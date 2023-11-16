@@ -208,6 +208,7 @@ editor.enviromine.GuiAdd.title.fail=Error occurred. Check log for details.
 editor.enviromine.GuiAdd.item=Add as Item
 editor.enviromine.GuiAdd.block=Add as Block
 editor.enviromine.GuiAdd.both=Add Both
+msg.enviromine.RecordEasterEgg=An eerie shiver travels down your spine
 
 
 

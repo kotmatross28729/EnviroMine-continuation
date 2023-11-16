@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
+import com.hbm.hazard.modifier.HazardModifier;
+import net.minecraft.client.resources.I18n;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
@@ -116,14 +119,14 @@ public class EM_EventManager
 {
 	private static final String BLOOD_BLOCK_BOP = "BiomesOPlenty:hell_blood";
 	private static final String WATER_ROOT_STREAMS = "streams:river/tile.water";
-	
+
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event)
 	{
 		boolean chunkPhys = true;
-		
+
 		DimensionProperties dProps = EM_Settings.dimensionProperties.get(event.world.provider.dimensionId);
-		
+
 		if(!event.world.isRemote)
 		{
 			if(EM_PhysManager.chunkDelay.containsKey(event.world.provider.dimensionId + "" + (MathHelper.floor_double(event.entity.posX) >> 4) + "," + (MathHelper.floor_double(event.entity.posZ) >> 4)))
@@ -131,19 +134,19 @@ public class EM_EventManager
 				chunkPhys = (EM_PhysManager.chunkDelay.get(event.world.provider.dimensionId + "" + (MathHelper.floor_double(event.entity.posX) >> 4) + "," + (MathHelper.floor_double(event.entity.posZ) >> 4)) < event.world.getTotalWorldTime());
 			}
 		}
-		
+
 		if((dProps != null && !dProps.physics) || !EM_Settings.enablePhysics)
 		{
 			chunkPhys = false;
 		}
-		
+
 		if(EM_Settings.foodSpoiling)
 		{
 			if(event.entity instanceof EntityItem)
 			{
 				EntityItem item = (EntityItem)event.entity;
 				ItemStack rotStack = RotHandler.doRot(event.world, item.getEntityItem());
-				
+
 				if(item.getEntityItem() != rotStack)
 				{
 					item.setEntityItemStack(rotStack);
@@ -158,20 +161,20 @@ public class EM_EventManager
 				RotHandler.rotInvo(event.world, invo);
 			}
 		}
-		
+
 		if(event.entity instanceof EntityLivingBase)
 		{
 			// Ensure that only one set of trackers are made per Minecraft instance.
 			boolean allowTracker = !(event.world.isRemote && EnviroMine.proxy.isClient() && Minecraft.getMinecraft().isIntegratedServerRunning());
-			
+
 			if(EnviroDataTracker.isLegalType((EntityLivingBase)event.entity) && (event.entity instanceof EntityPlayer || EM_Settings.trackNonPlayer) && allowTracker)
 			{
 				EnviroDataTracker tracker = EM_StatusManager.lookupTracker((EntityLivingBase)event.entity);
 				boolean hasOld = tracker != null && !tracker.isDisabled;
-				
+
 				if(!hasOld)
 				{
-					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase)event.entity);
+					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase) event.entity) {};
 					EM_StatusManager.addToManager(emTrack);
 					emTrack.loadNBTTags();
 					if(!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN())
@@ -182,9 +185,9 @@ public class EM_EventManager
 				{
 					tracker.trackedEntity = (EntityLivingBase)event.entity;
 				}
-				
+
 				//TODO this is for updating clients gui
-				if (event.entity instanceof EntityPlayerMP && !event.world.isRemote) 
+				if (event.entity instanceof EntityPlayerMP && !event.world.isRemote)
 				{
 					NBTTagCompound pData = new NBTTagCompound();
 					pData.setInteger("id", 4);
@@ -193,20 +196,20 @@ public class EM_EventManager
 					pData.setBoolean("enableBodyTemp", EM_Settings.enableBodyTemp);
 					pData.setBoolean("enableHydrate", EM_Settings.enableHydrate);
 					pData.setBoolean("enableSanity", EM_Settings.enableSanity);
-					
+
 					EnviroMine.instance.network.sendTo(new PacketEnviroMine(pData), (EntityPlayerMP) event.entity);
-			
+
 				}
 			}
 		} else if(event.entity instanceof EntityFallingBlock && !(event.entity instanceof EntityPhysicsBlock) && !event.world.isRemote && event.world.getTotalWorldTime() > EM_PhysManager.worldStartTime + EM_Settings.worldDelay && chunkPhys)
 		{
 			EntityFallingBlock oldSand = (EntityFallingBlock)event.entity;
-			
+
 			if(oldSand.func_145805_f() != Blocks.air)
 			{
 				NBTTagCompound oldTags = new NBTTagCompound();
 				oldSand.writeToNBT(oldTags);
-				
+
 				EntityPhysicsBlock newSand = new EntityPhysicsBlock(oldSand.worldObj, oldSand.prevPosX, oldSand.prevPosY, oldSand.prevPosZ, oldSand.func_145805_f(), oldSand.field_145814_a, true);
 				newSand.readFromNBT(oldTags);
 				event.world.spawnEntityInWorld(newSand);
@@ -216,7 +219,7 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onLivingSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
@@ -225,7 +228,7 @@ public class EM_EventManager
 			if(EnviroMine.caves.totalSpawnWeight > 0 && event.world.provider.dimensionId == EM_Settings.caveDimID && EM_Settings.caveSpawnProperties.containsKey(EntityList.getEntityID(event.entity)))
 			{
 				CaveSpawnProperties props = EM_Settings.caveSpawnProperties.get(EntityList.getEntityID(event.entity));
-				
+
 				if(event.world.rand.nextInt(EnviroMine.caves.totalSpawnWeight) > props.weight)
 				{
 					event.setResult(Result.DENY);
@@ -234,16 +237,16 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone event)
 	{
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.original);
-		
+
 		if(tracker != null && !tracker.isDisabled)
 		{
 			tracker.trackedEntity = event.entityPlayer;
-			
+
 			if(event.wasDeath && !EM_Settings.keepStatus)
 			{
 				tracker.resetData();
@@ -253,33 +256,33 @@ public class EM_EventManager
 				tracker.ClampSafeRange();
 				EM_StatusManager.saveTracker(tracker);
 			}
-			
+
 			tracker.loadNBTTags();
 		}
-		
+
 		if(event.wasDeath)
 		{
 			doDeath(event.entityPlayer);
 			doDeath(event.original);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent event)
 	{
 		doDeath(event.entityLiving);
-		
+
 		if(event.entityLiving instanceof EntityMob && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)event.source.getEntity();
 			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
 
-			
+
 			if(player.isPotionActive(EnviroPotion.insanity) && player.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2)
 			{
 				int val = player.getEntityData().getInteger("EM_MIND_MAT") + 1;
 				player.getEntityData().setInteger("EM_MIND_MAT", val);
-				
+
 				if(val >= 5)
 				{
 					player.addStat(EnviroAchievements.mindOverMatter, 1);
@@ -291,11 +294,11 @@ public class EM_EventManager
 			{
 				tracker.sanity += event.entityLiving.worldObj.rand.nextInt(5);
 			}
-			
+
 
 		}
 	}
-	
+
 	public static void doDeath(EntityLivingBase entityLiving)
 	{
 		if(entityLiving instanceof EntityPlayer)
@@ -304,44 +307,44 @@ public class EM_EventManager
 			{
 				entityLiving.getEntityData().removeTag("EM_MINE_TIME");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_WINTER"))
 			{
 				entityLiving.getEntityData().removeTag("EM_WINTER");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_CAVE_DIST"))
 			{
 				entityLiving.getEntityData().removeTag("EM_CAVE_DIST");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_SAFETY"))
 			{
 				entityLiving.getEntityData().removeTag("EM_SAFETY");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_MIND_MAT"))
 			{
 				entityLiving.getEntityData().removeTag("EM_MIND_MAT");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_THAT"))
 			{
 				entityLiving.getEntityData().removeTag("EM_THAT");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_BOILED"))
 			{
 				entityLiving.getEntityData().removeTag("EM_BOILED");
 			}
-			
+
 			if(entityLiving.getEntityData().hasKey("EM_PITCH"))
 			{
 				entityLiving.getEntityData().removeTag("EM_PITCH");
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onEntityAttacked(LivingAttackEvent event)
 	{
@@ -349,9 +352,9 @@ public class EM_EventManager
 		{
 			return;
 		}
-		
+
 		Entity attacker = event.source.getEntity();
-		
+
 		// Special handler for when a block falls on a player who is wearing the HARD HAT
 		if(
 				(event.source == DamageSource.fallingBlock || event.source == DamageSource.anvil || event.source == EnviroDamageSource.landslide || event.source == EnviroDamageSource.avalanche)
@@ -364,10 +367,10 @@ public class EM_EventManager
 			event.setCanceled(true);
 			// Damage the hard hat by some amount
 			hardHat.damageItem(block_damage_amount, event.entityLiving);
-			
+
 			if(helmet_durability >= block_damage_amount)
 			{
-				// Play stone dig sound but do no damage to the player 
+				// Play stone dig sound but do no damage to the player
 				event.entityLiving.worldObj.playSoundAtEntity(event.entityLiving, "dig.stone", 1.0F, 1.0F);
 				return;
 			} else
@@ -377,40 +380,40 @@ public class EM_EventManager
 				return;
 			}
 		}
-		
+
 		if(event.source == DamageSource.fallingBlock && event.entityLiving instanceof EntityPlayer)
 		{
 			event.entityLiving.getEntityData().setLong("EM_SAFETY", event.entityLiving.worldObj.getTotalWorldTime());
 		}
-		
+
 		if(event.source == EnviroDamageSource.gasfire && event.entityLiving instanceof EntityPlayer)
 		{
 			event.entityLiving.getEntityData().setLong("EM_THAT", event.entityLiving.worldObj.getTotalWorldTime());
 		}
-		
+
 		if(event.entityLiving instanceof EntityPlayer && event.entityLiving.getEntityData().hasKey("EM_MIND_MAT"))
 		{
 			event.entityLiving.getEntityData().removeTag("EM_MIND_MAT");
 		}
-		
+
 		if(attacker != null)
 		{
 			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.entityLiving);
-			
+
 			if(event.entityLiving instanceof EntityPlayer)
 			{
 				EntityPlayer player = (EntityPlayer)event.entityLiving;
-				
+
 				if(player.capabilities.disableDamage || player.capabilities.isCreativeMode)
 				{
 					return;
 				}
 			}
-			
+
 			if(tracker != null)
 			{
 				EntityProperties livingProps = null;
-				
+
 				if(EntityList.getEntityString(attacker) != null)
 				{
 					if(EntityProperties.base.hasProperty(attacker))
@@ -418,13 +421,13 @@ public class EM_EventManager
 						livingProps = EntityProperties.base.getProperty(attacker);
 					}
 				}
-				
+
 				if(livingProps != null)
 				{
 					tracker.sanity += livingProps.hitSanity;
 					tracker.airQuality += livingProps.hitAir;
 					tracker.hydration += livingProps.hitHydration;
-					
+
 					if(!livingProps.bodyTemp)
 					{
 						tracker.bodyTemp += livingProps.hitTemp;
@@ -433,32 +436,32 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		ItemStack item = event.entityPlayer.getCurrentEquippedItem();
-		
+
 		if(event.action == Action.RIGHT_CLICK_BLOCK && EM_Settings.foodSpoiling)
 		{
 			TileEntity tile = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
-			
+
 			if(tile != null & tile instanceof IInventory)
 			{
 				RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory)tile);
 			}
 		}
-		
+
 		if(!event.entityPlayer.worldObj.isRemote)
 		{
-			
+
 //			EnviroMine.logger.info("CreatureType: " + EnviroUtils.getWitcheryCreatureType(event.entityPlayer));
 //			EnviroMine.logger.info("Vampire level: " + EnviroUtils.getWitcheryVampireLevel(event.entityPlayer));
 //			EnviroMine.logger.info("Werewolf level: " + EnviroUtils.getWitcheryWerewolfLevel(event.entityPlayer));
 //			EnviroMine.logger.info("Is android: " + EnviroUtils.isPlayerMOAndroid(event.entityPlayer));
-			
+
 //			MovingObjectPosition mop = getMovingObjectPositionFromPlayer(event.entityPlayer.worldObj, event.entityPlayer, true);
-//			
+//
 //			if(mop != null)
 //			{
 //				if(mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
@@ -466,44 +469,44 @@ public class EM_EventManager
 //					int i = mop.blockX;
 //					int j = mop.blockY;
 //					int k = mop.blockZ;
-//					
+//
 //					int[] hitBlock = EnviroUtils.getAdjacentBlockCoordsFromSide(i, j, k, mop.sideHit);
-//					
+//
 //					int x = hitBlock[0];
 //					int y = hitBlock[1];
 //					int z = hitBlock[2];
-//					
+//
 //					if(event.entityPlayer.worldObj.getBlock(i, j, k).getMaterial() != Material.water && event.entityPlayer.worldObj.getBlock(x, y, z).getMaterial() == Material.water)
 //					{
 //						i = x;
 //						j = y;
 //						k = z;
 //					}
-//					
+//
 //					Block targetBlock = event.entityPlayer.worldObj.getBlock(i, j, k);
 //					String targetBlockRegistryName = Block.blockRegistry.getNameForObject(targetBlock);
-//					
+//
 //					if (targetBlockRegistryName.contains(BLOOD_BLOCK_BOP))
 //					{
 //						event.entityPlayer.addChatComponentMessage(new ChatComponentText("MOP block: " + targetBlockRegistryName));
-//						
+//
 //						event.setCanceled(true);
 //						return;
 //					}
 //				}
 //			}
 		}
-		
+
 		if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item != null)
 		{
 			if(item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote)
 			{
 				int adjCoords[] = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
-				
+
 				if(item.getItem() == Item.getItemFromBlock(Blocks.torch) && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) // Redirect torch placement to our own
 				{
 					Vec3 lookVec = event.entityPlayer.getLookVec();
-					
+
 		            Block block = event.world.getBlock(event.x, event.y, event.z);
 					if(block.onBlockActivated(event.world, event.x, event.y, event.y, event.entityPlayer, event.face, 0F, 0F, 0F))
 					{
@@ -519,7 +522,7 @@ public class EM_EventManager
 					return;
 
 				}
-				
+
 				EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, adjCoords[0], adjCoords[1], adjCoords[2], true, "Normal");
 			} else if(item.getItem() == Items.glass_bottle && !event.entityPlayer.worldObj.isRemote)
 			{
@@ -531,8 +534,8 @@ public class EM_EventManager
 			{
 				RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
 			}
-			
-			
+
+
 		} else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item == null)
 		{
 			if(!event.entityPlayer.worldObj.isRemote)
@@ -560,7 +563,7 @@ public class EM_EventManager
 			EnviroMine.instance.network.sendToServer(new PacketEnviroMine(pData));
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onEntityInteract(EntityInteractEvent event)
 	{
@@ -568,39 +571,39 @@ public class EM_EventManager
 		{
 			return;
 		}
-		
+
 		if(event.target instanceof EntityIronGolem && event.entityPlayer.getEquipmentInSlot(0) != null)
 		{
 			ItemStack stack = event.entityLiving.getEquipmentInSlot(0);
-			
+
 			if(stack.getItem() == Items.name_tag && stack.getDisplayName().toLowerCase().equals("siyliss"))
 			{
 				event.entityPlayer.addStat(EnviroAchievements.ironArmy, 1);
 			}
 		}
-		
+
 		if(!EM_Settings.foodSpoiling)
 		{
 			return;
 		}
-		
+
 		if(event.target != null && event.target instanceof IInventory && EM_Settings.foodSpoiling)
 		{
 			IInventory chest = (IInventory)event.target;
-			
+
 			RotHandler.rotInvo(event.entityPlayer.worldObj, chest);
 		}
 	}
-	
+
 	public void RecordEasterEgg(EntityPlayer player, int x, int y, int z)
 	{
 		if(player.worldObj.isRemote)
 		{
 			return;
 		}
-		
+
 		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
-		
+
 		if(movingobjectposition == null)
 		{
 			return;
@@ -611,25 +614,25 @@ public class EM_EventManager
 				int i = movingobjectposition.blockX;
 				int j = movingobjectposition.blockY;
 				int k = movingobjectposition.blockZ;
-				
+
 				if(player.worldObj.getBlock(i, j, k) == Blocks.jukebox)
 				{
 					TileEntityJukebox recordplayer = (TileEntityJukebox)player.worldObj.getTileEntity(i, j, k);
-					
+
 					if (recordplayer != null)
 					{
 						if(recordplayer.func_145856_a() == null)
 						{
 							EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
-							
+
 							if(tracker != null)
 							{
 								if(tracker.sanity >= 75F)
 								{
 									tracker.sanity -= 50F;
 								}
-								
-								player.addChatMessage(new ChatComponentText("An eerie shiver travels down your spine"));
+
+								player.addChatMessage(new ChatComponentText(I18n.format("msg.enviromine.RecordEasterEgg")));
 								player.addStat(EnviroAchievements.ohGodWhy, 1);
 							}
 						}
@@ -638,11 +641,11 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	public static void fillBottle(World world, EntityPlayer player, int x, int y, int z, ItemStack item, PlayerInteractEvent event)
 	{
 		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player, true);
-		
+
 		if(movingobjectposition == null)
 		{
 			return;
@@ -653,28 +656,28 @@ public class EM_EventManager
 				int i = movingobjectposition.blockX;
 				int j = movingobjectposition.blockY;
 				int k = movingobjectposition.blockZ;
-				
+
 				Block targetblock = world.getBlock(i, j, k);
 				int targetmeta = world.getBlockMetadata(i, j, k);
-				
+
 				boolean isValidCauldron = (targetblock == Blocks.cauldron && targetmeta > 0);
-				
+
 				if(!world.canMineBlock(player, i, j, k))
 				{
 					return;
 				}
-				
+
 				if(!player.canPlayerEdit(i, j, k, movingobjectposition.sideHit, item))
 				{
 					return;
 				}
-				
+
 				boolean isWater;
-				
+
 				if(targetblock == Blocks.water || targetblock == Blocks.flowing_water)
 				{
 					isWater = true;
-					
+
 					// if finite is on.. make sure player cant drink from a infinite flowing water source
 					if(targetmeta > .2f && EM_Settings.finiteWater)
 					{
@@ -685,11 +688,11 @@ public class EM_EventManager
 				{
 					isWater = false;
 				}
-				
+
 				if(isWater || isValidCauldron)
 				{
 					Item newItem = Items.potionitem;
-					
+
 					switch(getWaterType(world, i, j, k))
 					{
 						case 0: // Clean
@@ -713,12 +716,12 @@ public class EM_EventManager
 							break;
 						}
 					}
-					
+
 					if(isValidCauldron && isCauldronHeatingBlock(world.getBlock(i, j-1, k), world.getBlockMetadata(i, j-1, k)))
 					{
 						newItem = Items.potionitem;
 					}
-					
+
 					if(isValidCauldron)
 					{
 						player.worldObj.setBlockMetadataWithNotify(i, j, k, player.worldObj.getBlockMetadata(i, j, k) - 1, 2);
@@ -726,9 +729,9 @@ public class EM_EventManager
 					{
 						player.worldObj.setBlock(i, j, k, Blocks.flowing_water, player.worldObj.getBlockMetadata(i, j, k) + 1, 2);
 					}
-					
+
 					--item.stackSize;
-					
+
 					if(item.stackSize <= 0)
 					{
 						item = new ItemStack(newItem);
@@ -745,11 +748,11 @@ public class EM_EventManager
 					event.setCanceled(true);
 				}
 			}
-			
+
 			return;
 		}
 	}
-	
+
 	public static void drinkWater(EntityPlayer entityPlayer, PlayerInteractEvent event)
 	{
 		// Skip drinking if hydration is not tracked
@@ -763,16 +766,16 @@ public class EM_EventManager
 		{
 			return;
 		}
-		
+
 		// Don't allow drinking if you're in water
 		if(entityPlayer.isInsideOfMaterial(Material.water))
 		{
 			return;
 		}
-		
+
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(entityPlayer);
 		MovingObjectPosition mop = getMovingObjectPositionFromPlayer(entityPlayer.worldObj, entityPlayer, true);
-		
+
 		if(mop != null)
 		{
 			if(mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
@@ -780,25 +783,25 @@ public class EM_EventManager
 				int i = mop.blockX;
 				int j = mop.blockY;
 				int k = mop.blockZ;
-				
+
 				int[] hitBlock = EnviroUtils.getAdjacentBlockCoordsFromSide(i, j, k, mop.sideHit);
-				
+
 				int x = hitBlock[0];
 				int y = hitBlock[1];
 				int z = hitBlock[2];
-				
+
 				if(entityPlayer.worldObj.getBlock(i, j, k).getMaterial() != Material.water && entityPlayer.worldObj.getBlock(x, y, z).getMaterial() == Material.water)
 				{
 					i = x;
 					j = y;
 					k = z;
 				}
-				
+
 				Block targetBlock = entityPlayer.worldObj.getBlock(i, j, k);
 				String targetBlockRegistryName = Block.blockRegistry.getNameForObject(targetBlock);
-				
+
 				boolean isWater = false;
-				
+
 				if(
 						(targetBlock == Blocks.flowing_water  || targetBlock == Blocks.water
 						// Automatically make the block water if it's Streams water
@@ -812,7 +815,7 @@ public class EM_EventManager
 				{
 					isWater = true;
 				}
-				
+
 				boolean isValidCauldron = (entityPlayer.worldObj.getBlock(i, j, k) == Blocks.cauldron && entityPlayer.worldObj.getBlockMetadata(i, j, k) > 0);
 
 				if(isWater || isValidCauldron)
@@ -820,7 +823,7 @@ public class EM_EventManager
 					if(tracker != null && tracker.hydration < 100F)
 					{
 						int type = 0;
-						
+
 						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k)))
 						{
 							type = 0;
@@ -829,11 +832,11 @@ public class EM_EventManager
 						{
 							type = getWaterType(entityPlayer.worldObj, i, j, k);
 						}
-						
+
 						int werewolfLevel = EnviroUtils.getWitcheryWerewolfLevel(entityPlayer);
 						int werewolfDuration200 = MathHelper.clamp_int(200 - (entityPlayer instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
 						int werewolfDuration600 = MathHelper.clamp_int(600 - (entityPlayer instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
-						
+
 						if(type == 0) // Clean
 						{
 							if(tracker.bodyTemp >= 37.05F)
@@ -855,7 +858,7 @@ public class EM_EventManager
 									entityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, werewolfDuration200));
 								}
 							}
-							
+
 							if(tracker.bodyTemp >= 37.05)
 							{
 								tracker.bodyTemp -= 0.05;
@@ -878,7 +881,7 @@ public class EM_EventManager
 									}
 								}
 							}
-							
+
 							if(tracker.bodyTemp >= 37.05)
 							{
 								tracker.bodyTemp -= 0.05;
@@ -893,7 +896,7 @@ public class EM_EventManager
 							}
 							tracker.hydrate(10F);
 						}
-						
+
 						if(isValidCauldron)
 						{
 							entityPlayer.worldObj.setBlockMetadataWithNotify(i, j, k, entityPlayer.worldObj.getBlockMetadata(i, j, k) - 1, 2);
@@ -902,9 +905,9 @@ public class EM_EventManager
 						{
 							entityPlayer.worldObj.setBlock(i, j, k, Blocks.flowing_water, entityPlayer.worldObj.getBlockMetadata(i, j, k) + 1, 2);
 						}
-						
+
 						entityPlayer.worldObj.playSoundAtEntity(entityPlayer, "random.drink", 1.0F, 1.0F);
-						
+
 						if(event != null)
 						{
 							event.setCanceled(true);
@@ -914,46 +917,46 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	public static int getWaterType(World world, int x, int y, int z)
 	{
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		DimensionProperties dimensionProperties = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
 		int seaLvl = dimensionProperties != null? dimensionProperties.sealevel : 64;
-		
+
 		if(biome == null)
 		{
 			return 0;
 		}
-		
+
 		BiomeProperties biomeProperties = EM_Settings.biomeProperties.get(biome.biomeID);
-		
+
 		if(biomeProperties != null && biomeProperties.getWaterQualityId() != -1)
 		{
 			return biomeProperties.getWaterQualityId();
 		}
-		
+
 		int waterColour = biome.getWaterColorMultiplier();
 		boolean looksBad = false;
-		
+
 		if(waterColour != 16777215)
 		{
 			Color bColor = new Color(waterColour);
-			
+
 			if(bColor.getRed() < 200 || bColor.getGreen() < 200 || bColor.getBlue() < 200)
 			{
 				looksBad = true;
 			}
 		}
-		
+
 		ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
 		for(int i = 0; i < typeArray.length; i++)
 		{
 			typeList.add(typeArray[i]);
 		}
-		
-		
+
+
 		if(typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad)
 		{
 			return 1; // Dirty
@@ -971,7 +974,7 @@ public class EM_EventManager
 			return 0; // Regular
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onBreakBlock(HarvestDropsEvent event)
 	{
@@ -979,7 +982,7 @@ public class EM_EventManager
 		{
 			return;
 		}
-		
+
 		if(event.harvester != null)
 		{
 			if(event.getResult() != Result.DENY && !event.harvester.capabilities.isCreativeMode)
@@ -994,19 +997,19 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerUseItem(PlayerUseItemEvent.Finish event)
 	{
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.entityPlayer);
-		
+
 		if(tracker == null || event.item == null)
 		{
 			return;
 		}
-		
+
 		ItemStack item = event.item;
-		
+
 		if(EM_Settings.itemProperties.containsKey(Item.itemRegistry.getNameForObject(item.getItem())) || EM_Settings.itemProperties.containsKey(Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage()))
 		{
 			ItemProperties itemProps;
@@ -1017,7 +1020,7 @@ public class EM_EventManager
 			{
 				itemProps = EM_Settings.itemProperties.get(Item.itemRegistry.getNameForObject(item.getItem()));
 			}
-			
+
 			if(itemProps.effTemp > 0F)
 			{
 				if(tracker.bodyTemp + itemProps.effTemp > itemProps.effTempCap)
@@ -1043,7 +1046,7 @@ public class EM_EventManager
 					tracker.bodyTemp += itemProps.effTemp;
 				}
 			}
-			
+
 			if(tracker.sanity + itemProps.effSanity >= 100F)
 			{
 				tracker.sanity = 100F;
@@ -1054,7 +1057,7 @@ public class EM_EventManager
 			{
 				tracker.sanity += itemProps.effSanity;
 			}
-			
+
 			if(itemProps.effHydration > 0F)
 			{
 				tracker.hydrate(itemProps.effHydration);
@@ -1062,7 +1065,7 @@ public class EM_EventManager
 			{
 				tracker.dehydrate(Math.abs(itemProps.effHydration));
 			}
-			
+
 			if(tracker.airQuality + itemProps.effAir >= 100F)
 			{
 				tracker.airQuality = 100F;
@@ -1074,7 +1077,7 @@ public class EM_EventManager
 				tracker.airQuality += itemProps.effAir;
 			}
 		}
-		
+
 		if(item.getItem() == Items.golden_apple)
 		{
 			if(item.isItemDamaged())
@@ -1092,12 +1095,12 @@ public class EM_EventManager
 				tracker.sanity = 100F;
 				tracker.hydrate(10F);
 			}
-			
+
 			tracker.trackedEntity.removePotionEffect(EnviroPotion.frostbite.id);
 			tracker.frostbiteLevel = 0;
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event)
 	{
@@ -1109,7 +1112,7 @@ public class EM_EventManager
 			}
 			return;
 		}
-		
+
 		// Do hallucinations
 		if(event.entityLiving.worldObj.isRemote)
 		{
@@ -1117,26 +1120,26 @@ public class EM_EventManager
 			{
 				EM_StatusManager.createFX(event.entityLiving);
 			}
-			
+
 			if(event.entityLiving instanceof EntityPlayer && event.entityLiving.worldObj.isRemote)
 			{
 				if(Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity))
 				{
 					int chance = 100 / (Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() + 1);
-					
+
 					chance = chance > 0? chance : 1;
-					
+
 					if(event.entityLiving.getRNG().nextInt(chance) == 0)
 					{
 						new Hallucination(event.entityLiving);
 					}
 				}
-				
+
 				Hallucination.update();
 			}
 			return;
 		}
-		
+
 		if(event.entityLiving instanceof EntityPlayer)
 		{
 			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
@@ -1145,12 +1148,12 @@ public class EM_EventManager
 			{
 				ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1);
 			}
-			
+
 			if(EM_Settings.foodSpoiling)
 			{
 				RotHandler.rotInvo(event.entityLiving.worldObj, invo);
 			}
-			
+
 			if(event.entityLiving.getEntityData().hasKey("EM_SAFETY"))
 			{
 				if(event.entityLiving.worldObj.getTotalWorldTime() - event.entityLiving.getEntityData().getLong("EM_SAFETY") >= 1000L)
@@ -1158,7 +1161,7 @@ public class EM_EventManager
 					((EntityPlayer)event.entityLiving).addStat(EnviroAchievements.funwaysFault, 1);
 				}
 			}
-			
+
 			if(event.entityLiving.getEntityData().hasKey("EM_THAT"))
 			{
 				if(event.entityLiving.worldObj.getTotalWorldTime() - event.entityLiving.getEntityData().getLong("EM_THAT") >= 1000L)
@@ -1166,19 +1169,19 @@ public class EM_EventManager
 					((EntityPlayer)event.entityLiving).addStat(EnviroAchievements.thatJustHappened, 1);
 				}
 			}
-			
+
 			if(event.entityLiving.worldObj.provider.dimensionId == EM_Settings.caveDimID && event.entityLiving.getEntityData().hasKey("EM_CAVE_DIST"))
 			{
 				int[] prePos = event.entityLiving.getEntityData().getIntArray("EM_CAVE_DIST");
 				int distance = MathHelper.floor_double(event.entityLiving.getDistance(prePos[0], prePos[1], prePos[2]));
-				
+
 				if(distance > prePos[3])
 				{
 					prePos[3] = distance;
 					event.entityLiving.getEntityData().setIntArray("EM_CAVE_DIST", prePos);
 				}
 			}
-			
+
 			if(!event.entityLiving.isPotionActive(EnviroPotion.hypothermia) && !event.entityLiving.isPotionActive(EnviroPotion.frostbite) && event.entityLiving.worldObj.getBiomeGenForCoords(MathHelper.floor_double(event.entityLiving.posX), MathHelper.floor_double(event.entityLiving.posZ)).getEnableSnow())
 			{
 				if(event.entityLiving.getEntityData().hasKey("EM_WINTER"))
@@ -1196,7 +1199,7 @@ public class EM_EventManager
 			{
 				event.entityLiving.getEntityData().removeTag("EM_WINTER");
 			}
-			
+
 			if(event.entityLiving.isPotionActive(EnviroPotion.heatstroke) && event.entityLiving.getActivePotionEffect(EnviroPotion.heatstroke).getAmplifier() >= 2)
 			{
 				event.entityLiving.getEntityData().setBoolean("EM_BOILED", true);
@@ -1208,18 +1211,18 @@ public class EM_EventManager
 			{
 				event.entityLiving.getEntityData().removeTag("EM_BOILED");
 			}
-			
+
 			if(event.entityLiving.worldObj.provider.dimensionId == EM_Settings.caveDimID && event.entityLiving.worldObj.getBlockLightValue(MathHelper.floor_double(event.entityLiving.posX), MathHelper.floor_double(event.entityLiving.posY), MathHelper.floor_double(event.entityLiving.posZ)) < 1)
 			{
 				int x = MathHelper.floor_double(event.entityLiving.posX);
 				int y = MathHelper.floor_double(event.entityLiving.posY);
 				int z = MathHelper.floor_double(event.entityLiving.posZ);
-				
+
 				if(!event.entityLiving.getEntityData().hasKey("EM_PITCH"))
 				{
 					event.entityLiving.getEntityData().setIntArray("EM_PITCH", new int[]{x, y, z});
 				}
-				
+
 				if(event.entityLiving.getDistance(x, y, z) >= 250)
 				{
 					((EntityPlayer)event.entityLiving).addStat(EnviroAchievements.itsPitchBlack, 1);
@@ -1228,11 +1231,11 @@ public class EM_EventManager
 			{
 				event.entityLiving.getEntityData().removeTag("EM_PITCH");
 			}
-			
+
 			if(EM_Settings.enableAirQ && EM_Settings.enableBodyTemp && EM_Settings.enableHydrate && EM_Settings.enableSanity && EM_Settings.enableLandslide && EM_Settings.enablePhysics && EM_Settings.enableQuakes)
 			{
 				int seaLvl = 48;
-				
+
 				if(EM_Settings.dimensionProperties.containsKey(event.entityLiving.worldObj.provider.dimensionId))
 				{
 					seaLvl = MathHelper.ceiling_double_int(EM_Settings.dimensionProperties.get(event.entityLiving.worldObj.provider.dimensionId).sealevel * 0.75F);
@@ -1240,7 +1243,7 @@ public class EM_EventManager
 				{
 					seaLvl = 256;
 				}
-				
+
 				if(event.entityLiving.posY < seaLvl)
 				{
 					long time = event.entityLiving.getEntityData().getLong("EM_MINE_TIME");
@@ -1248,7 +1251,7 @@ public class EM_EventManager
 					time += event.entityLiving.worldObj.getTotalWorldTime() - date;
 					event.entityLiving.getEntityData().setLong("EM_MINE_DATE", event.entityLiving.worldObj.getTotalWorldTime());
 					event.entityLiving.getEntityData().setLong("EM_MINE_TIME", time);
-					
+
 					if(time > 24000L * 3L)
 					{
 						((EntityPlayer)event.entityLiving).addStat(EnviroAchievements.proMiner, 1);
@@ -1269,9 +1272,9 @@ public class EM_EventManager
 				}
 			}
 		}
-		
+
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.entityLiving);
-		
+
 		if(tracker == null || tracker.isDisabled)
 		{
 			if((!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN()) && (EM_Settings.enableAirQ || EM_Settings.enableBodyTemp || EM_Settings.enableHydrate || EM_Settings.enableSanity))
@@ -1279,7 +1282,7 @@ public class EM_EventManager
 				if(event.entityLiving instanceof EntityPlayer || (EM_Settings.trackNonPlayer && EnviroDataTracker.isLegalType(event.entityLiving)))
 				{
 					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.WARN, "Server lost track of player! Attempting to re-sync...");
-					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase)event.entity);
+					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase) event.entity) {};
 					EM_StatusManager.addToManager(emTrack);
 					emTrack.loadNBTTags();
 					EM_StatusManager.syncMultiplayerTracker(emTrack);
@@ -1293,11 +1296,11 @@ public class EM_EventManager
 				return;
 			}
 		}
-		
+
 		EM_StatusManager.updateTracker(tracker);
-		
+
 		UUID EM_DEHY1_ID = EM_Settings.DEHY1_UUID;
-		
+
 		if(tracker.hydration < 10F &&
 				(!EM_Settings.dimensionProperties.containsKey(event.entityLiving.dimension)
 						|| (EM_Settings.dimensionProperties.containsKey(event.entityLiving.dimension) && EM_Settings.dimensionProperties.get(event.entityLiving.dimension).trackHydration))
@@ -1305,10 +1308,10 @@ public class EM_EventManager
 		{
 			event.entityLiving.addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 0));
 			event.entityLiving.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 0));
-			
+
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod = new AttributeModifier(EM_DEHY1_ID, "EM_Dehydrated", -0.25D, 2);
-			
+
 			if(mod != null && attribute.getModifier(mod.getID()) == null)
 			{
 				attribute.applyModifier(mod);
@@ -1317,23 +1320,23 @@ public class EM_EventManager
 		else
 		{
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-			
+
 			if(attribute.getModifier(EM_DEHY1_ID) != null)
 			{
 				attribute.removeModifier(attribute.getModifier(EM_DEHY1_ID));
 			}
 		}
-		
+
 		UUID EM_FROST1_ID = EM_Settings.FROST1_UUID;
 		UUID EM_FROST2_ID = EM_Settings.FROST2_UUID;
 		UUID EM_FROST3_ID = EM_Settings.FROST3_UUID;
 		UUID EM_HEAT1_ID = EM_Settings.HEAT1_UUID;
-		
+
 		if(event.entityLiving.isPotionActive(EnviroPotion.heatstroke))
 		{
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod = new AttributeModifier(EM_HEAT1_ID, "EM_Heat", -0.25D, 2);
-			
+
 			if(mod != null && attribute.getModifier(mod.getID()) == null)
 			{
 				attribute.applyModifier(mod);
@@ -1341,25 +1344,25 @@ public class EM_EventManager
 		} else
 		{
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-			
+
 			if(attribute.getModifier(EM_HEAT1_ID) != null)
 			{
 				attribute.removeModifier(attribute.getModifier(EM_HEAT1_ID));
 			}
 		}
-		
+
 		if(event.entityLiving.isPotionActive(EnviroPotion.hypothermia) || event.entityLiving.isPotionActive(EnviroPotion.frostbite))
 		{
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod = new AttributeModifier(EM_FROST1_ID, "EM_Frost_Cold", -0.25D, 2);
 			String msg = "";
-			
+
 			if(event.entityLiving.isPotionActive(EnviroPotion.frostbite))
 			{
 				if(event.entityLiving.getActivePotionEffect(EnviroPotion.frostbite).getAmplifier() > 0)
 				{
 					mod = new AttributeModifier(EM_FROST3_ID, "EM_Frost_NOLEGS", -0.99D, 2);
-					
+
 					if(event.entityLiving instanceof EntityPlayer)
 					{
 						msg = "Your legs stiffen as they succumb to frostbite";
@@ -1367,7 +1370,7 @@ public class EM_EventManager
 				} else
 				{
 					mod = new AttributeModifier(EM_FROST2_ID, "EM_Frost_NOHANDS", -0.5D, 2);
-					
+
 					if(event.entityLiving instanceof EntityPlayer)
 					{
 						msg = "Your fingers start to feel numb and unresponsive";
@@ -1377,7 +1380,7 @@ public class EM_EventManager
 			if(mod != null && attribute.getModifier(mod.getID()) == null)
 			{
 				attribute.applyModifier(mod);
-				
+
 				if(event.entityLiving instanceof EntityPlayer && mod.getID() != EM_FROST1_ID)
 				{
 					((EntityPlayer)event.entityLiving).addChatMessage(new ChatComponentText(msg));
@@ -1386,7 +1389,7 @@ public class EM_EventManager
 		} else
 		{
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-			
+
 			if(attribute.getModifier(EM_FROST1_ID) != null)
 			{
 				attribute.removeModifier(attribute.getModifier(EM_FROST1_ID));
@@ -1400,7 +1403,7 @@ public class EM_EventManager
 				attribute.removeModifier(attribute.getModifier(EM_FROST3_ID));
 			}
 		}
-		
+
 		if(event.entityLiving instanceof EntityPlayer)
 		{
 			HandlingTheThing.stalkPlayer((EntityPlayer)event.entityLiving);
@@ -1408,7 +1411,7 @@ public class EM_EventManager
 			{
 				return;
 			}
-			
+
 			if(((EntityPlayer)event.entityLiving).isPlayerSleeping() && tracker != null && !event.entityLiving.worldObj.isDaytime())
 			{
 				tracker.sleepState = "Asleep";
@@ -1416,11 +1419,11 @@ public class EM_EventManager
 			} else if(tracker != null && event.entityLiving.worldObj.isDaytime())
 			{
 				int relitiveTime = (int)event.entityLiving.worldObj.getWorldInfo().getWorldTime() % 24000;
-				
+
 				if(tracker.sleepState.equals("Asleep") && tracker.lastSleepTime - relitiveTime > 100)
 				{
 					int timeSlept = MathHelper.floor_float(100*(12000 - (tracker.lastSleepTime - 12000))/12000);
-					
+
 					if(tracker.sanity + timeSlept > 100F)
 					{
 						tracker.sanity = 100;
@@ -1442,13 +1445,13 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	public void ReplaceInvoItems(IInventory invo, Item fItem, int fDamage, Item rItem, int rDamage)
 	{
 		for(int i = 0; i < invo.getSizeInventory(); i++)
 		{
 			ItemStack stack = invo.getStackInSlot(i);
-			
+
 			if(stack != null)
 			{
 				if(stack.getItem() == fItem && (stack.getItemDamage() == fDamage || fDamage <= -1))
@@ -1458,7 +1461,7 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onJump(LivingJumpEvent event)
 	{
@@ -1470,7 +1473,7 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onLand(LivingFallEvent event)
 	{
@@ -1479,34 +1482,34 @@ public class EM_EventManager
 			EM_PhysManager.schedulePhysUpdate(event.entityLiving.worldObj, MathHelper.floor_double(event.entityLiving.posX), MathHelper.floor_double(event.entityLiving.posY - 1), MathHelper.floor_double(event.entityLiving.posZ), true, "Jump");
 		}
 	}
-	
+
 	private static boolean firstload = false;
 	@SubscribeEvent
 	public void onWorldLoad(Load event)
 	{
-		
+
 		if(event.world.isRemote)
 		{
 			return;
 		}
-		
-		
-		
+
+
+
 		//Load Custom Configs
-		if (!firstload) 
+		if (!firstload)
 		{
 			//EnviroMine.theWorldEM = EM_WorldData.get(event.world);
-			EM_ConfigHandler.initProfile(); 
+			EM_ConfigHandler.initProfile();
 			firstload = true;
 		}
-		
+
 		if(EM_PhysManager.worldStartTime < 0)
 		{
 			EM_PhysManager.worldStartTime = event.world.getTotalWorldTime();
 		}
-		
+
 		MinecraftServer server = MinecraftServer.getServer();
-		
+
 		if(EM_Settings.worldDir == null && server.isServerRunning())
 		{
 			if(EnviroMine.proxy.isClient())
@@ -1516,17 +1519,17 @@ public class EM_EventManager
 			{
 				EM_Settings.worldDir = server.getFile(server.getFolderName());
 			}
-			
+
 			MineshaftBuilder.loadBuilders(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroMineshafts"));
 			Earthquake.loadQuakes(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroEarthquakes"));
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onWorldUnload(Unload event)
 	{
 		EM_StatusManager.saveAndDeleteWorldTrackers(event.world);
-		
+
 		if(!event.world.isRemote)
 		{
 			if(!MinecraftServer.getServer().isServerRunning())
@@ -1536,7 +1539,7 @@ public class EM_EventManager
 				EM_PhysManager.usedSlidePositions.clear();
 				EM_PhysManager.worldStartTime = -1;
 				EM_PhysManager.chunkDelay.clear();
-				
+
 				if(EM_Settings.worldDir != null)
 				{
 					MineshaftBuilder.saveBuilders(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroMineshafts"));
@@ -1545,12 +1548,12 @@ public class EM_EventManager
 				Earthquake.Reset();;
 				MineshaftBuilder.clearBuilders();
 				GasBuffer.reset();
-				
+
 				EM_Settings.worldDir = null;
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onChunkLoad(ChunkEvent.Load event)
 	{
@@ -1558,23 +1561,23 @@ public class EM_EventManager
 		{
 			return;
 		}
-		
+
 		if(!EM_PhysManager.chunkDelay.containsKey(event.world.provider.dimensionId + "" + event.getChunk().xPosition + "," + event.getChunk().zPosition))
 		{
 			EM_PhysManager.chunkDelay.put(event.world.provider.dimensionId + "" + event.getChunk().xPosition + "," + event.getChunk().zPosition, event.world.getTotalWorldTime() + EM_Settings.chunkDelay);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onWorldSave(Save event)
-	{		
+	{
 		EM_StatusManager.saveAllWorldTrackers(event.world);
 		if(EM_Settings.worldDir != null && event.world.provider.dimensionId == 0)
 		{
 			MineshaftBuilder.saveBuilders(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroMineshafts"));
 		}
 	}
-	
+
 	protected static MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World, EntityPlayer par2EntityPlayer, boolean par3)
 	{
 		float f = 1.0F;
@@ -1598,7 +1601,7 @@ public class EM_EventManager
 		Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
 		return par1World.func_147447_a(vec3, vec31, par3, !par3, false);
 	}
-	
+
 	/* Client only events */
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -1614,7 +1617,7 @@ public class EM_EventManager
 			event.setCanceled(true);
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onMusicPlay(PlaySoundEvent17 event)
@@ -1625,9 +1628,9 @@ public class EM_EventManager
 			event.result = PositionedSoundRecord.func_147673_a(new ResourceLocation("enviromine", "cave_ambience"));
 		}
 	}
-	
+
 	HashMap<String, EntityLivingBase> playerMob = new HashMap<String, EntityLivingBase>();
-	
+
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -1636,13 +1639,13 @@ public class EM_EventManager
 		if(Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity) && Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2)
 		{
 			event.setCanceled(true);
-			
+
 			EntityLivingBase entity = playerMob.get(event.entityPlayer.getCommandSenderName());
 			if(entity == null || entity.worldObj != event.entityPlayer.worldObj)
 			{
 				BiomeGenBase biome = event.entityPlayer.worldObj.getBiomeGenForCoords(MathHelper.floor_double(event.entityPlayer.posX), MathHelper.floor_double(event.entityPlayer.posZ));
 				ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>)biome.getSpawnableList(EnumCreatureType.monster);
-				
+
 				if(spawnList.size() <= 0)
 				{
 					entity = new EntityZombie(event.entityPlayer.worldObj);
@@ -1657,7 +1660,7 @@ public class EM_EventManager
 						entity = new EntityZombie(event.entityPlayer.worldObj);
 					}
 				}
-				
+
 				playerMob.put(event.entityPlayer.getCommandSenderName(), entity);
 			}
 			entity.renderYawOffset = event.entityPlayer.renderYawOffset;
@@ -1704,31 +1707,31 @@ public class EM_EventManager
 			playerMob.clear();
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onRender(RenderLivingEvent.Specials.Pre event)
-	{ 
-		
-		
+	{
+
+
 		/*
 		ItemStack plate = event.entity.getEquipmentInSlot(3);
 		EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
-		
+
 		if(event.entity == thePlayer && Minecraft.getMinecraft().currentScreen != null)
 		{
 			// Prevents the pack from rendering weirdly in the inventory screen
 			return;
 		}
-		
+
 		GL11.glPushMatrix();
-		
+
 		if (plate != null && (event.renderer instanceof RenderBiped || event.renderer instanceof RenderPlayer))
 		{
 			if (plate.getItem() == ObjectHandler.camelPack && !(plate.hasTagCompound() && !plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))) {
 				plate.getItem().onUpdate(plate, event.entity.worldObj, event.entity, 3, false);
 			}
-			
+
 			if (plate.hasTagCompound() && plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))
 			{
 				EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
@@ -1747,19 +1750,19 @@ public class EM_EventManager
 			}
 		}
 		GL11.glPopMatrix();
-		
+
 		*/
 	}
-	
+
 	float partialTicks = 1F;
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void RenderTickEvent(TickEvent.RenderTickEvent event)
 	{
 		partialTicks = event.renderTickTime;
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onItemTooltip(ItemTooltipEvent event)
@@ -1773,18 +1776,18 @@ public class EM_EventManager
 					fill = max;
 					event.itemStack.getTagCompound().setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, fill);
 				}
-				
+
 				int disp = (fill <= 0 ? 0 : fill > max ? 100 : (int)(((float)fill/(float)max)*100));
 				event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
 				//event.toolTip.add("Water: " + disp + "% ("+fill+"/"+max+")");
 			}
-			
+
 			if(event.itemStack.getTagCompound().getLong("EM_ROT_DATE") > 0 && EM_Settings.foodSpoiling)
 			{
 				double rotDate = event.itemStack.getTagCompound().getLong("EM_ROT_DATE");
 				double rotTime = event.itemStack.getTagCompound().getLong("EM_ROT_TIME");
 				double curTime = event.entity.worldObj.getTotalWorldTime();
-				
+
 				if(curTime - rotDate <= 0)
 				{
 					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", "0%" , MathHelper.floor_double((curTime - rotDate)/24000L) , MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
@@ -1796,7 +1799,7 @@ public class EM_EventManager
 					//event.toolTip.add("Use-By: Day " + MathHelper.floor_double((rotDate + rotTime)/24000L));
 				}
 			}
-			
+
 			if(event.itemStack.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY))
 			{
 				int i = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY);
@@ -1806,7 +1809,7 @@ public class EM_EventManager
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
@@ -1816,11 +1819,11 @@ public class EM_EventManager
 			{
 				config.save();
 			}
-			
+
 			EM_ConfigHandler.ReloadConfig();
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onCrafted(ItemCraftedEvent event) // Prevents exploit of making foods with almost rotten food to prolong total life of food supplies
 	{
@@ -1828,10 +1831,10 @@ public class EM_EventManager
 		{
 			return;
 		}
-		
+
 		RotProperties rotProps = null;
 		long rotTime = (long)(EM_Settings.foodRotTime * 24000L);
-		
+
 		if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(event.crafting.getItem())))
 		{
 			rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(event.crafting.getItem()));
@@ -1841,41 +1844,41 @@ public class EM_EventManager
 			rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(event.crafting.getItem()) + "," + event.crafting.getItemDamage());
 			rotTime = (long)(rotProps.days * 24000L);
 		}
-		
+
 		if(rotProps == null)
 		{
 			return; // Crafted item is not a rotting food
 		}
-		
+
 		long lowestDate = -1L;
-		
+
 		for(int i = 0; i < event.craftMatrix.getSizeInventory(); i++)
 		{
 			ItemStack stack = event.craftMatrix.getStackInSlot(i);
-			
+
 			if(stack == null || stack.getItem() == null || stack.getTagCompound() == null)
 			{
 				continue;
 			}
-			
+
 			if(stack.getTagCompound().hasKey("EM_ROT_DATE") && (lowestDate < 0 || stack.getTagCompound().getLong("EM_ROT_DATE") < lowestDate))
 			{
 				lowestDate = stack.getTagCompound().getLong("EM_ROT_DATE");
 			}
 		}
-		
+
 		if(lowestDate >= 0)
 		{
 			if(event.crafting.getTagCompound() == null)
 			{
 				event.crafting.setTagCompound(new NBTTagCompound());
 			}
-			
+
 			event.crafting.getTagCompound().setLong("EM_ROT_DATE", lowestDate);
 			event.crafting.getTagCompound().setLong("EM_ROT_TIME", rotTime);
 		}
 	}
-	
+
 	/**
 	 * Checks a block against the config list of blocks that can purify water in an above cauldron
 	 */
@@ -1887,22 +1890,22 @@ public class EM_EventManager
 			Block block; String blockname=cauldronBlock; int blockmeta=-1;
 			// Break entry into namespace and meta
 			String[] split_entry = cauldronBlock.split(":");
-			
+
 			if (split_entry.length <2 || split_entry.length>3) {return false;} // Illegal entry
 			else if (split_entry.length==3) // A meta is provided
 			{
 				try {blockmeta = Integer.parseInt(split_entry[2]);}
 				catch (Exception e) {blockmeta = -1;}
-				
+
 				blockname = split_entry[0]+":"+split_entry[1];
 			}
 			// Try to parse block
 			block = Block.getBlockFromName(blockname);
-			
+
 			// This is a heating block that's on the list
 			if (block != null && block==blockInWorld && (blockmeta<0 || (blockmeta==metaInWorld))) {return true;}
 		}
-		
+
 		return false;
 	}
 }

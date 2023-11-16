@@ -28,9 +28,9 @@ public class EM_Settings
 	public static final UUID FROST3_UUID = UUID.fromString("721E793E-2203-4F6F-883F-6F44D7DDCCE1");
 	public static final UUID HEAT1_UUID = UUID.fromString("CA6E2CFA-4C53-4CD2-AAD3-3D6177A4F126");
 	public static final UUID DEHY1_UUID = UUID.fromString("38909A39-E1A1-4E93-9016-B2CCBE83D13D");
-	
+
 	public static File worldDir = null;
-	
+
 	//Mod Data
 	public static final String VERSION = "@VERSION@";
 	public static final String MOD_ID = "enviromine";
@@ -41,19 +41,21 @@ public class EM_Settings
 	public static final String URL = "https://modrinth.com/mod/enviromine-for-galaxy-odyssey";
 	public static final String VERSION_CHECKER_URL = "https://gitgud.io/AstroTibs/enviromine-for-galaxy-odyssey/-/raw/1.7.10/CURRENT_VERSION";
 	public static final String GUI_FACTORY = MOD_ID+".client.gui.menu.config.EnviroMineGuiFactory";
-	
+
 	public static boolean versionChecker;
-	
+
 	public static int loggerVerbosity;
-	
+    public static int GasMaskBreakMultiplier;
+    public static int GasMaskBreakChanceNumber;
+
 	public static boolean enablePhysics = true;
 	public static boolean enableLandslide = true;
 	public static boolean waterCollapse = true; // Added out of necessity/annoyance -- AstroTibs
-	
+
 	public static float blockTempDropoffPower = 0.75F;
 	public static int scanRadius = 6;
 	public static float auraRadius = 0.5F;
-	
+
 	@ShouldOverride
 	public static boolean enableAirQ = true;
 	@ShouldOverride
@@ -63,20 +65,20 @@ public class EM_Settings
 	@ShouldOverride
 	public static boolean enableBodyTemp = true;
 	public static boolean trackNonPlayer = false;
-	
+
 	public static boolean spreadIce = false;
-	
+
 	public static boolean useFarenheit = false;
 	public static String heatBarPos;
 	public static String waterBarPos;
 	public static String sanityBarPos;
 	public static String oxygenBarPos;
-	
+
 	public static int dirtBottleID = 5001;
 	public static int saltBottleID = 5002;
 	public static int coldBottleID = 5003;
 	public static int camelPackID = 5004;
-	
+
 	public static final String GAS_MASK_FILL_TAG_KEY = "gasMaskFill";
 	public static final String GAS_MASK_MAX_TAG_KEY = "gasMaskMax";
 	public static final String CAMEL_PACK_FILL_TAG_KEY = "camelPackFill";
@@ -86,30 +88,30 @@ public class EM_Settings
 	public static int filterRestore = 500;
 	public static int camelPackMax = 100;
 	public static float gasMaskUpdateRestoreFraction = 1F;
-	
+
 	/*
 	public static int gasMaskID = 5005;
 	public static int airFilterID = 5006;
 	public static int hardHatID = 5007;
 	public static int rottenFoodID = 5008;
-	
+
 	public static int blockElevatorTopID = 501;
 	public static int blockElevatorBottomID = 502;
 	public static int gasBlockID = 503;
 	public static int fireGasBlockID = 504;
 	*/
-	
+
 	public static int hypothermiaPotionID = 27;
 	public static int heatstrokePotionID = 28;
 	public static int frostBitePotionID = 29;
 	public static int dehydratePotionID = 30;
 	public static int insanityPotionID = 31;
-	
+
 	public static boolean enableHypothermiaGlobal = true;
 	public static boolean enableHeatstrokeGlobal = true;
 	public static boolean enableFrostbiteGlobal = true;
 	public static boolean frostbitePermanent = true;
-	
+
 	//Gases
 	public static boolean renderGases = false;
 	public static int gasTickRate = 32; //GasFires are 4x faster than this
@@ -117,12 +119,12 @@ public class EM_Settings
 	public static boolean gasWaterLike = true;
 	public static boolean slowGases = true; // Normal gases use random ticks to move
 	public static boolean noGases = false;
-	
+
 	//World Gen
 	public static boolean shaftGen = true;
 	public static boolean gasGen = true;
 	public static boolean oldMineGen = true;
-	
+
 	//Properties
 	//@ShouldOverride("enviromine.network.packet.encoders.ArmorPropsEncoder")
 	@ShouldOverride({String.class, ArmorProperties.class})
@@ -138,37 +140,37 @@ public class EM_Settings
 	public static HashMap<Integer,BiomeProperties> biomeProperties = new HashMap<Integer,BiomeProperties>();
 	@ShouldOverride({Integer.class, DimensionProperties.class})
 	public static HashMap<Integer,DimensionProperties> dimensionProperties = new HashMap<Integer,DimensionProperties>();
-	
+
 	public static HashMap<String,StabilityType> stabilityTypes = new HashMap<String,StabilityType>();
-	
+
 	@ShouldOverride({String.class, RotProperties.class})
 	public static HashMap<String,RotProperties> rotProperties = new HashMap<String,RotProperties>();
-	
+
 	public static boolean streamsDrink = true;
 	public static boolean witcheryVampireImmunities = true;
 	public static boolean witcheryWerewolfImmunities = true;
 	public static boolean matterOverdriveAndroidImmunities = true;
-	
+
 	public static int updateCap = 128;
 	public static boolean stoneCracks = true;
 	public static String defaultStability = "loose";
-	
+
 	public static double sanityMult = 1.0D;
 	public static double hydrationMult = 1.0D;
 	public static double tempMult = 1.0D;
 	public static double airMult = 1.0D;
-	
+
 	//public static boolean updateCheck = true;
 	//public static boolean useDefaultConfig = true;
 	public static boolean genConfigs = false;
 	public static boolean genDefaults = false;
-	
+
 	public static int physInterval = 6;
 	public static int worldDelay = 1000;
 	public static int chunkDelay = 1000;
 	public static int entityFailsafe = 1;
 	public static boolean villageAssist = true;
-	
+
 	public static boolean minimalHud;
 	public static boolean limitCauldron;
 	public static boolean allowTinting = true;
@@ -177,7 +179,7 @@ public class EM_Settings
 	public static boolean genFlammableCoal = true; // In case you don't want burny-coal
 	public static boolean randomizeInsanityPitch = true;
 	public static boolean catchFireAtHighTemps = true;
-	
+
 	public static int caveDimID = -3;
 	public static int caveBiomeID = 23;
 	public static boolean disableCaves = false;
@@ -193,20 +195,20 @@ public class EM_Settings
 	public static boolean enforceWeights = false;
 	public static ArrayList<CaveGenProperties> caveGenProperties = new ArrayList<CaveGenProperties>();
 	public static HashMap<Integer, CaveSpawnProperties> caveSpawnProperties = new HashMap<Integer, CaveSpawnProperties>();
-	
+
 	public static boolean foodSpoiling = true;
 	public static int foodRotTime = 7;
-	
+
 	/** Whether or not this overridden with server settings */
 	public static boolean isOverridden = false;
 	public static boolean enableConfigOverride = false;
 	public static boolean profileOverride = false;
 	public static String profileSelected = "default";
-	
+
 	public static boolean enableQuakes = true;
 	public static boolean quakePhysics = true;
 	public static int quakeRarity = 100;
-	
+
 	public static boolean finiteWater = false;
 	public static float thingChance = 0.000001F;
 	public static boolean noNausea = false;
@@ -244,9 +246,9 @@ public class EM_Settings
 			"netherlicious:SoulFire",
 			"uptodate:magma_block",
 	};
-	
+
 	public static boolean voxelMenuExists = false;
-	
+
 	/**
 	 * Tells the server that this field should be sent to the client to overwrite<br>
 	 * Usage:<br>

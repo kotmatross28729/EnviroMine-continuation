@@ -42,10 +42,10 @@ public class EM_ConfigHandler
 	// Dirs for Custom Files
 	public static String configPath = "config/enviromine/";
 	public static String customPath = "CustomProperties/";
-	
+
 	public static String profilePath = configPath + "profiles/";
 	public static String defaultProfile = profilePath +"default/";
-	
+
 	// Category names
 	private static final String CATEGORY_CONFIG = "Config";
 	private static final String CATEGORY_PHYSICS = "Physics";
@@ -56,39 +56,39 @@ public class EM_ConfigHandler
 	private static final String CATEGORY_EASTER_EGGS = "Easter Eggs";
 	private static final String CATEGORY_WORLD_GENERATION = "World Generation";
 	private static final String CATEGORY_MOD_INTEGRATION = "Mod Integration";
-	
+
 	// Values
 	public static final int HUD_ID_AIR_QUALITY = 3;
 	public static final int HUD_ID_BODY_TEMPERATURE = 0;
 	public static final int HUD_ID_HYDRATION = 1;
 	public static final int HUD_ID_SANITY = 2;
-	
+
 	/**
 	 * Configuration version number. If changed the version file will be reset to defaults to prevent glitches
 	 */
 	public static final String CONFIG_VERSION = "1.0.0";
-	
+
 	/**
 	 * The version of the configs last loaded from file. This will be compared to the version number above when determining whether a reset is necessary
 	 */
-	
-	
+
+
 	public static String loadedProfile = defaultProfile;
-	
+
 	static HashMap<String, PropertyBase> propTypes;
 	public static HashMap<String, PropertyBase> globalTypes;
-	
+
 	public static List loadedConfigs = new ArrayList();
-	
-	
-	
+
+
+
 	/**
 	 * Register all property types and their category names here. The rest is handled automatically.
 	 */
 	static
 	{
 		propTypes = new HashMap<String, PropertyBase>();
-		
+
 		propTypes.put(BiomeProperties.base.categoryName(), BiomeProperties.base);
 		propTypes.put(ArmorProperties.base.categoryName(), ArmorProperties.base);
 		propTypes.put(BlockProperties.base.categoryName(), BlockProperties.base);
@@ -96,36 +96,36 @@ public class EM_ConfigHandler
 		propTypes.put(EntityProperties.base.categoryName(), EntityProperties.base);
 		propTypes.put(ItemProperties.base.categoryName(), ItemProperties.base);
 		propTypes.put(RotProperties.base.categoryName(), RotProperties.base);
-		
+
 		globalTypes = new HashMap<String, PropertyBase>();
 		globalTypes.put(CaveGenProperties.base.categoryName(), CaveGenProperties.base);
 		globalTypes.put(CaveSpawnProperties.base.categoryName(), CaveSpawnProperties.base);
 		globalTypes.put(CaveBaseProperties.base.categoryName(), CaveBaseProperties.base);
-		
+
 	}
 
-	
+
 	public static void initProfile()
-	{	
+	{
 		/*EM_WorldData theWorldEM = EnviroMine.theWorldEM;
-		
+
 		String profile = theWorldEM.getProfile();
-		
+
 		// if profile is overriden than switch profiles
-		if(EM_Settings.profileOverride) 
+		if(EM_Settings.profileOverride)
 		{
 			profile = EM_Settings.profileSelected;
 			theWorldEM.setProfile(profile);
 		}*/
-		
+
 		String profile = EM_Settings.profileSelected;
-		
+
 		if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.INFO, "LOADING PROFILE: " + profile);
-		
+
 		File profileDir = new File(profilePath + profile +"/"+ customPath);
 
 		//CheckDir(profileDir);
-		
+
 		if(!profileDir.exists())
 		{
 			try
@@ -137,59 +137,59 @@ public class EM_ConfigHandler
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Unable to create directories for profile", e);
 			}
 		}
-		
+
 		if(!profileDir.exists())
 		{
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to load Profile:"+ profile +". Loading Default");	
+			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to load Profile:"+ profile +". Loading Default");
 			profileDir = new File(defaultProfile + customPath);
 			loadedProfile = defaultProfile;
 		}
-		else 
+		else
 		{
 			loadedProfile = profilePath + profile +"/";
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.INFO, "Loading Profile: "+ profile);
 		}
-		
+
 		File ProfileSettings = new File(loadedProfile + profile +"_Settings.cfg");
 		loadProfileConfig(ProfileSettings);
 		// load defaults
-		
+
 		loadHudItems();
-		
+
 		//These must be run before the block configs generate/load
 		StabilityType.base.GenDefaults();
 		StabilityType.base.customLoad();
-		
+
 		if(EM_Settings.genDefaults)
 		{
 			loadDefaultProperties();
 		}
-		
-		
+
+
 		// Now load Files from "Custom Objects"
 		File[] customFiles = GetFileList(loadedProfile + customPath);
 		for(int i = 0; i < customFiles.length; i++)
 		{
 			LoadCustomObjects(customFiles[i]);
 		}
-				
-				
-			
-				
+
+
+
+
 		Iterator<PropertyBase> iterator = propTypes.values().iterator();
-				
+
 		// Load non standard property files
 		while(iterator.hasNext())
 		{
 			PropertyBase props = iterator.next();
-				
+
 			if(!props.useCustomConfigs())
 			{
 				props.customLoad();
 			}
 		}
-		
-		if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) 
+
+		if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel())
 		{
 			EnviroMine.logger.log(Level.INFO, "Loaded " + EM_Settings.stabilityTypes.size() + " stability types");
 			EnviroMine.logger.log(Level.INFO, "Loaded " + EM_Settings.armorProperties.size() + " armor properties");
@@ -202,9 +202,9 @@ public class EM_ConfigHandler
 			EnviroMine.logger.log(Level.INFO, "Loaded " + EM_Settings.caveGenProperties.size() + " cave ore properties");
 			EnviroMine.logger.log(Level.INFO, "Loaded " + EM_Settings.caveSpawnProperties.size() + " cave entity properties");
 		}
-				
-	}	
-	
+
+	}
+
 	// HardCoded for now
 	public static void loadHudItems()
 	{
@@ -217,7 +217,7 @@ public class EM_ConfigHandler
 		{
 			HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_AIR_QUALITY));
 		}
-		
+
 		if(!EM_Settings.enableBodyTemp
 				&& HUDRegistry.isActiveHudItem(HUDRegistry.getHudItemByID(HUD_ID_BODY_TEMPERATURE)))
 		{
@@ -227,7 +227,7 @@ public class EM_ConfigHandler
 		{
 			HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_BODY_TEMPERATURE));
 		}
-		
+
 		if(!EM_Settings.enableHydrate
 				&& HUDRegistry.isActiveHudItem(HUDRegistry.getHudItemByID(HUD_ID_HYDRATION)))
 		{
@@ -237,7 +237,7 @@ public class EM_ConfigHandler
 		{
 			HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_HYDRATION));
 		}
-		
+
 		if(!EM_Settings.enableSanity
 				&& HUDRegistry.isActiveHudItem(HUDRegistry.getHudItemByID(HUD_ID_SANITY)))
 		{
@@ -248,56 +248,56 @@ public class EM_ConfigHandler
 			HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_SANITY));
 		}
 	}
-	
+
 	public static int initConfig()
 	{
-		// Check for Data Directory 
+		// Check for Data Directory
 		//CheckDir(new File(customPath));
-		
+
 		if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.INFO, "Loading configs...");
-	
+
 		// Load Global Configs
 		File configFile = new File(configPath + "Global_Settings.cfg");
 		loadGlobalConfig(configFile);
-		
+
 		Iterator<PropertyBase> iterator = globalTypes.values().iterator();
-		
+
 		// Load non standard property files
 		while(iterator.hasNext())
 		{
 			PropertyBase props = iterator.next();
-				
+
 			if(!props.useCustomConfigs())
 			{
 				props.customLoad();
 			}
 		}
-		
+
 		int Total = EM_Settings.armorProperties.size() + EM_Settings.blockProperties.size() + EM_Settings.livingProperties.size() + EM_Settings.itemProperties.size() + EM_Settings.biomeProperties.size() + EM_Settings.dimensionProperties.size() + EM_Settings.caveGenProperties.size() + EM_Settings.caveSpawnProperties.size();
-		
+
 		return Total;
 	}
-	
+
 	public enum EnumLogVerbosity
 	{
 		NONE(0),
 		LOW(1),
 		NORMAL(2),
 		ALL(3);
-		
+
 		private final int level;
-		
+
 		private EnumLogVerbosity(int level)
 		{
 			this.level = level;
 		}
-		
+
 		public int getLevel()
 		{
 			return this.level;
 		}
 	}
-	
+
 	private static void loadGlobalConfig(File file)
 	{
 		Configuration config;
@@ -309,28 +309,30 @@ public class EM_ConfigHandler
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.WARN, "Failed to load main configuration file!", e);
 			return;
 		}
-		
+
 		config.load();
-		
-		
+
+
 		// ------------------------ //
 		// --- World Generation --- //
 		// ------------------------ //
-		
+
 		EM_Settings.shaftGen = config.get(CATEGORY_WORLD_GENERATION, "Enable Village MineShafts", EM_Settings.shaftGen, "Generates mineshafts in villages").getBoolean(EM_Settings.shaftGen);
 		EM_Settings.oldMineGen = config.get(CATEGORY_WORLD_GENERATION, "Enable New Abandoned Mineshafts", EM_Settings.oldMineGen, "Generates massive abandoned mineshafts (size doesn't cause lag) (This Overrides all Dimensions. Check Custom Dimension properties if you want to set it only for certain Dimensions.)").getBoolean(EM_Settings.oldMineGen);
 		EM_Settings.gasGen = config.get(CATEGORY_WORLD_GENERATION, "Generate Gases", EM_Settings.gasGen).getBoolean(EM_Settings.gasGen);
 		//EM_Settings.disableCaves = config.get(catWorldGen, "Disable Cave Dimension", false).getBoolean(false); // Moved to CaveBaseProperties
 		//EM_Settings.limitElevatorY = config.get(catWorldGen, "Limit Elevator Height", true).getBoolean(true); // Moved to CaveBaseProperties
-	
+
 		config.get("Do not Edit", "Current Config Version", CONFIG_VERSION).getString();
-		
-		
+
+
 		// --------------- //
 		// --- General --- //
 		// --------------- //
-		
+
 		//EM_Settings.updateCheck = config.get(Configuration.CATEGORY_GENERAL, "Check For Updates", EM_Settings.updateCheck).getBoolean(EM_Settings.updateCheck);
+        EM_Settings.GasMaskBreakMultiplier = config.getInt("Hbm Gas Mask filter break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "Multiplier for breaking a hbm gas mask filter");
+        EM_Settings.GasMaskBreakChanceNumber = config.getInt("Hbm Gas Mask filter break chance number",Configuration.CATEGORY_GENERAL, 15, 0, 100,  "Chance number for breaking a hbm gas mask filter");
 		EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, true, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
 				+ "\n0: No log messages are printed whatsoever"
@@ -349,8 +351,8 @@ public class EM_ConfigHandler
 		EM_Settings.blockTempDropoffPower = config.getFloat("Block Temperature Dropoff Power", Configuration.CATEGORY_GENERAL, 0.75F, 0.25F, 2F, "How rapidly the temperature influence of blocks falls off with your distance from them. 2 is realistic for open areas; 1 for large enclosed areas, and lower for more claustrophobic areas. Classic EnviroMine used 0.5.");
 //		EM_Settings.scanRadius = config.getInt("Environment scan radius", Configuration.CATEGORY_GENERAL, 6, 1, 10, "Max distance blocks with temperature effects can affect you. Higher radius is more accurate, but more computationally expensive.");
 //		EM_Settings.auraRadius = config.getFloat("Emission Aura Radius", Configuration.CATEGORY_GENERAL, 0.5F, 0F, 5F, "A block with temperature effects maxes out its effects when you're this far from the block's center. ");
-		
-		
+
+
 		// --------------- //
 		// --- Physics --- //
 		// --------------- //
@@ -362,8 +364,8 @@ public class EM_ConfigHandler
 		EM_Settings.chunkDelay = config.get(CATEGORY_PHYSICS, "Chunk Physics Delay", EM_Settings.chunkDelay, "How long until individual chunk's physics starts after loading (DO NOT SET TOO LOW)").getInt(EM_Settings.chunkDelay);
 		EM_Settings.physInterval = EM_Settings.physInterval >= 2 ? EM_Settings.physInterval : 2;
 		EM_Settings.entityFailsafe = config.get(CATEGORY_PHYSICS, "Physics entity fail safe level", EM_Settings.entityFailsafe, "0 = No action, 1 = Limit to < 100 per 8x8 block area, 2 = Delete excessive entities & Dump physics (EMERGENCY ONLY)").getInt(EM_Settings.entityFailsafe);
-		
-		
+
+
 		// --------------- //
 		// --- Potions --- //
 		// --------------- //
@@ -386,19 +388,19 @@ public class EM_ConfigHandler
 		EM_Settings.enableHeatstrokeGlobal = config.get(CATEGORY_POTIONS, "Enable Heat Stroke", EM_Settings.enableHeatstrokeGlobal).getBoolean();
 		EM_Settings.enableHypothermiaGlobal = config.get(CATEGORY_POTIONS, "Enable Hypothermia", EM_Settings.enableHypothermiaGlobal).getBoolean();
 		EM_Settings.frostbitePermanent = config.get(CATEGORY_POTIONS, "Frostbite is permanent after enough time passes", EM_Settings.enableFrostbiteGlobal).getBoolean(); // Convenience - AstroTibs
-		
+
 		// Config Options
 
 		//Default Profile Override
 		EM_Settings.profileSelected = config.get(CATEGORY_CONFIG, "Profile", EM_Settings.profileSelected).getString();
 		EM_Settings.profileOverride = config.get(CATEGORY_CONFIG, "Override Profile", EM_Settings.profileOverride,  "Override Profile. It Can be used for servers to force profiles on servers or modpack. This Overrides any world loaded up. Name is Case Sensitive!").getBoolean(false);
 		EM_Settings.enableConfigOverride = config.get(CATEGORY_CONFIG, "Client Config Override (SMP)", EM_Settings.enableConfigOverride, "[DISABLED][WIP] Temporarily overrides client configurations with the server's (NETWORK INTESIVE!)").getBoolean(EM_Settings.enableConfigOverride);
-		
-		
+
+
 		// ------------- //
 		// --- Gases --- //
 		// ------------- //
-		
+
 		EM_Settings.noGases = config.get(CATEGORY_GASES, "Disable Gases", EM_Settings.noGases, "Disables all gases and slowly deletes existing pockets").getBoolean(EM_Settings.noGases);
 		EM_Settings.slowGases = config.get(CATEGORY_GASES, "Slow Gases", EM_Settings.slowGases, "Normal gases will move extremely slowly and reduce TPS lag").getBoolean(EM_Settings.slowGases);
 		EM_Settings.renderGases = config.get(CATEGORY_GASES, "Render normal gas", EM_Settings.renderGases, "Whether to render gases not normally visible").getBoolean(EM_Settings.renderGases);
@@ -407,13 +409,13 @@ public class EM_ConfigHandler
 		EM_Settings.gasWaterLike = config.get(CATEGORY_GASES, "Water like spreading", EM_Settings.gasWaterLike, "Whether gases should spread like water (faster) or even out as much as possible (realistic)").getBoolean(EM_Settings.gasWaterLike);
 		// Custom ignite list
 		String[] igniteList = config.getStringList("Ignite List", CATEGORY_GASES, ObjectHandler.DefaultIgnitionSources(), "List of Blocks that will ignite flamable gasses.");
-		
+
 		ObjectHandler.LoadIgnitionSources(igniteList);
 		config.save();
-		
-	
+
+
 	}
-	
+
 	private static void loadProfileConfig(File file)
 	{
 		Configuration config;
@@ -425,9 +427,9 @@ public class EM_ConfigHandler
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.WARN, "Failed to load main configuration file!", e);
 			return;
 		}
-		
+
 		config.load();
-		
+
 		//General Settings
 		EM_Settings.enablePhysics = config.get(Configuration.CATEGORY_GENERAL, "Enable Physics", EM_Settings.enablePhysics, "Turn physics On/Off").getBoolean(EM_Settings.enablePhysics);
 		EM_Settings.enableLandslide = config.get(Configuration.CATEGORY_GENERAL, "Enable Physics Landslide", EM_Settings.enableLandslide).getBoolean(EM_Settings.enableLandslide);
@@ -444,7 +446,7 @@ public class EM_ConfigHandler
 		EM_Settings.genFlammableCoal = config.get(Configuration.CATEGORY_GENERAL, "Generate Combustable Coal Ore", EM_Settings.genFlammableCoal, "On worldgen, replace coal ore blocks with the flammable EM variant. Turning this off does not revert previous generation.").getBoolean(EM_Settings.genFlammableCoal); // Added from request -- AstroTibs
 		EM_Settings.randomizeInsanityPitch = config.get(Configuration.CATEGORY_GENERAL, "Randomize Insanity Pitch", EM_Settings.randomizeInsanityPitch, "Sounds you hear when under the influence of insanity have a randomized pitch").getBoolean(EM_Settings.randomizeInsanityPitch);
 		EM_Settings.catchFireAtHighTemps = config.get(Configuration.CATEGORY_GENERAL, "Catch fire at high temperatures", EM_Settings.catchFireAtHighTemps, "Spontaneously combust when your body temperature gets high enough").getBoolean(EM_Settings.catchFireAtHighTemps);
-		
+
 		// Item capacities
 		EM_Settings.gasMaskMax = config.get(Configuration.CATEGORY_GENERAL, "Capacity: Gas Mask", EM_Settings.gasMaskMax).getInt(EM_Settings.gasMaskMax);
 		EM_Settings.filterRestore = config.get(Configuration.CATEGORY_GENERAL, "Capacity: Gas Mask Filter Restore", EM_Settings.filterRestore).getInt(EM_Settings.filterRestore);
@@ -454,34 +456,34 @@ public class EM_ConfigHandler
 		if (EM_Settings.filterRestore < 1) {EM_Settings.filterRestore = 1;}
 		if (EM_Settings.camelPackMax < 1) {EM_Settings.camelPackMax = 1;}
 
-		
+
 		// ----------------------- //
 		// --- Mod Integration --- //
 		// ----------------------- //
-		
+
 		EM_Settings.streamsDrink = config.get(CATEGORY_MOD_INTEGRATION, "Streams: River Drinking", EM_Settings.streamsDrink, "Allows players to drink from river blocks from the Streams mod").getBoolean(EM_Settings.streamsDrink);
 		EM_Settings.witcheryVampireImmunities = config.get(CATEGORY_MOD_INTEGRATION, "Witchery: Vampire Immunities", EM_Settings.witcheryVampireImmunities, "Vampire players gain resistances and immunities to various effects inflicted by enviromine status bars").getBoolean(EM_Settings.witcheryVampireImmunities);
 		EM_Settings.witcheryWerewolfImmunities = config.get(CATEGORY_MOD_INTEGRATION, "Witchery: Werewolf Immunities", EM_Settings.witcheryWerewolfImmunities, "Players gain resistances and immunities to various effects inflicted by enviromine status bars when in wolf or werewolf form").getBoolean(EM_Settings.witcheryWerewolfImmunities);
 		EM_Settings.matterOverdriveAndroidImmunities = config.get(CATEGORY_MOD_INTEGRATION, "Matter Overdrive: Android Immunities", EM_Settings.matterOverdriveAndroidImmunities, "Players who are in android form gain immunities to most EnviroMine effects").getBoolean(EM_Settings.matterOverdriveAndroidImmunities);
-		
-		
+
+
 		// Physics Settings
 		EM_Settings.stoneCracks = config.get(CATEGORY_PHYSICS, "Stone Cracks Before Falling", EM_Settings.stoneCracks).getBoolean(EM_Settings.stoneCracks);
 		EM_Settings.defaultStability = config.get(CATEGORY_PHYSICS, "Default Stability Type (BlockIDs > 175)", EM_Settings.defaultStability).getString();
 		EM_Settings.waterCollapse = config.get(CATEGORY_PHYSICS, "Water Causes Collapse", EM_Settings.waterCollapse).getBoolean(EM_Settings.waterCollapse); // Added out of necessity/annoyance -- AstroTibs
-		
-		
+
+
 		// Multipliers IDs
 		EM_Settings.tempMult = config.get(CATEGORY_SPEED_MULTIPLIERS, "BodyTemp", EM_Settings.tempMult).getDouble(EM_Settings.tempMult);
 		EM_Settings.hydrationMult = config.get(CATEGORY_SPEED_MULTIPLIERS, "Hydration", EM_Settings.hydrationMult).getDouble(EM_Settings.hydrationMult);
 		EM_Settings.airMult = config.get(CATEGORY_SPEED_MULTIPLIERS, "AirQuality", EM_Settings.airMult).getDouble(EM_Settings.airMult);
 		EM_Settings.sanityMult = config.get(CATEGORY_SPEED_MULTIPLIERS, "Sanity", EM_Settings.sanityMult).getDouble(EM_Settings.sanityMult);
-		
+
 		EM_Settings.tempMult = EM_Settings.tempMult < 0 ? 0F : EM_Settings.tempMult;
 		EM_Settings.hydrationMult = EM_Settings.hydrationMult < 0 ? 0F : EM_Settings.hydrationMult;
 		EM_Settings.airMult = EM_Settings.airMult < 0 ? 0F : EM_Settings.airMult;
 		EM_Settings.sanityMult = EM_Settings.sanityMult < 0 ? 0F : EM_Settings.sanityMult;
-		
+
 		// Config Options
 		Property genConfig = config.get(CATEGORY_CONFIG, "Generate Blank Configs", false, "Will attempt to find and generate blank configs for any custom items/blocks/etc loaded before "+EM_Settings.MOD_NAME+". Pack developers are highly encouraged to enable this! (Resets back to false after use)");
 		if(!EM_Settings.genConfigs)
@@ -489,16 +491,16 @@ public class EM_ConfigHandler
 			EM_Settings.genConfigs = genConfig.getBoolean(false);
 		}
 		genConfig.set(false);
-		
+
 		Property genDefault = config.get(CATEGORY_CONFIG, "Generate Defaults", true, "Generates "+EM_Settings.MOD_NAME+"'s initial default files");
 		if(!EM_Settings.genDefaults)
 		{
 			EM_Settings.genDefaults = genDefault.getBoolean(true);
 		}
 		genDefault.set(false);
-		
+
 		EM_Settings.enableConfigOverride = config.get(CATEGORY_CONFIG, "Client Config Override (SMP)", EM_Settings.enableConfigOverride, "[DISABLED][WIP] Temporarily overrides client configurations with the server's (NETWORK INTESIVE!)").getBoolean(EM_Settings.enableConfigOverride);
-		
+
 		// Earthquake
 		EM_Settings.enableQuakes = config.get(CATEGORY_EARTHQUAKES, "Enable Earthquakes", EM_Settings.enableQuakes).getBoolean(EM_Settings.enableQuakes);
 		EM_Settings.quakePhysics = config.get(CATEGORY_EARTHQUAKES, "Triggers Physics", EM_Settings.quakePhysics, "Can cause major lag at times (Requires main physics to be enabled)").getBoolean(EM_Settings.quakePhysics);
@@ -507,13 +509,13 @@ public class EM_ConfigHandler
 		{
 			EM_Settings.quakeRarity = 0;
 		}
-		
+
 		// Easter Eggs!
 		EM_Settings.thingChance = config.getFloat("Cave Dimension Grue", CATEGORY_EASTER_EGGS, 0.000001F, 0F, 1F, "Chance the (extremely rare) grue in the cave dimension will attack in the dark (ignored on Halloween or Friday 13th)");
-			
-		config.save();	
+
+		config.save();
 	}
-	
+
 	/**
 	 * @deprecated Use config.getInt(...) instead as it provides min & max value caps
 	 */
@@ -527,7 +529,7 @@ public class EM_ConfigHandler
 			return min;
 		}
 	}
-	
+
 	static int nextAvailPotion(int startID)
 	{
 		for(int i = startID; i > 0; i++)
@@ -543,63 +545,63 @@ public class EM_ConfigHandler
 				return i;
 			}
 		}
-		
+
 		return startID;
 	}
-	
+
 	//#######################################
-	//#          Get File List              #                 
+	//#          Get File List              #
 	//#This Grabs Directory List for Custom #
 	//#######################################
 	private static File[] GetFileList(String path)
 	{
-		
-		// Will be used Auto Load Custom Objects from ??? Dir 
+
+		// Will be used Auto Load Custom Objects from ??? Dir
 		File f = new File(path);
 		File[] list = f.listFiles();
 		list = list != null? list : new File[0];
-		
+
 		return list;
 	}
-	
+
 	private static boolean isCFGFile(File file)
 	{
 		String fileName = file.getName();
-		
+
 		if(file.isHidden()) return false;
-		
+
 		//Matcher
 		String patternString = "(.*\\.cfg$)";
-		
+
 		Pattern pattern;
 		Matcher matcher;
 		// Make Sure its a .cfg File
 		pattern = Pattern.compile(patternString);
 		matcher = pattern.matcher(fileName);
-		
+
 		String MacCheck = ".DS_Store.cfg";
-		
+
 		if (matcher.matches() && matcher.group(0).toString().toLowerCase() == MacCheck.toLowerCase()) { return false;}
-		
+
 		return matcher.matches();
 	}
-	
+
 	//###################################
-	//#           Check Dir             #                 
+	//#           Check Dir             #
 	//#  Checks for, or makes Directory #
-	//###################################	
+	//###################################
 	public static void CheckDir(File Dir)
 	{
 		boolean dirFlag = false;
-		
+
 		// create File object
-		
+
 		if(Dir.exists())
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.INFO, "Dir already exists:"+ Dir.getName());
 			return;
 		}
-		
+
 		try
 		{
 			Dir.setWritable(true);
@@ -609,22 +611,22 @@ public class EM_ConfigHandler
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Error occured while creating config directory: " + Dir.getAbsolutePath(), e);
 		}
-		
+
 		if(!dirFlag)
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to create config directory: " + Dir.getAbsolutePath());
 		}
 	}
-	
+
 	/**
-	 * Load Custom Objects          
+	 * Load Custom Objects
 	 * Used to Load Custom Blocks,Armor
-	 * Entitys, & Items from Custom Config Dir        
+	 * Entitys, & Items from Custom Config Dir
 	 */
 	private static void LoadCustomObjects(File customFiles)
 	{
 		boolean datFile = isCFGFile(customFiles);
-		
+
 		// Check to make sure this is a Data File Before Editing
 		if(datFile == true)
 		{
@@ -632,9 +634,9 @@ public class EM_ConfigHandler
 			try
 			{
 				config = new Configuration(customFiles, true);
-				
+
 				//EnviroMine.logger.log(Level.INFO, "Loading Config File: " + customFiles.getAbsolutePath());
-	
+
 				config.load();
 
 
@@ -642,21 +644,21 @@ public class EM_ConfigHandler
 			List<String> catagory = new ArrayList<String>();
 			Set<String> nameList = config.getCategoryNames();
 			Iterator<String> nameListData = nameList.iterator();
-			
-			// add Categories to a List 
+
+			// add Categories to a List
 			while(nameListData.hasNext())
 			{
 				catagory.add(nameListData.next());
 			}
-			
+
 			for(int x = 0; x < catagory.size(); x++)
 			{
 				String CurCat = catagory.get(x);
-				
+
 				if(!CurCat.isEmpty() && CurCat.contains(Configuration.CATEGORY_SPLITTER))
 				{
 					String parent = CurCat.split("\\" + Configuration.CATEGORY_SPLITTER)[0];
-					
+
 					if(propTypes.containsKey(parent) && propTypes.get(parent).useCustomConfigs())
 					{
 						PropertyBase property = propTypes.get(parent);
@@ -665,15 +667,15 @@ public class EM_ConfigHandler
 					{
 						if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Failed to load object " + CurCat);
 					}
-					
+
 				}
 			}
-			
+
 			config.save();
-			
+
 			// Add to list of loaded Config files
 			loadedConfigs.add(config.getConfigFile().getName());
-			
+
 			} catch(Exception e)
 			{
 				e.printStackTrace();
@@ -681,40 +683,40 @@ public class EM_ConfigHandler
 				return;
 			}
 		}
-			
-			
+
+
 	}
-	
+
 	public static ArrayList<String> getSubCategories(Configuration config, String mainCat)
 	{
 		ArrayList<String> category = new ArrayList<String>();
 		Set<String> nameList = config.getCategoryNames();
 		Iterator<String> nameListData = nameList.iterator();
-		
-		// add Categories to a List 
+
+		// add Categories to a List
 		while(nameListData.hasNext())
 		{
 			String catName = nameListData.next();
-			
+
 			if(catName.startsWith(mainCat + "."))
 			{
 				category.add(catName);
 			}
 		}
-		
+
 		return category;
 	}
-	
+
 	public static String getProfileName()
 	{
 		return getProfileName(loadedProfile);
 	}
-	
+
 	public static String getProfileName(String profile)
 	{
-		return profile.substring(profilePath.length(),profile.length()-1).toUpperCase();		
+		return profile.substring(profilePath.length(),profile.length()-1).toUpperCase();
 	}
-	
+
 	public static boolean ReloadConfig()
 	{
 				 	try
@@ -730,27 +732,27 @@ public class EM_ConfigHandler
 				 		EM_Settings.rotProperties.clear();
 				 		EM_Settings.caveGenProperties.clear();
 				 		EM_Settings.caveSpawnProperties.clear();
-			
+
 				 		int Total = initConfig();
-			
+
 				 		initProfile();
-			
+
 				 		EnviroMine.caves.RefreshSpawnList();
 				 		return true;
-				 		
+
 				 	} //try
 					catch(NullPointerException e)
 					{
 						return false;
 					}
-	            
+
 
 	}
-	
+
 	public static void loadDefaultProperties()
 	{
 		Iterator<PropertyBase> iterator = propTypes.values().iterator();
-		
+
 		while(iterator.hasNext())
 		{
 			iterator.next().GenDefaults();
@@ -760,9 +762,9 @@ public class EM_ConfigHandler
 	public static Configuration getConfigFromObj(Object obj)
 	{
 		String ModID = ModIdentification.idFromObject(obj);
-	
+
 		File configFile = new File(loadedProfile+ customPath + ModID +".cfg");
-		
+
 		Configuration config;
 		try
 		{
@@ -782,21 +784,21 @@ public class EM_ConfigHandler
 
 		return config;
 	}
-	
+
 	public static String SaveMyCustom(Object obj)
 	{
 		return SaveMyCustom(obj, null);
 	}
-	
+
 	public static String SaveMyCustom(Object obj, Object type)
 	{
-		
+
 		String ModID = ModIdentification.idFromObject(obj);
 
-		
+
 		// Check to make sure this is a Data File Before Editing
 		File configFile = new File(loadedProfile+ customPath + ModID +".cfg");
-		
+
 		Configuration config;
 		try
 		{
@@ -816,16 +818,16 @@ public class EM_ConfigHandler
 		config.load();
 
 		String returnValue = "";
-		
+
 		if(obj instanceof Block)
 		{
-			
+
 			BlockProperties.base.generateEmpty(config, obj);
 			returnValue = "(Block) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();
 
 		} else if(obj instanceof Entity)
-		{		
-			
+		{
+
 			Entity en = (Entity) obj;
 			int id = 0;
 			if(EntityList.getEntityID(en) > 0)
@@ -850,15 +852,15 @@ public class EM_ConfigHandler
 				ArmorProperties.base.generateEmpty(config, obj);
 				returnValue = "(ItemArmor) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();
 		}
-		
+
 		config.save();
-		
-		
+
+
 		return returnValue;
-		
+
 		//return null;
 	}
-	
+
 	private void removeProperty(Configuration config, String oldCat, String propName)
 	{
 		String remove = "Remove";
