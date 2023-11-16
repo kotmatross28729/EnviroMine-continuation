@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import api.hbm.item.IGasMask;
-import com.hbm.hazard.type.HazardTypeBase;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -658,7 +657,6 @@ public class EnviroDataTracker
 				{
 					trackedEntity.attackEntityFrom(EnviroDamageSource.dehydrate, 4.0F);
 				}
-                EntityPlayer player = Minecraft.getMinecraft().thePlayer;;
                 // Sanity checks
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
@@ -672,84 +670,87 @@ public class EnviroDataTracker
                 {
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 4));
 
-                    player.addPotionEffect(new PotionEffect(18, 100, 4));
-                    player.addPotionEffect(new PotionEffect(17, 100, 2));
-                    player.addPotionEffect(new PotionEffect(9, 100, 1));
-                    player.addPotionEffect(new PotionEffect(4, 100, 2));
-                    player.addPotionEffect(new PotionEffect(2, 100, 3));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, 120, 4));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, 100, 2));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.confusion.id, 100, 1));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 100, 2));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 3));
                 }
                 else if(sanity > 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
-                    player.removePotionEffect(18);
-                    player.removePotionEffect(17);
-                    player.removePotionEffect(9);
-                    player.removePotionEffect(4);
-                    player.removePotionEffect(2);
+                  /*trackedEntity.removePotionEffect(Potion.weakness.id);
+                  trackedEntity.removePotionEffect(Potion.hunger.id);
+                  trackedEntity.removePotionEffect(Potion.confusion.id);
+                  trackedEntity.removePotionEffect(Potion.digSlowdown.id);
+                  trackedEntity.removePotionEffect(Potion.moveSlowdown.id);*/
 
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 3));
-                    player.addPotionEffect(new PotionEffect(18, 80, 3));
-                    player.addPotionEffect(new PotionEffect(17, 100, 1));
-                    player.addPotionEffect(new PotionEffect(9, 100, 0));
-                    player.addPotionEffect(new PotionEffect(4, 100, 1));
-                    player.addPotionEffect(new PotionEffect(2, 100, 2));
+
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, 100, 3));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, 100, 1));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.confusion.id, 100, 0));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 100, 1));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 2));
 
                 }
                 else if(sanity > 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
 
-                    player.removePotionEffect(18);
-                    player.removePotionEffect(17);
-                    player.removePotionEffect(9);
-                    player.removePotionEffect(4);
-                    player.removePotionEffect(2);
-
+                  /*trackedEntity.removePotionEffect(Potion.weakness.id);
+                  trackedEntity.removePotionEffect(Potion.hunger.id);
+                  trackedEntity.removePotionEffect(Potion.confusion.id);
+                  trackedEntity.removePotionEffect(Potion.digSlowdown.id);
+                  trackedEntity.removePotionEffect(Potion.moveSlowdown.id);*/
 
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 2));
-                    player.addPotionEffect(new PotionEffect(18, 60, 2));
-                    player.addPotionEffect(new PotionEffect(4, 100, 1));
-                    player.addPotionEffect(new PotionEffect(2, 100, 1));
+
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, 80, 2));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 100, 1));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1));
                 }
                 else if(sanity > 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0))
                 {
-                    player.removePotionEffect(18);
-                    player.removePotionEffect(17);
-                    player.removePotionEffect(9);
-                    player.removePotionEffect(4);
-                    player.removePotionEffect(2);
+                  /*trackedEntity.removePotionEffect(Potion.weakness.id);
+                  trackedEntity.removePotionEffect(Potion.hunger.id);
+                  trackedEntity.removePotionEffect(Potion.confusion.id);
+                  trackedEntity.removePotionEffect(Potion.digSlowdown.id);
+                  trackedEntity.removePotionEffect(Potion.moveSlowdown.id);*/
 
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 1));
-                    player.addPotionEffect(new PotionEffect(18, 40, 1));
-                    player.addPotionEffect(new PotionEffect(2, 100, 0));
+
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, 60, 1));
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 0));
                 }
 				else if(sanity > 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 75F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0) )
 				{
-                    player.removePotionEffect(18);
-                    player.removePotionEffect(17);
-                    player.removePotionEffect(9);
-                    player.removePotionEffect(4);
-                    player.removePotionEffect(2);
+                  /*trackedEntity.removePotionEffect(Potion.weakness.id);
+                  trackedEntity.removePotionEffect(Potion.hunger.id);
+                  trackedEntity.removePotionEffect(Potion.confusion.id);
+                  trackedEntity.removePotionEffect(Potion.digSlowdown.id);
+                  trackedEntity.removePotionEffect(Potion.moveSlowdown.id);*/
 
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 0));
-                    player.addPotionEffect(new PotionEffect(18, 20, 0));
+
+                  trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, 60, 0));
 
 				}
-				else if(sanity > 90F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0))
+				else if(sanity > 75F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0))
 				{
-                    player.removePotionEffect(18);
-                    player.removePotionEffect(17);
-                    player.removePotionEffect(9);
-                    player.removePotionEffect(4);
-                    player.removePotionEffect(2);
+                 /*trackedEntity.removePotionEffect(Potion.weakness.id);
+                 trackedEntity.removePotionEffect(Potion.hunger.id);
+                 trackedEntity.removePotionEffect(Potion.confusion.id);
+                 trackedEntity.removePotionEffect(Potion.digSlowdown.id);
+                 trackedEntity.removePotionEffect(Potion.moveSlowdown.id);*/
 
 				}
                 else if(isCreative)
                 {
-                    player.removePotionEffect(18);
-                    player.removePotionEffect(17);
-                    player.removePotionEffect(9);
-                    player.removePotionEffect(4);
-                    player.removePotionEffect(2);
-
+                 trackedEntity.removePotionEffect(EnviroPotion.insanity.id);
+                 trackedEntity.removePotionEffect(Potion.weakness.id);
+                 trackedEntity.removePotionEffect(Potion.hunger.id);
+                 trackedEntity.removePotionEffect(Potion.confusion.id);
+                 trackedEntity.removePotionEffect(Potion.digSlowdown.id);
+                 trackedEntity.removePotionEffect(Potion.moveSlowdown.id);
                 }
 			}
 

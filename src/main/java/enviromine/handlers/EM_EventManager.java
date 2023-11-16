@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.hbm.hazard.modifier.HazardModifier;
-import net.minecraft.client.resources.I18n;
+import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.util.*;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
@@ -77,15 +78,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
@@ -167,14 +159,14 @@ public class EM_EventManager
 			// Ensure that only one set of trackers are made per Minecraft instance.
 			boolean allowTracker = !(event.world.isRemote && EnviroMine.proxy.isClient() && Minecraft.getMinecraft().isIntegratedServerRunning());
 
-			if(EnviroDataTracker.isLegalType((EntityLivingBase)event.entity) && (event.entity instanceof EntityPlayer || EM_Settings.trackNonPlayer) && allowTracker)
-			{
+          if(EnviroDataTracker.isLegalType((EntityLivingBase) event.entity) && (event.entity instanceof EntityPlayer || EM_Settings.trackNonPlayer) && allowTracker)
+{
 				EnviroDataTracker tracker = EM_StatusManager.lookupTracker((EntityLivingBase)event.entity);
 				boolean hasOld = tracker != null && !tracker.isDisabled;
 
 				if(!hasOld)
 				{
-					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase) event.entity) {};
+					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase) event.entity);
 					EM_StatusManager.addToManager(emTrack);
 					emTrack.loadNBTTags();
 					if(!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN())
@@ -632,7 +624,7 @@ public class EM_EventManager
 									tracker.sanity -= 50F;
 								}
 
-								player.addChatMessage(new ChatComponentText(I18n.format("msg.enviromine.RecordEasterEgg")));
+								player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("msg.enviromine.RecordEasterEgg")));
 								player.addStat(EnviroAchievements.ohGodWhy, 1);
 							}
 						}
@@ -1282,7 +1274,7 @@ public class EM_EventManager
 				if(event.entityLiving instanceof EntityPlayer || (EM_Settings.trackNonPlayer && EnviroDataTracker.isLegalType(event.entityLiving)))
 				{
 					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.WARN, "Server lost track of player! Attempting to re-sync...");
-					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase) event.entity) {};
+					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase) event.entity);
 					EM_StatusManager.addToManager(emTrack);
 					emTrack.loadNBTTags();
 					EM_StatusManager.syncMultiplayerTracker(emTrack);
