@@ -1,0 +1,249 @@
+package enviromine.blocks;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import enviromine.blocks.tiles.TileEntityElevator;
+import enviromine.core.EM_Settings;
+import enviromine.handlers.EnviroAchievements;
+import enviromine.handlers.ObjectHandler;
+import enviromine.handlers.TeleportHandler;
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.world.World;
+
+public class BlockElevator extends Block implements ITileEntityProvider
+{
+	public BlockElevator(Material par2Material)
+	{
+		super(par2Material);
+		this.setHardness(3.0F);
+		this.setStepSound(Block.soundTypeMetal);
+		this.setLightLevel(1F);
+	}
+    
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+    {
+    	return null;
+    }
+	
+	/**
+	 * Called upon block activation (right click on the block.)
+	 */
+	@Override
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9)
+	{
+		if(player.isSneaking())
+		{
+			return true;
+		}
+		
+		EntityPlayerMP playerMP = null;
+		
+		if(player instanceof EntityPlayerMP)
+		{
+			playerMP = (EntityPlayerMP)player;
+		} else
+		{
+			return true;
+		}
+		
+		if(EM_Settings.disableCaves)
+		{
+			player.addChatMessage(new ChatComponentText("The cave dimension has been disabled by the server owner!"));
+			return true;
+		}
+		
+		int meta = world.getBlockMetadata(i, j, k)%2;
+		int meta1 = world.getBlockMetadata(i, j, k)%4;
+		
+		/*if(meta1 > 1) // Recall type
+		{
+			if(meta1 == 2 && (world.getBlock(i, j - 1, k) != ObjectHandler.elevator || world.getBlockMetadata(i, j - 1, k) != 3))
+			{
+				player.addChatMessage(new ChatComponentText("Can't recall an elevator. Incomplete frame"));
+			} else if(meta1 == 3 && (world.getBlock(i, j + 1, k) != ObjectHandler.elevator || world.getBlockMetadata(i, j + 1, k) != 2))
+			{
+				player.addChatMessage(new ChatComponentText("Can't recall an elevator. Incomplete frame"));
+			} else
+			{
+				if(world.provider.dimensionId == 0)
+				{
+					if(TeleportHandler.RecallElevator(i, j + meta - 1, k, false))
+					{
+						player.addChatMessage(new ChatComponentText("Elevator recalled!"));
+					} else
+					{
+						player.addChatMessage(new ChatComponentText("Unable to find elevator to recall"));
+					}
+				} else if(world.provider.dimensionId == EM_Settings.caveDimID)
+				{
+					if(TeleportHandler.RecallElevator(i, j + meta - 1, k, false))
+					{
+						player.addChatMessage(new ChatComponentText("Elevator recalled!"));
+					} else
+					{
+						player.addChatMessage(new ChatComponentText("Unable to find elevator to recall"));
+					}
+				} else
+				{
+					player.addChatMessage(new ChatComponentText("Can't recall an elevator from this dimension"));
+				}
+			}
+			return true;
+		}*/
+		
+		if(!(meta == 0 && world.getBlock(i, j - 1, k) == ObjectHandler.elevator && world.getBlockMetadata(i, j - 1, k)%2 == 1) && !(meta == 1 && world.getBlock(i, j + 1, k) == ObjectHandler.elevator && world.getBlockMetadata(i, j + 1, k)%2 == 0))
+		{
+			player.addChatMessage(new ChatComponentText("Elevator is incomplete!"));
+			return true;
+		}
+		
+		if(j > EM_Settings.limitElevatorY - meta && player.dimension == 0)
+		{
+			player.addChatMessage(new ChatComponentText("Elevator must be built near bedrock."));
+			return true;
+		}
+		
+		if(player.timeUntilPortal > 0)
+		{
+			player.addChatMessage(new ChatComponentText("Please wait before attempting to teleport again."));
+			return true;
+		} else
+		{
+			player.timeUntilPortal = 100;
+		}
+		
+		if(player.dimension == EM_Settings.caveDimID)
+		{
+			player.setLocationAndAngles((double)i + 0.5D, j - 1 + meta, (double)k + 0.5D, player.rotationYaw, player.rotationPitch);
+			player.addStat(EnviroAchievements.intoTheDarkness, 1);
+			
+			if(player.getEntityData().hasKey("EM_CAVE_DIST"))
+			{
+				if(player.getEntityData().getIntArray("EM_CAVE_DIST")[3] >= 1000)
+				{
+					player.addStat(EnviroAchievements.intoTheDarkness, 1);
+				}
+				
+				player.getEntityData().removeTag("EM_CAVE_DIST");
+			}
+			
+			playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, 0, TeleportHandler.GetInstance(playerMP.mcServer.worldServerForDimension(0)));
+			//world.setBlockToAir(i, j, k);
+			/*if(meta == 0)
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 2, 2);
+				world.setBlockMetadataWithNotify(i, j - 1, k, 3, 2);
+				//world.setBlockToAir(i, j - 1, k);
+			} else
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 3, 2);
+				world.setBlockMetadataWithNotify(i, j + 1, k, 2, 2);
+				//world.setBlockToAir(i, j + 1, k);
+			}*/
+		} else if(player.dimension == 0)
+		{
+			player.setLocationAndAngles((double)i + 0.5D, j - 1 + meta, (double)k + 0.5D, player.rotationYaw, player.rotationPitch);
+			player.addStat(EnviroAchievements.boreToTheCore, 1);
+			player.getEntityData().setIntArray("EM_CAVE_DIST", new int[]{i, j, k, 0});
+			playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, EM_Settings.caveDimID, TeleportHandler.GetInstance(playerMP.mcServer.worldServerForDimension(EM_Settings.caveDimID)));
+			//world.setBlockToAir(i, j, k);
+			/*if(meta == 0)
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 2, 2);
+				world.setBlockMetadataWithNotify(i, j - 1, k, 3, 2);
+				//world.setBlockToAir(i, j - 1, k);
+			} else
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 3, 2);
+				world.setBlockMetadataWithNotify(i, j + 1, k, 2, 2);
+				//world.setBlockToAir(i, j + 1, k);
+			}*/
+		} else
+		{
+			player.addChatMessage(new ChatComponentText("You cannot use the elevator from here!"));
+		}
+		return true;
+	}
+	
+	//Make sure you set this as your TileEntity class relevant for the block!
+	@Override
+	public TileEntity createNewTileEntity(World world, int i)
+	{
+		return new TileEntityElevator();
+	}
+	
+	/**
+	 * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
+	 */
+	@Override
+	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void getSubBlocks(Item item, CreativeTabs tab, List tabList)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			tabList.add(new ItemStack(item, 1, i));
+		}
+	}
+	
+	@Override
+	public int damageDropped(int meta)
+	{
+		return meta;
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+    {
+        if(metadata >= 2)
+        {
+        	return new ArrayList<ItemStack>(); // This is the recall block and shouldn't drop anything
+        } else
+        {
+        	return super.getDrops(world, x, y, z, metadata, fortune);
+        }
+    }
+	
+	//You don't want the normal render type, or it wont render properly.
+	@Override
+	public int getRenderType()
+	{
+        return ObjectHandler.renderSpecialID;
+	}
+	
+	//It's not an opaque cube, so you need this.
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+	
+	//It's not a normal block, so you need this too.
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+	
+	//This is the icon to use for showing the block in your hand.
+	@Override
+	public void registerBlockIcons(IIconRegister register)
+	{
+		this.blockIcon = register.registerIcon("iron_block");
+	}
+}

@@ -1,0 +1,174 @@
+language.name=Russian
+
+item.enviromine.badwater.name=Бутылка грязной воды
+item.enviromine.saltwater.name=Бутылка солёной воды
+item.enviromine.coldwater.name=Бутылка холодной воды
+item.enviromine.camelpack.name=Бурдюк
+item.enviromine.gasmask.name=Противогаз
+item.enviromine.hardhat.name=Каска
+item.enviromine.airfilter.name=Воздушный фильтр
+item.enviromine.rottenfood.name=Испорченная еда
+item.enviromine.spoiledmilk.name=Прокисшее молоко
+
+potion.enviromine.frostbite=Обморожение
+potion.enviromine.dehydration=Обезвоживание
+potion.enviromine.insanity=Безумие
+potion.enviromine.heatstroke=Тепловой удар
+potion.enviromine.hypothermia=Гипотермия
+
+tile.enviromine.elevator_top.name=Верх лифта
+tile.enviromine.elevator_bottom.name=Низ лифта
+tile.enviromine.esky.name=Портативный холодильник 
+tile.enviromine.freezer.name=Морозилка
+tile.enviromine.davy_lamp.name=Лампа Дэви
+tile.enviromine.gas.name=Газ
+tile.enviromine.firegas.name=Огнеопасный газ
+tile.enviromine.burningcoal.name=Горящий уголь
+tile.enviromine.nophysblock.name=Пустой физический блок
+
+itemGroup.enviromine.enviroTab=EnviroMine
+
+achievement.enviromine.FunwaysFault=Ошибка Funway
+achievement.enviromine.MindOverMatter=Разум важнее материи
+achievement.enviromine.ProMiner=Профессиональный шахтёр
+achievement.enviromine.HardBoiled=Сильно сваренный
+achievement.enviromine.IronArmy=Железная армия
+achievement.enviromine.TradingFavours=Польза торговли
+achievement.enviromine.INeededThat=Я нуждался в этом
+achievement.enviromine.WinterIsComing=Зима близко
+achievement.enviromine.OhGodWhy=О, Боже, почему
+achievement.enviromine.SafetyFirst=Безопасность прежде всего
+achievement.enviromine.BoreToTheCore=Копаем до ядра
+achievement.enviromine.IntoTheDarkness=В темноту
+achievement.enviromine.ThatJustHappened=Это только что произошло
+achievement.enviromine.ItsPitchBlack=Это кромешная тьма
+achievement.enviromine.TenSecondRule=Правило 10 секунд
+achievement.enviromine.MedicalMarvels=Медицинские чудеса
+achievement.enviromine.SuckItUpPrincess=Получи принцесса
+achievement.enviromine.BreatheEasy=Дыши свободнее
+
+achievement.enviromine.FunwaysFault.desc=Выживете в пещере
+achievement.enviromine.MindOverMatter.desc=Убейте 5 враждебных мобов, находясь под воздействием безумия III
+achievement.enviromine.ProMiner.desc=В сумме наберите 1 час добывания не умирая (с физикой и всеми эффектами)
+achievement.enviromine.HardBoiled.desc=Переживите тепловой удар III
+achievement.enviromine.IronArmy.desc=Назовите железного голема "Siyliss"
+achievement.enviromine.TradingFavours.desc=Получите помощь от жителя
+achievement.enviromine.INeededThat.desc=Нащупайте инструмент, находясь под воздействием обморожения I
+achievement.enviromine.WinterIsComing.desc=Переживите 7 дней в снежном биоме без гипотермии
+achievement.enviromine.OhGodWhy.desc=Play 11
+achievement.enviromine.SafetyFirst.desc=Сделайте каску
+achievement.enviromine.BoreToTheCore.desc=Войдите в пещерное измерение
+achievement.enviromine.IntoTheDarkness.desc=Пройдите 1 км. в пещерном измерении и вернитесь живым
+achievement.enviromine.ThatJustHappened.desc=Переживите газовую атаку
+achievement.enviromine.ItsPitchBlack.desc=???
+achievement.enviromine.TenSecondRule.desc=Съешьте испорченную еду
+achievement.enviromine.MedicalMarvels.desc=Вылечите любую инфекцию или заболевание
+achievement.enviromine.SuckItUpPrincess.desc=Убейте враждебного моба, когда у Вас сломана одна или более конечностей
+achievement.enviromine.BreatheEasy.desc=Сделайте противогаз
+
+options.enviromine.on=Вкл.
+options.enviromine.off=Выкл.
+options.enviromine.visible=Показывать
+options.enviromine.hidden=Спрятать
+options.enviromine.menu.title=Меню Enviromine
+options.enviromine.guiMainmenu.title=Главное меню EnviroMine
+options.enviromine.guiSetting.title=Графические настройки EnviroMine
+options.enviromine.guiBars.title=Настройки интерфейса EnviroMine
+options.enviromine.configSetting.title=Конфигурация EnviroMine
+options.enviromine.guiBarPos.title=Позиции интерфейса EnviroMine
+options.enviromine.adminOptions.title=Настройки администратора
+options.enviromine.physics=Физика
+options.enviromine.guiScaling=Размер интерфейса
+options.enviromine.guiOptions=Графические настройки
+options.enviromine.configSettings=Серверные настройки
+options.enviromine.customEditor=Пользовательский редактор
+options.enviromine.status=Текст интерфейса
+options.enviromine.minBars=Минималистичный интерфейс
+options.enviromine.tinting=Тонирование экрана
+options.enviromine.sweatParticles=Частицы испарений
+options.enviromine.insaneParticles=Частицы безумия
+options.enviromine.debug=Текст отладки
+options.enviromine.showIcons=Иконки интерфейса
+options.enviromine.barPos=Позиции полосок
+options.enviromine.tempScale=Шкала температуры
+options.enviromine.tempScale.f=Фаренгейта
+options.enviromine.tempScale.c=Цельсия
+options.enviromine.barPos.hydration=Полоска увлажнения
+options.enviromine.barPos.temprature=Полоска температуры
+options.enviromine.barPos.sanity=Полоска здравомыслия
+options.enviromine.barPos.airQuality=Полоска качества воздуха
+options.enviromine.guiSounds=Настройки звуков
+options.enviromine.physSound=Звуки физики
+options.enviromine.breathVol=Громкость дыхания
+options.enviromine.newsPage=Лента новостей
+
+
+options.enviromine.hud.temperature=Температура
+options.enviromine.hud.sanity=Здравомыслие
+options.enviromine.hud.hydration=Увлажнение
+options.enviromine.hud.air=Качество воздуха
+options.enviromine.hud.resetDefault=Сбросить настройки
+options.enviromine.hud.resetDefault.desc=Сбрасывает все настройки интерфейса на по-умолчанию
+options.enviromine.hud.reposition=Кликните для подтверждения, ESC для отмены, R для сброса
+options.enviromine.hud.alignment=Выравнивание:
+
+options.enviromine.supportUs=Поддержите Нас
+options.enviromine.website=Наш сайт
+options.enviromine.website.YesNo=Это откроет страницу в Вашем браузере по-умолчанию. Продолжить? 
+
+deathmessage.enviromine.suffocate=%s задохнулся
+deathmessage.enviromine.frostbite=%s замёрз до смерти
+deathmessage.enviromine.dehydrate=%s умер от жажды
+deathmessage.enviromine.landslide=%s был раздавлен в результате оползня
+deathmessage.enviromine.avalanche=%s был погребён лавиной
+deathmessage.enviromine.organfailure=%s умер от полиорганной недостаточности
+deathmessage.enviromine.heatstroke=Мозг %s был приготовлен в результате теплового удара
+deathmessage.enviromine.bleedout=%s умер от кровопотери
+deathmessage.enviromine.gasfire=%s погиб в результате утечки газа
+
+updatemsg.enviromine.available=Обновление %s для EnviroMine доступно
+updatemsg.enviromine.download=Загрузка и изменения:
+updatemsg.enviromine.uptodate=EnviroMine %s обновлён
+updatemsg.enviromine.debug=EnviroMine версии %s предназначен для отладки
+updatemsg.enviromine.error=Произошла ошибка при разборе файла версии EnviroMine!
+
+news.enviromine.newpost=(Новое сообщение)
+news.enviromine.button.news=Лента новостей
+news.enviromine.button.changelog=Список изменений
+news.enviromine.button.version=Информация о версии
+news.enviromine.version.current=Номер Вашей версии: %s
+news.enviromine.news.changelog=Проверьте изменения, чтобы узнать что нового
+news.enviromine.news.wiki=Загрузите новую версию с нашей wiki!
+
+auth.enviromine.1=EnviroMine %s успешно прошёл проверку подлинности!
+auth.enviromine.2=Спасибо за использование официальной версии <3
+auth.enviromine.3=ВНИМАНИЕ: Если Вам понадобится установить более старую версию или добавить её
+auth.enviromine.4=в пакет модов, Вам НЕ нужно удалять "AUTH" файл из папки конфигурации
+auth.enviromine.5=Это поможет в поддержке кампании %s
+
+keybinds.enviromine.reload=Перезагрузить конфигурацию
+keybinds.enviromine.addremove=Добавить/удалить пользоват. конфигурацию
+
+misc.enviromine.tooltip.filter=Фильтры: %s (%s/%s)
+misc.enviromine.tooltip.water=Вода: %s (%s/%s)
+misc.enviromine.tooltip.rot=Испорчено: %s (Day %s/%s)
+
+commands.enviromine.envirostat.add=добавить
+commands.enviromine.envirostat.set=установить
+commands.enviromine.envirostat.temp=температура
+commands.enviromine.envirostat.sanity=здравомыслие
+commands.enviromine.envirostat.water=вода
+commands.enviromine.envirostat.air=воздух
+commands.enviromine.envirostat.noTracker=Цель не найдена или не имеет enviro маячка!
+commands.enviromine.envirophysic.toggle=переключить
+commands.enviromine.envirophysic.status=статус
+commands.enviromine.envirophysic.statusText=%s Статус физики: %s
+commands.enviromine.envirophysic.physics= %s Физика %s
+commands.enviromine.enviroquake.length=длина
+commands.enviromine.enviroquake.width=ширина
+commands.enviromine.enviroquake.rotation=вращение
+commands.enviromine.enviroquake.mode=режим
+commands.enviromine.enviroquake.stop=стоп
+commands.enviromine.enviroquake.stoppedAll=Все землетрясения остановлены
+commands.enviromine.enviroquake.error.tooMany=У Вас нет прав вызывать больше одного землетрясения за раз!
+commands.enviromine.enviroquake.error.tooBig=Вы не можете вызвать землетрясение больше чем на 4096 блоков!
