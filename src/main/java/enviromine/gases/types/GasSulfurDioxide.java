@@ -3,6 +3,7 @@ package enviromine.gases.types;
 import java.awt.Color;
 
 import api.hbm.item.IGasMask;
+import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import enviromine.core.EM_Settings;
 import enviromine.gases.EnviroGas;
@@ -35,6 +36,14 @@ public class GasSulfurDioxide extends EnviroGas
 	{
 		super.applyEffects(entityLiving, amplifier);
 
+        if(entityLiving instanceof EntityPlayer)
+        {
+            if(((EntityPlayer)entityLiving).capabilities.isCreativeMode)
+            {
+                isCreative = true;
+            }
+        }
+
         if (entityLiving.worldObj.isRemote || entityLiving.isEntityUndead()) {
             return;
         }
@@ -45,12 +54,21 @@ public class GasSulfurDioxide extends EnviroGas
             if (helmet.getItem() instanceof IGasMask mask) {  // Check if the helmet is a mask
                 ItemStack filter = mask.getFilter(helmet, entityLiving);  // Get the filter of the mask
                 if (filter != null) {
-                    hasGasMask = true;
-                    // Random chance to damage the filter
-                    if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
-                        ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
+                    if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_CHLORINE)) {
+                        hasGasMask = true;
+                        // Random chance to damage the filter
+                        if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
+                            ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
+                        }
                     }
                 }
+            }
+            else if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_CHLORINE)) {
+                        hasGasMask = true;
+                        // Random chance to damage the filter
+                        if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
+                            ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
+                        }
             }
         }
 
@@ -74,7 +92,7 @@ public class GasSulfurDioxide extends EnviroGas
 
 		if(!hasGasMask && !isCreative &&
 				amplifier >= 5 + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
-				&& entityLiving.getRNG().nextInt(100) == 0)
+				&& entityLiving.getRNG().nextInt(5) == 0) //100
 		{
 			if(
 					amplifier >= 10 + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving)*2 : 0)

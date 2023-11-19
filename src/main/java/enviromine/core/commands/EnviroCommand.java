@@ -15,14 +15,16 @@ import net.minecraft.util.StatCollector;
 
 public class EnviroCommand extends CommandBase
 {
-	
+
 	private String add = StatCollector.translateToLocal("commands.enviromine.envirostat.add");
 	private String set = StatCollector.translateToLocal("commands.enviromine.envirostat.set");
 	private String temp = StatCollector.translateToLocal("commands.enviromine.envirostat.temp");
 	private String sanity = StatCollector.translateToLocal("commands.enviromine.envirostat.sanity");
+
+    private String blood = StatCollector.translateToLocal("commands.enviromine.envirostat.blood");
 	private String water = StatCollector.translateToLocal("commands.enviromine.envirostat.water");
 	private String air = StatCollector.translateToLocal("commands.enviromine.envirostat.air");
-	
+
 	@Override
 	public String getCommandName()
 	{
@@ -32,9 +34,9 @@ public class EnviroCommand extends CommandBase
 	@Override
 	public String getCommandUsage(ICommandSender sender)
 	{
-		return "/envirostat <playername> <"+add+", "+set+"> <"+temp+", "+sanity+", "+water+", "+air+"> <float>";
+		return "/envirostat <playername> <"+add+", "+set+"> <"+temp+", "+sanity+", "+blood+", "+water+", "+air+"> <float>";
 	}
-	
+
 	@Override
     public int getRequiredPermissionLevel()
     {
@@ -50,23 +52,23 @@ public class EnviroCommand extends CommandBase
 			this.ShowUsage(sender);
 			return;
 		}
-		
+
 		EntityPlayerMP player = getPlayer(sender, astring[0]);
-		
+
 		String target = player.getCommandSenderName();
-		
+
 		EnviroDataTracker tracker = EM_StatusManager.lookupTrackerFromUsername(target);
-		
+
 		if(tracker == null)
 		{
 			this.ShowNoTracker(sender);
 			return;
 		}
-		
+
 		try
 		{
 			float value = Float.parseFloat(astring[3]);
-			
+
 			if(astring[1].equalsIgnoreCase(add))
 			{
 				if(astring[2].equalsIgnoreCase(temp))
@@ -75,7 +77,10 @@ public class EnviroCommand extends CommandBase
 				} else if(astring[2].equalsIgnoreCase(sanity))
 				{
 					tracker.sanity += value;
-				} else if(astring[2].equalsIgnoreCase(water))
+				} else if(astring[2].equalsIgnoreCase(blood))
+                {
+                    tracker.blood += value;
+                } else if(astring[2].equalsIgnoreCase(water))
 				{
 					tracker.hydration += value;
 				} else if(astring[2].equalsIgnoreCase(air))
@@ -94,7 +99,12 @@ public class EnviroCommand extends CommandBase
 				} else if(astring[2].equalsIgnoreCase(sanity))
 				{
 					tracker.sanity = value;
-				} else if(astring[2].equalsIgnoreCase(water))
+
+				} else if(astring[2].equalsIgnoreCase(blood))
+                {
+                    tracker.blood = value;
+
+                } else if(astring[2].equalsIgnoreCase(water))
 				{
 					tracker.hydration = value;
 				} else if(astring[2].equalsIgnoreCase("air"))
@@ -110,7 +120,7 @@ public class EnviroCommand extends CommandBase
 				this.ShowUsage(sender);
 				return;
 			}
-			
+
 			tracker.fixFloatingPointErrors();
 			return;
 		} catch(Exception e)
@@ -119,12 +129,12 @@ public class EnviroCommand extends CommandBase
 			return;
 		}
 	}
-	
+
 	public void ShowUsage(ICommandSender sender)
 	{
 		sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
 	}
-	
+
 	public void ShowNoTracker(ICommandSender sender)
 	{
 		sender.addChatMessage(new ChatComponentTranslation("commands.enviromine.envirostat.noTracker"));
@@ -145,7 +155,7 @@ public class EnviroCommand extends CommandBase
         	return getListOfStringsMatchingLastWord(strings, new String[]{add, set});
         } else if(strings.length == 3)
         {
-        	return getListOfStringsMatchingLastWord(strings, new String[]{temp, sanity, water, air});
+        	return getListOfStringsMatchingLastWord(strings, new String[]{temp, sanity, blood, water, air});
         } else
         {
         	return new ArrayList<String>();

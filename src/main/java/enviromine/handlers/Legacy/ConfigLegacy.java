@@ -24,9 +24,9 @@ public class ConfigLegacy extends LegacyHandler
 	private static File configFile = new File(configPath + "EnviroMine.cfg");
 	private static Configuration config;
 	private static boolean didRun = false;
-	
+
 	@Override
-	public boolean initCheck() 
+	public boolean initCheck()
 	{
 
 		if(configFile.exists() && !configFile.isDirectory())
@@ -40,7 +40,7 @@ public class ConfigLegacy extends LegacyHandler
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Failed to load Legacy configuration file!", e);
 				return false;
 			}
-			
+
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.INFO, "Legacy: Config File Loaded");
 			return true;
 		}
@@ -51,74 +51,74 @@ public class ConfigLegacy extends LegacyHandler
 	}
 
 	@Override
-	public void runLegacy() 
+	public void runLegacy()
 	{
 		// Version 0
 		loadGeneralConfig(configFile);
 		MoveCustomProperties();
 		this.didRun = true;
 	}
-	
-	
+
+
 	@Override
-	public boolean didRun() 
+	public boolean didRun()
 	{
 		// TODO Auto-generated method stub
 		return this.didRun;
 	}
-	
+
 	private static void MoveCustomProperties()
 	{
 		File customsDir = new File(customPath);
-		
+
 		if(customsDir.exists() && customsDir.listFiles().length > 0)
 		{
-			
+
 			try
 			{
 				File sourceDir = new File(customPath);
-				
+
 				CopyOption[] options = new CopyOption[]{};
-				
+
 				File newPath = new File(EM_ConfigHandler.defaultProfile + EM_ConfigHandler.customPath);
-				
-				
+
+
 				if(!newPath.isDirectory())Files.createDirectories(newPath.toPath());
-				
+
 				for(File file : sourceDir.listFiles())
 				{
-					Files.move(sourceDir.toPath().resolve(file.getName()) , newPath.toPath().resolve(file.getName()), options);	
+					Files.move(sourceDir.toPath().resolve(file.getName()) , newPath.toPath().resolve(file.getName()), options);
 				}
-				
+
 				if(sourceDir.isDirectory())Files.delete(sourceDir.toPath());
-				
+
 				File Stability = new File(configPath + "StabilityTypes.cfg");
-				
+
 				if(Stability.exists()) Files.move(Stability.toPath(), Paths.get(EM_ConfigHandler.defaultProfile).resolve("StabilityTypes.cfg"), options);
-				
+
 				//File CaveDimension = new File(configPath + "CaveDimension.cfg");
-				
-				//if(CaveDimension.exists()) Files.move(CaveDimension.toPath(), Paths.get(EM_ConfigHandler.defaultProfile).resolve("CaveDimension.cfg"), options);				
-				
+
+				//if(CaveDimension.exists()) Files.move(CaveDimension.toPath(), Paths.get(EM_ConfigHandler.defaultProfile).resolve("CaveDimension.cfg"), options);
+
 				//Files.move(source, target, options)
-				
+
 			}
 			catch(IOException e)
 			{
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Legacy failed to copy custom configs to new directory! " + e);
 			}
-			
+
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Register all property types and their category names here. The rest is handled automatically.
 	 */
-	
+
 	private static void loadGeneralConfig(File file)
-	{	
+	{
 		//World Generation
 		String cat_worldgen = "World Generation";
 		EM_Settings.shaftGen = config.get(cat_worldgen, "Enable Village MineShafts", true, "Generates mineshafts in villages").getBoolean(true);
@@ -126,11 +126,12 @@ public class ConfigLegacy extends LegacyHandler
 		EM_Settings.gasGen = config.get(cat_worldgen, "Generate Gases", true).getBoolean(true);
 		//EM_Settings.disableCaves = config.get(cat_worldgen, "Disable Cave Dimension", false).getBoolean(false); // Moved to CaveBaseProperties
 		//EM_Settings.limitElevatorY = config.get(cat_worldgen, "Limit Elevator Height", true).getBoolean(true); // Moved to CaveBaseProperties
-		
+
 		// General Settings
 		EM_Settings.enablePhysics = config.get(Configuration.CATEGORY_GENERAL, "Enable Physics", true, "Turn physics On/Off").getBoolean(true);
 		EM_Settings.enableLandslide = config.get(Configuration.CATEGORY_GENERAL, "Enable Physics Landslide", true).getBoolean(true);
 		EM_Settings.enableSanity = config.get(Configuration.CATEGORY_GENERAL, "Allow Sanity", true).getBoolean(true);
+        EM_Settings.enableBlood = config.get(Configuration.CATEGORY_GENERAL, "Allow Blood", true).getBoolean(true);
 		EM_Settings.enableHydrate = config.get(Configuration.CATEGORY_GENERAL, "Allow Hydration", true).getBoolean(true);
 		EM_Settings.enableBodyTemp = config.get(Configuration.CATEGORY_GENERAL, "Allow Body Temperature", true).getBoolean(true);
 		EM_Settings.enableAirQ = config.get(Configuration.CATEGORY_GENERAL, "Allow Air Quality", true, "True/False to turn Enviromine Trackers for Sanity, Air Quality, Hydration, and Body Temperature.").getBoolean(true);
@@ -146,7 +147,7 @@ public class ConfigLegacy extends LegacyHandler
 		EM_Settings.keepStatus = config.get(Configuration.CATEGORY_GENERAL, "Keep statuses on death", false).getBoolean(false);
 		EM_Settings.renderGear = config.get(Configuration.CATEGORY_GENERAL, "Render Gear", true ,"Render 3d gear worn on player. Must reload game to take effect").getBoolean(true);
 		EM_Settings.genFlammableCoal = config.get(Configuration.CATEGORY_GENERAL, "Generate Combustable Coal Ore", true, "On worldgen, replace coal ore blocks with the flammable EM variant. Turning this off does not revert previous generation.").getBoolean(true); // Added from request -- AstroTibs
-		
+
 		// Physics Settings
 		String cat_physics = "Physics";
 		int minPhysInterval = 6;
@@ -160,7 +161,7 @@ public class ConfigLegacy extends LegacyHandler
 		EM_Settings.physInterval = EM_Settings.physInterval >= 2 ? EM_Settings.physInterval : 2;
 		EM_Settings.entityFailsafe = config.get(cat_physics, "Physics entity fail safe level", 1, "0 = No action, 1 = Limit to < 100 per 8x8 block area, 2 = Delete excessive entities & Dump physics (EMERGENCY ONLY)").getInt(1);
 		EM_Settings.waterCollapse = config.get(cat_physics, "Water Causes Collapse", true, "Blocks that touch water are more prone to physics collapse").getBoolean(true); // Added out of necessity/annoyance -- AstroTibs
-		
+
 		// Config Gas
 		String cat_gases = "Gases";
 		EM_Settings.noGases = config.get(cat_gases, "Disable Gases", false, "Disables all gases and slowly deletes existing pockets").getBoolean(false);
@@ -169,39 +170,39 @@ public class ConfigLegacy extends LegacyHandler
 		EM_Settings.gasTickRate = config.get(cat_gases, "Gas Tick Rate", 256, "How many ticks between gas updates. Gas fires are 1/4 of this.").getInt(256);
 		EM_Settings.gasPassLimit = config.get(cat_gases, "Gas Pass Limit", 2048, "How many gases can be processed in a single pass per chunk (-1 = infinite)").getInt(-1);
 		EM_Settings.gasWaterLike = config.get(cat_gases, "Water like spreading", true, "Whether gases should spread like water (faster) or even out as much as possible (realistic)").getBoolean(true);
-		
+
 		// Potion ID's
 		EM_Settings.hypothermiaPotionID = -1;
 		EM_Settings.heatstrokePotionID = -1;
 		EM_Settings.frostBitePotionID = -1;
 		EM_Settings.dehydratePotionID = -1;
 		EM_Settings.insanityPotionID = -1;
-		
+
 		String cat_potions = "Potions";
 		EM_Settings.hypothermiaPotionID = config.get(cat_potions, "Hypothermia", nextAvailPotion(27)).getInt(nextAvailPotion(27));
 		EM_Settings.heatstrokePotionID = config.get(cat_potions, "Heat Stroke", nextAvailPotion(28)).getInt(nextAvailPotion(28));
 		EM_Settings.frostBitePotionID = config.get(cat_potions, "Frostbite", nextAvailPotion(29)).getInt(nextAvailPotion(29));
 		EM_Settings.dehydratePotionID = config.get(cat_potions, "Dehydration", nextAvailPotion(30)).getInt(nextAvailPotion(30));
 		EM_Settings.insanityPotionID = config.get(cat_potions, "Insanity", nextAvailPotion(31)).getInt(nextAvailPotion(31));
-		
+
 		// Multipliers ID's
 		String cat_speed_mult = "Speed Multipliers";
 		EM_Settings.tempMult = config.get(cat_speed_mult, "BodyTemp", 1.0D).getDouble(1.0D);
 		EM_Settings.hydrationMult = config.get(cat_speed_mult, "Hydration", 1.0D).getDouble(1.0D);
 		EM_Settings.airMult = config.get(cat_speed_mult, "AirQuality", 1.0D).getDouble(1.0D);
 		EM_Settings.sanityMult = config.get(cat_speed_mult, "Sanity", 1.0D).getDouble(1.0D);
-		
+
 		EM_Settings.tempMult = EM_Settings.tempMult < 0 ? 0F : EM_Settings.tempMult;
 		EM_Settings.hydrationMult = EM_Settings.hydrationMult < 0 ? 0F : EM_Settings.hydrationMult;
 		EM_Settings.airMult = EM_Settings.airMult < 0 ? 0F : EM_Settings.airMult;
 		EM_Settings.sanityMult = EM_Settings.sanityMult < 0 ? 0F : EM_Settings.sanityMult;
-		
+
 		// Config Options
 		String ConSetCat = "Config";
 
-		
+
 		EM_Settings.enableConfigOverride = config.get(ConSetCat, "Client Config Override (SMP)", false, "[DISABLED][WIP] Temporarily overrides client configurations with the server's (NETWORK INTESIVE!)").getBoolean(false);
-		
+
 		// Earthquake
 		String cat_earthquake = "Earthquakes";
 		EM_Settings.enableQuakes = config.get(cat_earthquake, "Enable Earthquakes", true).getBoolean(true);
@@ -211,12 +212,12 @@ public class ConfigLegacy extends LegacyHandler
 		{
 			EM_Settings.quakeRarity = 0;
 		}
-		
+
 		// Easter Eggs!
 		String eggCat = "Easter Eggs";
-		EM_Settings.thingChance = config.getFloat("Cave Dimension Grue", eggCat, 0.000001F, 0F, 1F, "Chance the (extremely rare) grue in the cave dimension will attack in the dark (ignored on Halloween or Friday 13th)");		
-		
-		
+		EM_Settings.thingChance = config.getFloat("Cave Dimension Grue", eggCat, 0.000001F, 0F, 1F, "Chance the (extremely rare) grue in the cave dimension will attack in the dark (ignored on Halloween or Friday 13th)");
+
+
 		config = null;
 
 		try {
@@ -227,7 +228,7 @@ public class ConfigLegacy extends LegacyHandler
 		}
 
 	}
-	
+
 	/**
 	 * @deprecated Use config.getInt(...) instead as it provides min & max value caps
 	 */
@@ -241,7 +242,7 @@ public class ConfigLegacy extends LegacyHandler
 			return min;
 		}
 	}
-	
+
 	static int nextAvailPotion(int startID)
 	{
 		for(int i = startID; i > 0; i++)
@@ -257,7 +258,7 @@ public class ConfigLegacy extends LegacyHandler
 				return i;
 			}
 		}
-		
+
 		return startID;
 	}
 

@@ -28,14 +28,16 @@ public class EnviroPotion extends Potion
 	public static EnviroPotion frostbite;
 	public static EnviroPotion dehydration;
 	public static EnviroPotion insanity;
-	
+    public static EnviroPotion bleedout;
+
+
 	public static ResourceLocation textureResource = new ResourceLocation("enviromine", "textures/gui/status_Gui.png");
-	
+
 	public EnviroPotion(int par1, boolean par2, int par3)
 	{
 		super(par1, par2, par3);
 	}
-	
+
 	public static void RegisterPotions()
 	{
 		EnviroPotion.frostbite = ((EnviroPotion)new EnviroPotion(EM_Settings.frostBitePotionID, true, 8171462).setPotionName("potion.enviromine.frostbite")).setIconIndex(0, 0);
@@ -43,17 +45,18 @@ public class EnviroPotion extends Potion
 		EnviroPotion.insanity = ((EnviroPotion)new EnviroPotion(EM_Settings.insanityPotionID, true, 5578058).setPotionName("potion.enviromine.insanity")).setIconIndex(2, 0);
 		EnviroPotion.heatstroke = ((EnviroPotion)new EnviroPotion(EM_Settings.heatstrokePotionID, true, RenderAssist.getColorFromRGBA(255, 0, 0, 255)).setPotionName("potion.enviromine.heatstroke")).setIconIndex(3, 0);
 		EnviroPotion.hypothermia = ((EnviroPotion)new EnviroPotion(EM_Settings.hypothermiaPotionID, true, 8171462).setPotionName("potion.enviromine.hypothermia")).setIconIndex(4, 0);
+        EnviroPotion.bleedout = ((EnviroPotion)new EnviroPotion(EM_Settings.bleedoutPotionID, true, 8171462).setPotionName("potion.enviromine.bleedout")).setIconIndex(5, 0);
 	}
-	
+
 	public static void checkAndApplyEffects(EntityLivingBase entityLiving)
 	{
 		if(entityLiving.worldObj.isRemote)
 		{
 			return;
 		}
-		
+
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(entityLiving);
-		
+
 		boolean isVampire = entityLiving instanceof EntityPlayer && EnviroUtils.isPlayerAVampire((EntityPlayer)entityLiving);
 //		boolean isWerewolf = entityLiving instanceof EntityPlayer && EnviroUtils.isPlayerAWerewolf((EntityPlayer)entityLiving);
 		boolean isCurrentlyAndroid = entityLiving instanceof EntityPlayer && EnviroUtils.isPlayerCurrentlyMOAndroid((EntityPlayer)entityLiving);
@@ -61,15 +64,15 @@ public class EnviroPotion extends Potion
 		boolean isCurrentlyWolf = entityLiving instanceof EntityPlayer && EnviroUtils.isPlayerCurrentlyWitcheryWolf((EntityPlayer)entityLiving);
 		int vampireLevel = entityLiving instanceof EntityPlayer ? EnviroUtils.getWitcheryVampireLevel((EntityPlayer)entityLiving) : 0;
 		int werewolfLevel = entityLiving instanceof EntityPlayer ? EnviroUtils.getWitcheryWerewolfLevel((EntityPlayer)entityLiving) : 0;
-		
+
 		int vampireDuration = MathHelper.clamp_int(200 - (entityLiving instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities ? vampireLevel : 0)*15, 0, 200);
 		int werewolfDuration = MathHelper.clamp_int(200 - (entityLiving instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
-		
+
 		// === Heatstroke === //
 		if(entityLiving.isPotionActive(heatstroke))
 		{
 			PotionEffect effect = entityLiving.getActivePotionEffect(heatstroke);
-			
+
 			// Remove effect if it's worn off
 			if (effect.getDuration() <= 0)
 			{
@@ -93,13 +96,13 @@ public class EnviroPotion extends Potion
 				{
 					entityLiving.attackEntityFrom(EnviroDamageSource.heatstroke, 4.0F);
 				}
-				
+
 				if(effect.getAmplifier() >= 1)
 				{
 					entityLiving.addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 0));
 					entityLiving.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 0));
 					entityLiving.addPotionEffect(new PotionEffect(Potion.hunger.id, 200, 0));
-					
+
 					if(entityLiving.getRNG().nextInt(10) == 0)
 					{
 						if(EM_Settings.noNausea)
@@ -113,12 +116,60 @@ public class EnviroPotion extends Potion
 				}
 			}
 		}
-		
+        // === BleedOut === //
+        if(entityLiving.isPotionActive(bleedout))
+        {
+            PotionEffect effect = entityLiving.getActivePotionEffect(bleedout);
+
+            // Remove effect if it's worn off
+            if (effect.getDuration() <= 0)
+            {
+                entityLiving.removePotionEffect(bleedout.id);
+            }
+            // Don't inflict further effects if the stat in question is not tracked
+            else if(
+                EM_Settings.enableBlood
+                    && (
+                    !EM_Settings.dimensionProperties.containsKey(entityLiving.dimension)
+                        || (EM_Settings.dimensionProperties.containsKey(entityLiving.dimension)
+                        && EM_Settings.dimensionProperties.get(entityLiving.dimension).trackBlood)
+                )
+                    && !(
+                    EM_Settings.matterOverdriveAndroidImmunities
+                        && isCurrentlyAndroid
+                )
+            )
+            {
+                if(effect.getAmplifier() >= 2 && entityLiving.getRNG().nextInt(2) == 0)
+                {
+                    entityLiving.attackEntityFrom(EnviroDamageSource.bleedout, 4.0F);
+                }
+
+                if(effect.getAmplifier() >= 1)
+                {
+                    entityLiving.addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 0));
+                    entityLiving.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 0));
+                    entityLiving.addPotionEffect(new PotionEffect(Potion.hunger.id, 200, 0));
+
+                    if(entityLiving.getRNG().nextInt(10) == 0)
+                    {
+                        if(EM_Settings.noNausea)
+                        {
+                            entityLiving.addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 0));
+                        } else
+                        {
+                            entityLiving.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 0));
+                        }
+                    }
+                }
+            }
+        }
+
 		// === Hypothermia === //
 		if(entityLiving.isPotionActive(hypothermia))
 		{
 			PotionEffect effect = entityLiving.getActivePotionEffect(hypothermia);
-			
+
 			// Remove effect if it's worn off
 			if (effect.getDuration() <= 0)
 			{
@@ -146,7 +197,7 @@ public class EnviroPotion extends Potion
 				{
 					entityLiving.attackEntityFrom(EnviroDamageSource.organfailure, 4.0F * 5F / (((EM_Settings.witcheryWerewolfImmunities && entityLiving instanceof EntityPlayer) ? werewolfLevel : 0)+5));
 				}
-				
+
 				if(effect.getAmplifier() >= 1)
 				{
 					entityLiving.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 0));
@@ -154,12 +205,12 @@ public class EnviroPotion extends Potion
 				}
 			}
 		}
-		
+
 		// === Frostbite === //
 		if(entityLiving.isPotionActive(frostbite))
 		{
 			PotionEffect effect = entityLiving.getActivePotionEffect(frostbite);
-			
+
 			// Remove effect if it's worn off
 			if (effect.getDuration() <= 0)
 			{
@@ -187,7 +238,7 @@ public class EnviroPotion extends Potion
 				{
 					entityLiving.attackEntityFrom(EnviroDamageSource.frostbite, 4.0F * 5F / (((EM_Settings.witcheryWerewolfImmunities && entityLiving instanceof EntityPlayer) ? werewolfLevel : 0)+5));
 				}
-				
+
 				if(entityLiving.getHeldItem() != null)
 				{
 					if(effect != null)
@@ -197,9 +248,9 @@ public class EnviroPotion extends Potion
 							EntityItem item = entityLiving.entityDropItem(entityLiving.getHeldItem(), 0.0F);
 							item.delayBeforeCanPickup = 40;
 							entityLiving.setCurrentItemOrArmor(0, null);
-						
+
 							entityLiving.worldObj.playSoundAtEntity(entityLiving, "enviromine:shiver", 1f, 1f);
-							
+
 							if(entityLiving instanceof EntityPlayer)
 							{
 								((EntityPlayer)entityLiving).addStat(EnviroAchievements.iNeededThat, 1);
@@ -209,12 +260,12 @@ public class EnviroPotion extends Potion
 				}
 			}
 		}
-		
+
 		// === Dehydration === //
 		if(entityLiving.isPotionActive(dehydration.id))
 		{
 			PotionEffect effect = entityLiving.getActivePotionEffect(dehydration);
-			
+
 			// Remove effect if it's worn off
 			if (effect.getDuration() <= 0)
 			{
@@ -244,12 +295,12 @@ public class EnviroPotion extends Potion
 				}
 			}
 		}
-		
+
 		// === Insanity === //
 		if(entityLiving.isPotionActive(insanity.id))
 		{
 			PotionEffect effect = entityLiving.getActivePotionEffect(insanity);
-			
+
 			// Remove effect if it's worn off
 			if (effect.getDuration() <= 0)
 			{
@@ -274,10 +325,10 @@ public class EnviroPotion extends Potion
 				)
 			{
 				int chance = 50 / (effect.getAmplifier() + 1);
-				
+
 				chance = chance > 0? chance : 1;
 				chance += (entityLiving instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*4 : 0);
-				
+
 				if(entityLiving.getRNG().nextInt(chance) == 0)
 				{
 					if(effect.getAmplifier() >= 1)
@@ -291,12 +342,12 @@ public class EnviroPotion extends Potion
 						}
 					}
 				}
-				
+
 				if(EnviroMine.proxy.isClient() && effect.getAmplifier() >= 2 && entityLiving.getRNG().nextInt(1000 + (entityLiving instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*200 : 0)) == 0)
 				{
 					displayFakeDeath();
 				}
-				
+
 				String sound = "";
 				if(entityLiving.getRNG().nextInt(chance) == 0 && entityLiving instanceof EntityPlayer)
 				{
@@ -383,15 +434,15 @@ public class EnviroPotion extends Potion
 							break;
 						}
 					}
-					
+
 					EntityPlayer player = ((EntityPlayer)entityLiving);
-					
+
 					float rndX = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 					float rndY = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 					float rndZ = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
-					
+
 					S29PacketSoundEffect packet = new S29PacketSoundEffect(sound, entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 1.0F, !EM_Settings.randomizeInsanityPitch ? 1F : player.getRNG().nextBoolean()? 0.2F : (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
-					
+
 					if(!EnviroMine.proxy.isClient() && player instanceof EntityPlayerMP)
 					{
 						((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
@@ -402,7 +453,7 @@ public class EnviroPotion extends Potion
 				}
 			}
 		}
-		
+
 		// Award achievement for heatstroke and hypothermia together
 		if(entityLiving.isPotionActive(heatstroke.id) && entityLiving.isPotionActive(hypothermia.id))
 		{
@@ -412,7 +463,7 @@ public class EnviroPotion extends Potion
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static void displayFakeDeath()
 	{
@@ -421,7 +472,7 @@ public class EnviroPotion extends Potion
 			Minecraft.getMinecraft().displayGuiScreen(new EM_GuiFakeDeath());
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	/**
@@ -432,7 +483,7 @@ public class EnviroPotion extends Potion
 		Minecraft.getMinecraft().renderEngine.bindTexture(textureResource);
 		return true;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	/**

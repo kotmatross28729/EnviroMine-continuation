@@ -186,6 +186,7 @@ public class EM_EventManager
 					pData.setBoolean("enableBodyTemp", EM_Settings.enableBodyTemp);
 					pData.setBoolean("enableHydrate", EM_Settings.enableHydrate);
 					pData.setBoolean("enableSanity", EM_Settings.enableSanity);
+                    pData.setBoolean("enableBlood", EM_Settings.enableBlood);
 
 					EnviroMine.instance.network.sendTo(new PacketEnviroMine(pData), (EntityPlayerMP) event.entity);
 
@@ -1222,7 +1223,7 @@ public class EM_EventManager
 				event.entityLiving.getEntityData().removeTag("EM_PITCH");
 			}
 
-			if(EM_Settings.enableAirQ && EM_Settings.enableBodyTemp && EM_Settings.enableHydrate && EM_Settings.enableSanity && EM_Settings.enableLandslide && EM_Settings.enablePhysics && EM_Settings.enableQuakes)
+			if(EM_Settings.enableAirQ && EM_Settings.enableBodyTemp && EM_Settings.enableHydrate && EM_Settings.enableSanity && EM_Settings.enableBlood && EM_Settings.enableLandslide && EM_Settings.enablePhysics && EM_Settings.enableQuakes)
 			{
 				int seaLvl = 48;
 
@@ -1267,7 +1268,7 @@ public class EM_EventManager
 
 		if(tracker == null || tracker.isDisabled)
 		{
-			if((!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN()) && (EM_Settings.enableAirQ || EM_Settings.enableBodyTemp || EM_Settings.enableHydrate || EM_Settings.enableSanity))
+			if((!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN()) && (EM_Settings.enableAirQ || EM_Settings.enableBodyTemp || EM_Settings.enableHydrate || EM_Settings.enableSanity|| EM_Settings.enableBlood))
 			{
 				if(event.entityLiving instanceof EntityPlayer || (EM_Settings.trackNonPlayer && EnviroDataTracker.isLegalType(event.entityLiving)))
 				{

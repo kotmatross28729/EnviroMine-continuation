@@ -40,8 +40,7 @@ import net.minecraft.util.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static enviromine.core.EM_Settings.DeathFromHeartAttack;
-import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
+import static enviromine.core.EM_Settings.*;
 
 
 public class EnviroDataTracker
@@ -54,6 +53,8 @@ public class EnviroDataTracker
 	public float prevAirQuality = 100;
 	public float prevSanity = 100F;
 
+    public float prevBlood = 100F;
+
 	public float gasAirDiff = 0F;
 
 	public float airQuality;
@@ -64,6 +65,8 @@ public class EnviroDataTracker
 	public float hydration;
 
 	public float sanity;
+
+    public float blood;
 
 	public int attackDelay = 1;
 	public int curAttackTime = 0;
@@ -126,7 +129,7 @@ public class EnviroDataTracker
 		}
 
 		if(!(trackedEntity instanceof EntityPlayer) && !EM_Settings.trackNonPlayer
-				|| (!EM_Settings.enableAirQ && !EM_Settings.enableBodyTemp && !EM_Settings.enableHydrate && !EM_Settings.enableSanity))
+				|| (!EM_Settings.enableAirQ && !EM_Settings.enableBodyTemp && !EM_Settings.enableHydrate && !EM_Settings.enableSanity && !EM_Settings.enableBlood))
 		{
 			EM_StatusManager.saveAndRemoveTracker(this);
 			return;
@@ -436,6 +439,10 @@ public class EnviroDataTracker
 		{
 			hydration = 100F;
 		}
+        if(!EM_Settings.enableBlood || !enableBlood)
+        {
+            blood = 100F;
+        }
 		if(!EM_Settings.enableSanity || !(trackedEntity instanceof EntityPlayer) || !enableSanity)
 		{
 			sanity = 100F;
@@ -648,6 +655,23 @@ public class EnviroDataTracker
 				{
 					trackedEntity.attackEntityFrom(EnviroDamageSource.dehydrate, 4.0F);
 				}
+
+                // Blood checks
+                else if (blood <= 0F && !(EM_Settings.witcheryVampireImmunities && isVampire))
+                {
+                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.bleedout.id, 10, 3));
+                    //trackedEntity.attackEntityFrom(EnviroDamageSource.bleedout, 4.0F);
+                }
+                else if(blood <= 25F && !(EM_Settings.witcheryVampireImmunities && isVampire))
+                {
+                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.bleedout.id, 5, 2));
+                    //trackedEntity.attackEntityFrom(EnviroDamageSource.bleedout, 4.0F);
+                }
+                else if(blood <= 50F && !(EM_Settings.witcheryVampireImmunities && isVampire))
+                {
+                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.bleedout.id, 5, 1));
+                    //trackedEntity.attackEntityFrom(EnviroDamageSource.bleedout, 4.0F);
+                }
                 // Sanity checks
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 				/**if(
@@ -746,6 +770,7 @@ public class EnviroDataTracker
 			airQuality = prevAirQuality;
 			hydration = prevHydration;
 			sanity = prevSanity;
+            blood = prevBlood;
 		}
 
 		DimensionProperties dimensionProp = null;
@@ -759,6 +784,7 @@ public class EnviroDataTracker
 				if(!dimensionProp.trackAirQuality && EM_Settings.enableAirQ) {airQuality = prevAirQuality;}
 				if(!dimensionProp.trackHydration && EM_Settings.enableHydrate) {hydration = prevHydration;}
 				if(!dimensionProp.trackSanity && EM_Settings.enableSanity) {sanity = prevSanity;}
+                if(!dimensionProp.trackBlood && EM_Settings.enableBlood) {blood = prevBlood;}
 			}
 		}
 
@@ -786,6 +812,7 @@ public class EnviroDataTracker
 		airTemp = new BigDecimal(String.valueOf(airTemp)).setScale(3, RoundingMode.HALF_UP).floatValue();
 		hydration = new BigDecimal(String.valueOf(hydration)).setScale(2, RoundingMode.HALF_UP).floatValue();
 		sanity = new BigDecimal(String.valueOf(sanity)).setScale(3, RoundingMode.HALF_UP).floatValue();
+        blood = new BigDecimal(String.valueOf(sanity)).setScale(3, RoundingMode.HALF_UP).floatValue();
 	}
 
 	public static boolean isLegalType(EntityLivingBase entity)
@@ -910,20 +937,27 @@ public class EnviroDataTracker
 		{
 			sanity = tags.getFloat("ENVIRO_SAN");
 		}
+        if(tags.hasKey("ENVIRO_BLD"))
+        {
+            blood = tags.getFloat("ENVIRO_BLD");
+        }
 	}
 
 	public void resetData()
 	{
 		airQuality = 100F;
-		bodyTemp = 37F;
+		bodyTemp = 36.6F;
 		hydration = 100F;
 		sanity = 100F;
+        blood = 100F;
+
 
 		// Added by AstroTibs to ensure no BS
 		trackedEntity.clearActivePotions();
 		frostbiteLevel = 0;
 		lastSleepTime = 0;
 		timeBelow10 = 0;
+        heartattacktimer = 0;
 	}
 
 	public void ClampSafeRange()
@@ -932,5 +966,6 @@ public class EnviroDataTracker
 		bodyTemp = MathHelper.clamp_float(bodyTemp, 35F, 39F);
 		hydration = MathHelper.clamp_float(hydration, 25F, 100F);
 		sanity = MathHelper.clamp_float(sanity, 50F, 100F);
+        blood = MathHelper.clamp_float(blood, 50F, 100F);
 	}
 }

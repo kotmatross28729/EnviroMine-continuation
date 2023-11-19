@@ -63,11 +63,20 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
         if (helmet.getItem() instanceof IGasMask mask) {  // Check if the helmet is a mask
             ItemStack filter = mask.getFilter(helmet, entityLiving);  // Get the filter of the mask
             if (filter != null) {
-                hasGasMask = true;
-                // Random chance to damage the filter
-                if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
-                    ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
+                if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_MONOXIDE)) {
+                    hasGasMask = true;
+                    // Random chance to damage the filter
+                    if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
+                        ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
+                    }
                 }
+            }
+        }
+        else if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_MONOXIDE)) {
+            hasGasMask = true;
+            // Random chance to damage the filter
+            if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
+                ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
             }
         }
     }
@@ -93,7 +102,7 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
 
     if (!hasGasMask && !isCreative &&
         amplifier >= 5 + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
-        && entityLiving.getRNG().nextInt(10) == 0)
+        && entityLiving.getRNG().nextInt(5) == 0) //10
     {
         entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
     }

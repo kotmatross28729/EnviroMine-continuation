@@ -62,9 +62,11 @@ public class EM_StatusManager
 	public static final int BODY_TEMP_RISE_SPEED_INDEX = 5;
 	public static final int ANIMAL_HOSTILITY_INDEX = 6;
 	public static final int SANITY_DELTA_INDEX = 7;
-	
+
+    public static final int BLOOD_DELTA_INDEX = 8;
+
 	public static HashMap<String,EnviroDataTracker> trackerList = new HashMap<String,EnviroDataTracker>();
-	
+
 	public static void addToManager(EnviroDataTracker tracker)
 	{
 		if(tracker.trackedEntity instanceof EntityPlayer)
@@ -75,14 +77,14 @@ public class EM_StatusManager
 			trackerList.put("" + tracker.trackedEntity.getEntityId(), tracker);
 		}
 	}
-	
+
 	public static void updateTracker(EnviroDataTracker tracker)
 	{
 		if(tracker == null)
 		{
 			return;
 		}
-		
+
 		if(EnviroMine.proxy.isClient() && Minecraft.getMinecraft().isIntegratedServerRunning())
 		{
 			if(Minecraft.getMinecraft().isGamePaused() && !EnviroMine.proxy.isOpenToLAN())
@@ -90,27 +92,27 @@ public class EM_StatusManager
 				return;
 			}
 		}
-		
+
 		tracker.updateTimer += 1;
-		
+
 		if(tracker.updateTimer >= 30)
 		{
 			tracker.updateData();
-			
+
 			if(!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN())
 			{
 				syncMultiplayerTracker(tracker);
 			}
 		}
 	}
-	
+
 	public static void syncMultiplayerTracker(EnviroDataTracker tracker)
 	{
 		if(!(tracker.trackedEntity instanceof EntityPlayer))
 		{
 			return;
 		}
-		
+
 		tracker.fixFloatingPointErrors(); // Shortens data as much as possible before sending
 		NBTTagCompound pData = new NBTTagCompound();
 		pData.setInteger("id", 0);
@@ -119,11 +121,12 @@ public class EM_StatusManager
 		pData.setFloat("bodyTemp", tracker.bodyTemp);
 		pData.setFloat("hydration", tracker.hydration);
 		pData.setFloat("sanity", tracker.sanity);
+        pData.setFloat("blood", tracker.blood);
 		pData.setFloat("airTemp", tracker.airTemp);
-		
+
 		EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(tracker.trackedEntity.worldObj.provider.dimensionId, tracker.trackedEntity.posX, tracker.trackedEntity.posY, tracker.trackedEntity.posZ, 128D));
 	}
-	
+
 	public static EnviroDataTracker lookupTracker(EntityLivingBase entity)
 	{
 		if(entity instanceof EntityPlayer)
@@ -146,7 +149,7 @@ public class EM_StatusManager
 			}
 		}
 	}
-	
+
 	public static EnviroDataTracker lookupTrackerFromUsername(String username)
 	{
 		if(trackerList.containsKey(username))
@@ -157,28 +160,28 @@ public class EM_StatusManager
 			return null;
 		}
 	}
-	
+
 	private static Stopwatch timer = Stopwatch.createUnstarted();
-	
+
 	public static float[] getSurroundingData(EntityLivingBase entityLiving, int cubeRadius)
 	{
 		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().thePlayer.getCommandSenderName()) && !timer.isRunning())
 		{
 			timer.start();
 		}
-		
+
 		float[] data = new float[8];
-		
+
 		float sanityRate = 0F;
 		float sanityStartRate = sanityRate;
-		
+
 		float quality = 0;
 		double leaves = 0;
 		float sanityBoost = 0;
-		
+
 		float dropSpeed = 0.001F;
 		float riseSpeed = 0.001F;
-		
+
 		float blockAndItemTempInfluence = -999F;
 		float cooling = 0;
 		float dehydrateBonus = 0.0F;
@@ -187,54 +190,54 @@ public class EM_StatusManager
 		float dist = 0;
 		float solidBlocks = 0;
 		float totalBlocks = 0;
-		
+
 		int i = MathHelper.floor_double(entityLiving.posX);
 		int j = MathHelper.floor_double(entityLiving.posY);
 		int k = MathHelper.floor_double(entityLiving.posZ);
-		
+
 		if(entityLiving.worldObj == null)
 		{
 			return data;
 		}
-		
+
 		Chunk chunk = entityLiving.worldObj.getChunkFromBlockCoords(i, k);
-		
+
 		if(chunk == null)
 		{
 			return data;
 		}
-		
+
 		BiomeGenBase biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, entityLiving.worldObj.getWorldChunkManager());
-		
+
 		if(biome == null)
 		{
 			return data;
 		}
-		
+
 		DimensionProperties dimensionProp = null;
 		if(DimensionProperties.base.hasProperty(entityLiving.worldObj.provider.dimensionId))
-		{ 
+		{
 			dimensionProp = DimensionProperties.base.getProperty(entityLiving.worldObj.provider.dimensionId);
 		}
-		
-		
+
+
 		float surroundingBiomeTempSamplesSum = 0;
 		int surroundingBiomeTempSamplesCount = 0;
-		
+
 		boolean isDay = entityLiving.worldObj.isDaytime();
-		
+
 		//Note: This is offset slightly so that heat peaks after noon.
 		float scale = 1.25F; // Anything above 1 forces the maximum and minimum temperatures to plateau when they're reached
 		float dayPercent = MathHelper.clamp_float((float)(Math.sin(Math.toRadians(((entityLiving.worldObj.getWorldTime()%24000L)/24000D)*360F - 30F))*0.5F + 0.5F)*scale, 0F, 1F);
-		
+
 		if(entityLiving.worldObj.provider.hasNoSky)
 		{
 			isDay = false;
 		}
-		
+
 		int lightLev = 0;
 		int blockLightLev = 0;
-		
+
 		if(j > 0)
 		{
 			if(j >= 256)
@@ -247,7 +250,7 @@ public class EM_StatusManager
 				blockLightLev = chunk.getSavedLightValue(EnumSkyBlock.Block, i & 0xf, j, k & 0xf);
 			}
 		}
-		
+
 		if(!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null)
 		{
 			if(dimensionProp == null || !dimensionProp.override || dimensionProp.darkAffectSanity)
@@ -256,22 +259,22 @@ public class EM_StatusManager
 			   sanityRate = -0.01F;
 			}
 		}
-		
+
 		// Scan a cube around the player
 		int cubeRadius_squared = cubeRadius*cubeRadius;
-		
+
 		for(int y = -cubeRadius; y <= cubeRadius; y++)
 		{
 			float radiusAtVerticalSlice = MathHelper.sqrt_float(cubeRadius_squared - (y*y));
 			int radiusAtVerticalSlice_floored = MathHelper.floor_float(radiusAtVerticalSlice);
 			float radiusAtVerticalSlice_squared = radiusAtVerticalSlice*radiusAtVerticalSlice;
-			
+
 			// East-West position
 			for(int x = -radiusAtVerticalSlice_floored; x <= radiusAtVerticalSlice_floored; x++)
 			{
 				float radiusAtXSlice = MathHelper.sqrt_float(radiusAtVerticalSlice_squared - (x*x));
 				int radiusAtXSlice_floored = MathHelper.floor_float(radiusAtXSlice);
-				
+
 				// South-North position
 				for(int z = -radiusAtXSlice_floored; z <= radiusAtXSlice_floored; z++)
 				{
@@ -279,7 +282,7 @@ public class EM_StatusManager
 					{
 						Chunk testChunk = entityLiving.worldObj.getChunkFromBlockCoords((i + x), (k + z));
 						BiomeGenBase checkBiome = testChunk.getBiomeGenForWorldCoords((i + x) & 15, (k + z) & 15, entityLiving.worldObj.getWorldChunkManager());
-						
+
 						if(checkBiome != null)
 						{
 							BiomeProperties biomeOverride = null;
@@ -287,7 +290,7 @@ public class EM_StatusManager
 							{
 								biomeOverride = BiomeProperties.base.getProperty(checkBiome);
 							}
-							
+
 							if(biomeOverride != null && biomeOverride.biomeOveride)
 							{
 								surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
@@ -297,33 +300,33 @@ public class EM_StatusManager
 								//surBiomeTemps += EnviroUtils.getBiomeTemp(checkBiome);
 								surroundingBiomeTempSamplesSum += EnviroUtils.getBiomeTemp((i + x),(j + y), (k + z), checkBiome);
 							}
-							
+
 							surroundingBiomeTempSamplesCount += 1;
 						}
 					}
-					
+
 					if(!EM_PhysManager.blockNotSolid(entityLiving.worldObj, x + i, y + j, z + k, false))
 					{
 						solidBlocks += 1;
 					}
 					totalBlocks += 1;
-					
+
 					dist = (float)entityLiving.getDistance(i + x, j + y, k + z);
-					
+
 					Block block = Blocks.air;
 					int meta = 0;
-					
+
 					block = entityLiving.worldObj.getBlock(i + x, j + y, k + z);
-					
+
 					if(block != Blocks.air)
 					{
 						meta = entityLiving.worldObj.getBlockMetadata(i + x, j + y, k + z);
 					}
-					
+
 					if(BlockProperties.base.hasProperty(block, meta))
 					{
 						BlockProperties blockProps = BlockProperties.base.getProperty(block, meta);
-						
+
 						if(blockProps.air > 0F)
 						{
 							leaves += (blockProps.air/0.1F);
@@ -364,7 +367,7 @@ public class EM_StatusManager
 							}
 						}
 					}
-					
+
 					if(block.getMaterial() == Material.lava)
 					{
 						nearLava = true;
@@ -372,31 +375,31 @@ public class EM_StatusManager
 				}
 			}
 		}
-		
+
 		if(entityLiving instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)entityLiving;
-			
+
 			for(int slot = 0; slot < 9; slot++)
 			{
 				ItemStack stack = player.inventory.mainInventory[slot];
-				
+
 				if(stack == null)
 				{
 					continue;
 				}
-				
+
 				float stackMult = 1F;
-				
+
 				if(stack.stackSize > 1)
 				{
 					stackMult = (stack.stackSize-1F)/63F + 1F;
 				}
-				
+
 				if(ItemProperties.base.hasProperty(stack))
 				{
 					ItemProperties itemProps = ItemProperties.base.getProperty(stack);
-	
+
 					if(itemProps.ambAir > 0F)
 					{
 						leaves += (itemProps.ambAir/0.1F) * stackMult;
@@ -446,7 +449,7 @@ public class EM_StatusManager
 				}
 			}
 		}
-		
+
 		if(lightLev > 1 && !entityLiving.worldObj.provider.hasNoSky)
 		{
 			quality = 2F;
@@ -455,17 +458,17 @@ public class EM_StatusManager
 		{
 			sanityRate = -0.1F;
 		}
-		
+
 		if(dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky)
 		{
 			quality = 2F;
 		}
-		
+
 
 		float biomeTemperature = (surroundingBiomeTempSamplesSum / surroundingBiomeTempSamplesCount);
 		float maxHighAltitudeTemp = -30F; // Max temp at high altitude
 		float minLowAltitudeTemp = 30F; // Min temp at low altitude (Geothermal Heating)
-		
+
 		if(!entityLiving.worldObj.provider.hasNoSky)
 		{
 			if(entityLiving.posY < 48)
@@ -485,9 +488,9 @@ public class EM_StatusManager
 				biomeTemperature = biomeTemperature < maxHighAltitudeTemp? biomeTemperature : maxHighAltitudeTemp;
 			}
 		}
-		
+
 		biomeTemperature -= cooling;
-		
+
 		if(entityLiving instanceof EntityPlayer)
 		{
 			if(((EntityPlayer)entityLiving).isPlayerSleeping())
@@ -495,75 +498,75 @@ public class EM_StatusManager
 				biomeTemperature += 10F;
 			}
 		}
-		
-		if (dimensionProp != null && dimensionProp.override && !dimensionProp.weatherAffectsTemp) 
+
+		if (dimensionProp != null && dimensionProp.override && !dimensionProp.weatherAffectsTemp)
 		{
 
 		}
-		else 
+		else
 		{
 			if(entityLiving.worldObj.isRaining() && biome.rainfall != 0.0F)
 			{
 				biomeTemperature -= 10F;
 				animalHostility = -1;
-				
+
 				if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k))
 				{
 					dropSpeed = 0.01F;
 				}
 			}
-		
+
 		} // Dimension Overrides End
-	
-		// 	Shade		
+
+		// 	Shade
 		if(!entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.worldObj.isRaining())
 		{
 			biomeTemperature -= 2.5F;
 		}
-		
+
 		if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp))
-		{ 
+		{
 			biomeTemperature -= (1F-dayPercent) * 10F;
-			
+
 			if(biome.rainfall <= 0F)
 			{
 				biomeTemperature -= (1F-dayPercent) * 30F;
 			}
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		List<Entity> mobList = entityLiving.worldObj.getEntitiesWithinAABBExcludingEntity(entityLiving, AxisAlignedBB.getBoundingBox(entityLiving.posX - 2, entityLiving.posY - 2, entityLiving.posZ - 2, entityLiving.posX + 3, entityLiving.posY + 3, entityLiving.posZ + 3));
-		
+
 		Iterator<Entity> iterator = mobList.iterator();
-		
+
 		float avgEntityTemp = 0.0F;
 		int validEntities = 0;
-		
+
 		EnviroDataTracker tracker = lookupTracker(entityLiving);
-		
+
 		if(tracker == null)
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tracker updating as null! Crash imminent!");
 		}
-		
+
 		while(iterator.hasNext())
 		{
 			Entity mob = (Entity)iterator.next();
-			
+
 			if(!(mob instanceof EntityLivingBase))
 			{
 				continue;
 			}
-			
+
 			EnviroDataTracker mobTrack = lookupTracker((EntityLivingBase)mob);
 			EntityProperties livingProps = null;
-			
-			
+
+
 			if(EntityProperties.base.hasProperty(mob))
 			{
 				livingProps = EntityProperties.base.getProperty(mob);
 			}
-			
+
 //			if(EntityList.getEntityID(mob) > 0)
 //			{
 //				if(EM_Settings.livingProperties.containsKey(EntityList.getEntityID(mob)))
@@ -577,16 +580,16 @@ public class EM_StatusManager
 //					livingProps = EM_Settings.livingProperties.get(EntityRegistry.instance().lookupModSpawn(mob.getClass(), false).getModEntityId() + 128);
 //				}
 //			}
-			
+
 			// Villager assistance. Once per day, certain villagers will heal your sanity, hydration, high body temp; or will feed you.
 			if(mob instanceof EntityVillager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist)
 			{
 				EntityVillager villager = (EntityVillager)mob;
 				Village village = entityLiving.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(villager.posX), MathHelper.floor_double(villager.posY), MathHelper.floor_double(villager.posZ), 32);
-				
+
 				long assistTime = villager.getEntityData().getLong("Enviro_Assist_Time");
 				long worldTime = entityLiving.worldObj.provider.getWorldTime();
-				
+
 				if(village != null && village.getReputationForPlayer(entityLiving.getCommandSenderName()) >= 5 && !villager.isChild() && Math.abs(worldTime - assistTime) > 24000)
 				{
 					if(villager.getProfession() == 2) // Priest
@@ -595,14 +598,14 @@ public class EM_StatusManager
 						{
 							sanityBoost = 5F;
 						}
-						
+
 						((EntityPlayer)entityLiving).addStat(EnviroAchievements.tradingFavours, 1);
 					} else if(villager.getProfession() == 0 && isDay) // Farmer
 					{
 						if(tracker.hydration < 50F)
 						{
 							tracker.hydration = 100F;
-							
+
 							if(tracker.bodyTemp >= 38F)
 							{
 								tracker.bodyTemp -= 1F;
@@ -610,7 +613,7 @@ public class EM_StatusManager
 							entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.drink", 1.0F, 1.0F);
 							villager.playSound("mob.villager.yes", 1.0F, 1.0F);
 							villager.getEntityData().setLong("Enviro_Assist_Time", worldTime);
-							
+
 							((EntityPlayer)entityLiving).addStat(EnviroAchievements.tradingFavours, 1);
 						}
 					} else if(villager.getProfession() == 4 && isDay) // Butcher
@@ -622,13 +625,13 @@ public class EM_StatusManager
 							entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.burp", 0.5F, entityLiving.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 							villager.playSound("mob.villager.yes", 1.0F, 1.0F);
 							villager.getEntityData().setLong("Enviro_Assist_Time", worldTime);
-							
+
 							((EntityPlayer)entityLiving).addStat(EnviroAchievements.tradingFavours, 1);
 						}
 					}
 				}
 			}
-			
+
 			if(livingProps != null && entityLiving.canEntityBeSeen(mob))
 			{
 				if(sanityRate >= livingProps.ambSanity && livingProps.ambSanity < 0 && sanityRate <= 0)
@@ -641,7 +644,7 @@ public class EM_StatusManager
 						sanityBoost = livingProps.ambSanity;
 					}
 				}
-				
+
 				if(livingProps.ambAir > 0F)
 				{
 					leaves += (livingProps.ambAir/0.1F);
@@ -649,10 +652,10 @@ public class EM_StatusManager
 				{
 					quality = livingProps.ambAir;
 				}
-				
+
 				dehydrateBonus -= livingProps.ambHydration;
 			}
-			
+
 //			else if(mob instanceof EntityBat && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob))
 //			{
 //				if(sanityRate <= sanityStartRate && sanityRate > -0.01F)
@@ -672,7 +675,7 @@ public class EM_StatusManager
 //					sanityRate = -0.01F;
 //				}
 //			}
-			
+
 			if(mobTrack != null)
 			{
 				if(livingProps != null)
@@ -708,39 +711,39 @@ public class EM_StatusManager
 				}
 			}
 		}
-		
+
 		if(validEntities > 0)
 		{
 			avgEntityTemp /= validEntities;
-			
+
 			if(biomeTemperature < avgEntityTemp - 12F)
 			{
 				biomeTemperature = (biomeTemperature + (avgEntityTemp - 12F)) / 2;
 			}
 		}
-		
+
 		float fireProt = 0;
-		
+
 		{
 			ItemStack helmet = entityLiving.getEquipmentInSlot(4);
 			ItemStack plate = entityLiving.getEquipmentInSlot(3);
 			ItemStack legs = entityLiving.getEquipmentInSlot(2);
 			ItemStack boots = entityLiving.getEquipmentInSlot(1);
-			
+
 			float tempMultTotal = 0F;
 			float addTemp = 0F;
-			
+
 			if(helmet != null)
 			{
 				NBTTagList enchTags = helmet.getEnchantmentTagList();
-				
+
 				if(enchTags != null)
 				{
 					for(int index = 0; index < enchTags.tagCount(); index++)
 					{
 						int enID = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("id");
 						int enLV = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("lvl");
-						
+
 						if(enID == Enchantment.respiration.effectId)
 						{
 							leaves += 3F * enLV;
@@ -750,11 +753,11 @@ public class EM_StatusManager
 						}
 					}
 				}
-				
+
 				if(ArmorProperties.base.hasProperty(helmet))
 				{
 					ArmorProperties props = ArmorProperties.base.getProperty(helmet);
-					
+
 					if(isDay)
 					{
 						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && biomeTemperature > 0F)
@@ -771,7 +774,7 @@ public class EM_StatusManager
 						tempMultTotal += (props.nightMult - 1.0F);
 						addTemp += props.nightTemp;
 					}
-					
+
 					if(props.air > 0F)
 					{
 						leaves += (props.air/0.1F);
@@ -779,7 +782,7 @@ public class EM_StatusManager
 					{
 						quality = props.air;
 					}
-					
+
 					if(sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0)
 					{
 						sanityRate = props.sanity;
@@ -792,25 +795,25 @@ public class EM_StatusManager
 			if(plate != null)
 			{
 				NBTTagList enchTags = plate.getEnchantmentTagList();
-				
+
 				if(enchTags != null)
 				{
 					for(int index = 0; index < enchTags.tagCount(); index++)
 					{
 						int enID = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("id");
 						int enLV = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("lvl");
-						
+
 						if(enID == Enchantment.fireProtection.effectId)
 						{
 							fireProt += enLV;
 						}
 					}
 				}
-				
+
 				if(ArmorProperties.base.hasProperty(plate))
 				{
 					ArmorProperties props = ArmorProperties.base.getProperty(plate);
-					
+
 					if(isDay)
 					{
 						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && biomeTemperature > 0F)
@@ -827,12 +830,12 @@ public class EM_StatusManager
 						tempMultTotal += (props.nightMult - 1.0F);
 						addTemp += props.nightTemp;
 					}
-					
+
 					if((quality <= props.air && props.air > 0F) || (quality >= props.air && props.air < 0 && quality <= 0))
 					{
 						quality = props.air;
 					}
-					
+
 					if(sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0)
 					{
 						sanityRate = props.sanity;
@@ -845,25 +848,25 @@ public class EM_StatusManager
 			if(legs != null)
 			{
 				NBTTagList enchTags = legs.getEnchantmentTagList();
-				
+
 				if(enchTags != null)
 				{
 					for(int index = 0; index < enchTags.tagCount(); index++)
 					{
 						int enID = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("id");
 						int enLV = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("lvl");
-						
+
 						if(enID == Enchantment.fireProtection.effectId)
 						{
 							fireProt += enLV;
 						}
 					}
 				}
-				
+
 				if(ArmorProperties.base.hasProperty(legs))
 				{
 					ArmorProperties props = ArmorProperties.base.getProperty(legs);
-						
+
 					if(isDay)
 					{
 						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && biomeTemperature > 0F)
@@ -880,12 +883,12 @@ public class EM_StatusManager
 						tempMultTotal += (props.nightMult - 1.0F);
 						addTemp += props.nightTemp;
 					}
-					
+
 					if((quality <= props.air && props.air > 0F) || (quality >= props.air && props.air < 0 && quality <= 0))
 					{
 						quality = props.air;
 					}
-					
+
 					if(sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0)
 					{
 						sanityRate = props.sanity;
@@ -898,25 +901,25 @@ public class EM_StatusManager
 			if(boots != null)
 			{
 				NBTTagList enchTags = boots.getEnchantmentTagList();
-				
+
 				if(enchTags != null)
 				{
 					for(int index = 0; index < enchTags.tagCount(); index++)
 					{
 						int enID = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("id");
 						int enLV = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("lvl");
-						
+
 						if(enID == Enchantment.fireProtection.effectId)
 						{
 							fireProt += enLV;
 						}
 					}
 				}
-				
+
 				if(ArmorProperties.base.hasProperty(boots))
 				{
 					ArmorProperties props = ArmorProperties.base.getProperty(boots);
-					
+
 					if(isDay)
 					{
 						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && biomeTemperature > 0F)
@@ -933,12 +936,12 @@ public class EM_StatusManager
 						tempMultTotal += (props.nightMult - 1.0F);
 						addTemp += props.nightTemp;
 					}
-					
+
 					if((quality <= props.air && props.air > 0F) || (quality >= props.air && props.air < 0 && quality <= 0))
 					{
 						quality = props.air;
 					}
-					
+
 					if(sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0)
 					{
 						sanityRate = props.sanity;
@@ -948,12 +951,12 @@ public class EM_StatusManager
 					}
 				}
 			}
-			
+
 			biomeTemperature *= (1F + tempMultTotal);
 			biomeTemperature += addTemp;
 			fireProt = 1F - fireProt/18F;
 		}
-		
+
 		if(entityLiving.isInWater())
 		{
 			if(biomeTemperature > 25F)
@@ -968,9 +971,9 @@ public class EM_StatusManager
 			}
 			dropSpeed = 0.01F;
 		}
-		
+
 		float ambientTemperature = 0F;
-		
+
 		if(blockAndItemTempInfluence > biomeTemperature)
 		{
 			ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / 2;
@@ -982,12 +985,12 @@ public class EM_StatusManager
 		{
 			ambientTemperature = biomeTemperature;
 		}
-		
+
 		if(entityLiving.getActivePotionEffect(Potion.hunger) != null)
 		{
 			dehydrateBonus += 0.1F;
 		}
-		
+
 		if(nearLava)
 		{
 			if(riseSpeed <= 0.005F)
@@ -1000,7 +1003,7 @@ public class EM_StatusManager
 				animalHostility = 1;
 			}
 		}
-		
+
 		BiomeProperties biomeProp = null;
 		if(BiomeProperties.base.hasProperty(biome))
 		{
@@ -1009,7 +1012,7 @@ public class EM_StatusManager
 			 if(biomeProp != null && biomeProp.biomeOveride)
 				{
 					dehydrateBonus += biomeProp.dehydrateRate;
-					
+
 					if(biomeProp.tempRate > 0)
 					{
 						riseSpeed += biomeProp.tempRate;
@@ -1017,7 +1020,7 @@ public class EM_StatusManager
 					{
 						dropSpeed += biomeProp.tempRate;
 					}
-					
+
 					sanityRate += biomeProp.sanityRate;
 				}
 
@@ -1031,7 +1034,7 @@ public class EM_StatusManager
 				animalHostility = 1;
 			}
 		}
-		
+
 		if(!entityLiving.isPotionActive(Potion.fireResistance))
 		{
 			if(entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava)
@@ -1044,22 +1047,22 @@ public class EM_StatusManager
 				{
 					ambientTemperature = 75F;
 				}
-				
+
 				if(riseSpeed < 0.1F)
 				{
 					riseSpeed = 0.1F;
 				}
 			}
 		}
-		
+
 		quality += (leaves * 0.1F);
 		sanityRate += sanityBoost;
-		
+
 		if(quality < 0)
 		{
 			quality *= ((float)solidBlocks)/totalBlocks;
 		}
-		
+
 		if(entityLiving.isSprinting())
 		{
 			dehydrateBonus += 0.05F;
@@ -1069,16 +1072,16 @@ public class EM_StatusManager
 			}
 			ambientTemperature += 2F;
 		}
-		
+
 		if(dimensionProp != null && dimensionProp.override)
-		{   
+		{
 			quality = quality * (float) dimensionProp.airMulti + dimensionProp.airRate;
 			riseSpeed = riseSpeed * (float) dimensionProp.tempMulti + dimensionProp.tempRate;
 			dropSpeed = dropSpeed * (float) dimensionProp.tempMulti + dimensionProp.tempRate;
 			sanityRate = sanityRate * (float) dimensionProp.sanityMulti + dimensionProp.sanityRate;
 			dehydrateBonus = dehydrateBonus * (float) dimensionProp.hydrationMulti + dimensionProp.hydrationRate;
 		}
-		
+
 		// Air quality delta
 		data[AIR_QUALITY_DELTA_INDEX] = quality * (float)EM_Settings.airMult;
 		// Air temp
@@ -1091,7 +1094,7 @@ public class EM_StatusManager
 		data[BODY_TEMP_RISE_SPEED_INDEX] = riseSpeed * (float)EM_Settings.tempMult * (tracker.bodyTemp < 37F? 1F : fireProt);
 		data[ANIMAL_HOSTILITY_INDEX] = animalHostility;
 		data[SANITY_DELTA_INDEX] = sanityRate * (float)EM_Settings.sanityMult;
-		
+
 		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().thePlayer.getCommandSenderName()) && timer.isRunning())
 		{
 			timer.stop();
@@ -1100,16 +1103,16 @@ public class EM_StatusManager
 		}
 		return data;
 	}
-	
+
 	public static float getBiomeTemprature(int x, int y, BiomeGenBase biome)
 	{
 		float temp= 0F;
-		
-		
+
+
 		return temp;
-		
+
 	}
-	
+
 	public static void removeTracker(EnviroDataTracker tracker)
 	{
 		if(trackerList.containsValue(tracker))
@@ -1124,7 +1127,7 @@ public class EM_StatusManager
 			}
 		}
 	}
-	
+
 	public static void saveAndRemoveTracker(EnviroDataTracker tracker)
 	{
 		if(trackerList.containsValue(tracker))
@@ -1135,6 +1138,7 @@ public class EM_StatusManager
 			tags.setFloat("ENVIRO_HYD", tracker.hydration);
 			tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 			tags.setFloat("ENVIRO_SAN", tracker.sanity);
+            tags.setFloat("ENVIRO_BLD", tracker.blood);
 			if(tracker.trackedEntity instanceof EntityPlayer)
 			{
 				trackerList.remove(tracker.trackedEntity.getCommandSenderName());
@@ -1144,7 +1148,7 @@ public class EM_StatusManager
 			}
 		}
 	}
-	
+
 	public static void saveTracker(EnviroDataTracker tracker)
 	{
 		NBTTagCompound tags = tracker.trackedEntity.getEntityData();
@@ -1152,8 +1156,9 @@ public class EM_StatusManager
 		tags.setFloat("ENVIRO_HYD", tracker.hydration);
 		tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 		tags.setFloat("ENVIRO_SAN", tracker.sanity);
+        tags.setFloat("ENVIRO_BLD", tracker.blood);
 	}
-	
+
 	public static void removeAllTrackers()
 	{
 		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
@@ -1162,10 +1167,10 @@ public class EM_StatusManager
 			EnviroDataTracker tracker = iterator.next();
 			tracker.isDisabled = true;
 		}
-		
+
 		trackerList.clear();
 	}
-	
+
 	public static void saveAndDeleteAllTrackers()
 	{
 		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
@@ -1178,10 +1183,11 @@ public class EM_StatusManager
 			tags.setFloat("ENVIRO_HYD", tracker.hydration);
 			tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 			tags.setFloat("ENVIRO_SAN", tracker.sanity);
+            tags.setFloat("ENVIRO_BLD", tracker.blood);
 		}
 		trackerList.clear();
 	}
-	
+
 	public static void saveAndDeleteWorldTrackers(World world)
 	{
 		HashMap<String,EnviroDataTracker> tempList = new HashMap<String,EnviroDataTracker>(trackerList);
@@ -1189,7 +1195,7 @@ public class EM_StatusManager
 		while(iterator.hasNext())
 		{
 			EnviroDataTracker tracker = iterator.next();
-			
+
 			if(tracker.trackedEntity.worldObj == world)
 			{
 				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
@@ -1197,6 +1203,7 @@ public class EM_StatusManager
 				tags.setFloat("ENVIRO_HYD", tracker.hydration);
 				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 				tags.setFloat("ENVIRO_SAN", tracker.sanity);
+                tags.setFloat("ENVIRO_BLD", tracker.blood);
 				tracker.isDisabled = true;
 				if(tracker.trackedEntity instanceof EntityPlayer)
 				{
@@ -1208,7 +1215,7 @@ public class EM_StatusManager
 			}
 		}
 	}
-	
+
 	public static void saveAllWorldTrackers(World world)
 	{
 		HashMap<String,EnviroDataTracker> tempList = new HashMap<String,EnviroDataTracker>(trackerList);
@@ -1216,7 +1223,7 @@ public class EM_StatusManager
 		while(iterator.hasNext())
 		{
 			EnviroDataTracker tracker = iterator.next();
-			
+
 			if(tracker.trackedEntity.worldObj == world)
 			{
 				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
@@ -1224,14 +1231,15 @@ public class EM_StatusManager
 				tags.setFloat("ENVIRO_HYD", tracker.hydration);
 				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 				tags.setFloat("ENVIRO_SAN", tracker.sanity);
+                tags.setFloat("ENVIRO_BLD", tracker.blood);
 			}
 		}
 	}
-	
+
 	public static EntityPlayer findPlayer(String username)
 	{
 		World[] worlds = new World[1];
-		
+
 		if(EnviroMine.proxy.isClient())
 		{
 			if(Minecraft.getMinecraft().isIntegratedServerRunning())
@@ -1245,7 +1253,7 @@ public class EM_StatusManager
 		{
 			worlds = MinecraftServer.getServer().worldServers;
 		}
-		
+
 		for(int i = worlds.length - 1; i >= 0; i -= 1)
 		{
 			if(worlds[i] == null)
@@ -1253,7 +1261,7 @@ public class EM_StatusManager
 				continue;
 			}
 			EntityPlayer player = worlds[i].getPlayerEntityByName(username);
-			
+
 			if(player != null)
 			{
 				if(player.isEntityAlive())
@@ -1262,36 +1270,36 @@ public class EM_StatusManager
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public static void createFX(EntityLivingBase entityLiving)
 	{
 		float rndX = (entityLiving.getRNG().nextFloat() * entityLiving.width * 2) - entityLiving.width;
 		float rndY = entityLiving.getRNG().nextFloat() * entityLiving.height;
 		float rndZ = (entityLiving.getRNG().nextFloat() * entityLiving.width * 2) - entityLiving.width;
 		EnviroDataTracker tracker = lookupTracker(entityLiving);
-		
+
 		if(entityLiving instanceof EntityPlayer && !(entityLiving instanceof EntityPlayerMP))
 		{
 			rndY = -rndY;
 		}
-		
+
 		if(tracker != null)
 		{
 			if(tracker.bodyTemp >= 38F && UI_Settings.sweatParticals)
 			{
 				entityLiving.worldObj.spawnParticle("dripWater", entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 0.0D, 0.0D, 0.0D);
 			}
-			
+
 			if(tracker.trackedEntity.isPotionActive(EnviroPotion.insanity) && UI_Settings.insaneParticals)
 			{
 				entityLiving.worldObj.spawnParticle("portal", entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
-	
+
 	public static float getTempFalloff(float blockTemperature, float cartesianDistance, int scanRadius, float dropoffPower)
 	{
 		return cartesianDistance <= scanRadius ? (float) (blockTemperature * (1 - Math.pow(MathHelper.clamp_float(cartesianDistance-EM_Settings.auraRadius, 0, scanRadius)/scanRadius, 1F/dropoffPower))) : 0F;
