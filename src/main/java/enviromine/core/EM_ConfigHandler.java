@@ -331,9 +331,10 @@ public class EM_ConfigHandler
 		// --------------- //
 
 		//EM_Settings.updateCheck = config.get(Configuration.CATEGORY_GENERAL, "Check For Updates", EM_Settings.updateCheck).getBoolean(EM_Settings.updateCheck);
-        EM_Settings.GasMaskBreakMultiplier = config.getInt("Hbm Gas Mask filter break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "Multiplier for breaking a hbm gas mask filter");
-        EM_Settings.GasMaskBreakChanceNumber = config.getInt("Hbm Gas Mask filter break chance number",Configuration.CATEGORY_GENERAL, 15, 0, 100,  "Chance number for breaking a hbm gas mask filter");
-		EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, true, "Displays a client-side chat message on login if there's an update available.");
+        EM_Settings.HbmGasMaskBreakMultiplier = config.getInt("Hbm Gas Mask filter break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "Multiplier for breaking a hbm gas mask filter");
+        EM_Settings.HbmGasMaskBreakChanceNumber = config.getInt("Hbm Gas Mask filter break chance number",Configuration.CATEGORY_GENERAL, 15, 0, 100,  "The number on which the chance of reducing the durability of the hbm filter depends. The lower the number, the greater the chance that the filter durability will decrease");
+        EM_Settings.EnviromineGasMaskBreakMultiplier = config.getInt("Gas Masks break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "A number that is subtracted from the current enviromine mask filter durability if the player is in a gas block, that is suffocating");
+        EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
 				+ "\n0: No log messages are printed whatsoever"
 				+ "\n1: Minimal log messages are printed"
@@ -345,6 +346,8 @@ public class EM_ConfigHandler
 		EM_Settings.keepStatus = config.get(Configuration.CATEGORY_GENERAL, "Keep statuses on death", EM_Settings.keepStatus).getBoolean(EM_Settings.keepStatus);
 		EM_Settings.renderGear = config.get(Configuration.CATEGORY_GENERAL, "Render Gear", EM_Settings.renderGear ,"Render 3d gear worn on player. Must reload game to take effect").getBoolean(EM_Settings.renderGear);
 		EM_Settings.finiteWater = config.get(Configuration.CATEGORY_GENERAL, "Finite Water", EM_Settings.finiteWater).getBoolean(EM_Settings.finiteWater);
+        EM_Settings.DeathFromHeartAttack = config.getBoolean("Death From Heart Attack", Configuration.CATEGORY_GENERAL, true, "Should a player die from a heart attack if sanity < 5?");
+        EM_Settings.HeartAttackTimeToDie = config.getInt("Heart Attack Time To Die",Configuration.CATEGORY_GENERAL, 20, 1, 65536,  "Time after which the player dies from a heart attack (for sanity > 0 but <5, it will be the same number. For sanity = 0, it will be this number / 2). To calculate the time, multiply this number by 3, this will be the time in seconds");
 		EM_Settings.cauldronHeatingBlocks = config.get(Configuration.CATEGORY_GENERAL, "Cauldron Heating Blocks", EM_Settings.cauldronHeatingBlocks,
 				"List of blocks that will purify a cauldron's water when placed underneath the cauldron. Of the form mod:block:meta. Append no meta value in order to use any meta."
 				).getStringList();

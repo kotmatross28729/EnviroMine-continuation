@@ -3,18 +3,22 @@
 
 ## Differences from the Galaxy Odyssey version:
 
-### 1) more sanity debuffs (due to the fact that sanity in the original enviromine does almost nothing dangerous (I plan to make it even more dangerous)
+### 1) more sanity debuffs (due to the fact that sanity in the original enviromine does almost nothing dangerous (+, from 1.3.134 version, if your sanity is less than or equal to 5 (but greater than 0) you will die from a heart attack after 1 minute, but if your sanity is 0, then you will die after 30 seconds, and, if more than 30 seconds have passed and your sanity has JUST dropped to 0, you will die instantly(configurable + you can disable death, but instead, some debuffs will become of a higher level))
 
-### 2) Compatible with hbm filters/masks/protective helmets (it will be right hnt, because Hbm’s Nuclear Tech, but it’s more convenient for me) (Test, no enviromine gas protection  yet)
+### 2) Compatibility with Hbm's Nuclear Tech filters/masks/protective helmets
 
 ### 3) Updated build script, thanks to GTNH!
+
+### 4) Fixed a bug where the sound of the gas mask was played even when the game was paused
 
 
 ## Current TODO:
 
-### 1) implement death within a certain time when sanity = 0F
+### 1) ~~implement death within a certain time when sanity = 0F~~ Made in 1.3.134
 
-### 2) enviromine gas protection for  hbm filters/masks/protective helmets
+### ~~2) enviromine gas protection for  hbm filters/masks/protective helmets~~ Made in 1.3.134
+
+### 3) custom / needed in the modpack things
 
 
 # Credits:

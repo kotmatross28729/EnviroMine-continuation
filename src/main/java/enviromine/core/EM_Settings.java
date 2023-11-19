@@ -45,8 +45,14 @@ public class EM_Settings
 	public static boolean versionChecker;
 
 	public static int loggerVerbosity;
-    public static int GasMaskBreakMultiplier;
-    public static int GasMaskBreakChanceNumber;
+
+    public static boolean DeathFromHeartAttack;
+
+    public static int HeartAttackTimeToDie;
+    public static int HbmGasMaskBreakMultiplier;
+
+    public static int EnviromineGasMaskBreakMultiplier;
+    public static int HbmGasMaskBreakChanceNumber;
 
 	public static boolean enablePhysics = true;
 	public static boolean enableLandslide = true;

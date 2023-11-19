@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import com.hbm.hazard.modifier.HazardModifier;
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.util.*;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;

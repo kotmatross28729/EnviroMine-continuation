@@ -120,6 +120,7 @@ deathmessage.enviromine.suffocate=%s задохнулся
 deathmessage.enviromine.frostbite=%s замёрз до смерти
 deathmessage.enviromine.dehydrate=%s умер от жажды
 deathmessage.enviromine.landslide=%s был раздавлен в результате оползня
+deathmessage.enviromine.heartattack=Сердце %s не выдержало, и остановилось
 deathmessage.enviromine.avalanche=%s был погребён лавиной
 deathmessage.enviromine.organfailure=%s умер от полиорганной недостаточности
 deathmessage.enviromine.heatstroke=Мозг %s был приготовлен в результате теплового удара
