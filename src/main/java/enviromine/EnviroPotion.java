@@ -28,8 +28,6 @@ public class EnviroPotion extends Potion
 	public static EnviroPotion frostbite;
 	public static EnviroPotion dehydration;
 	public static EnviroPotion insanity;
-    public static EnviroPotion bleedout;
-
 
 	public static ResourceLocation textureResource = new ResourceLocation("enviromine", "textures/gui/status_Gui.png");
 
@@ -45,7 +43,6 @@ public class EnviroPotion extends Potion
 		EnviroPotion.insanity = ((EnviroPotion)new EnviroPotion(EM_Settings.insanityPotionID, true, 5578058).setPotionName("potion.enviromine.insanity")).setIconIndex(2, 0);
 		EnviroPotion.heatstroke = ((EnviroPotion)new EnviroPotion(EM_Settings.heatstrokePotionID, true, RenderAssist.getColorFromRGBA(255, 0, 0, 255)).setPotionName("potion.enviromine.heatstroke")).setIconIndex(3, 0);
 		EnviroPotion.hypothermia = ((EnviroPotion)new EnviroPotion(EM_Settings.hypothermiaPotionID, true, 8171462).setPotionName("potion.enviromine.hypothermia")).setIconIndex(4, 0);
-        EnviroPotion.bleedout = ((EnviroPotion)new EnviroPotion(EM_Settings.bleedoutPotionID, true, 8171462).setPotionName("potion.enviromine.bleedout")).setIconIndex(5, 0);
 	}
 
 	public static void checkAndApplyEffects(EntityLivingBase entityLiving)
@@ -116,55 +113,6 @@ public class EnviroPotion extends Potion
 				}
 			}
 		}
-        // === BleedOut === //
-        if(entityLiving.isPotionActive(bleedout))
-        {
-            PotionEffect effect = entityLiving.getActivePotionEffect(bleedout);
-
-            // Remove effect if it's worn off
-            if (effect.getDuration() <= 0)
-            {
-                entityLiving.removePotionEffect(bleedout.id);
-            }
-            // Don't inflict further effects if the stat in question is not tracked
-            else if(
-                EM_Settings.enableBlood
-                    && (
-                    !EM_Settings.dimensionProperties.containsKey(entityLiving.dimension)
-                        || (EM_Settings.dimensionProperties.containsKey(entityLiving.dimension)
-                        && EM_Settings.dimensionProperties.get(entityLiving.dimension).trackBlood)
-                )
-                    && !(
-                    EM_Settings.matterOverdriveAndroidImmunities
-                        && isCurrentlyAndroid
-                )
-            )
-            {
-                if(effect.getAmplifier() >= 2 && entityLiving.getRNG().nextInt(2) == 0)
-                {
-                    entityLiving.attackEntityFrom(EnviroDamageSource.bleedout, 4.0F);
-                }
-
-                if(effect.getAmplifier() >= 1)
-                {
-                    entityLiving.addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 0));
-                    entityLiving.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 0));
-                    entityLiving.addPotionEffect(new PotionEffect(Potion.hunger.id, 200, 0));
-
-                    if(entityLiving.getRNG().nextInt(10) == 0)
-                    {
-                        if(EM_Settings.noNausea)
-                        {
-                            entityLiving.addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 0));
-                        } else
-                        {
-                            entityLiving.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 0));
-                        }
-                    }
-                }
-            }
-        }
-
 		// === Hypothermia === //
 		if(entityLiving.isPotionActive(hypothermia))
 		{

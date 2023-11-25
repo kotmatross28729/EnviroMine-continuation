@@ -20,8 +20,6 @@ public class EnviroCommand extends CommandBase
 	private String set = StatCollector.translateToLocal("commands.enviromine.envirostat.set");
 	private String temp = StatCollector.translateToLocal("commands.enviromine.envirostat.temp");
 	private String sanity = StatCollector.translateToLocal("commands.enviromine.envirostat.sanity");
-
-    private String blood = StatCollector.translateToLocal("commands.enviromine.envirostat.blood");
 	private String water = StatCollector.translateToLocal("commands.enviromine.envirostat.water");
 	private String air = StatCollector.translateToLocal("commands.enviromine.envirostat.air");
 
@@ -34,7 +32,7 @@ public class EnviroCommand extends CommandBase
 	@Override
 	public String getCommandUsage(ICommandSender sender)
 	{
-		return "/envirostat <playername> <"+add+", "+set+"> <"+temp+", "+sanity+", "+blood+", "+water+", "+air+"> <float>";
+		return "/envirostat <playername> <"+add+", "+set+"> <"+temp+", "+sanity+", "+water+", "+air+"> <float>";
 	}
 
 	@Override
@@ -77,10 +75,7 @@ public class EnviroCommand extends CommandBase
 				} else if(astring[2].equalsIgnoreCase(sanity))
 				{
 					tracker.sanity += value;
-				} else if(astring[2].equalsIgnoreCase(blood))
-                {
-                    tracker.blood += value;
-                } else if(astring[2].equalsIgnoreCase(water))
+				} else if(astring[2].equalsIgnoreCase(water))
 				{
 					tracker.hydration += value;
 				} else if(astring[2].equalsIgnoreCase(air))
@@ -100,11 +95,7 @@ public class EnviroCommand extends CommandBase
 				{
 					tracker.sanity = value;
 
-				} else if(astring[2].equalsIgnoreCase(blood))
-                {
-                    tracker.blood = value;
-
-                } else if(astring[2].equalsIgnoreCase(water))
+				} else if(astring[2].equalsIgnoreCase(water))
 				{
 					tracker.hydration = value;
 				} else if(astring[2].equalsIgnoreCase("air"))
@@ -155,7 +146,7 @@ public class EnviroCommand extends CommandBase
         	return getListOfStringsMatchingLastWord(strings, new String[]{add, set});
         } else if(strings.length == 3)
         {
-        	return getListOfStringsMatchingLastWord(strings, new String[]{temp, sanity, blood, water, air});
+        	return getListOfStringsMatchingLastWord(strings, new String[]{temp, sanity, water, air});
         } else
         {
         	return new ArrayList<String>();

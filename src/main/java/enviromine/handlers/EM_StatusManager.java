@@ -63,7 +63,6 @@ public class EM_StatusManager
 	public static final int ANIMAL_HOSTILITY_INDEX = 6;
 	public static final int SANITY_DELTA_INDEX = 7;
 
-    public static final int BLOOD_DELTA_INDEX = 8;
 
 	public static HashMap<String,EnviroDataTracker> trackerList = new HashMap<String,EnviroDataTracker>();
 
@@ -121,7 +120,6 @@ public class EM_StatusManager
 		pData.setFloat("bodyTemp", tracker.bodyTemp);
 		pData.setFloat("hydration", tracker.hydration);
 		pData.setFloat("sanity", tracker.sanity);
-        pData.setFloat("blood", tracker.blood);
 		pData.setFloat("airTemp", tracker.airTemp);
 
 		EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(tracker.trackedEntity.worldObj.provider.dimensionId, tracker.trackedEntity.posX, tracker.trackedEntity.posY, tracker.trackedEntity.posZ, 128D));
@@ -1138,7 +1136,6 @@ public class EM_StatusManager
 			tags.setFloat("ENVIRO_HYD", tracker.hydration);
 			tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 			tags.setFloat("ENVIRO_SAN", tracker.sanity);
-            tags.setFloat("ENVIRO_BLD", tracker.blood);
 			if(tracker.trackedEntity instanceof EntityPlayer)
 			{
 				trackerList.remove(tracker.trackedEntity.getCommandSenderName());
@@ -1156,7 +1153,6 @@ public class EM_StatusManager
 		tags.setFloat("ENVIRO_HYD", tracker.hydration);
 		tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 		tags.setFloat("ENVIRO_SAN", tracker.sanity);
-        tags.setFloat("ENVIRO_BLD", tracker.blood);
 	}
 
 	public static void removeAllTrackers()
@@ -1183,7 +1179,6 @@ public class EM_StatusManager
 			tags.setFloat("ENVIRO_HYD", tracker.hydration);
 			tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 			tags.setFloat("ENVIRO_SAN", tracker.sanity);
-            tags.setFloat("ENVIRO_BLD", tracker.blood);
 		}
 		trackerList.clear();
 	}
@@ -1203,7 +1198,6 @@ public class EM_StatusManager
 				tags.setFloat("ENVIRO_HYD", tracker.hydration);
 				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 				tags.setFloat("ENVIRO_SAN", tracker.sanity);
-                tags.setFloat("ENVIRO_BLD", tracker.blood);
 				tracker.isDisabled = true;
 				if(tracker.trackedEntity instanceof EntityPlayer)
 				{
@@ -1231,7 +1225,6 @@ public class EM_StatusManager
 				tags.setFloat("ENVIRO_HYD", tracker.hydration);
 				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 				tags.setFloat("ENVIRO_SAN", tracker.sanity);
-                tags.setFloat("ENVIRO_BLD", tracker.blood);
 			}
 		}
 	}

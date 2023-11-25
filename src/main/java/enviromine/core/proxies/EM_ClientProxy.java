@@ -184,7 +184,6 @@ public class EM_ClientProxy extends EM_CommonProxy
         HUDRegistry.registerHudItem(new HudItemTemperature());
         HUDRegistry.registerHudItem(new HudItemHydration());
         HUDRegistry.registerHudItem(new HudItemSanity());
-        HUDRegistry.registerHudItem(new HudItemBlood());
         HUDRegistry.registerHudItem(new HudItemAirQuality());
         HUDRegistry.setInitialLoadComplete(true);
 	}

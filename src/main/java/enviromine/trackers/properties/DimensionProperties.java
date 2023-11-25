@@ -26,7 +26,6 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 	public boolean override;
 	public boolean trackSanity;
 
-    public boolean trackBlood;
 	public boolean darkAffectSanity;
 	public float sanityMulti;
 	public boolean trackAirQuality;

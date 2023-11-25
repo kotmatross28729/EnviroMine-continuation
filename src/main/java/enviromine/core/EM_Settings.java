@@ -70,10 +70,6 @@ public class EM_Settings
 	public static boolean enableHydrate = true;
 	@ShouldOverride
 	public static boolean enableSanity = true;
-
-    @ShouldOverride
-    public static boolean enableBlood = true;
-
 	@ShouldOverride
 	public static boolean enableBodyTemp = true;
 
@@ -119,8 +115,6 @@ public class EM_Settings
 	public static int frostBitePotionID = 29;
 	public static int dehydratePotionID = 30;
 	public static int insanityPotionID = 31;
-
-    public static int bleedoutPotionID = 32;
 
 	public static boolean enableHypothermiaGlobal = true;
 	public static boolean enableHeatstrokeGlobal = true;

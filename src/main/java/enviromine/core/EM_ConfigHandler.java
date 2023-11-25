@@ -249,11 +249,6 @@ public class EM_ConfigHandler
 		{
 			HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_SANITY));
 		}
-        if(!EM_Settings.enableBlood
-            && HUDRegistry.isActiveHudItem(HUDRegistry.getHudItemByID(HUD_ID_BLOOD)))
-        {
-            HUDRegistry.disableHudItem(HUDRegistry.getHudItemByID(HUD_ID_BLOOD));
-        }
         else if (!HUDRegistry.isActiveHudItem(HUDRegistry.getHudItemByID(HUD_ID_BLOOD)))
         {
             HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_BLOOD));
@@ -449,7 +444,6 @@ public class EM_ConfigHandler
 		EM_Settings.enablePhysics = config.get(Configuration.CATEGORY_GENERAL, "Enable Physics", EM_Settings.enablePhysics, "Turn physics On/Off").getBoolean(EM_Settings.enablePhysics);
 		EM_Settings.enableLandslide = config.get(Configuration.CATEGORY_GENERAL, "Enable Physics Landslide", EM_Settings.enableLandslide).getBoolean(EM_Settings.enableLandslide);
 		EM_Settings.enableSanity = config.get(Configuration.CATEGORY_GENERAL, "Allow Sanity", EM_Settings.enableSanity).getBoolean(EM_Settings.enableSanity);
-        EM_Settings.enableBlood = config.get(Configuration.CATEGORY_GENERAL, "Allow Blood", EM_Settings.enableBlood).getBoolean(EM_Settings.enableBlood);
 		EM_Settings.enableHydrate = config.get(Configuration.CATEGORY_GENERAL, "Allow Hydration", EM_Settings.enableHydrate).getBoolean(EM_Settings.enableHydrate);
 		EM_Settings.enableBodyTemp = config.get(Configuration.CATEGORY_GENERAL, "Allow Body Temperature", EM_Settings.enableBodyTemp).getBoolean(EM_Settings.enableBodyTemp);
 		EM_Settings.enableAirQ = config.get(Configuration.CATEGORY_GENERAL, "Allow Air Quality", EM_Settings.enableAirQ, "True/False to turn Enviromine Trackers for Sanity, Air Quality, Hydration, and Body Temperature.").getBoolean(EM_Settings.enableAirQ);
