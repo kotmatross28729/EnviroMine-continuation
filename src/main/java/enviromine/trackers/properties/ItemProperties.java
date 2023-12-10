@@ -3,6 +3,7 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.Iterator;
 
+import com.hbm.items.ModItems;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -25,68 +26,70 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 
+import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+
 public class ItemProperties implements SerialisableProperty, PropertyBase
 {
 	public static final ItemProperties base = new ItemProperties();
 	static String[] IPName;
-	
+
 	public String name;
 	public int meta;
-	
+
 	public boolean enableTemp;
-	
+
 	public float ambTemp;
 	public float ambAir;
 	public float ambSanity;
-	
+
 	public float effTemp;
 	public float effAir;
 	public float effSanity;
 	public float effHydration;
-	
+
 	public float effTempCap;
-	
+
 	public int camelFill;
 	public String fillReturnItem;
 	public int fillReturnMeta;
-	
+
 	public String loadedFrom;
-	
+
 	public ItemProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
 	}
-	
+
 	public ItemProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
+
 		if(base != null && base != this)
 		{
 			throw new IllegalStateException();
 		}
 	}
-	
+
 	public ItemProperties(String name, int meta, boolean enableTemp, float ambTemp, float ambAir, float ambSanity, float effTemp, float effAir, float effSanity, float effHydration, float effTempCap, int camelFill, String fillReturnItem, int fillReturnMeta, String fileName)
 	{
 		this.name = name;
 		this.meta = meta;
 		this.enableTemp = enableTemp;
-		
+
 		this.ambTemp = ambTemp;
 		this.ambAir = ambAir;
 		this.ambSanity = ambSanity;
-		
-		this.effTemp = effTemp;
-		this.effAir = effAir;
-		this.effSanity = effSanity;
-		this.effHydration = effHydration;
-		
+
+		this.effTemp = effTemp/2f;
+		this.effAir = effAir/2f;
+		this.effSanity = effSanity/2f;
+		this.effHydration = effHydration/2f;
+
 		this.effTempCap = effTempCap;
 		this.camelFill = camelFill;
 		this.fillReturnItem = fillReturnItem;
 		this.fillReturnMeta = fillReturnMeta;
-		
+
 		this.loadedFrom = fileName;
 	}
 	/**
@@ -99,7 +102,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.itemProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()) || EM_Settings.itemProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()));
 	}
-	/** 
+	/**
 	 * 	<b>getProperty(ItemStack stack)</b><bR><br>
 	 * Gets ItemProperty from ItemStack.
 	 * @param stack
@@ -108,7 +111,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	public ItemProperties getProperty(ItemStack stack)
 	{
 		ItemProperties itemProps;
-		
+
 		if(EM_Settings.itemProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()))
 		{
 			itemProps = EM_Settings.itemProperties.get("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage());
@@ -118,7 +121,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 		}
 		return itemProps;
 	}
-	
+
 	@Override
 	public NBTTagCompound WriteToNBT()
 	{
@@ -180,9 +183,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 		String camelReturnItem = config.get(category, IPName[12], "").getString();
 		int camelReturnMeta = config.get(category, IPName[13], 0).getInt(0);
 		String filename = config.getConfigFile().getName();
-		
+
 		ItemProperties entry = new ItemProperties(name, meta, enableTemp, ambTemp, ambAir, ambSanity, effTemp, effAir, effSanity, effHydration, effTempCap, camelFill, camelReturnItem, camelReturnMeta, filename);
-		
+
 		if(meta < 0)
 		{
 			// If item already exist and current file hasn't completely been loaded do this
@@ -190,7 +193,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 			{
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Items - "+ name.toUpperCase() +" was already added from "+ EM_Settings.itemProperties.get(name).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
 			}
-			
+
 			EM_Settings.itemProperties.put("" + name, entry);
 		} else
 		{
@@ -199,7 +202,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 			{
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Items - "+ name.toUpperCase() +" - Meta:"+ meta +" was already added from "+ EM_Settings.itemProperties.get(name).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
 			}
-			
+
 			EM_Settings.itemProperties.put("" + name + "," + meta, entry);
 		}
 	}
@@ -228,32 +231,32 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	{
 		@SuppressWarnings("unchecked")
 		Iterator<Item> iterator = Item.itemRegistry.iterator();
-		
+
 		while(iterator.hasNext())
 		{
 			Item item = iterator.next();
 			Block block = Blocks.air;
-			
+
 			if(item == null)
 			{
 				continue;
 			}
-			
+
 			if(item instanceof ItemBlock)
 			{
 				block = ((ItemBlock)item).field_150939_a;
 			}
-			
+
 			String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
-			
+
 			if(regName.length <= 0)
 			{
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + item.getUnlocalizedName());
 				continue;
 			}
-			
+
 			File itemFile = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(regName[0]) + ".cfg");
-			
+
 			if(!itemFile.exists())
 			{
 				try
@@ -265,13 +268,13 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 					continue;
 				}
 			}
-			
+
 			Configuration config = new Configuration(itemFile, true);
-			
+
 			String category = this.categoryName() + "." + EnviroUtils.replaceULN(item.getUnlocalizedName() +"_"+ regName[1]);
-			
+
 			config.load();
-			
+
 			if(item == Items.glass_bottle)
 			{
 				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
@@ -304,9 +307,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-				
+
 				category = category + "_(water)";
-				
+
 				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
 				config.get(category, IPName[1], 0).getInt(0);
 				config.get(category, IPName[2], false).getBoolean(false);
@@ -435,7 +438,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 			{
 				this.generateEmpty(config, item);
 			}
-			
+
 			config.save();
 		}
 	}
@@ -454,19 +457,19 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non item object!", new Exception());
 			return;
 		}
-		
+
 		Item item = (Item)obj;
-		
+
 		String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
-		
+
 		if(regName.length <= 0)
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + item.getUnlocalizedName() +"_"+ regName[1]);
 			return;
 		}
-		
+
 		String category = this.categoryName() + "." + EnviroUtils.replaceULN(item.getUnlocalizedName() +"_"+ regName[1]);
-		
+
 		config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
 		config.get(category, IPName[1], -1).getInt(-1);
 		config.get(category, IPName[2], false).getBoolean(false);
@@ -493,7 +496,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	public void customLoad()
 	{
 	}
-	
+
 	static
 	{
 		IPName = new String[14];
