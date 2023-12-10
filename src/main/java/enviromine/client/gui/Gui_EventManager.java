@@ -33,15 +33,15 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 @SideOnly(Side.CLIENT)
 public class Gui_EventManager
 {
-	
+
 	int width, height;
-	
+
 	//Render HUD
 	//Render Player
-	
+
 	// Button Functions
 	GuiButton enviromine;
-	
+
 	// Captures the initiation of vanilla menus to render new buttons
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
@@ -49,7 +49,7 @@ public class Gui_EventManager
 	{
 		width = event.gui.width;
 		height = event.gui.height;
-		
+
 		if(event.gui instanceof GuiIngameMenu && !EM_Settings.voxelMenuExists)
 		{
 			// There will be no new posts.
@@ -71,7 +71,7 @@ public class Gui_EventManager
 			}
 		}
 	}
-	
+
 	// Used to capture when an Enviromine button is hit in a vanilla menu
 	@SubscribeEvent
 	public void action(ActionPerformedEvent.Post event)
@@ -82,19 +82,19 @@ public class Gui_EventManager
 			{
 				Minecraft.getMinecraft().displayGuiScreen(new EM_Gui_Menu(event.gui));
 			}
-			
+
 		}
 	}
-	
+
 	public static int scaleTranslateX, scaleTranslateY;
-	
+
 	private Minecraft mc = Minecraft.getMinecraft();
-	
+
 	public static final ResourceLocation guiResource = new ResourceLocation("enviromine", "textures/gui/status_Gui.png");
 	public static final ResourceLocation blurOverlayResource = new ResourceLocation("enviromine", "textures/misc/blur.png");
-	
+
 	public static EnviroDataTracker tracker = null;
-	
+
 	/**
 	 * All Enviromine Gui and Hud Items will render here
 	 * @param event
@@ -107,7 +107,7 @@ public class Gui_EventManager
 		{
 			return;
 		}
-		
+
 		mc.thePlayer.yOffset = 1.62F;
 		if(ClientQuake.GetQuakeShake(mc.theWorld, mc.thePlayer) > 0)
 		{
@@ -116,50 +116,50 @@ public class Gui_EventManager
 			} else
 			{
 				float shakeMult = ClientQuake.GetQuakeShake(mc.theWorld, mc.thePlayer);
-				
+
 				double shakeSpeed = 2D * shakeMult;
 				float offsetY = 0.2F * shakeMult;
-				
+
 				double shake = (int)(mc.theWorld.getTotalWorldTime() % 24000L) * shakeSpeed;
-				
+
 				mc.thePlayer.yOffset -= (Math.sin(shake) * (offsetY / 2F)) + (offsetY / 2F);
 				mc.thePlayer.cameraPitch = (float)(Math.sin(shake) * offsetY / 4F);
 				mc.thePlayer.cameraYaw = (float)(Math.sin(shake) * offsetY / 4F);
 			}
 		}
-		
+
 		HUDRegistry.checkForResize();
-		
+
 		if(tracker == null)
 		{
 			if(!(EM_Settings.enableAirQ == false && EM_Settings.enableBodyTemp == false && EM_Settings.enableHydrate == false && EM_Settings.enableSanity == false))
 			{
 				//Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("NO ENVIRONMENT DATA", xPos, (height - yPos) - 8, 16777215);
 				tracker = EM_StatusManager.lookupTrackerFromUsername(this.mc.thePlayer.getCommandSenderName());
-			} 
+			}
 		} else if(tracker.isDisabled || !EM_StatusManager.trackerList.containsValue(tracker))
 		{
 			tracker = null;
 		} else
 		{
-			
+
 			HudItem.blinkTick++;
-			
-			
+
+
 			// Render GasMask Overlays
 			if(UI_Settings.overlay)
 			{
 				GasMaskHud.renderGasMask(mc);
 			}
-			
-			// Render Hud Items	
+
+			// Render Hud Items
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_LIGHTING);
 	        GL11.glColor4f(1F, 1F, 1F, 1F);
 
 			for(HudItem huditem : HUDRegistry.getActiveHudItemList())
 			{
-				
+
 				if(mc.playerController.isInCreativeMode() && !huditem.isRenderedInCreative())
 				{
 					continue;
@@ -174,20 +174,20 @@ public class Gui_EventManager
 							RenderAssist.bindTexture(huditem.getResource("TintOverlay"));
 							huditem.renderScreenOverlay(HUDRegistry.screenWidth, HUDRegistry.screenHeight);
 						}
-						
+
 						RenderAssist.bindTexture(huditem.getResource(""));
-						
+
 						//float transx = (float)(huditem.posX - (huditem.posX * UI_Settings.guiScale));
 						//float transy = (float)(huditem.posY - (huditem.posY * UI_Settings.guiScale));
-						
+
 						//GL11.glTranslated(transx, transy, 0);
-						
+
 						//GL11.glScalef((float)UI_Settings.guiScale, (float)UI_Settings.guiScale, (float)UI_Settings.guiScale);
-						
+
 						huditem.fixBounds();
 						huditem.render();
-						
-						
+
+
 					}
 				} else
 				{
@@ -198,31 +198,31 @@ public class Gui_EventManager
 							RenderAssist.bindTexture(huditem.getResource("TintOverlay"));
 							huditem.renderScreenOverlay(HUDRegistry.screenWidth, HUDRegistry.screenHeight);
 						}
-						
+
 						RenderAssist.bindTexture(huditem.getResource(""));
-						
+
 						//float transx = (float)(huditem.posX - (huditem.posX * UI_Settings.guiScale));
 						//float transy = (float)(huditem.posY - (huditem.posY * UI_Settings.guiScale));
-						
+
 						//GL11.glTranslated(transx, transy, 0);
-						
+
 						//GL11.glScalef((float)UI_Settings.guiScale, (float)UI_Settings.guiScale, (float)UI_Settings.guiScale);
-						
+
 						huditem.fixBounds();
 						huditem.render();
-						
+
 						//GL11.glTranslated(0, 0, 0);
-						
+
 					}
 				}
-				
+
 			}
 			Debug_Info.ShowDebugText(event, mc);
 			GL11.glPopMatrix();
 		}
-		
+
 	}
-	
+
 	//TODO Was used for Debugging Gui
 	/*@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event)
@@ -233,21 +233,21 @@ public class Gui_EventManager
 		if(event.gui instanceof GuiConfig)
 		{
 			GuiConfig guiConfig = (GuiConfig) event.gui;
-			
+
 			System.out.println("configID:"+guiConfig.configID +" modID:"+ guiConfig.modID);
-			
+
 			Iterator<IConfigElement> elements = guiConfig.configElements.iterator();
-			
+
 			while(elements.hasNext())
 			{
 				IConfigElement element = elements.next();
-				
-				
+
+
 				System.out.println("element name:"+ element.getName() +" Type:"+ element.getType() + " QNamed:"+element.getQualifiedName());
-				
+
 			}
-			
+
 		}
 	}*/
-	
+
 }

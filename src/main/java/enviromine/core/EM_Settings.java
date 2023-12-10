@@ -54,6 +54,8 @@ public class EM_Settings
     public static int EnviromineGasMaskBreakMultiplier;
     public static int HbmGasMaskBreakChanceNumber;
 
+    public static boolean hardcoregases = true;
+
 	public static boolean enablePhysics = true;
 	public static boolean enableLandslide = true;
 	public static boolean waterCollapse = true; // Added out of necessity/annoyance -- AstroTibs
@@ -70,6 +72,7 @@ public class EM_Settings
 	public static boolean enableSanity = true;
 	@ShouldOverride
 	public static boolean enableBodyTemp = true;
+
 	public static boolean trackNonPlayer = false;
 
 	public static boolean spreadIce = false;

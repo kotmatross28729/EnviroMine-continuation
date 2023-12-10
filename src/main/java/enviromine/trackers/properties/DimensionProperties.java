@@ -21,10 +21,11 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 {
 	public static final DimensionProperties base = new DimensionProperties();
 	static String[] DMName;
-	
+
 	public int id;
 	public boolean override;
 	public boolean trackSanity;
+
 	public boolean darkAffectSanity;
 	public float sanityMulti;
 	public boolean trackAirQuality;
@@ -44,22 +45,22 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 	public float airRate;
 	public boolean physics;
 	public String loadedFrom;
-	
+
 	public DimensionProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
 	}
-	
+
 	public DimensionProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
+
 		if(base != null && base != this)
 		{
 			throw new IllegalStateException();
 		}
 	}
-	
+
 	public DimensionProperties(int id, boolean override, boolean trackSanity, boolean darkAffectSanity, float sanityMulti, boolean trackAirQuality, float airMulti, boolean trackHydration, float hydrationMulti, boolean trackTemp, float tempMulti, boolean dayNightTemp, boolean weatherAffectsTemp, boolean mineshaftGen, int sealevel, int mineDepth, float tempRate, float hydrationRate, float sanityRate, float airRate, boolean physics, String fileName)
 	{
 		this.id = id;
@@ -96,7 +97,7 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.dimensionProperties.containsKey(dimensionId);
 	}
-	/** 
+	/**
 	 * 	<b>getProperty(BiomeGenBase biome)</b><bR><br>
 	 * Gets Property.
 	 * @param biome
@@ -106,7 +107,7 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.dimensionProperties.get(dimensionId);
 	}
-	
+
 	@Override
 	public NBTTagCompound WriteToNBT()
 	{
@@ -197,7 +198,7 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 		float airRate = (float)config.get(category, DMName[19], 0.0D).getDouble(0.0D);
 		boolean physics = config.get(category, DMName[20], true).getBoolean(true);
 		String filename = config.getConfigFile().getName();
-		
+
 		DimensionProperties entry = new DimensionProperties(id, override, trackSanity, darkAffectSanity, sanityMulti, trackAirQuality, airMulti, trackHydration, hydrationMulti, trackTemp, tempMulti, dayNightTemp, weatherAffectsTemp, mineshaftGen, sealevel, mineDepth, tempRate, hydrationRate, sanityRate, airRate, physics, filename);
 
 		// If item already exist and current file hasn't completely been loaded do this
@@ -241,20 +242,20 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 	public void GenDefaults()
 	{
 		Integer[] dimIDs = DimensionManager.getStaticDimensionIDs();
-		
+
 		for(int i = 0; i < dimIDs.length; i++)
 		{
 			WorldProvider dimension = WorldProvider.getProviderForDimension(dimIDs[i]);
-			
+
 			if(dimension == null)
 			{
 				continue;
 			}
-			
+
 			String modID = ModIdentification.idFromObject(dimension);
-			
+
 			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
-			
+
 			if(!file.exists())
 			{
 				try
@@ -266,13 +267,13 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 					continue;
 				}
 			}
-			
+
 			Configuration config = new Configuration(file, true);
-			
+
 			config.load();
-			
+
 			String catName = this.categoryName() + "." + EnviroUtils.replaceULN(dimension.getDimensionName());
-			
+
 			if(dimension.dimensionId == EM_Settings.caveDimID)
 			{
 				config.get(catName, DMName[0], dimension.dimensionId).getInt(dimension.dimensionId);
@@ -323,7 +324,7 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 			{
 				this.generateEmpty(config, dimension);
 			}
-			
+
 			config.save();
 		}
 	}
@@ -342,11 +343,11 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non WorldProvider object!", new Exception());
 			return;
 		}
-		
+
 		WorldProvider dimension = (WorldProvider)obj;
-		
+
 		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(dimension.getDimensionName());
-		
+
 		config.get(catName, DMName[0], dimension.dimensionId).getInt(dimension.dimensionId);
 		config.get(catName, DMName[1], true).getBoolean(true);
 		config.get(catName, DMName[2], true).getBoolean(true);
@@ -380,7 +381,7 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 	public void customLoad()
 	{
 	}
-	
+
 	static
 	{
 		DMName = new String[21];

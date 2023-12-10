@@ -40,8 +40,7 @@ import net.minecraft.util.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static enviromine.core.EM_Settings.DeathFromHeartAttack;
-import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
+import static enviromine.core.EM_Settings.*;
 
 
 public class EnviroDataTracker
@@ -53,7 +52,6 @@ public class EnviroDataTracker
 	public float prevHydration = 100F;
 	public float prevAirQuality = 100;
 	public float prevSanity = 100F;
-
 	public float gasAirDiff = 0F;
 
 	public float airQuality;
@@ -64,7 +62,6 @@ public class EnviroDataTracker
 	public float hydration;
 
 	public float sanity;
-
 	public int attackDelay = 1;
 	public int curAttackTime = 0;
 	public boolean isDisabled = false;
@@ -915,15 +912,17 @@ public class EnviroDataTracker
 	public void resetData()
 	{
 		airQuality = 100F;
-		bodyTemp = 37F;
+		bodyTemp = 36.6F;
 		hydration = 100F;
 		sanity = 100F;
+
 
 		// Added by AstroTibs to ensure no BS
 		trackedEntity.clearActivePotions();
 		frostbiteLevel = 0;
 		lastSleepTime = 0;
 		timeBelow10 = 0;
+        heartattacktimer = 0;
 	}
 
 	public void ClampSafeRange()
