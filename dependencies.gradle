@@ -35,6 +35,7 @@
  */
 dependencies {
     implementation("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
+    compileOnly name: 'BaublesExpanded-2.1.2-dev'
     compileOnly name: 'HBM-NTM-[1.0.27_X4795]'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     compileOnly fileTree(dir: 'libs', include: '*.zip')
