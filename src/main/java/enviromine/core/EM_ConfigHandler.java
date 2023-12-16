@@ -353,7 +353,7 @@ public class EM_ConfigHandler
 		EM_Settings.renderGear = config.get(Configuration.CATEGORY_GENERAL, "Render Gear", EM_Settings.renderGear ,"Render 3d gear worn on player. Must reload game to take effect").getBoolean(EM_Settings.renderGear);
 		EM_Settings.finiteWater = config.get(Configuration.CATEGORY_GENERAL, "Finite Water", EM_Settings.finiteWater).getBoolean(EM_Settings.finiteWater);
         EM_Settings.DeathFromHeartAttack = config.getBoolean("Death From Heart Attack", Configuration.CATEGORY_GENERAL, true, "Should a player die from a heart attack if sanity < 5?");
-        EM_Settings.hardcoregases = config.getBoolean("Hardcore gases", Configuration.CATEGORY_GENERAL, true, "If true, then all gases will be invisible");
+        EM_Settings.hardcoregases = config.getBoolean("Hardcore gases", Configuration.CATEGORY_GENERAL, false, "If true, then all gases will be invisible");
         EM_Settings.HeartAttackTimeToDie = config.getInt("Heart Attack Time To Die",Configuration.CATEGORY_GENERAL, 20, 1, 65536,  "Time after which the player dies from a heart attack (for sanity > 0 but <5, it will be the same number. For sanity = 0, it will be this number / 2). To calculate the time, multiply this number by 3, this will be the time in seconds");
 		EM_Settings.cauldronHeatingBlocks = config.get(Configuration.CATEGORY_GENERAL, "Cauldron Heating Blocks", EM_Settings.cauldronHeatingBlocks,
 				"List of blocks that will purify a cauldron's water when placed underneath the cauldron. Of the form mod:block:meta. Append no meta value in order to use any meta."

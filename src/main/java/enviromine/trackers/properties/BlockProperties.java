@@ -22,54 +22,55 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
+import thaumcraft.common.blocks.BlockMagicalLeaves;
 
 public class BlockProperties implements SerialisableProperty, PropertyBase
 {
 	public static final BlockProperties base = new BlockProperties();
 	static String[] BPName;
-	
+
 	public boolean hasPhys;
-	
+
 	public String name;
 	public int meta;
-	
+
 	public String stability;
 	public int minFall;
 	public int maxFall;
 	public int supportDist;
-	
+
 	public String dropName;
 	public int dropMeta;
 	public int dropNum;
-	
+
 	public boolean enableTemp;
-	
+
 	public float temp;
 	public float air;
 	public float sanity;
-	
+
 	public boolean holdsOthers;
 	public boolean slides;
 	public boolean canHang;
 	public boolean wetSlide;
-	
+
 	public String loadedFrom;
-	
+
 	public BlockProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
 	}
-	
+
 	public BlockProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
+
 		if(base != null && base != this)
 		{
 			throw new IllegalStateException();
 		}
 	}
-	
+
 	public BlockProperties(String name, int meta, boolean hasPhys, int minFall, int maxFall, int supportDist, String dropName, int dropMeta, int dropNum, boolean enableTemp, float temp, float air, float sanity, boolean holdOther, boolean slides, boolean canHang, boolean wetSlide, String stability, String fileName)
 	{
 		this.name = name;
@@ -100,13 +101,13 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	 * @param meta - Block MetaData<br>
 	 * @return true if has custom properties
 	 */
-	
-	
+
+
 	public boolean hasProperty(Block block, int meta)
 	{
 		return EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block) + "," + meta) || EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block));
 	}
-	/** 
+	/**
 	 * 	<b>getProperty(Block block, int meta)</b><bR><br>
 	 * Gets Property form Block and metaData.
 	 * @param block
@@ -116,7 +117,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	public BlockProperties getProperty(Block block, int meta)
 	{
 		BlockProperties blockProps = null;
-		
+
 		if(EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block) + "," + meta))
 		{
 			blockProps = EM_Settings.blockProperties.get("" + Block.blockRegistry.getNameForObject(block) + "," + meta);
@@ -126,7 +127,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		}
 		return blockProps;
 	}
-	
+
 	@Override
 	public NBTTagCompound WriteToNBT()
 	{
@@ -194,7 +195,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		boolean slides = config.get(category, BPName[10], false).getBoolean(false);
 		boolean wetSlides = config.get(category, BPName[11], false).getBoolean(false);
 		String filename = config.getConfigFile().getName();
-		
+
 		// 	Get Stability Options
 		int minFall = 99;
 		int maxFall = 99;
@@ -202,11 +203,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		boolean holdOther = false;
 		boolean canHang = true;
 		boolean hasPhys = false;
-		
+
 		if(EM_Settings.stabilityTypes.containsKey(stability))
 		{
 			StabilityType stabType = EM_Settings.stabilityTypes.get(stability);
-			
+
 			minFall = stabType.minFall;
 			maxFall = stabType.maxFall;
 			supportDist = stabType.supportDist;
@@ -223,9 +224,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 			holdOther = false;
 			canHang = true;
 		}
-		
+
 		BlockProperties entry = new BlockProperties(name, metaData, hasPhys, minFall, maxFall, supportDist, dropName, dropMeta, dropNum, enableTemp, temperature, airQuality, sanity, holdOther, slides, canHang, wetSlides, stability, filename);
-		
+
 		if(metaData < 0)
 		{
 			// If item already exist and current file hasn't completely been loaded do this
@@ -269,26 +270,26 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	{
 		@SuppressWarnings("unchecked")
 		Iterator<Block> iterator = Block.blockRegistry.iterator();
-		
+
 		while(iterator.hasNext())
 		{
 			Block block = iterator.next();
-			
+
 			if(block == null || block == Blocks.air)
 			{
 				continue;
 			}
 
 			String[] regName = Block.blockRegistry.getNameForObject(block).split(":");
-			
+
 			if(regName.length <= 0)
 			{
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + block.getUnlocalizedName());
 				continue;
 			}
-			
+
 			File blockFile = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(regName[0]) + ".cfg");
-			
+
 			if(!blockFile.exists())
 			{
 				try
@@ -300,14 +301,14 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 					continue;
 				}
 			}
-			
+
 			Configuration config = new Configuration(blockFile, true);
-			
+
 			config.load();
-			
+
 			String category = this.categoryName() + "." + EnviroUtils.replaceULN(block.getUnlocalizedName() +"_"+ regName[1]);
 			StabilityType defStability = EnviroUtils.getDefaultStabilityType(block);
-			
+
 			if(block == Blocks.lava || block == Blocks.flowing_lava || block == ObjectHandler.fireGasBlock || (EM_Settings.genConfigs && block.getMaterial() == Material.lava))
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
@@ -364,7 +365,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if((block == Blocks.flower_pot || block == Blocks.grass || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.grass || block.getMaterial() == Material.leaves || block.getMaterial() == Material.vine || block.getMaterial() == Material.plants) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block == Blocks.flower_pot || block == Blocks.grass || block instanceof BlockLeavesBase || block instanceof BlockMagicalLeaves || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.grass || block.getMaterial() == Material.leaves || block.getMaterial() == Material.vine || block.getMaterial() == Material.plants) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
@@ -478,7 +479,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);*/
 			}
-			
+
 			config.save();
 		}
 	}
@@ -497,20 +498,20 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non block object!", new Exception());
 			return;
 		}
-		
+
 		Block block = (Block)obj;
-		
+
 		String[] regName = Block.blockRegistry.getNameForObject(block).split(":");
-		
+
 		if(regName.length <= 0)
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + block.getUnlocalizedName() +"_"+ regName[1]);
 			return;
 		}
-		
+
 		String category = this.categoryName() + "." + EnviroUtils.replaceULN(block.getUnlocalizedName() +"_"+ regName[1]);
 		StabilityType defStability = EnviroUtils.getDefaultStabilityType(block);
-		
+
 		config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 		config.get(category, BPName[1], -1).getInt(0);
 		config.get(category, BPName[2], block == Blocks.stone? Block.blockRegistry.getNameForObject(Blocks.cobblestone) : (block == Blocks.grass? Block.blockRegistry.getNameForObject(Blocks.dirt) : "")).getString();
@@ -535,7 +536,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	public void customLoad()
 	{
 	}
-	
+
 	static
 	{
 		BPName = new String[12];

@@ -340,7 +340,23 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(block == Blocks.snow || block == Blocks.snow_layer)
+			} else if(item == ModItems.cigarette_normal || item == ModItems.crackpipe || item == ModItems.cigarette)
+            {
+                config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+                config.get(category, IPName[1], -1).getInt(-1);
+                config.get(category, IPName[2], false).getBoolean(false);
+                config.get(category, IPName[3], 0D).getDouble(0D);
+                config.get(category, IPName[4], 0D).getDouble(0D);
+                config.get(category, IPName[5], 0D).getDouble(0D);
+                config.get(category, IPName[6], -0.025D).getDouble(-0.025D);
+                config.get(category, IPName[7], item == ModItems.cigarette_normal ? -5D : item == ModItems.crackpipe ? -1D : -10D).getDouble(item == ModItems.cigarette_normal ? -5D : item == ModItems.crackpipe ? -1D : -10D);
+                config.get(category, IPName[8], item == ModItems.cigarette_normal ? 15D : item == ModItems.crackpipe ? 40D : 30D).getDouble(item == ModItems.cigarette_normal ? 15D : item == ModItems.crackpipe ? 40D : 30D);
+                config.get(category, IPName[9], 5D).getDouble(5D);
+                config.get(category, IPName[10], 37D).getDouble(37D);
+                config.get(category, IPName[11], 0).getInt(0);
+                config.get(category, IPName[12], "").getString();
+                config.get(category, IPName[13], 0).getInt(0);
+            } else if(block == Blocks.snow || block == Blocks.snow_layer)
 			{
 				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);

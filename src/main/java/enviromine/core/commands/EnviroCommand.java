@@ -98,7 +98,7 @@ public class EnviroCommand extends CommandBase
 				} else if(astring[2].equalsIgnoreCase(water))
 				{
 					tracker.hydration = value;
-				} else if(astring[2].equalsIgnoreCase("air"))
+				} else if(astring[2].equalsIgnoreCase(air))
 				{
 					tracker.airQuality = value;
 				} else

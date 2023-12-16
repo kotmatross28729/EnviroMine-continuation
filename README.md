@@ -14,11 +14,11 @@
 
 ## Current TODO:
 
-### 1) ~~implement death within a certain time when sanity = 0F~~ Made in 1.3.134
+- [x] implement death within a certain time when sanity = 0F
 
-### ~~2) enviromine gas protection for  hbm filters/masks/protective helmets~~ Made in 1.3.134
+- [x] enviromine gas protection for  hbm filters/masks/protective helmets
 
-### 3) custom / needed in the modpack things
+- [x] custom / needed in the modpack things
 
 
 # Credits:

@@ -54,7 +54,7 @@ public class EM_Settings
     public static int EnviromineGasMaskBreakMultiplier;
     public static int HbmGasMaskBreakChanceNumber;
 
-    public static boolean hardcoregases = true;
+    public static boolean hardcoregases = false;
 
 	public static boolean enablePhysics = true;
 	public static boolean enableLandslide = true;
