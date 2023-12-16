@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Iterator;
 
 import com.hbm.items.ModItems;
+import cpw.mods.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -25,50 +26,46 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
-
 import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
 
-public class ItemProperties implements SerialisableProperty, PropertyBase
-{
-	public static final ItemProperties base = new ItemProperties();
-	static String[] IPName;
+public class ItemProperties implements SerialisableProperty, PropertyBase {
+    public static final ItemProperties base = new ItemProperties();
+    static String[] IPName;
 
-	public String name;
-	public int meta;
+    public String name;
+    public int meta;
 
-	public boolean enableTemp;
+    public boolean enableTemp;
 
-	public float ambTemp;
-	public float ambAir;
-	public float ambSanity;
+    public float ambTemp;
+    public float ambAir;
+    public float ambSanity;
 
-	public float effTemp;
-	public float effAir;
-	public float effSanity;
-	public float effHydration;
+    public float effTemp;
+    public float effAir;
+    public float effSanity;
+    public float effHydration;
 
-	public float effTempCap;
+    public float effTempCap;
 
-	public int camelFill;
-	public String fillReturnItem;
-	public int fillReturnMeta;
+    public int camelFill;
+    public String fillReturnItem;
+    public int fillReturnMeta;
 
-	public String loadedFrom;
+    public String loadedFrom;
 
-	public ItemProperties(NBTTagCompound tags)
-	{
-		this.ReadFromNBT(tags);
-	}
 
-	public ItemProperties()
-	{
-		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
+    public ItemProperties(NBTTagCompound tags) {
+        this.ReadFromNBT(tags);
+    }
 
-		if(base != null && base != this)
-		{
-			throw new IllegalStateException();
-		}
-	}
+    public ItemProperties() {
+        // THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
+
+        if (base != null && base != this) {
+            throw new IllegalStateException();
+        }
+    }
 
 	public ItemProperties(String name, int meta, boolean enableTemp, float ambTemp, float ambAir, float ambSanity, float effTemp, float effAir, float effSanity, float effHydration, float effTempCap, int camelFill, String fillReturnItem, int fillReturnMeta, String fileName)
 	{
@@ -340,7 +337,10 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(item == ModItems.cigarette_normal || item == ModItems.crackpipe || item == ModItems.cigarette)
+			}
+
+            else if(isHbmLoaded()) {
+             if(item == ModItems.cigarette_normal || item == ModItems.crackpipe || item == ModItems.cigarette)
             {
                 config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
                 config.get(category, IPName[1], -1).getInt(-1);
@@ -356,6 +356,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
                 config.get(category, IPName[11], 0).getInt(0);
                 config.get(category, IPName[12], "").getString();
                 config.get(category, IPName[13], 0).getInt(0);
+             }
             } else if(block == Blocks.snow || block == Blocks.snow_layer)
 			{
 				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();

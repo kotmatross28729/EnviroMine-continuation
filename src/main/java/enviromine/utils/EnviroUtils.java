@@ -6,6 +6,8 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.Loader;
+import net.minecraft.block.*;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
@@ -13,22 +15,6 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.ObjectHandler;
 import enviromine.trackers.properties.StabilityType;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAnvil;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockEndPortal;
-import net.minecraft.block.BlockEndPortalFrame;
-import net.minecraft.block.BlockFalling;
-import net.minecraft.block.BlockGlowstone;
-import net.minecraft.block.BlockGravel;
-import net.minecraft.block.BlockLadder;
-import net.minecraft.block.BlockLeavesBase;
-import net.minecraft.block.BlockMobSpawner;
-import net.minecraft.block.BlockObsidian;
-import net.minecraft.block.BlockPortal;
-import net.minecraft.block.BlockSign;
-import net.minecraft.block.BlockWeb;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,6 +28,8 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
+
+import static enviromine.trackers.EnviroDataTracker.isTCLoaded;
 
 public class EnviroUtils
 {
@@ -258,22 +246,27 @@ public class EnviroUtils
 
 		Material material = block.getMaterial();
 
-		if(block instanceof BlockMobSpawner || block instanceof BlockLadder || block instanceof BlockWeb || block instanceof BlockSign || block instanceof BlockBed || block instanceof BlockDoor || block instanceof BlockAnvil || block instanceof BlockGravel || block instanceof BlockPortal || block instanceof BlockEndPortal || block instanceof BlockEndPortalFrame || block == ObjectHandler.elevator || block == Blocks.end_stone || block.getMaterial() == Material.vine || !block.getMaterial().blocksMovement())
+		if(block instanceof BlockMobSpawner || block instanceof BlockLadder || block instanceof BlockWeb || block instanceof BlockSign || block instanceof BlockBed || block instanceof BlockDoor || block instanceof BlockAnvil || block instanceof BlockGravel || block instanceof BlockPortal || block instanceof BlockEndPortal || block instanceof BlockEndPortalFrame || block == Blocks.grass || block == ObjectHandler.elevator || block == Blocks.end_stone || block.getMaterial() == Material.vine || !block.getMaterial().blocksMovement())
 		{
 			type = EM_Settings.stabilityTypes.get("none");
 		} else if(block instanceof BlockGlowstone)
 		{
 			type = EM_Settings.stabilityTypes.get("glowstone");
-		} else if(block instanceof BlockFalling)
+		} else if(isTCLoaded() && block instanceof BlockMagicalLeaves ){
+
+            type = EM_Settings.stabilityTypes.get("average");
+        } else if(block instanceof BlockFalling)
 		{
 			type = EM_Settings.stabilityTypes.get("sand-like");
 		} else if(material == Material.iron || material == Material.wood || block instanceof BlockObsidian || block == Blocks.stonebrick || block == Blocks.brick_block || block == Blocks.quartz_block)
 		{
 			type = EM_Settings.stabilityTypes.get("strong");
-		} else if(material == Material.rock || material == Material.glass || material == Material.ice || block instanceof BlockLeavesBase || block instanceof BlockMagicalLeaves)
+		} else if(material == Material.rock || material == Material.glass || material == Material.ice || block instanceof BlockLeavesBase)
 		{
 			type = EM_Settings.stabilityTypes.get("average");
-		} else
+		}
+
+        else
 		{
 			type = EM_Settings.stabilityTypes.get(EM_Settings.defaultStability);
 		}

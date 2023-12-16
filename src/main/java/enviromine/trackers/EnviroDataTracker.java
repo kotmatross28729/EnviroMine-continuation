@@ -86,6 +86,9 @@ public class EnviroDataTracker
     public static boolean isHbmLoaded() {
         return Loader.isModLoaded("hbm");
     }
+    public static boolean isTCLoaded() {
+        return Loader.isModLoaded("Thaumcraft");
+    }
 
 	private Side side = FMLCommonHandler.instance().getSide();
 

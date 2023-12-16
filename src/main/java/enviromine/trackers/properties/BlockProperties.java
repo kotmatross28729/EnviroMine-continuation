@@ -3,6 +3,7 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.Iterator;
 
+import cpw.mods.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -23,6 +24,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
+import static enviromine.trackers.EnviroDataTracker.isTCLoaded;
 
 public class BlockProperties implements SerialisableProperty, PropertyBase
 {
@@ -365,7 +367,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if((block == Blocks.flower_pot || block == Blocks.grass || block instanceof BlockLeavesBase || block instanceof BlockMagicalLeaves || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.grass || block.getMaterial() == Material.leaves || block.getMaterial() == Material.vine || block.getMaterial() == Material.plants) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block == Blocks.flower_pot || block == Blocks.grass || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.grass || block.getMaterial() == Material.leaves || block.getMaterial() == Material.vine || block.getMaterial() == Material.plants) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
@@ -379,7 +381,20 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if((block.getMaterial() == Material.snow || block.getMaterial() == Material.ice || block.getMaterial() == Material.packedIce) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if(isTCLoaded() && block instanceof BlockMagicalLeaves) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+                config.get(category, BPName[1], -1).getInt(-1);
+                config.get(category, BPName[2], block == Blocks.grass ? Block.blockRegistry.getNameForObject(Blocks.dirt) : "").getString();
+                config.get(category, BPName[3], -1).getInt(-1);
+                config.get(category, BPName[4], -1).getInt(-1);
+                config.get(category, BPName[5], false).getBoolean(false);
+                config.get(category, BPName[6], 0.0D).getDouble(0.0D);
+                config.get(category, BPName[7], 1.0D).getDouble(1.0D);
+                config.get(category, BPName[8], 0.1D).getDouble(0.1D);
+                config.get(category, BPName[9], defStability.name).getString();
+                config.get(category, BPName[10], false).getBoolean(false);
+                config.get(category, BPName[11], false).getBoolean(false);
+            } else if((block.getMaterial() == Material.snow || block.getMaterial() == Material.ice || block.getMaterial() == Material.packedIce) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import cpw.mods.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.base.Stopwatch;
@@ -34,6 +35,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
+
+import static enviromine.trackers.EnviroDataTracker.isTCLoaded;
 
 public class EM_PhysManager
 {
@@ -387,10 +390,14 @@ public class EM_PhysManager
 			} else if(block instanceof BlockLeavesBase)
 			{
 				dropType = -1;
-			} else if(block instanceof BlockMagicalLeaves)
-            {
-                dropType = -1;
-            } else if(dropBlock instanceof Block)
+			}
+            else if(isTCLoaded()){
+                if(block instanceof BlockMagicalLeaves)
+                {
+                    dropType = -1;
+                }
+            }
+            else if(dropBlock instanceof Block)
 			{
 				dropType = 1;
 			} else if(dropBlock instanceof Item)

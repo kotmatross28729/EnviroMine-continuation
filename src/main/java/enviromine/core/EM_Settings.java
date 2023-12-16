@@ -56,7 +56,7 @@ public class EM_Settings
 
     public static boolean hardcoregases = false;
 
-	public static boolean enablePhysics = true;
+	public static boolean enablePhysics = false;
 	public static boolean enableLandslide = true;
 	public static boolean waterCollapse = true; // Added out of necessity/annoyance -- AstroTibs
 
