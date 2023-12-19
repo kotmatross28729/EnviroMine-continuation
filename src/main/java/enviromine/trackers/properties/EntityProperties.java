@@ -24,7 +24,7 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 {
 	public static final EntityProperties base = new EntityProperties();
 	static String[] EPName;
-	
+
 	public int id;
 	public boolean shouldTrack;
 	public boolean dehydration;
@@ -41,36 +41,36 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 	public float ambHydration;
 	public float hitHydration;
 	public String loadedFrom;
-	
+
 	public EntityProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
 	}
-	
+
 	public EntityProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
+
 		if(base != null && base != this)
 		{
 			throw new IllegalStateException();
 		}
 	}
-	
+
 	public boolean hasProperty(Entity entity)
 	{
 		return EM_Settings.livingProperties.containsKey(getID(entity));
 	}
-	
+
 	public EntityProperties getProperty(Entity entity)
 	{
 		return EM_Settings.livingProperties.get(getID(entity));
 	}
-	
+
 	private int getID(Entity entity)
 	{
 		int entityid = 0;
-		
+
 		if(EntityList.getEntityID(entity) > 0)
 		{
 			entityid = EntityList.getEntityID(entity);
@@ -79,10 +79,10 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 		{
 			entityid = EntityRegistry.instance().lookupModSpawn(entity.getClass(), false).getModEntityId() + 128;
 		}
-		
+
 		return entityid;
 	}
-	
+
 	public EntityProperties(int id, boolean track, boolean dehydration, boolean bodyTemp, boolean airQ, boolean immuneToFrost, boolean immuneToHeat, float aSanity, float hSanity, float aTemp, float hTemp, float aAir, float hAir, float aHyd, float hHyd, String fileName)
 	{
 		this.id = id;
@@ -170,23 +170,23 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 		boolean immuneToHeat = config.get(category, EPName[6], false).getBoolean(false);
 		float aSanity = (float)config.get(category, EPName[7], 0.0D).getDouble(0.0D);
 		float hSanity = (float)config.get(category, EPName[8], 0.0D).getDouble(0.0D);
-		float aTemp = (float)config.get(category, EPName[9], 37.0D, "Overridden by body temp").getDouble(37.0D);
+		float aTemp = (float)config.get(category, EPName[9], 36.6D, "Overridden by body temp").getDouble(36.6D);
 		float hTemp = (float)config.get(category, EPName[10], 0.0D).getDouble(0.0D);
 		float aAir = (float)config.get(category, EPName[11], 0.0D).getDouble(0.0D);
 		float hAir = (float)config.get(category, EPName[12], 0.0D).getDouble(0.0D);
 		float aHyd = (float)config.get(category, EPName[13], 0.0D).getDouble(0.0D);
 		float hHyd = (float)config.get(category, EPName[14], 0.0D).getDouble(0.0D);
 		String filename = config.getConfigFile().getName();
-		
+
 		EntityProperties entry = new EntityProperties(id, track, dehydration, bodyTemp, airQ, immuneToFrost, immuneToHeat, aSanity, hSanity, aTemp, hTemp, aAir, hAir, aHyd, hHyd, filename);
-		
+
 		// If item already exist and current file hasn't completely been loaded do this
 		if(EM_Settings.livingProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Entity ID "+ id +" was already added from "+ EM_Settings.livingProperties.get(id).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
 		}
 
-		
+
 		EM_Settings.livingProperties.put(id, entry);
 	}
 
@@ -215,22 +215,22 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 	{
 		@SuppressWarnings("unchecked")
 		Iterator<Integer> iterator = EntityList.IDtoClassMapping.keySet().iterator();
-		
+
 		while(iterator.hasNext())
 		{
 			int eID = (Integer)iterator.next();
 			Class<?> clazz = (Class<?>)EntityList.IDtoClassMapping.get(eID);
-			
+
 			if(clazz == null || !EntityLivingBase.class.isAssignableFrom(clazz))
 			{
 				continue;
 			}
-			
+
 			String modID = ModIdentification.idFromObject(clazz);
 			String eName = EntityList.getStringFromID(eID);
-			
+
 			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
-			
+
 			if(!file.exists())
 			{
 				try
@@ -242,13 +242,13 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 					continue;
 				}
 			}
-			
+
 			String catName = this.categoryName() + "." + eName;
-			
+
 			Configuration config = new Configuration(file, true);
-			
+
 			config.load();
-			
+
 			if(eID == 65) // Bat
 			{
 				config.get(catName, EPName[0], eID).getInt(eID);
@@ -372,7 +372,7 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 			{
 				this.generateEmpty(config, eID);
 			}
-			
+
 			config.save();
 		}
 	}
@@ -391,12 +391,12 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non EntityLivingBase id!", new Exception());
 			return;
 		}
-		
-		
+
+
 		int id = (Integer)obj;
-		
+
 	    String category = this.categoryName() + "." + EntityList.getStringFromID(id);
-		
+
 		config.get(category, EPName[0], id).getInt(id);
 		config.get(category, EPName[1], false).getBoolean(false);
 		config.get(category, EPName[2], false).getBoolean(false);
@@ -424,7 +424,7 @@ public class EntityProperties implements SerialisableProperty, PropertyBase
 	public void customLoad()
 	{
 	}
-	
+
 	static
 	{
 		EPName = new String[15];

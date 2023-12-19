@@ -6,6 +6,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import api.hbm.item.IGasMask;
+import com.hbm.extprop.HbmLivingProps;
+import com.hbm.items.ModItems;
+import com.hbm.items.armor.ArmorFSB;
+import com.hbm.items.armor.ArmorHEV;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -23,6 +28,7 @@ import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.EnviroUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -36,7 +42,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,8 +86,7 @@ public class EnviroDataTracker
 
 	public int timeBelow10 = 0;
 
-    public int heartattacktimer =0;
-
+    public int heartattacktimer = 0;
 	public int updateTimer = 0;
 
 
@@ -282,9 +289,87 @@ public class EnviroDataTracker
 			werewolfLevel = EnviroUtils.getWitcheryWerewolfLevel((EntityPlayer)trackedEntity);
 		}
 
-		if (trackedEntity.isPotionActive(Potion.fireResistance) && bodyTemp > 36.6F) {bodyTemp = 36.6F;} // IF you have fire resistance, ambient temperature can never "feel" higher than 37
+		if (trackedEntity.isPotionActive(Potion.fireResistance) && bodyTemp > 36.6F) {bodyTemp = 36.6F;} // IF you have fire resistance, ambient temperature can never "feel" higher than 36.6
 
-		if(bodyTemp - relTemp > 0) // Cold
+// Literally other code below: if -> else if, if -> else if, if -> else if, ...
+/// Hbm's Nuclear Tech armor that gives fire protection also prevents you from dying from enviromine heatstroke / hypothermia
+   if(isHbmLoaded()) {
+       // COLD THINGS START
+// For player
+       if (trackedEntity instanceof EntityPlayer) {
+           EntityPlayer player = (EntityPlayer) trackedEntity;
+           if (ArmorFSB.hasFSBArmor(player)) {
+               ItemStack plate = player.inventory.armorInventory[2];
+               ArmorFSB chestplate = (ArmorFSB) plate.getItem();
+               if(chestplate != null) {
+// Adjust the temperature if armor allows
+                   if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < 100.0F) {
+                       bodyTemp = 36.6F;
+                   } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < 37.7F) {
+                       bodyTemp = 36.6F;
+                   }
+// Greatly reduce the effect of ntm temperature if the armor is completely sealed
+
+                   if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate.fireproof)) {
+                       bodyTemp -= 0.1F;
+                   } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate.fireproof)) {
+                       bodyTemp -= 0.2F;
+                   }
+// Reduce the effect of the NTM temperature if the armor has little resistance
+                   else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                       bodyTemp -= 0.1F;
+                   } else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                       bodyTemp -= 0.3F;
+                   } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                       bodyTemp -= 0.5F;
+                   }
+               }
+           }
+// No armor, but still player
+           else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
+               bodyTemp -= 0.3F;
+           }
+           else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
+               bodyTemp -= 0.5F;
+           }
+           else if (HbmLivingProps.isFrozen(trackedEntity)) {
+               bodyTemp -= 0.8F;
+           }
+       }
+// For other entities that NOT player
+        if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
+           bodyTemp -= 0.3F;
+       }
+       else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
+           bodyTemp -= 0.5F;
+       }
+       else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.isFrozen(trackedEntity)) {
+           bodyTemp -= 0.8F;
+       }
+       // COLD THINGS END
+
+
+       // HOT THINGS START
+     if (trackedEntity instanceof EntityPlayer) {
+           EntityPlayer player = (EntityPlayer) trackedEntity;
+           if (ArmorFSB.hasFSBArmor(player)) {
+               ItemStack plate = player.inventory.armorInventory[2];
+               ArmorFSB chestplate = (ArmorFSB) plate.getItem();
+
+               if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance)) && (chestplate != null && chestplate.fireproof || chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                   bodyTemp += 0.0F; // Do nothing
+               }
+           }
+           else if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
+               bodyTemp += 0.1F;
+           }
+       }
+     else if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
+           bodyTemp += 0.1F;
+       }
+       // HOT THINGS END
+}
+        if(bodyTemp - relTemp > 0) // Cold
 		{
 			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
 			if(bodyTemp - relTemp >= temperatureDropSpeed * temperatureSpeedAmplification)
