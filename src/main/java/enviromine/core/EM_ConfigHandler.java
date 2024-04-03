@@ -340,6 +340,32 @@ public class EM_ConfigHandler
         EM_Settings.HbmGasMaskBreakMultiplier = config.getInt("Hbm Gas Mask filter break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "Multiplier for breaking a hbm gas mask filter");
         EM_Settings.HbmGasMaskBreakChanceNumber = config.getInt("Hbm Gas Mask filter break chance number",Configuration.CATEGORY_GENERAL, 15, 0, 100,  "The number on which the chance of reducing the durability of the hbm filter depends. The lower the number, the greater the chance that the filter durability will decrease");
         EM_Settings.EnviromineGasMaskBreakMultiplier = config.getInt("Gas Masks break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "A number that is subtracted from the current enviromine mask filter durability if the player is in a gas block, that is suffocating");
+
+        EM_Settings.SulfurDioxideGasDebugLogger = config.getBoolean("SulfurDioxideGasDebugLogger", Configuration.CATEGORY_GENERAL, false, "Don't use unless you are a developer");
+        EM_Settings.CarbonMonoxideGasDebugLogger = config.getBoolean("CarbonMonoxideGasDebugLogger", Configuration.CATEGORY_GENERAL, false, "Don't use unless you are a developer");
+        EM_Settings.HydrogenSulfideGasDebugLogger = config.getBoolean("HydrogenSulfideGasDebugLogger", Configuration.CATEGORY_GENERAL, false, "Don't use unless you are a developer");
+
+        EM_Settings.SulfurDioxidePoisoningAmplifier = config.getInt("Sulfur Dioxide Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "How dense the Sulfur Dioxide gas should  be, in order for it to have the opportunity to poison you?");
+        EM_Settings.SulfurDioxideSeverePoisoningAmplifier = config.getInt("Sulfur Dioxide Severe Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 10, 1, 65536,  "How dense the Sulfur Dioxide gas should  be, in order for it to have the opportunity to severe poison you?");
+        EM_Settings.SulfurDioxidePoisoningTime = config.getInt("Sulfur Dioxide Poisoning Time",Configuration.CATEGORY_GENERAL, 200, 1, 65536,  "How long does Sulfur Dioxide poisoning last?");
+        EM_Settings.SulfurDioxideSeverePoisoningTime = config.getInt("Sulfur Dioxide Severe Poisoning Time",Configuration.CATEGORY_GENERAL, 600, 1, 65536,  "How long does severe Sulfur Dioxide poisoning last?");
+        EM_Settings.SulfurDioxidePoisoningLevel = config.getInt("Sulfur Dioxide Poisoning Level",Configuration.CATEGORY_GENERAL, 0, 0, 65536,  "What level of poisoning applies when player is Sulfur Dioxide poisoned?");
+        EM_Settings.SulfurDioxideSeverePoisoningLevel = config.getInt("Sulfur Dioxide Severe Poisoning Level",Configuration.CATEGORY_GENERAL, 1, 0, 65536,  "What level of poisoning applies when player is severe Sulfur Dioxide poisoned?");
+        EM_Settings.SulfurDioxidePoisoningChance = config.getInt("Chance of Sulfur Dioxide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Sulfur Dioxide poisoning if the player has no protection?");
+
+        EM_Settings.CarbonMonoxidePoisoningAmplifier = config.getInt("Carbon Monoxide Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "How dense the Carbon Monoxide gas should  be, in order for it to have the opportunity to poison you?");
+        EM_Settings.CarbonMonoxidePoisoningTime = config.getInt("Carbon Monoxide Poisoning Time",Configuration.CATEGORY_GENERAL, 200, 1, 65536,  "How long does Carbon Monoxide poisoning last?");
+        EM_Settings.CarbonMonoxidePoisoningLevel = config.getInt("Carbon Monoxide Poisoning Level",Configuration.CATEGORY_GENERAL, 0, 0, 65536,  "What level of poisoning applies when player is Carbon Monoxide poisoned?");
+        EM_Settings.CarbonMonoxidePoisoningChance = config.getInt("Chance of Carbon Monoxide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+
+        EM_Settings.HydrogenSulfidePoisoningAmplifier = config.getInt("Hydrogen Sulfide Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "How dense the Hydrogen Sulfide gas should  be, in order for it to have the opportunity to poison you?");
+        EM_Settings.HydrogenSulfideSeverePoisoningAmplifier = config.getInt("Hydrogen Sulfide Severe Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 10, 1, 65536,  "How dense the Hydrogen Sulfide gas should  be, in order for it to have the opportunity to severe poison you?");
+        EM_Settings.HydrogenSulfidePoisoningTime = config.getInt("Hydrogen Sulfide Poisoning Time",Configuration.CATEGORY_GENERAL, 200, 1, 65536,  "How long does Hydrogen Sulfide poisoning last?");
+        EM_Settings.HydrogenSulfideSeverePoisoningTime = config.getInt("Hydrogen Sulfide Severe Poisoning Time",Configuration.CATEGORY_GENERAL, 600, 1, 65536,  "How long does severe Hydrogen Sulfide poisoning last?");
+        EM_Settings.HydrogenSulfidePoisoningLevel = config.getInt("Hydrogen Sulfide Poisoning Level",Configuration.CATEGORY_GENERAL, 0, 0, 65536,  "What level of poisoning applies when player is Hydrogen Sulfide poisoned?");
+        EM_Settings.HydrogenSulfideSeverePoisoningLevel = config.getInt("Hydrogen Sulfide Severe Poisoning Level",Configuration.CATEGORY_GENERAL, 1, 0, 65536,  "What level of poisoning applies when player is severe Hydrogen Sulfide poisoned?");
+        EM_Settings.HydrogenSulfidePoisoningChance = config.getInt("Chance of Hydrogen Sulfide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Hydrogen Sulfide poisoning if the player has no protection?");
+
         EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
 				+ "\n0: No log messages are printed whatsoever"

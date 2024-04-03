@@ -54,6 +54,41 @@ public class EM_Settings
     public static int EnviromineGasMaskBreakMultiplier;
     public static int HbmGasMaskBreakChanceNumber;
 
+
+    public static boolean SulfurDioxideGasDebugLogger;
+    public static boolean CarbonMonoxideGasDebugLogger;
+    public static boolean HydrogenSulfideGasDebugLogger;
+//SulfurDioxide
+    public static int SulfurDioxidePoisoningAmplifier;
+    public static int SulfurDioxideSeverePoisoningAmplifier;
+    public static int SulfurDioxidePoisoningTime;
+    public static int SulfurDioxideSeverePoisoningTime;
+    public static int SulfurDioxidePoisoningLevel;
+    public static int SulfurDioxideSeverePoisoningLevel;
+
+    public static int SulfurDioxidePoisoningChance;
+
+//SulfurDioxide
+
+//CarbonMonoxide
+    public static int CarbonMonoxidePoisoningAmplifier;
+    public static int CarbonMonoxidePoisoningTime;
+    public static int CarbonMonoxidePoisoningLevel;
+
+    public static int CarbonMonoxidePoisoningChance;
+//CarbonMonoxide
+
+//HydrogenSulfide
+    public static int HydrogenSulfidePoisoningAmplifier;
+    public static int HydrogenSulfideSeverePoisoningAmplifier;
+    public static int HydrogenSulfidePoisoningTime;
+    public static int HydrogenSulfideSeverePoisoningTime;
+    public static int HydrogenSulfidePoisoningLevel;
+    public static int HydrogenSulfideSeverePoisoningLevel;
+    public static int HydrogenSulfidePoisoningChance;
+//HydrogenSulfide
+
+
     public static boolean hardcoregases = false;
 
 	public static boolean enablePhysics = false;

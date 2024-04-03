@@ -18,11 +18,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 
 
+import static enviromine.core.EM_Settings.*;
 import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+import static enviromine.trackers.EnviroDataTracker.logger;
 
 public class GasHydrogenSulfide extends EnviroGas
 {
     boolean isCreative = false;
+    boolean hasGasMask = false;
+
+    boolean isHbmMask = false;
 
 	public GasHydrogenSulfide(String name, int ID)
 	{
@@ -42,36 +47,53 @@ public class GasHydrogenSulfide extends EnviroGas
             if(((EntityPlayer)entityLiving).capabilities.isCreativeMode)
             {
                 isCreative = true;
+            } else {
+                isCreative = false;
             }
         }
 
         if (entityLiving.worldObj.isRemote || entityLiving.isEntityUndead()) {
             return;
         }
-        boolean hasGasMask = false;
+
         ItemStack helmet = entityLiving.getEquipmentInSlot(4);
         if (helmet != null && !isCreative && isHbmLoaded()) {
             if (helmet.getItem() instanceof IGasMask mask) {  // Check if the helmet is a mask
                 ItemStack filter = mask.getFilter(helmet, entityLiving);  // Get the filter of the mask
                 if (filter != null) {
-                    if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_CHLORINE)) {
+                    if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_LUNG)) {
                         hasGasMask = true;
+                        isHbmMask = true;
                         // Random chance to damage the filter
                         if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
                             ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
                         }
+                    } else {
+                        hasGasMask = false;
+                        isHbmMask = false;
                     }
+                } else {
+                    hasGasMask = false;
+                    isHbmMask = false;
                 }
             }
-            else if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_CHLORINE)) {
+            else if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_LUNG)) {
                 hasGasMask = true;
+                isHbmMask = true;
                 // Random chance to damage the filter
                 if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
                     ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
                 }
+            }  else {
+                hasGasMask = false;
+                isHbmMask = false;
             }
+        } else {
+            hasGasMask = false;
+            isHbmMask = false;
         }
-        if (helmet != null && !isCreative) {
+
+        if (helmet != null && !isCreative && !isHbmMask) {
             if (entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask ) {  // Check if the helmet is a mask
                 if (helmet.hasTagCompound() && helmet.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
                     NBTTagCompound tag = helmet.getTagCompound();
@@ -83,23 +105,36 @@ public class GasHydrogenSulfide extends EnviroGas
                             if (newMaskQuality < 0) {newMaskQuality = 0;}  // Sanitize to ensure we do not have negative fill
                             tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, newMaskQuality);
                         }
+                    } else {
+                        hasGasMask = false;
                     }
+                } else {
+                    hasGasMask = false;
                 }
+            } else {
+                hasGasMask = false;
             }
+        } else if (!isHbmMask) {
+            hasGasMask = false;
         }
-
+        if(HydrogenSulfideGasDebugLogger) {
+            logger.warn("HydrogenSulfide: amplifier:  " + amplifier);
+            logger.warn("HydrogenSulfide: hasGasMask:  " + hasGasMask);
+            logger.warn("HydrogenSulfide: isCreative:  " + isCreative);
+            logger.warn("HydrogenSulfide: entityLiving.getRNG().nextInt(HydrogenSulfidePoisoningChance) == 0?:  " + (entityLiving.getRNG().nextInt(HydrogenSulfidePoisoningChance) == 0));
+        }
 		if(!hasGasMask && !isCreative &&
-				amplifier >= 5 + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
-				&& entityLiving.getRNG().nextInt(5) == 0) //100
+				amplifier >= HydrogenSulfidePoisoningAmplifier + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
+				&& entityLiving.getRNG().nextInt(HydrogenSulfidePoisoningChance) == 0) //100
 		{
 			if(
-					amplifier >= 10 + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving)*2 : 0)
+					amplifier >= HydrogenSulfideSeverePoisoningAmplifier + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving)*2 : 0)
 					)
 			{
-				entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 600));
+				entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, HydrogenSulfideSeverePoisoningTime, HydrogenSulfideSeverePoisoningLevel));
 			} else
 			{
-				entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+				entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, HydrogenSulfidePoisoningTime, HydrogenSulfidePoisoningLevel));
 			}
 		}
 	}

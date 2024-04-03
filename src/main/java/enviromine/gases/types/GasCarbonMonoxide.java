@@ -19,11 +19,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import static enviromine.core.EM_Settings.*;
 import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+import static enviromine.trackers.EnviroDataTracker.logger;
 
 public class GasCarbonMonoxide extends EnviroGas
 {
     boolean isCreative = false;
+
+    boolean hasGasMask = false;
+    boolean isHbmMask = false;
 
 	public GasCarbonMonoxide(String name, int id)
 	{
@@ -50,6 +55,8 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
         if(((EntityPlayer)entityLiving).capabilities.isCreativeMode)
         {
             isCreative = true;
+        }  else {
+            isCreative = false;
         }
     }
 
@@ -57,7 +64,6 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
         return;
     }
 
-    boolean hasGasMask = false;
     ItemStack helmet = entityLiving.getEquipmentInSlot(4);
     if (helmet != null && !isCreative && isHbmLoaded()) {
         if (helmet.getItem() instanceof IGasMask mask) {  // Check if the helmet is a mask
@@ -65,24 +71,38 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
             if (filter != null) {
                 if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_MONOXIDE)) {
                     hasGasMask = true;
+                    isHbmMask = true;
                     // Random chance to damage the filter
                     if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
                         ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
                     }
+                } else {
+                    hasGasMask = false;
+                    isHbmMask = false;
                 }
+            } else {
+                hasGasMask = false;
+                isHbmMask = false;
             }
         }
         else if (ArmorRegistry.hasProtection(entityLiving, 3, ArmorRegistry.HazardClass.GAS_MONOXIDE)) {
             hasGasMask = true;
+            isHbmMask = true;
             // Random chance to damage the filter
             if (entityLiving.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - 10, 1)) == 0) {
                 ArmorUtil.damageGasMaskFilter(entityLiving, MathHelper.floor_float(1.5F * EM_Settings.HbmGasMaskBreakMultiplier));
             }
+        }  else {
+            hasGasMask = false;
+            isHbmMask = false;
         }
+    } else {
+        hasGasMask = false;
+        isHbmMask = false;
     }
 
 
-    if (helmet != null && !isCreative) {
+    if (helmet != null && !isCreative && !isHbmMask) {
         if (entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask ) {  // Check if the helmet is a mask
             if (helmet.hasTagCompound() && helmet.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
                 NBTTagCompound tag = helmet.getTagCompound();
@@ -94,17 +114,29 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
                         if (newMaskQuality < 0) {newMaskQuality = 0;}  // Sanitize to ensure we do not have negative fill
                         tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, newMaskQuality);
                     }
+                } else {
+                    hasGasMask = false;
                 }
+            } else {
+                hasGasMask = false;
             }
+        } else {
+            hasGasMask = false;
         }
+    } else if (!isHbmMask) {
+        hasGasMask = false;
     }
-
-
+    if(CarbonMonoxideGasDebugLogger) {
+        logger.warn("CarbonMonoxide: amplifier:  " + amplifier);
+        logger.warn("CarbonMonoxide: hasGasMask:  " + hasGasMask);
+        logger.warn("CarbonMonoxide: isCreative:  " + isCreative);
+        logger.warn("CarbonMonoxide: entityLiving.getRNG().nextInt(CarbonMonoxidePoisoningChance) == 0?:  " + (entityLiving.getRNG().nextInt(CarbonMonoxidePoisoningChance) == 0));
+    }
     if (!hasGasMask && !isCreative &&
-        amplifier >= 5 + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
-        && entityLiving.getRNG().nextInt(5) == 0) //10
+        amplifier >= CarbonMonoxidePoisoningAmplifier + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
+        && entityLiving.getRNG().nextInt(CarbonMonoxidePoisoningChance) == 0) //10
     {
-        entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+        entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, CarbonMonoxidePoisoningTime, CarbonMonoxidePoisoningLevel));
     }
 }
 
