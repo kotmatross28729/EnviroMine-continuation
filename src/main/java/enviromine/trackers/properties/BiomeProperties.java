@@ -19,12 +19,14 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 
+import static net.minecraftforge.common.BiomeDictionary.Type.DRY;
+
 
 public class BiomeProperties implements SerialisableProperty, PropertyBase
 {
 	public static final BiomeProperties base = new BiomeProperties();
 	static String[] BOName;
-	
+
 	public int id;
 	public boolean biomeOveride;
 	public String waterQuality;
@@ -34,23 +36,29 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public float dehydrateRate;
 	public float airRate;
 	public String loadedFrom;
-	
+
+    public boolean isDesertBiome;
+
+    public float DesertBiomeTemperatureMultiplier;
+
+
+
 	public BiomeProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
 	}
-	
+
 	public BiomeProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
+
 		if(base != null && base != this)
 		{
 			throw new IllegalStateException();
 		}
 	}
 
-	public BiomeProperties(int id, boolean biomeOveride, String waterQuality, float ambientTemp, float tempRate, float sanityRate, float dehydrateRate, float airRate, String filename)
+	public BiomeProperties(int id, boolean biomeOveride, String waterQuality, float ambientTemp, float tempRate, float sanityRate, float dehydrateRate, float airRate, String filename, boolean isDesertBiome, float DesertBiomeTemperatureMultiplier)
 	{
 		this.id = id;
 		this.biomeOveride = biomeOveride;
@@ -61,6 +69,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		this.dehydrateRate = dehydrateRate;
 		this.airRate = airRate;
 		this.loadedFrom = filename;
+        this.isDesertBiome = isDesertBiome;
+        this.DesertBiomeTemperatureMultiplier = DesertBiomeTemperatureMultiplier;
 	}
 	/**
 	 * <b>hasProperty(BiomeGenBase biome)</b><bR><br>
@@ -72,7 +82,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.biomeProperties.containsKey(biome.biomeID);
 	}
-	/** 
+	/**
 	 * 	<b>getProperty(BiomeGenBase biome)</b><bR><br>
 	 * Gets Property.
 	 * @param biome
@@ -82,7 +92,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.biomeProperties.get(biome.biomeID);
 	}
-	
+
 	public int getWaterQualityId()
 	{
 		if(this.waterQuality.trim().equalsIgnoreCase("dirty"))
@@ -114,6 +124,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		tags.setFloat("tempRate", this.tempRate);
 		tags.setFloat("sanityRate", this.sanityRate);
 		tags.setFloat("dehydrateRate", this.dehydrateRate);
+        tags.setBoolean("isDesertBiome", this.isDesertBiome);
+        tags.setFloat("DesertBiomeTemperatureMultiplier", this.DesertBiomeTemperatureMultiplier);
 		return tags;
 	}
 
@@ -127,6 +139,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		this.tempRate = tags.getFloat("tempRate");
 		this.sanityRate = tags.getFloat("sanityRate");
 		this.dehydrateRate = tags.getFloat("dehydrateRate");
+        this.isDesertBiome = tags.getBoolean("isDesertBiome");
+        this.DesertBiomeTemperatureMultiplier = tags.getFloat("DesertBiomeTemperatureMultiplier");
 	}
 
 	@Override
@@ -154,9 +168,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		float dehyRate = (float)config.get(category, BOName[6], 0.0).getDouble(0.0);
 		float airRate = (float)config.get(category, BOName[7], 0.0).getDouble(0.0);
 		String filename = config.getConfigFile().getName();
-		
-		BiomeProperties entry = new BiomeProperties(id, biomeOveride, waterQ, ambTemp, tempRate, sanRate, dehyRate, airRate, filename);
-		
+        boolean isDesertBiome = config.get(category, BOName[8], false).getBoolean(false);
+        float DesertBiomeTemperatureMultiplier = (float)config.get(category, BOName[9], 1.0).getDouble(1.0);
+
+		BiomeProperties entry = new BiomeProperties(id, biomeOveride, waterQ, ambTemp, tempRate, sanRate, dehyRate, airRate, filename, isDesertBiome, DesertBiomeTemperatureMultiplier);
+
 		if(EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Biome ID "+id +" was already added from "+ EM_Settings.biomeProperties.get(id).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
@@ -175,26 +191,28 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.get(category, BOName[5], this.sanityRate).getDouble(this.sanityRate);
 		config.get(category, BOName[6], this.dehydrateRate).getDouble(this.dehydrateRate);
 		config.get(category, BOName[7], this.airRate).getDouble(this.airRate);
+        config.get(category, BOName[8], this.isDesertBiome, "Affects the temperature difference at night / day (useful for deserts)").getBoolean(this.isDesertBiome);
+        config.get(category, BOName[9], this.DesertBiomeTemperatureMultiplier, "The temperatureChange will be multiplied by this number").getDouble(this.DesertBiomeTemperatureMultiplier);
 	}
 
 	@Override
 	public void GenDefaults()
 	{
 		BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
-		
+
 		for(int p = 0; p < biomeArray.length; p++)
 		{
 			BiomeGenBase biome = biomeArray[p];
-			
+
 			if(biome == null)
 			{
 				continue;
 			}
-			
+
 			String modID = ModIdentification.idFromObject(biome);
-			
+
 			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
-			
+
 			if(!file.exists())
 			{
 				try
@@ -206,13 +224,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 					continue;
 				}
 			}
-			
+
 			Configuration config = new Configuration(file, true);
-			
+
 			config.load();
-			
+
 			generateEmpty(config, biome);
-			
+
 			config.save();
 		}
 	}
@@ -231,23 +249,25 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non biome object!", new Exception());
 			return;
 		}
-		
+
 		BiomeGenBase biome = (BiomeGenBase)obj;
-		
+
 		ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
 		for(int i = 0; i < typeArray.length; i++)
 		{
 			typeList.add(typeArray[i]);
 		}
-		
+
 		double air = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double water = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.05D : 0D;
 		double temp = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.005D : 0D;
-		
+        boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY); //TODO change if needed
+        double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
+
 		String catName = this.categoryName() + "." + biome.biomeName;
-		
+
 		config.get(catName, BOName[0], biome.biomeID).getInt(biome.biomeID);
 		config.get(catName, BOName[1], false).getBoolean(false);
 		config.get(catName, BOName[2], EnviroUtils.getBiomeWater(biome), "Water Quality: dirty, salty, cold, clean").getString();
@@ -256,6 +276,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.get(catName, BOName[5], sanity).getDouble(sanity);
 		config.get(catName, BOName[6], water).getDouble(water);
 		config.get(catName, BOName[7], air).getDouble(air);
+        config.get(catName, BOName[8], isDesertBiome).getBoolean(isDesertBiome);
+        config.get(catName, BOName[9], DesertBiomeTemperatureMultiplier).getDouble(DesertBiomeTemperatureMultiplier);
 	}
 
 	@Override
@@ -268,10 +290,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public void customLoad()
 	{
 	}
-	
+
 	static
 	{
-		BOName = new String[8];
+		BOName = new String[10];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
@@ -280,5 +302,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		BOName[5] = "06.Sanity Rate";
 		BOName[6] = "07.Dehydrate Rate";
 		BOName[7] = "08.Air Quality Rate";
+        BOName[8] = "09.Is desert biome";
+        BOName[9] = "10.Desert biome temperature multiplier";
 	}
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
+import enviromine.core.EM_ConfigHandler;
+import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.base.Stopwatch;
@@ -53,6 +55,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
+import org.apache.logging.log4j.LogManager;
 
 import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
 
@@ -221,10 +224,6 @@ public class EM_StatusManager
         int surroundingBiomeTempSamplesCount = 0;
 
         boolean isDay = entityLiving.worldObj.isDaytime();
-
-        //Note: This is offset slightly so that heat peaks after noon.
-        float scale = 1.25F; // Anything above 1 forces the maximum and minimum temperatures to plateau when they're reached
-        float dayPercent = MathHelper.clamp_float((float) (Math.sin(Math.toRadians(((entityLiving.worldObj.getWorldTime() % 24000L) / 24000D) * 360F - 30F)) * 0.5F + 0.5F) * scale, 0F, 1F);
 
         if (entityLiving.worldObj.provider.hasNoSky) {
             isDay = false;
@@ -437,8 +436,15 @@ public class EM_StatusManager
         if (dimensionProp != null && dimensionProp.override && !dimensionProp.weatherAffectsTemp) {
 
         } else {
-            if (entityLiving.worldObj.isRaining() && biome.rainfall != 0.0F) {
-                biomeTemperature -= 10F;
+            if (entityLiving.worldObj.isRaining() && biome.rainfall != 0.0F && EM_Settings.biomeTemperatureRainBool) {
+                biomeTemperature -= EM_Settings.biomeTemperatureRain;
+                animalHostility = -1;
+
+                if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
+                    dropSpeed = 0.01F;
+                }
+            } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && EM_Settings.biomeTemperatureThunderBool) {
+                biomeTemperature -= EM_Settings.biomeTemperatureThunder;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
@@ -454,11 +460,52 @@ public class EM_StatusManager
         }
 
         if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
-            biomeTemperature -= (1F - dayPercent) * 10F;
 
-            if (biome.rainfall <= 0F) {
-                biomeTemperature -= (1F - dayPercent) * 30F;
+//| Ticks                    | Time of the day |
+//|--------------------------|-----------------|
+//| 24000 (0)                |Sunrise          |
+//| 1000 - 6000              |Morning          |
+//| 6000                     |Noon             |
+//| 6000 - 12000             |Afternoon        |
+//| 12000                    |Sunset           |
+//| 12000 - 18000            |Dusk             |
+//| 18000                    |Midnight         |
+//| 18000 - 23000            |After midnight   |
+//| 23000 - 24000 (0)        |Dawn             |
+
+
+
+
+//LogManager.getLogger().fatal("biomeTemperature old " + biomeTemperature);
+
+
+            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L);
+//LogManager.getLogger().fatal("currentTime " + currentTime);
+
+            float temperatureChange = calculateTemperatureChange(currentTime);
+//LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
+
+            biomeTemperature -= temperatureChange;
+
+            boolean isDesertBiome = false;
+            float DesertBiomeTemperatureMultiplier = 1F;
+
+            if (biome != null) {
+                BiomeProperties biomeOverride = null;
+                if (BiomeProperties.base.hasProperty(biome)) {
+                    biomeOverride = BiomeProperties.base.getProperty(biome);
+                }
+                if (biomeOverride != null && biomeOverride.biomeOveride) {
+
+                    isDesertBiome = biomeOverride.isDesertBiome;
+                    DesertBiomeTemperatureMultiplier = biomeOverride.DesertBiomeTemperatureMultiplier;
+                }
             }
+
+            if (biome.rainfall <= 0F || isDesertBiome) {
+                biomeTemperature -= temperatureChange * DesertBiomeTemperatureMultiplier;
+            }
+//LogManager.getLogger().fatal("biomeTemperature new " + biomeTemperature);
         }
 
         @SuppressWarnings("unchecked")
@@ -988,6 +1035,38 @@ public class EM_StatusManager
 		}
 		return data;
 	}
+
+    // Day/Night const
+    public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon, also affects at the function decrease | minimum function value
+    public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; //Will be at midnight, this/2 at dawn|dusk, also affects at the function increase | maximum function value
+
+    // Function to calculate temperature change
+    public static float calculateTemperatureChange(float currentTime) {
+        float temperatureChange;
+
+        // from 0 to 6000 ticks
+        if (currentTime >= 0 && currentTime < 6000) {
+            temperatureChange = NIGHT_TEMPERATURE/2F - ((NIGHT_TEMPERATURE/2F - DAY_TEMPERATURE) / 6000f) * currentTime;
+        }
+        // from 6000 to 12000 ticks
+        else if (currentTime >= 6000 && currentTime < 12000) {
+            temperatureChange = DAY_TEMPERATURE + ((NIGHT_TEMPERATURE/2F - DAY_TEMPERATURE) / 6000f) * (currentTime - 6000);
+        }
+        // from 12000 to 18000 ticks
+        else if (currentTime >= 12000 && currentTime < 18000) {
+            temperatureChange = NIGHT_TEMPERATURE/2F + ((NIGHT_TEMPERATURE - NIGHT_TEMPERATURE/2F) / 6000f) * (currentTime - 12000);
+        }
+        // from 18000 to 24000 ticks
+        else if (currentTime >= 18000 && currentTime < 24000) {
+            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - NIGHT_TEMPERATURE/2F) / 6000f) * (currentTime - 18000);
+        }
+        else {
+            // If currentTime doesn't fall within the specified range
+            temperatureChange = 0;
+        }
+
+        return temperatureChange;
+    }
 
 	public static float getBiomeTemprature(int x, int y, BiomeGenBase biome)
 	{

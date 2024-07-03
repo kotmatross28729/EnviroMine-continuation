@@ -366,6 +366,15 @@ public class EM_ConfigHandler
         EM_Settings.HydrogenSulfideSeverePoisoningLevel = config.getInt("Hydrogen Sulfide Severe Poisoning Level",Configuration.CATEGORY_GENERAL, 1, 0, 65536,  "What level of poisoning applies when player is severe Hydrogen Sulfide poisoned?");
         EM_Settings.HydrogenSulfidePoisoningChance = config.getInt("Chance of Hydrogen Sulfide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Hydrogen Sulfide poisoning if the player has no protection?");
 
+        EM_Settings.biomeTemperatureRainBool = config.getBoolean("Biome temperature should rain change", Configuration.CATEGORY_GENERAL, true, "Should the biome temperature decreases if it rains?");
+        EM_Settings.biomeTemperatureRain = config.getFloat("Biome temperature rain change",Configuration.CATEGORY_GENERAL, 10F, 1F, 65536F,  "Biome temperature decreases by n degrees if it rains");
+
+        EM_Settings.biomeTemperatureThunderBool = config.getBoolean("Biome temperature should thunder change", Configuration.CATEGORY_GENERAL, true, "Should the biome temperature decreases if there is a thunderstorm?");
+        EM_Settings.biomeTemperatureThunder = config.getFloat("Biome temperature thunder change",Configuration.CATEGORY_GENERAL, 12F, 1F, 65536F,  "Biome temperature decreases by n degrees if there is a thunderstorm");
+
+        EM_Settings.biome_DAY_TEMPERATURE = config.getFloat("Absolute maximum of the day",Configuration.CATEGORY_GENERAL, 0F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly noon. Read more about this setting in changelog 1.3.139");
+        EM_Settings.biome_NIGHT_TEMPERATURE = config.getFloat("Absolute maximum of the night",Configuration.CATEGORY_GENERAL, 8F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly midnight (or half this number at sunrise/sunset). Read more about this setting in changelog 1.3.139");
+
         EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
 				+ "\n0: No log messages are printed whatsoever"

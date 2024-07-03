@@ -88,6 +88,14 @@ public class EM_Settings
     public static int HydrogenSulfidePoisoningChance;
 //HydrogenSulfide
 
+    public static boolean biomeTemperatureRainBool;
+    public static float biomeTemperatureRain;
+
+    public static boolean biomeTemperatureThunderBool;
+    public static float biomeTemperatureThunder;
+
+    public static float biome_DAY_TEMPERATURE;
+    public static float biome_NIGHT_TEMPERATURE;
 
     public static boolean hardcoregases = false;
 
