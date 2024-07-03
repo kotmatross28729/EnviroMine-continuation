@@ -1075,7 +1075,7 @@ public class EM_EventManager
 				tracker.hydration = 100F;
 				tracker.sanity = 100F;
 				tracker.airQuality = 100F;
-				tracker.bodyTemp = 37F;
+				tracker.bodyTemp = 36.6F;
 				if(!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN())
 				{
 					EM_StatusManager.syncMultiplayerTracker(tracker);

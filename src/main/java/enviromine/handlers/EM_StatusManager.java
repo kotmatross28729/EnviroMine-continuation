@@ -604,11 +604,11 @@ public class EM_StatusManager
                     if (!livingProps.bodyTemp || !livingProps.shouldTrack) {
                         avgEntityTemp += livingProps.ambTemp;
                     } else {
-                        avgEntityTemp += 37F;
+                        avgEntityTemp += 36.6F;
                     }
                     validEntities += 1;
                 } else if (!(mob instanceof EntityMob)) {
-                    avgEntityTemp += 37F;
+                    avgEntityTemp += 36.6F;
                     validEntities += 1;
                 }
             }
@@ -970,13 +970,13 @@ public class EM_StatusManager
 		// Air quality delta
 		data[AIR_QUALITY_DELTA_INDEX] = quality * (float)EM_Settings.airMult;
 		// Air temp
-		data[AMBIENT_TEMP_INDEX] = entityLiving.isPotionActive(Potion.fireResistance) && ambientTemperature > 37F? 37F : (ambientTemperature > 37F? 37F + ((ambientTemperature-37F) * fireProt): ambientTemperature);
+		data[AMBIENT_TEMP_INDEX] = entityLiving.isPotionActive(Potion.fireResistance) && ambientTemperature > 36.6F? 36.6F : (ambientTemperature > 36.6F? 36.6F + ((ambientTemperature-36.6F) * fireProt): ambientTemperature);
 		// Is "near lava"?
 		data[NEAR_LAVA_INDEX] = nearLava? 1 : 0;
 		// Dehydration
 		data[DEHYDRATION_DELTA_INDEX] = dehydrateBonus * (float)EM_Settings.hydrationMult;
 		data[BODY_TEMP_DROP_SPEED_INDEX] = dropSpeed * (float)EM_Settings.tempMult;
-		data[BODY_TEMP_RISE_SPEED_INDEX] = riseSpeed * (float)EM_Settings.tempMult * (tracker.bodyTemp < 37F? 1F : fireProt);
+		data[BODY_TEMP_RISE_SPEED_INDEX] = riseSpeed * (float)EM_Settings.tempMult * (tracker.bodyTemp < 36.6F? 1F : fireProt);
 		data[ANIMAL_HOSTILITY_INDEX] = animalHostility;
 		data[SANITY_DELTA_INDEX] = sanityRate * (float)EM_Settings.sanityMult;
 

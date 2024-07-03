@@ -374,7 +374,7 @@ public class EnviroDataTracker
 			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
 			if(bodyTemp - relTemp >= temperatureDropSpeed * temperatureSpeedAmplification)
 			{
-				bodyTemp -= temperatureDropSpeed * temperatureSpeedAmplification * (((EM_Settings.witcheryVampireImmunities & isVampire) | (EM_Settings.witcheryWerewolfImmunities & (isCurrentlyWerewolf | isCurrentlyWolf))) & bodyTemp <= 37F ? 0.5F : 1F);
+				bodyTemp -= temperatureDropSpeed * temperatureSpeedAmplification * (((EM_Settings.witcheryVampireImmunities & isVampire) | (EM_Settings.witcheryWerewolfImmunities & (isCurrentlyWerewolf | isCurrentlyWolf))) & bodyTemp <= 36.6F ? 0.5F : 1F);
 			} else
 			{
 				bodyTemp = relTemp;
@@ -515,7 +515,7 @@ public class EnviroDataTracker
 		}
 		if(!EM_Settings.enableBodyTemp || !enableBodyTemp)
 		{
-			bodyTemp = 37F;
+			bodyTemp = 36.6F;
 		}
 		if(!EM_Settings.enableHydrate || !enableHydrate)
 		{
@@ -541,7 +541,7 @@ public class EnviroDataTracker
 					tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, camelPackFill-1);
 					hydrate((float)EM_Settings.hydrationMult);
 
-					if(bodyTemp >= 37F + EM_Settings.tempMult/10F)
+					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F)
 					{
 						bodyTemp -= EM_Settings.tempMult/10F;
 					}
