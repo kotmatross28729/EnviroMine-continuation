@@ -38,8 +38,8 @@ public class EM_Settings
 	public static final String MOD_NAME_COLORIZED = EnumChatFormatting.AQUA + MOD_NAME + EnumChatFormatting.RESET;
 	public static final String Channel = "EM_CH";
 	public static final String Proxy = "enviromine.core.proxies";
-	public static final String URL = "https://modrinth.com/mod/enviromine-for-galaxy-odyssey";
-	public static final String VERSION_CHECKER_URL = "https://gitgud.io/AstroTibs/enviromine-for-galaxy-odyssey/-/raw/1.7.10/CURRENT_VERSION";
+	public static final String URL = "https://modrinth.com/mod/enviromine-continuation";
+	public static final String VERSION_CHECKER_URL = "https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/CURRENT_VERSION";
 	public static final String GUI_FACTORY = MOD_ID+".client.gui.menu.config.EnviroMineGuiFactory";
 
 	public static boolean versionChecker;
