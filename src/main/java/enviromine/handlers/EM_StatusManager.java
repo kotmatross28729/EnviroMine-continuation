@@ -436,15 +436,38 @@ public class EM_StatusManager
         if (dimensionProp != null && dimensionProp.override && !dimensionProp.weatherAffectsTemp) {
 
         } else {
-            if (entityLiving.worldObj.isRaining() && biome.rainfall != 0.0F && EM_Settings.biomeTemperatureRainBool) {
-                biomeTemperature -= EM_Settings.biomeTemperatureRain;
+            float biomeTemperatureRain = 6F;
+            float biomeTemperatureThunder = 8F;
+            float biomeTemperatureShade = 2.5F;
+
+            boolean biomeTemperatureRainBool = false;
+            boolean biomeTemperatureThunderBool = false;
+
+            if (biome != null) {
+                BiomeProperties biomeOverride = null;
+                if (BiomeProperties.base.hasProperty(biome)) {
+                    biomeOverride = BiomeProperties.base.getProperty(biome);
+                }
+                if (biomeOverride != null && biomeOverride.biomeOveride) {
+                    biomeTemperatureRain = biomeOverride.TemperatureRainDecrease;
+                    biomeTemperatureThunder = biomeOverride.TemperatureThunderDecrease;
+                    biomeTemperatureRainBool = biomeOverride.TemperatureRainBool;
+                    biomeTemperatureThunderBool = biomeOverride.TemperatureThunderBool;
+                    biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
+                }
+            }
+
+            if (entityLiving.worldObj.isRaining() && biome.rainfall != 0.0F && biomeTemperatureRainBool) {
+                biomeTemperature -= biomeTemperatureRain;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
                     dropSpeed = 0.01F;
                 }
-            } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && EM_Settings.biomeTemperatureThunderBool) {
-                biomeTemperature -= EM_Settings.biomeTemperatureThunder;
+            } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && biomeTemperatureThunderBool) {
+
+
+                biomeTemperature -= biomeTemperatureThunder;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
@@ -454,9 +477,18 @@ public class EM_StatusManager
 
         } // Dimension Overrides End
 
+        float biomeTemperatureShade = 2.5F;
+        if (biome != null) {
+            BiomeProperties biomeOverride = null;
+            if (BiomeProperties.base.hasProperty(biome)) {
+                biomeOverride = BiomeProperties.base.getProperty(biome);
+            } if (biomeOverride != null && biomeOverride.biomeOveride) {
+                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
+            }
+        }
         // 	Shade
         if (!entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.worldObj.isRaining()) {
-            biomeTemperature -= 2.5F;
+            biomeTemperature -= biomeTemperatureShade;
         }
 
         if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
@@ -473,22 +505,13 @@ public class EM_StatusManager
 //| 18000 - 23000            |After midnight   |
 //| 23000 - 24000 (0)        |Dawn             |
 
-
-
-
-//LogManager.getLogger().fatal("biomeTemperature old " + biomeTemperature);
-
-
-            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L);
-//LogManager.getLogger().fatal("currentTime " + currentTime);
-
-            float temperatureChange = calculateTemperatureChange(currentTime);
-//LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
-
-            biomeTemperature -= temperatureChange;
-
             boolean isDesertBiome = false;
             float DesertBiomeTemperatureMultiplier = 1F;
+
+            float biome_DAWN_TEMPERATURE = 4F;
+            float biome_DAY_TEMPERATURE = 0F;
+            float biome_DUSK_TEMPERATURE = 4F;
+            float biome_NIGHT_TEMPERATURE = 8F;
 
             if (biome != null) {
                 BiomeProperties biomeOverride = null;
@@ -499,13 +522,25 @@ public class EM_StatusManager
 
                     isDesertBiome = biomeOverride.isDesertBiome;
                     DesertBiomeTemperatureMultiplier = biomeOverride.DesertBiomeTemperatureMultiplier;
+
+                    biome_DAWN_TEMPERATURE = biomeOverride.DAWN_TEMPERATURE;
+                    biome_DAY_TEMPERATURE = biomeOverride.DAY_TEMPERATURE;
+                    biome_DUSK_TEMPERATURE = biomeOverride.DUSK_TEMPERATURE;
+                    biome_NIGHT_TEMPERATURE = biomeOverride.NIGHT_TEMPERATURE;
                 }
             }
+
+            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L);
+//LogManager.getLogger().fatal("currentTime " + currentTime);
+
+            float temperatureChange = calculateTemperatureChange(currentTime, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+//LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
+
+            biomeTemperature -= temperatureChange;
 
             if (biome.rainfall <= 0F || isDesertBiome) {
                 biomeTemperature -= temperatureChange * DesertBiomeTemperatureMultiplier;
             }
-//LogManager.getLogger().fatal("biomeTemperature new " + biomeTemperature);
         }
 
         @SuppressWarnings("unchecked")
@@ -1041,14 +1076,14 @@ public class EM_StatusManager
     //public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; //Will be at midnight, this/2 at dawn|dusk, also affects at the function increase | maximum function value
 
     //Time const
-    public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon
-    public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; // Will be at midnight
-    public static final float DAWN_TEMPERATURE = EM_Settings.biome_DAWN_TEMPERATURE; // Will be at dawn
-    public static final float DUSK_TEMPERATURE = EM_Settings.biome_DUSK_TEMPERATURE; // Will be at dusk
+//    public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon
+//    public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; // Will be at midnight
+//    public static final float DAWN_TEMPERATURE = EM_Settings.biome_DAWN_TEMPERATURE; // Will be at dawn
+//    public static final float DUSK_TEMPERATURE = EM_Settings.biome_DUSK_TEMPERATURE; // Will be at dusk
 
 
     // Function to calculate temperature change
-    public static float calculateTemperatureChange(float currentTime/*, float DAY_TEMPERATURE, float NIGHT_TEMPERATURE,float DAWN_TEMPERATURE, float DUSK_TEMPERATURE*/) {
+    public static float calculateTemperatureChange(float currentTime, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
         float temperatureChange;
 
         // from 0 to 6000 ticks (dawn to noon)

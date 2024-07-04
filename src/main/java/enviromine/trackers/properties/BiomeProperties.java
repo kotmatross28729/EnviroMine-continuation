@@ -36,12 +36,19 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public float dehydrateRate;
 	public float airRate;
 	public String loadedFrom;
-
     public boolean isDesertBiome;
-
     public float DesertBiomeTemperatureMultiplier;
+    public float DAWN_TEMPERATURE;
+    public float DAY_TEMPERATURE;
+    public float DUSK_TEMPERATURE;
+    public float NIGHT_TEMPERATURE;
 
+    public float TemperatureRainDecrease;
+    public float TemperatureThunderDecrease;
+    public boolean TemperatureRainBool;
+    public boolean TemperatureThunderBool;
 
+    public float TemperatureShadeDecrease;
 
 	public BiomeProperties(NBTTagCompound tags)
 	{
@@ -58,8 +65,30 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		}
 	}
 
-	public BiomeProperties(int id, boolean biomeOveride, String waterQuality, float ambientTemp, float tempRate, float sanityRate, float dehydrateRate, float airRate, String filename, boolean isDesertBiome, float DesertBiomeTemperatureMultiplier)
-	{
+	public BiomeProperties (
+        int id,
+        boolean biomeOveride,
+        String waterQuality,
+        float ambientTemp,
+        float tempRate,
+        float sanityRate,
+        float dehydrateRate,
+        float airRate,
+        String filename,
+        boolean isDesertBiome,
+        float DesertBiomeTemperatureMultiplier,
+
+        float DAWN_TEMPERATURE,
+        float DAY_TEMPERATURE,
+        float DUSK_TEMPERATURE,
+        float NIGHT_TEMPERATURE,
+
+        float TemperatureRainDecrease,
+        float TemperatureThunderDecrease,
+        boolean TemperatureRainBool,
+        boolean TemperatureThunderBool,
+        float TemperatureShadeDecrease
+    ) {
 		this.id = id;
 		this.biomeOveride = biomeOveride;
 		this.waterQuality = waterQuality;
@@ -71,6 +100,17 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		this.loadedFrom = filename;
         this.isDesertBiome = isDesertBiome;
         this.DesertBiomeTemperatureMultiplier = DesertBiomeTemperatureMultiplier;
+
+        this.DAWN_TEMPERATURE = DAWN_TEMPERATURE;
+        this.DAY_TEMPERATURE = DAY_TEMPERATURE;
+        this.DUSK_TEMPERATURE = DUSK_TEMPERATURE;
+        this.NIGHT_TEMPERATURE = NIGHT_TEMPERATURE;
+
+        this.TemperatureRainDecrease = TemperatureRainDecrease;
+        this.TemperatureThunderDecrease = TemperatureThunderDecrease;
+        this.TemperatureRainBool = TemperatureRainBool;
+        this.TemperatureThunderBool = TemperatureThunderBool;
+        this.TemperatureShadeDecrease = TemperatureShadeDecrease;
 	}
 	/**
 	 * <b>hasProperty(BiomeGenBase biome)</b><bR><br>
@@ -126,6 +166,18 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		tags.setFloat("dehydrateRate", this.dehydrateRate);
         tags.setBoolean("isDesertBiome", this.isDesertBiome);
         tags.setFloat("DesertBiomeTemperatureMultiplier", this.DesertBiomeTemperatureMultiplier);
+
+        tags.setFloat("DAWN_TEMPERATURE", this.DAWN_TEMPERATURE);
+        tags.setFloat("DAY_TEMPERATURE", this.DAY_TEMPERATURE);
+        tags.setFloat("DUSK_TEMPERATURE", this.DUSK_TEMPERATURE);
+        tags.setFloat("NIGHT_TEMPERATURE", this.NIGHT_TEMPERATURE);
+
+        tags.setFloat("TemperatureRainDecrease", this.TemperatureRainDecrease);
+        tags.setFloat("TemperatureThunderDecrease", this.TemperatureThunderDecrease);
+        tags.setBoolean("TemperatureRainBool", this.TemperatureRainBool);
+        tags.setBoolean("TemperatureThunderBool", this.TemperatureThunderBool);
+        tags.setFloat("TemperatureShadeDecrease", this.TemperatureShadeDecrease);
+
 		return tags;
 	}
 
@@ -141,6 +193,17 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		this.dehydrateRate = tags.getFloat("dehydrateRate");
         this.isDesertBiome = tags.getBoolean("isDesertBiome");
         this.DesertBiomeTemperatureMultiplier = tags.getFloat("DesertBiomeTemperatureMultiplier");
+
+        this.DAWN_TEMPERATURE = tags.getFloat("DAWN_TEMPERATURE");
+        this.DAY_TEMPERATURE = tags.getFloat("DAY_TEMPERATURE");
+        this.DUSK_TEMPERATURE = tags.getFloat("DUSK_TEMPERATURE");
+        this.NIGHT_TEMPERATURE = tags.getFloat("NIGHT_TEMPERATURE");
+
+        this.TemperatureRainDecrease = tags.getFloat("TemperatureRainDecrease");
+        this.TemperatureThunderDecrease = tags.getFloat("TemperatureThunderDecrease");
+        this.TemperatureRainBool = tags.getBoolean("TemperatureRainBool");
+        this.TemperatureThunderBool = tags.getBoolean("TemperatureThunderBool");
+        this.TemperatureShadeDecrease = tags.getFloat("TemperatureShadeDecrease");
 	}
 
 	@Override
@@ -171,7 +234,40 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean isDesertBiome = config.get(category, BOName[8], false).getBoolean(false);
         float DesertBiomeTemperatureMultiplier = (float)config.get(category, BOName[9], 1.0).getDouble(1.0);
 
-		BiomeProperties entry = new BiomeProperties(id, biomeOveride, waterQ, ambTemp, tempRate, sanRate, dehyRate, airRate, filename, isDesertBiome, DesertBiomeTemperatureMultiplier);
+        float DAWN_TEMPERATURE = (float)config.get(category, BOName[10], 4.0).getDouble(4.0);
+        float DAY_TEMPERATURE = (float)config.get(category, BOName[11], 0.0).getDouble(0.0);
+        float DUSK_TEMPERATURE = (float)config.get(category, BOName[12], 4.0).getDouble(4.0);
+        float NIGHT_TEMPERATURE = (float)config.get(category, BOName[13], 8.0).getDouble(8.0);
+
+        float TemperatureRainDecrease = (float)config.get(category, BOName[14], 6.0).getDouble(6.0);
+        float TemperatureThunderDecrease = (float)config.get(category, BOName[15], 8.0).getDouble(8.0);
+
+        boolean TemperatureRainBool = config.get(category, BOName[16], false).getBoolean(false);
+        boolean TemperatureThunderBool = config.get(category, BOName[17], false).getBoolean(false);
+        float TemperatureShadeDecrease = (float)config.get(category, BOName[18], 2.5).getDouble(2.5);
+
+		BiomeProperties entry = new BiomeProperties (
+            id,
+            biomeOveride,
+            waterQ,
+            ambTemp,
+            tempRate,
+            sanRate,
+            dehyRate,
+            airRate,
+            filename,
+            isDesertBiome,
+            DesertBiomeTemperatureMultiplier,
+            DAWN_TEMPERATURE,
+            DAY_TEMPERATURE,
+            DUSK_TEMPERATURE,
+            NIGHT_TEMPERATURE,
+            TemperatureRainDecrease,
+            TemperatureThunderDecrease,
+            TemperatureRainBool,
+            TemperatureThunderBool,
+            TemperatureShadeDecrease
+        );
 
 		if(EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
 		{
@@ -192,7 +288,18 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.get(category, BOName[6], this.dehydrateRate).getDouble(this.dehydrateRate);
 		config.get(category, BOName[7], this.airRate).getDouble(this.airRate);
         config.get(category, BOName[8], this.isDesertBiome, "Affects the temperature difference at night / day (useful for deserts)").getBoolean(this.isDesertBiome);
-        config.get(category, BOName[9], this.DesertBiomeTemperatureMultiplier, "The temperatureChange will be multiplied by this number").getDouble(this.DesertBiomeTemperatureMultiplier);
+        config.get(category, BOName[9], this.DesertBiomeTemperatureMultiplier, "The temperatureChange will be multiplied by this number if isDesertBiome=true").getDouble(this.DesertBiomeTemperatureMultiplier);
+
+        config.get(category, BOName[10], this.DAWN_TEMPERATURE, "The temperatureChange will be equal to this number at dawn").getDouble(this.DAWN_TEMPERATURE);
+        config.get(category, BOName[11], this.DAY_TEMPERATURE, "The temperatureChange will be equal to this number at day").getDouble(this.DAY_TEMPERATURE);
+        config.get(category, BOName[12], this.DUSK_TEMPERATURE, "The temperatureChange will be equal to this number at dusk").getDouble(this.DUSK_TEMPERATURE);
+        config.get(category, BOName[13], this.NIGHT_TEMPERATURE, "The temperatureChange will be equal to this number at midnight").getDouble(this.NIGHT_TEMPERATURE);
+//TODO change
+        config.get(category, BOName[14], this.TemperatureRainDecrease, "Biome temperature decreases by n degrees if it rains").getDouble(this.TemperatureRainDecrease);
+        config.get(category, BOName[15], this.TemperatureThunderDecrease, "Biome temperature decreases by n degrees if there is a thunderstorm").getDouble(this.TemperatureThunderDecrease);
+        config.get(category, BOName[16], this.TemperatureRainBool, "Should the biome temperature decreases if it rains?").getBoolean(this.TemperatureRainBool);
+        config.get(category, BOName[17], this.TemperatureThunderBool, "Should the biome temperature decreases if there is a thunderstorm?").getBoolean(this.TemperatureThunderBool);
+        config.get(category, BOName[18], this.TemperatureShadeDecrease, "Biome temperature decreases by n degrees if player in the shadow").getDouble(this.TemperatureShadeDecrease);
 	}
 
 	@Override
@@ -266,6 +373,18 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY); //TODO change if needed
         double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
 
+        //TODO change if needed
+        double DAWN_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
+        double DAY_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 0D :*/ 0D;
+        double DUSK_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
+        double NIGHT_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 8D :*/ 8D;
+
+        double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 8D : 6D;
+        double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D : 8D;
+        boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
+        boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
+        double TemperatureShadeDecrease = /*typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :*/ 2.5D;
+
 		String catName = this.categoryName() + "." + biome.biomeName;
 
 		config.get(catName, BOName[0], biome.biomeID).getInt(biome.biomeID);
@@ -278,7 +397,18 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.get(catName, BOName[7], air).getDouble(air);
         config.get(catName, BOName[8], isDesertBiome).getBoolean(isDesertBiome);
         config.get(catName, BOName[9], DesertBiomeTemperatureMultiplier).getDouble(DesertBiomeTemperatureMultiplier);
-	}
+
+        config.get(catName, BOName[10], DAWN_TEMPERATURE).getDouble(DAWN_TEMPERATURE);
+        config.get(catName, BOName[11], DAY_TEMPERATURE).getDouble(DAY_TEMPERATURE);
+        config.get(catName, BOName[12], DUSK_TEMPERATURE).getDouble(DUSK_TEMPERATURE);
+        config.get(catName, BOName[13], NIGHT_TEMPERATURE).getDouble(NIGHT_TEMPERATURE);
+
+        config.get(catName, BOName[14], TemperatureRainDecrease).getDouble(TemperatureRainDecrease);
+        config.get(catName, BOName[15], TemperatureThunderDecrease).getDouble(TemperatureThunderDecrease);
+        config.get(catName, BOName[16], TemperatureRainBool).getBoolean(TemperatureRainBool);
+        config.get(catName, BOName[17], TemperatureThunderBool).getBoolean(TemperatureThunderBool);
+        config.get(catName, BOName[18], TemperatureShadeDecrease).getDouble(TemperatureShadeDecrease);
+    }
 
 	@Override
 	public boolean useCustomConfigs()
@@ -293,7 +423,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BOName = new String[10];
+		BOName = new String[19];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
@@ -302,7 +432,16 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		BOName[5] = "06.Sanity Rate";
 		BOName[6] = "07.Dehydrate Rate";
 		BOName[7] = "08.Air Quality Rate";
-        BOName[8] = "09.Is desert biome";
+        BOName[8] = "09.Is desert biome?";
         BOName[9] = "10.Desert biome temperature multiplier";
+        BOName[10] = "11.Dawn biome temperature";
+        BOName[11] = "12.Day biome temperature";
+        BOName[12] = "13.Dusk biome temperature";
+        BOName[13] = "14.Night biome temperature";
+        BOName[14] = "15.Biome temperature rain decrease";
+        BOName[15] = "16.Biome temperature thunder decrease";
+        BOName[16] = "17.Should biome temperature decrease when rain?";
+        BOName[17] = "18.Should biome temperature decrease when thunder?";
+        BOName[18] = "19.Biome temperature shadow decrease";
 	}
 }
