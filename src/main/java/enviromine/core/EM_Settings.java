@@ -96,6 +96,8 @@ public class EM_Settings
 
     public static float biome_DAY_TEMPERATURE;
     public static float biome_NIGHT_TEMPERATURE;
+    public static float biome_DAWN_TEMPERATURE;
+    public static float biome_DUSK_TEMPERATURE;
 
     public static boolean hardcoregases = false;
 

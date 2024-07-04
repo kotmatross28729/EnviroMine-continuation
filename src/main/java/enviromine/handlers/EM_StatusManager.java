@@ -1037,28 +1037,35 @@ public class EM_StatusManager
 	}
 
     // Day/Night const
-    public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon, also affects at the function decrease | minimum function value
-    public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; //Will be at midnight, this/2 at dawn|dusk, also affects at the function increase | maximum function value
+    //public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon, also affects at the function decrease | minimum function value
+    //public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; //Will be at midnight, this/2 at dawn|dusk, also affects at the function increase | maximum function value
+
+    //Time const
+    public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon
+    public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; // Will be at midnight
+    public static final float DAWN_TEMPERATURE = EM_Settings.biome_DAWN_TEMPERATURE; // Will be at dawn
+    public static final float DUSK_TEMPERATURE = EM_Settings.biome_DUSK_TEMPERATURE; // Will be at dusk
+
 
     // Function to calculate temperature change
-    public static float calculateTemperatureChange(float currentTime) {
+    public static float calculateTemperatureChange(float currentTime/*, float DAY_TEMPERATURE, float NIGHT_TEMPERATURE,float DAWN_TEMPERATURE, float DUSK_TEMPERATURE*/) {
         float temperatureChange;
 
-        // from 0 to 6000 ticks
+        // from 0 to 6000 ticks (dawn to noon)
         if (currentTime >= 0 && currentTime < 6000) {
-            temperatureChange = NIGHT_TEMPERATURE/2F - ((NIGHT_TEMPERATURE/2F - DAY_TEMPERATURE) / 6000f) * currentTime;
+            temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / 6000f) * currentTime;
         }
-        // from 6000 to 12000 ticks
+        // from 6000 to 12000 ticks (noon to dusk)
         else if (currentTime >= 6000 && currentTime < 12000) {
-            temperatureChange = DAY_TEMPERATURE + ((NIGHT_TEMPERATURE/2F - DAY_TEMPERATURE) / 6000f) * (currentTime - 6000);
+            temperatureChange = DAY_TEMPERATURE + ((DUSK_TEMPERATURE - DAY_TEMPERATURE) / 6000f) * (currentTime - 6000);
         }
-        // from 12000 to 18000 ticks
+        // from 12000 to 18000 ticks (dusk to midnight)
         else if (currentTime >= 12000 && currentTime < 18000) {
-            temperatureChange = NIGHT_TEMPERATURE/2F + ((NIGHT_TEMPERATURE - NIGHT_TEMPERATURE/2F) / 6000f) * (currentTime - 12000);
+            temperatureChange = DUSK_TEMPERATURE + ((NIGHT_TEMPERATURE - DUSK_TEMPERATURE) / 6000f) * (currentTime - 12000);
         }
-        // from 18000 to 24000 ticks
+        // from 18000 to 24000 ticks (midnight to dawn)
         else if (currentTime >= 18000 && currentTime < 24000) {
-            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - NIGHT_TEMPERATURE/2F) / 6000f) * (currentTime - 18000);
+            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - DAWN_TEMPERATURE) / 6000f) * (currentTime - 18000);
         }
         else {
             // If currentTime doesn't fall within the specified range

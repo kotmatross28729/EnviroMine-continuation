@@ -373,7 +373,11 @@ public class EM_ConfigHandler
         EM_Settings.biomeTemperatureThunder = config.getFloat("Biome temperature thunder change",Configuration.CATEGORY_GENERAL, 12F, 1F, 65536F,  "Biome temperature decreases by n degrees if there is a thunderstorm");
 
         EM_Settings.biome_DAY_TEMPERATURE = config.getFloat("Absolute maximum of the day",Configuration.CATEGORY_GENERAL, 0F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly noon. Read more about this setting in changelog 1.3.139");
-        EM_Settings.biome_NIGHT_TEMPERATURE = config.getFloat("Absolute maximum of the night",Configuration.CATEGORY_GENERAL, 8F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly midnight (or half this number at sunrise/sunset). Read more about this setting in changelog 1.3.139");
+        EM_Settings.biome_NIGHT_TEMPERATURE = config.getFloat("Absolute maximum of the night",Configuration.CATEGORY_GENERAL, 8F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly midnight. Read more about this setting in changelog 1.3.139");
+
+        EM_Settings.biome_DAWN_TEMPERATURE = config.getFloat("Absolute dawn",Configuration.CATEGORY_GENERAL, 4F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly dawn");
+        EM_Settings.biome_DUSK_TEMPERATURE = config.getFloat("Absolute dusk",Configuration.CATEGORY_GENERAL, 4F, -128F, 65536F,  "temperatureChange will be equal to this number at exactly dusk");
+
 
         EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
