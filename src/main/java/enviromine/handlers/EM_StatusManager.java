@@ -949,23 +949,20 @@ public class EM_StatusManager
         }
     if(isHbmLoaded()) {
 //TODO
-// HBM COMPAT For player
-    if (entityLiving instanceof EntityPlayer player) {
-        if (ArmorFSB.hasFSBArmor(player)) {
+// HBM COMPAT FSB Armor For player
+        if (entityLiving instanceof EntityPlayer player && ArmorFSB.hasFSBArmor(player)) {
             ItemStack plate = player.inventory.armorInventory[2];
             ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-
             if (!entityLiving.isPotionActive(Potion.fireResistance) && !(chestplate.fireproof)) {
                 if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
-                    riseSpeed = EM_Settings.RiseSpeedLava;
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature; //No hev/env, and lava -> lava
+                    riseSpeed = EM_Settings.RiseSpeedLava; //No hev/env, and lava -> lava
                 } else if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                    ambientTemperature = EM_Settings.BurningambientTemperature;
-                } else if (entityLiving.isBurning() && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) ) {
+                    ambientTemperature = EM_Settings.BurningambientTemperature; //hev/env, and lava -> fire (less)
+                } else if (entityLiving.isBurning() && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
                     if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
-                        ambientTemperature = EM_Settings.BurningambientTemperature;
+                        ambientTemperature = EM_Settings.BurningambientTemperature; //No hev/env, and fire -> fire
                     }
-
                     if (riseSpeed < EM_Settings.RiseSpeedMin) {
                         riseSpeed = EM_Settings.RiseSpeedMin;
                     }
@@ -973,7 +970,7 @@ public class EM_StatusManager
             }
         }
 //TODO
-// HBM COMPAT No FSBarmor, but still player
+// HBM COMPAT No FSBarmor
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
             ItemStack helmet = entityLiving.getEquipmentInSlot(4);
             ItemStack plate = entityLiving.getEquipmentInSlot(3);
@@ -991,33 +988,25 @@ public class EM_StatusManager
             if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
             if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
                 if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                    ImmunityBurning = true;
+                    ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
                     ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+                    // All armor isTemperatureSealed ? ImmunityFull = true
                 } else {
-                    ImmunityBurning = false;
-                }
-            }
-
-            if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null){
-                if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                    ImmunityBurning = true;
-                    ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-                } else {
-                    ImmunityBurning = false;
+                    ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
                 }
             }
 
             if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
                 if(ImmunityBurning) {
-                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature/2F;
-                    riseSpeed = EM_Settings.RiseSpeedLava/2F;
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature/2F;// In lava, but ImmunityBurning -> half lava
+                    riseSpeed = EM_Settings.RiseSpeedLava/2F;// In lava, but ImmunityBurning -> half lava
                 } else {
-                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
-                    riseSpeed = EM_Settings.RiseSpeedLava;
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature; // In lava, No ImmunityBurning -> lava
+                    riseSpeed = EM_Settings.RiseSpeedLava; // In lava, No ImmunityBurning -> lava
                 }
             } else if (entityLiving.isBurning() && !ImmunityBurning) {
                 if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
-                    ambientTemperature = EM_Settings.BurningambientTemperature;
+                    ambientTemperature = EM_Settings.BurningambientTemperature; //On fire, No ImmunityBurning -> fire
                 }
 
                 if (riseSpeed < EM_Settings.RiseSpeedMin) {
@@ -1026,51 +1015,6 @@ public class EM_StatusManager
             }
         }
     }
-//TODO
-// HBM COMPAT For other entities that NOT player
-    else if (!(entityLiving instanceof EntityPlayer) && !entityLiving.isPotionActive(Potion.fireResistance)) {
-        ItemStack helmet = entityLiving.getEquipmentInSlot(4);
-        ItemStack plate = entityLiving.getEquipmentInSlot(3);
-        ItemStack legs = entityLiving.getEquipmentInSlot(2);
-        ItemStack boots = entityLiving.getEquipmentInSlot(1);
-        ArmorProperties helmetprops = null;
-        ArmorProperties plateprops = null;
-        ArmorProperties legsprops = null;
-        ArmorProperties bootsprops = null;
-        boolean ImmunityBurning = false;
-        boolean ImmunityFull = false;
-        if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
-        if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
-        if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
-        if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
-        if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
-            if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                ImmunityBurning = true;
-                ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-            } else {
-                ImmunityBurning = false;
-            }
-        }
-
-        if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
-            if(ImmunityBurning) {
-                ambientTemperature = EM_Settings.LavaBlocksambientTemperature/2F;
-                riseSpeed = EM_Settings.RiseSpeedLava/2F;
-            } else {
-                ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
-                riseSpeed = EM_Settings.RiseSpeedLava;
-            }
-        } else if (entityLiving.isBurning() && !ImmunityBurning) {
-            if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
-                ambientTemperature = EM_Settings.BurningambientTemperature;
-            }
-
-            if (riseSpeed < EM_Settings.RiseSpeedMin) {
-                riseSpeed = EM_Settings.RiseSpeedMin;
-            }
-        }
-    }
-}
 //TODO
 // NOT HBM
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {

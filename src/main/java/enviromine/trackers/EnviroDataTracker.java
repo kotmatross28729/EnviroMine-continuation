@@ -284,6 +284,7 @@ public class EnviroDataTracker
 
 		if (trackedEntity.isPotionActive(Potion.fireResistance) && bodyTemp > 36.6F) {bodyTemp = 36.6F;} // IF you have fire resistance, ambient temperature can never "feel" higher than 36.6
 
+    //TODO : Refactor all this shit
 // Literally other code below: if -> else if, if -> else if, if -> else if, ...
 /// Hbm's Nuclear Tech armor that gives fire protection also prevents you from dying from enviromine heatstroke / hypothermia
    if(isHbmLoaded()) {
