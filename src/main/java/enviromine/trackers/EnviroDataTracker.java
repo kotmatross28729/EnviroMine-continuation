@@ -1,21 +1,13 @@
 package enviromine.trackers;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import api.hbm.item.IGasMask;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
-import com.hbm.items.armor.ArmorHEV;
-import com.hbm.lib.ModDamageSource;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroDamageSource;
@@ -28,7 +20,6 @@ import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.EnviroUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -42,13 +33,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static enviromine.core.EM_Settings.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static enviromine.core.EM_Settings.DeathFromHeartAttack;
+import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
 
 
 public class EnviroDataTracker
@@ -296,8 +289,7 @@ public class EnviroDataTracker
    if(isHbmLoaded()) {
        // COLD THINGS START
 // For player
-       if (trackedEntity instanceof EntityPlayer) {
-           EntityPlayer player = (EntityPlayer) trackedEntity;
+       if (trackedEntity instanceof EntityPlayer player) {
            if (ArmorFSB.hasFSBArmor(player)) {
                ItemStack plate = player.inventory.armorInventory[2];
                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
@@ -309,7 +301,6 @@ public class EnviroDataTracker
                        bodyTemp = 36.6F;
                    }
 // Greatly reduce the effect of ntm temperature if the armor is completely sealed
-
                    if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate.fireproof)) {
                        bodyTemp -= 0.1F;
                    } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate.fireproof)) {
@@ -350,9 +341,8 @@ public class EnviroDataTracker
 
 
        // HOT THINGS START
-     if (trackedEntity instanceof EntityPlayer) {
-           EntityPlayer player = (EntityPlayer) trackedEntity;
-           if (ArmorFSB.hasFSBArmor(player)) {
+     if (trackedEntity instanceof EntityPlayer player) {
+         if (ArmorFSB.hasFSBArmor(player)) {
                ItemStack plate = player.inventory.armorInventory[2];
                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
 

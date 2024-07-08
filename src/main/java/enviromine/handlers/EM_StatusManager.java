@@ -1,17 +1,8 @@
 package enviromine.handlers;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
+import com.google.common.base.Stopwatch;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
-import enviromine.core.EM_ConfigHandler;
-import org.apache.commons.logging.Log;
-import org.apache.logging.log4j.Level;
-
-import com.google.common.base.Stopwatch;
-
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.EnviroPotion;
 import enviromine.client.gui.UI_Settings;
@@ -55,7 +46,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Level;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
 

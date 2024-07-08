@@ -1,14 +1,6 @@
 package enviromine.handlers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
-
-import cpw.mods.fml.common.Loader;
-import org.apache.logging.log4j.Level;
-
 import com.google.common.base.Stopwatch;
-
 import enviromine.EntityPhysicsBlock;
 import enviromine.client.gui.hud.items.Debug_Info;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
@@ -34,7 +26,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.logging.log4j.Level;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import static enviromine.trackers.EnviroDataTracker.isTCLoaded;
 

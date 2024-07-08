@@ -33,31 +33,31 @@ import net.minecraft.world.World;
 
 public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdditionalSpawnData
 {
-	
+
 	public boolean isAnvil2 = true;
 	public boolean isBreakingAnvil2;
 	public int fallHurtMax2;
 	public float fallHurtAmount2;
 	public boolean isLandSlide = false;
 	public boolean earthquake = false;
-	
+
 	public int fallTime = 0;
-	
+
 	public Block block;
 	public int meta;
-	
+
 	public EntityPhysicsBlock(World world)
 	{
 		super(world);
 		this.isAnvil2 = true;
 		this.fallHurtMax2 = 40;
 		this.fallHurtAmount2 = 2.0F;
-		
+
 		if(EM_Settings.entityFailsafe > 0 && !world.isRemote)
 		{
 			@SuppressWarnings("unchecked")
 			List<EntityPhysicsBlock> entityList = this.worldObj.getEntitiesWithinAABB(EntityPhysicsBlock.class, this.boundingBox.expand(8F, 8F, 8F));
-			
+
 			if(entityList.size() >= 1024)
 			{
 				if(EM_Settings.entityFailsafe == 1)
@@ -80,7 +80,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 						EnviroMine.logger.log(Level.ERROR, "No.: " + entityList.size());
 					}
 					Iterator<EntityPhysicsBlock> iterator = entityList.iterator();
-					
+
 					while(iterator.hasNext())
 					{
 						EntityPhysicsBlock oldPhysBlock = iterator.next();
@@ -90,14 +90,14 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 						}
 					}
 					this.setDead();
-					
+
 					EM_PhysManager.physSchedule.clear();
 					return;
 				}
 			}
 		}
 	}
-	
+
 	public EntityPhysicsBlock(World world, double x, double y, double z, Block block, int meta, boolean update)
 	{
 		super(world, x, y, z, flowerID(block), meta);
@@ -106,12 +106,12 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 		this.fallHurtAmount2 = 2.0F;
 		this.block = block;
 		this.meta = meta;
-		
+
 		if(EM_Settings.entityFailsafe > 0 && !world.isRemote)
 		{
 			@SuppressWarnings("unchecked")
 			List<EntityPhysicsBlock> entityList = this.worldObj.getEntitiesWithinAABB(EntityPhysicsBlock.class, this.boundingBox.expand(8F, 8F, 8F));
-			
+
 			if(entityList.size() >= 512)
 			{
 				if(EM_Settings.entityFailsafe == 1)
@@ -134,7 +134,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 						EnviroMine.logger.log(Level.ERROR, "No.: " + entityList.size());
 					}
 					Iterator<EntityPhysicsBlock> iterator = entityList.iterator();
-					
+
 					while(iterator.hasNext())
 					{
 						EntityPhysicsBlock oldPhysBlock = iterator.next();
@@ -144,21 +144,21 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 						}
 					}
 					this.setDead();
-					
+
 					EM_PhysManager.physSchedule.clear();
 					return;
 				}
 			}
 		}
-		
+
 		EM_PhysManager.usedSlidePositions.add("" + MathHelper.floor_double(this.posX) + "," + MathHelper.floor_double(this.posZ));
-		
+
 		if(update)
 		{
 			EM_PhysManager.schedulePhysUpdate(world, (int)Math.floor(x), (int)Math.floor(y), (int)Math.floor(z), false, earthquake? "Quake" : "Collapse");
 		}
 	}
-	
+
 	public static Block flowerID(Block block)
 	{
 		if(block instanceof BlockFlower)
@@ -169,7 +169,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 			return block;
 		}
 	}
-	
+
 	@Override
 	/**
 	 * Returns true if other Entities should be prevented from moving through this Entity.
@@ -178,7 +178,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 	{
 		return false;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void onUpdate()
@@ -197,13 +197,13 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 			this.motionX *= 0.9800000190734863D;
 			this.motionY *= 0.9800000190734863D;
 			this.motionZ *= 0.9800000190734863D;
-			
+
 			if(!this.worldObj.isRemote)
 			{
 				int i = MathHelper.floor_double(this.posX);
 				int j = MathHelper.floor_double(this.posY);
 				int k = MathHelper.floor_double(this.posZ);
-				
+
 				if(this.fallTime == 1)
 				{
 					if(this.worldObj.getBlock(i, j, k) != this.block && !isLandSlide)
@@ -211,31 +211,31 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 						this.setDead();
 						return;
 					}
-					
+
 					@SuppressWarnings("unchecked")
 					List<Entity> before = ((List<Entity>)this.worldObj.getEntitiesWithinAABB(EntityItem.class, this.boundingBox.expand(1, 1, 1)));
 					this.worldObj.setBlockToAir(i, j, k);
 					@SuppressWarnings("unchecked")
 					List<Entity> after = ((List<Entity>)this.worldObj.getEntitiesWithinAABB(EntityItem.class, this.boundingBox.expand(1, 1, 1)));
-					
+
 					for (Entity e : before) {
 						after.remove(e);
 					}
-					
+
 					for (Entity e : after) {
 						e.setDead();
 					}
 				}
-				
+
 				try
 				{
 			        AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(this.worldObj, i, j - 1, k);
 			        if(axisalignedbb != null)
 			        {
 			        	List fallingBlocks = this.worldObj.getEntitiesWithinAABB(EntityPhysicsBlock.class, axisalignedbb);
-			        	
+
 			        	fallingBlocks.remove(this);
-			        	
+
 				        if(fallingBlocks.size() >= 1 && isLandSlide)
 				        {
 				        	this.motionY = 0;
@@ -245,7 +245,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 				} catch(NullPointerException e)
 				{
 				}
-				
+
 				if(earthquake)
 				{
 					for(int jj = j; j >= MathHelper.ceiling_double_int(motionY); j --)
@@ -272,22 +272,22 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 						}
 					}
 				}
-				
+
 				if(this.onGround)
 				{
 					this.motionX *= 0.699999988079071D;
 					this.motionZ *= 0.699999988079071D;
 					this.motionY *= -0.5D;
-					
+
 					if(this.worldObj.getBlock(i, j, k) != Blocks.piston_extension)
 					{
 						this.setDead();
-						
+
 						if(!this.worldObj.canPlaceEntityOnSide(Blocks.anvil, i, j, k, true, 1, (Entity)null, (ItemStack)null) && !EM_PhysManager.blockNotSolid(this.worldObj, i, j, k, false))
 						{
 							j += 1;
 						}
-						
+
 						if((this.block == Blocks.snow_layer && this.worldObj.getBlock(i, j, k) == Blocks.snow_layer && this.worldObj.getBlockMetadata(i, j, k) < 15) || (!this.isBreakingAnvil2 && this.worldObj.canPlaceEntityOnSide(Blocks.anvil, i, j, k, true, 1, (Entity)null, (ItemStack)null) && !BlockFalling.func_149831_e(this.worldObj, i, j - 1, k) && this.worldObj.setBlock(i, j, k, this.block, this.meta, 3)))
 						{
 							if(this.block == Blocks.snow_layer && this.worldObj.getBlock(i, j, k) == Blocks.snow_layer && this.worldObj.getBlockMetadata(i, j, k) < 15)
@@ -303,30 +303,30 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 							{
 								this.worldObj.setBlockMetadataWithNotify(i, j, k, meta, 2);
 							}
-							
+
 							EM_PhysManager.schedulePhysUpdate(this.worldObj, i, j, k, true, earthquake? "Quake" : "Collapse");
-							
+
 							/*if(block instanceof BlockFalling)
 							{
 								((BlockFalling)block).func_149828_a(this.worldObj, i, j, k, this.meta);
 							}*/
-							
+
 							Block bSurface = null;
 							if(this.worldObj.getBlock(i, j - 1, k) != Blocks.air && this.worldObj.getBlock(i, j - 1, k).getMaterial() != Material.air)
 							{
 								bSurface = this.worldObj.getBlock(i, j -1 , k);
 								this.worldObj.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), bSurface.stepSound.func_150496_b(), (bSurface.stepSound.getVolume() + 1.0F) / 2.0F, bSurface.stepSound.getPitch() * 0.5F);
 							}
-							
+
 							if(bSurface == null || bSurface != this.block)
 							{
 								this.worldObj.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), this.block.stepSound.func_150496_b(), (this.block.stepSound.getVolume() + 1.0F) / 2.0F, this.block.stepSound.getPitch() * 0.5F);
 							}
-							
+
 							if(this.field_145810_d != null && block instanceof ITileEntityProvider)
 							{
 								TileEntity tileentity = this.worldObj.getTileEntity(i, j, k);
-								
+
 								if(tileentity != null)
 								{
 									NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -359,13 +359,13 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 					{
 						this.entityDropItem(new ItemStack(this.block, 1, this.block.damageDropped(this.meta)), 0.0F);
 					}
-					
+
 					this.setDead();
 				}
 			}
 		}
 	}
-	
+
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	protected void fall(float par1)
@@ -373,18 +373,18 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 		if(this.isAnvil2)
 		{
 			int i = MathHelper.ceiling_float_int(par1 - 1.0F);
-			
+
 			if(isLandSlide)
 			{
 				i = 2;
 			}
-			
+
 			if(i > 0)
 			{
 				ArrayList arraylist = new ArrayList(this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox));
-				
+
 				DamageSource damagesource;
-				
+
 				if(isLandSlide)
 				{
 					if(this.block.getMaterial() == Material.snow)
@@ -398,21 +398,21 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 				{
 					damagesource = this.block == Blocks.anvil ? DamageSource.anvil : DamageSource.fallingBlock;
 				}
-				
+
 				Iterator iterator = arraylist.iterator();
-				
+
 				while(iterator.hasNext())
 				{
 					Entity entity = (Entity)iterator.next();
 					entity.attackEntityFrom(damagesource, (float)Math.min(MathHelper.floor_float((float)i * this.fallHurtAmount2), this.fallHurtMax2));
 				}
-				
+
 				if(this.block == Blocks.anvil && (double)this.rand.nextFloat() < 0.05000000074505806D + (double)i * 0.05D)
 				{
 					int j = this.meta >> 2;
 					int k = this.meta & 3;
 					++j;
-					
+
 					if(j > 2)
 					{
 						this.isBreakingAnvil2 = true;
@@ -458,9 +458,9 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
         {
             this.block = Block.getBlockById(par1NBTTagCompound.getByte("Tile") & 255);
         }
-        
+
         this.meta = par1NBTTagCompound.getByte("Data") & 255;
-        
+
         if (par1NBTTagCompound.hasKey("HurtEntities2"))
         {
             this.isAnvil2 = par1NBTTagCompound.getBoolean("HurtEntities2");
@@ -479,7 +479,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 	{
 		NBTTagCompound tags = new NBTTagCompound();
 		this.writeEntityToNBT(tags);
-		
+
 		ByteBufUtils.writeTag(buffer, tags);
 	}
 
