@@ -3,6 +3,7 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.Iterator;
 
+import com.hbm.items.ModItems;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -20,11 +21,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 
+import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+
 public class ArmorProperties implements SerialisableProperty, PropertyBase
 {
 	public static final ArmorProperties base = new ArmorProperties();
 	static String[] APName;
-	
+
 	public Item item;
 	public String name;
 	public float nightTemp;
@@ -37,23 +40,26 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	public float air;
 	public boolean allowCamelPack;
 	public String loadedFrom;
-	
+
+    public boolean isTemperatureResistance;
+    public boolean isTemperatureSealed;
+
 	public ArmorProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
 	}
-	
+
 	public ArmorProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
+
 		if(base != null && base != this)
 		{
 			throw new IllegalStateException();
 		}
 	}
-	
-	public ArmorProperties(Item item, String name, float nightTemp, float shadeTemp, float sunTemp, float nightMult, float shadeMult, float sunMult, float sanity, float air, boolean allowCamelPack, String filename)
+
+	public ArmorProperties(Item item, String name, float nightTemp, float shadeTemp, float sunTemp, float nightMult, float shadeMult, float sunMult, float sanity, float air, boolean allowCamelPack, String filename, boolean isTemperatureResistance, boolean isTemperatureSealed)
 	{
 		this.item = item;
 		this.name = name;
@@ -66,6 +72,8 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		this.sanity = sanity;
 		this.air = air;
 		this.allowCamelPack = allowCamelPack;
+        this.isTemperatureResistance = isTemperatureResistance;
+        this.isTemperatureSealed = isTemperatureSealed;
 		this.loadedFrom = filename;
 	}
 
@@ -79,7 +87,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.armorProperties.containsKey(Item.itemRegistry.getNameForObject(stack.getItem()));
 	}
-	/** 
+	/**
 	 * 	<b>getProperty(ItemStack stack)</b><bR><br>
 	 * Gets ItemProperty from ItemStack.
 	 * @param stack
@@ -89,7 +97,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	{
 		return EM_Settings.armorProperties.get(Item.itemRegistry.getNameForObject(stack.getItem()));
 	}
-	
+
 	@Override
 	public NBTTagCompound WriteToNBT()
 	{
@@ -104,6 +112,8 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		tags.setFloat("sanity", sanity);
 		tags.setFloat("air", air);
 		tags.setBoolean("allowCamelPack", allowCamelPack);
+        tags.setBoolean("isTemperatureResistance", isTemperatureResistance);
+        tags.setBoolean("isTemperatureSealed", isTemperatureSealed);
 		return tags;
 	}
 
@@ -121,6 +131,8 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		this.sanity = tags.getFloat("sanity");
 		this.air = tags.getFloat("air");
 		this.allowCamelPack = tags.getBoolean("allowCamelPack");
+        this.isTemperatureResistance = tags.getBoolean("isTemperatureResistance");
+        this.isTemperatureSealed = tags.getBoolean("isTemperatureSealed");
 	}
 
 	@Override
@@ -149,21 +161,23 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		float sanity = (float)config.get(category, APName[7], 0.00).getDouble(0.00);
 		float air = (float)config.get(category, APName[8], 0.00).getDouble(0.00);
 		String filename = config.getConfigFile().getName();
-		
+
 		Object item = Item.itemRegistry.getObject(name);
 		boolean allowCamelPack = true;
 		if (item instanceof ItemArmor && ((ItemArmor)item).armorType == 1)
 		{
 			allowCamelPack = config.get(category, APName[9], true).getBoolean(true);
 		}
-		
-		ArmorProperties entry = new ArmorProperties((Item)item, name, nightTemp, shadeTemp, sunTemp, nightMult, shadeMult, sunMult, sanity, air, allowCamelPack, filename);
+        boolean isTemperatureResistance = config.get(category, APName[10], false).getBoolean(false);
+        boolean isTemperatureSealed = config.get(category, APName[11], false).getBoolean(false);
+
+		ArmorProperties entry = new ArmorProperties((Item)item, name, nightTemp, shadeTemp, sunTemp, nightMult, shadeMult, sunMult, sanity, air, allowCamelPack, filename, isTemperatureResistance, isTemperatureSealed);
 
 		// If item already exist and current file hasn't completely been loaded do this
 		if(EM_Settings.armorProperties.containsKey(name) && !EM_ConfigHandler.loadedConfigs.contains(filename)) {
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Armor - "+ name.toUpperCase() +" was already added from "+ EM_Settings.armorProperties.get(name).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
 		}
-		
+
 		EM_Settings.armorProperties.put(name, entry);
 	}
 
@@ -179,34 +193,36 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		config.get(category, APName[6], sunMult).getDouble(sunMult);
 		config.get(category, APName[7], sanity).getDouble(sanity);
 		config.get(category, APName[8], air).getDouble(air);
+        config.get(category, APName[10], isTemperatureResistance).getBoolean(isTemperatureResistance);
+        config.get(category, APName[11], isTemperatureSealed).getBoolean(isTemperatureSealed);
 	}
-	
+
 	@Override
 	public void GenDefaults()
 	{
 		@SuppressWarnings("unchecked")
 		Iterator<Item> itemList = Item.itemRegistry.iterator();
-		
+
 		while(itemList.hasNext())
 		{
 			Item regItem = itemList.next();
-			
+
 			if(!(regItem instanceof ItemArmor))
 			{
 				continue;
 			}
-			
+
 			ItemArmor armor = (ItemArmor)regItem;
 			String[] regName = Item.itemRegistry.getNameForObject(armor).split(":");
-			
+
 			if(regName.length <= 0)
 			{
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + armor.getUnlocalizedName());
 				continue;
 			}
-			
+
 			File armorFile = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(regName[0]) + ".cfg");
-			
+
 			if(!armorFile.exists())
 			{
 				try
@@ -218,12 +234,12 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 					continue;
 				}
 			}
-			
+
 			Configuration config = new Configuration(armorFile, true);
 			config.load();
-			
+
 			String catName = this.categoryName() + "." + EnviroUtils.replaceULN(armor.getUnlocalizedName() +"_"+ regName[1]);
-			
+
 			if(armor == Items.diamond_helmet || armor == Items.diamond_chestplate || armor == Items.diamond_leggings || armor == Items.diamond_boots || (armor.getArmorMaterial() == ArmorMaterial.DIAMOND && EM_Settings.genConfigs))
 			{
 				config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
@@ -235,7 +251,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[6], 0.9D).getDouble(0.9D);
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
-				
+
 				if(armor.armorType == 1)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
@@ -251,7 +267,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[6], 1.1D).getDouble(1.1D);
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
-				
+
 				if(armor.armorType == 1)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
@@ -267,7 +283,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[6], 1.2D).getDouble(1.2D);
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
-				
+
 				if(armor.armorType == 1)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
@@ -283,7 +299,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[6], 1.0D).getDouble(1.0D);
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
-				
+
 				if(armor.armorType == 1)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
@@ -300,13 +316,13 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[6], 1.0D).getDouble(1.0D);
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
-				
+
 				if(armor.armorType == 1)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}*/
 			}
-			
+
 			config.save();
 		}
 	}
@@ -325,19 +341,19 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non armor object!", new Exception());
 			return;
 		}
-		
+
 		ItemArmor armor = (ItemArmor)obj;
-		
+
 		String[] regName = Item.itemRegistry.getNameForObject(armor).split(":");
-		
+
 		if(regName.length <= 0)
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + armor.getUnlocalizedName());
 			return;
 		}
-		
+
 		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(armor.getUnlocalizedName() +"_"+ regName);
-		
+
 		config.addCustomCategoryComment(catName, "");
 		config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
 		config.get(catName, APName[1], 0.0D).getDouble(0.0D);
@@ -348,7 +364,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		config.get(catName, APName[6], 1.0D).getDouble(1.0D);
 		config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 		config.get(catName, APName[8], 0.0D).getDouble(0.0D);
-		
+
 		if(armor.armorType == 1)
 		{
 			config.get(catName, APName[9], true).getBoolean(true);
@@ -365,10 +381,10 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	public void customLoad()
 	{
 	}
-	
+
 	static
 	{
-		APName = new String[10];
+		APName = new String[12];
 		APName[0] = "01.ID";
 		APName[1] = "02.Temp Add - Night";
 		APName[2] = "03.Temp Add - Shade";
@@ -379,5 +395,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		APName[7] = "08.Sanity";
 		APName[8] = "09.Air";
 		APName[9] = "10.Allow Camel Pack";
+        APName[10] = "11.Is Temperature Resistance";
+        APName[11] = "12.Is Temperature Sealed";
 	}
 }

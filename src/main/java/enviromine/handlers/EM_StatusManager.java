@@ -47,10 +47,13 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
 
@@ -945,74 +948,171 @@ public class EM_StatusManager
             }
         }
     if(isHbmLoaded()) {
-// For player
-    if (entityLiving instanceof EntityPlayer) {
-        EntityPlayer player = (EntityPlayer) entityLiving;
+//TODO
+// HBM COMPAT For player
+    if (entityLiving instanceof EntityPlayer player) {
         if (ArmorFSB.hasFSBArmor(player)) {
             ItemStack plate = player.inventory.armorInventory[2];
             ArmorFSB chestplate = (ArmorFSB) plate.getItem();
 
             if (!entityLiving.isPotionActive(Potion.fireResistance) && !(chestplate.fireproof)) {
-                if (entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                    ambientTemperature = 200F;
-                    riseSpeed = 1.0F;
-                } else if (entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                    ambientTemperature = 75F;
-                    riseSpeed = 0.3F;
+                if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
+                    riseSpeed = EM_Settings.RiseSpeedLava;
+                } else if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                    ambientTemperature = EM_Settings.BurningambientTemperature;
                 } else if (entityLiving.isBurning() && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) ) {
-                    if (ambientTemperature <= 75F) {
-                        ambientTemperature = 75F;
+                    if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+                        ambientTemperature = EM_Settings.BurningambientTemperature;
                     }
 
-                    if (riseSpeed < 0.1F) {
-                        riseSpeed = 0.1F;
+                    if (riseSpeed < EM_Settings.RiseSpeedMin) {
+                        riseSpeed = EM_Settings.RiseSpeedMin;
                     }
                 }
             }
         }
-// No armor, but still player
+//TODO
+// HBM COMPAT No FSBarmor, but still player
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
-            if (entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava) {
-                ambientTemperature = 200F;
-                riseSpeed = 1.0F;
-            } else if (entityLiving.isBurning()) {
-                if (ambientTemperature <= 75F) {
-                    ambientTemperature = 75F;
+            ItemStack helmet = entityLiving.getEquipmentInSlot(4);
+            ItemStack plate = entityLiving.getEquipmentInSlot(3);
+            ItemStack legs = entityLiving.getEquipmentInSlot(2);
+            ItemStack boots = entityLiving.getEquipmentInSlot(1);
+            ArmorProperties helmetprops = null;
+            ArmorProperties plateprops = null;
+            ArmorProperties legsprops = null;
+            ArmorProperties bootsprops = null;
+            boolean ImmunityBurning = false;
+            boolean ImmunityFull = false;
+            if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+            if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
+            if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+            if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+            if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+                if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+                    ImmunityBurning = true;
+                    ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+                } else {
+                    ImmunityBurning = false;
+                }
+            }
+
+            if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null){
+                if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+                    ImmunityBurning = true;
+                    ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+                } else {
+                    ImmunityBurning = false;
+                }
+            }
+
+            if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
+                if(ImmunityBurning) {
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature/2F;
+                    riseSpeed = EM_Settings.RiseSpeedLava/2F;
+                } else {
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
+                    riseSpeed = EM_Settings.RiseSpeedLava;
+                }
+            } else if (entityLiving.isBurning() && !ImmunityBurning) {
+                if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+                    ambientTemperature = EM_Settings.BurningambientTemperature;
                 }
 
-                if (riseSpeed < 0.1F) {
-                    riseSpeed = 0.1F;
+                if (riseSpeed < EM_Settings.RiseSpeedMin) {
+                    riseSpeed = EM_Settings.RiseSpeedMin;
                 }
             }
         }
     }
-    // For other entities that NOT player
+//TODO
+// HBM COMPAT For other entities that NOT player
     else if (!(entityLiving instanceof EntityPlayer) && !entityLiving.isPotionActive(Potion.fireResistance)) {
-        if (entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava) {
-            ambientTemperature = 200F;
-            riseSpeed = 1.0F;
-        } else if (entityLiving.isBurning()) {
-            if (ambientTemperature <= 75F) {
-                ambientTemperature = 75F;
+        ItemStack helmet = entityLiving.getEquipmentInSlot(4);
+        ItemStack plate = entityLiving.getEquipmentInSlot(3);
+        ItemStack legs = entityLiving.getEquipmentInSlot(2);
+        ItemStack boots = entityLiving.getEquipmentInSlot(1);
+        ArmorProperties helmetprops = null;
+        ArmorProperties plateprops = null;
+        ArmorProperties legsprops = null;
+        ArmorProperties bootsprops = null;
+        boolean ImmunityBurning = false;
+        boolean ImmunityFull = false;
+        if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+        if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
+        if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+        if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+        if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+            if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+                ImmunityBurning = true;
+                ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+            } else {
+                ImmunityBurning = false;
+            }
+        }
+
+        if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
+            if(ImmunityBurning) {
+                ambientTemperature = EM_Settings.LavaBlocksambientTemperature/2F;
+                riseSpeed = EM_Settings.RiseSpeedLava/2F;
+            } else {
+                ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
+                riseSpeed = EM_Settings.RiseSpeedLava;
+            }
+        } else if (entityLiving.isBurning() && !ImmunityBurning) {
+            if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+                ambientTemperature = EM_Settings.BurningambientTemperature;
             }
 
-            if (riseSpeed < 0.1F) {
-                riseSpeed = 0.1F;
+            if (riseSpeed < EM_Settings.RiseSpeedMin) {
+                riseSpeed = EM_Settings.RiseSpeedMin;
             }
         }
     }
 }
+//TODO
+// NOT HBM
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
-            if (entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava) {
-                ambientTemperature = 200F;
-                riseSpeed = 1.0F;
-            } else if (entityLiving.isBurning()) {
-                if (ambientTemperature <= 75F) {
-                    ambientTemperature = 75F;
+
+        ItemStack helmet = entityLiving.getEquipmentInSlot(4);
+        ItemStack plate = entityLiving.getEquipmentInSlot(3);
+        ItemStack legs = entityLiving.getEquipmentInSlot(2);
+        ItemStack boots = entityLiving.getEquipmentInSlot(1);
+        ArmorProperties helmetprops = null;
+        ArmorProperties plateprops = null;
+        ArmorProperties legsprops = null;
+        ArmorProperties bootsprops = null;
+        boolean ImmunityBurning = false;
+        boolean ImmunityFull = false;
+        if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+        if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
+        if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+        if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+        if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+            if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+                ImmunityBurning = true;
+                ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+            } else {
+                ImmunityBurning = false;
+            }
+        }
+            if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
+                if(ImmunityBurning) {
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature/2F;
+                    riseSpeed = EM_Settings.RiseSpeedLava/2F;
+                } else {
+                    ambientTemperature = EM_Settings.LavaBlocksambientTemperature;
+                    riseSpeed = EM_Settings.RiseSpeedLava;
                 }
 
-                if (riseSpeed < 0.1F) {
-                    riseSpeed = 0.1F;
+            } else if (entityLiving.isBurning() && !ImmunityBurning) {
+                if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+                    ambientTemperature = EM_Settings.BurningambientTemperature;
+                }
+
+                if (riseSpeed < EM_Settings.RiseSpeedMin) {
+                    riseSpeed = EM_Settings.RiseSpeedMin;
                 }
             }
         }
@@ -1032,7 +1132,7 @@ public class EM_StatusManager
 			{
 				riseSpeed = 0.01F;
 			}
-			ambientTemperature += 2F;
+			ambientTemperature += EM_Settings.SprintambientTemperature;
 		}
 
 		if(dimensionProp != null && dimensionProp.override)
@@ -1065,17 +1165,6 @@ public class EM_StatusManager
 		}
 		return data;
 	}
-
-    // Day/Night const
-    //public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon, also affects at the function decrease | minimum function value
-    //public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; //Will be at midnight, this/2 at dawn|dusk, also affects at the function increase | maximum function value
-
-    //Time const
-//    public static final float DAY_TEMPERATURE = EM_Settings.biome_DAY_TEMPERATURE; // Will be at noon
-//    public static final float NIGHT_TEMPERATURE = EM_Settings.biome_NIGHT_TEMPERATURE; // Will be at midnight
-//    public static final float DAWN_TEMPERATURE = EM_Settings.biome_DAWN_TEMPERATURE; // Will be at dawn
-//    public static final float DUSK_TEMPERATURE = EM_Settings.biome_DUSK_TEMPERATURE; // Will be at dusk
-
 
     // Function to calculate temperature change
     public static float calculateTemperatureChange(float currentTime, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {

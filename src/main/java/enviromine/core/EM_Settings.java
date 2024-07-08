@@ -46,14 +46,24 @@ public class EM_Settings
 
 	public static int loggerVerbosity;
 
-    public static boolean DeathFromHeartAttack;
 
+    //Fork changes
+
+    //ToDo: EM_StatusManager
+    public static float LavaBlocksambientTemperature = 200F;
+    public static float BurningambientTemperature = 75F;
+    public static float RiseSpeedMin = 0.1F;
+    public static float RiseSpeedLava = 1F;
+
+    public static float SprintambientTemperature = 2F;
+    //ToDo: EM_StatusManager
+
+
+    public static boolean DeathFromHeartAttack;
     public static int HeartAttackTimeToDie;
     public static int HbmGasMaskBreakMultiplier;
-
     public static int EnviromineGasMaskBreakMultiplier;
     public static int HbmGasMaskBreakChanceNumber;
-
     public static boolean SulfurDioxideGasDebugLogger;
     public static boolean CarbonMonoxideGasDebugLogger;
     public static boolean HydrogenSulfideGasDebugLogger;
@@ -64,19 +74,12 @@ public class EM_Settings
     public static int SulfurDioxideSeverePoisoningTime;
     public static int SulfurDioxidePoisoningLevel;
     public static int SulfurDioxideSeverePoisoningLevel;
-
     public static int SulfurDioxidePoisoningChance;
-
-//SulfurDioxide
-
 //CarbonMonoxide
     public static int CarbonMonoxidePoisoningAmplifier;
     public static int CarbonMonoxidePoisoningTime;
     public static int CarbonMonoxidePoisoningLevel;
-
     public static int CarbonMonoxidePoisoningChance;
-//CarbonMonoxide
-
 //HydrogenSulfide
     public static int HydrogenSulfidePoisoningAmplifier;
     public static int HydrogenSulfideSeverePoisoningAmplifier;
@@ -85,14 +88,11 @@ public class EM_Settings
     public static int HydrogenSulfidePoisoningLevel;
     public static int HydrogenSulfideSeverePoisoningLevel;
     public static int HydrogenSulfidePoisoningChance;
-//HydrogenSulfide
 
     public static boolean hardcoregases = false;
-
 	public static boolean enablePhysics = false;
 	public static boolean enableLandslide = true;
 	public static boolean waterCollapse = true; // Added out of necessity/annoyance -- AstroTibs
-
 	public static float blockTempDropoffPower = 0.75F;
 	public static int scanRadius = 6;
 	public static float auraRadius = 0.5F;
@@ -182,7 +182,6 @@ public class EM_Settings
 	public static HashMap<Integer,BiomeProperties> biomeProperties = new HashMap<Integer,BiomeProperties>();
 	@ShouldOverride({Integer.class, DimensionProperties.class})
 	public static HashMap<Integer,DimensionProperties> dimensionProperties = new HashMap<Integer,DimensionProperties>();
-
 	public static HashMap<String,StabilityType> stabilityTypes = new HashMap<String,StabilityType>();
 
 	@ShouldOverride({String.class, RotProperties.class})

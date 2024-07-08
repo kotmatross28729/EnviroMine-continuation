@@ -342,15 +342,15 @@ public class EnviroDataTracker
 
        // HOT THINGS START
      if (trackedEntity instanceof EntityPlayer player) {
-         if (ArmorFSB.hasFSBArmor(player)) {
-               ItemStack plate = player.inventory.armorInventory[2];
-               ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-
-               if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance)) && (chestplate != null && chestplate.fireproof || chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                   bodyTemp += 0.0F; // Do nothing
-               }
-           }
-           else if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
+//         if (ArmorFSB.hasFSBArmor(player)) {
+//               ItemStack plate = player.inventory.armorInventory[2];
+//               ArmorFSB chestplate = (ArmorFSB) plate.getItem();
+//
+//               if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance)) && (chestplate != null && chestplate.fireproof || chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+//                   bodyTemp += 0.0F; // Do nothing
+//               }
+//           }
+           /*else*/ if (!(ArmorFSB.hasFSBArmor(player)) && HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
                bodyTemp += 0.1F;
            }
        }
@@ -725,13 +725,7 @@ public class EnviroDataTracker
 				}
                 // Sanity checks
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
-				/**if(
-						sanity <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities) ? 10F - (float)werewolfLevel*0.75F : 10F)
-						&& !(EM_Settings.witcheryVampireImmunities && isVampire))
-				{
-					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 2));
-				}*/
-                /**else*/ if(!isCreative && sanity <= 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
+                if(!isCreative && sanity <= 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
                 {
                     if (DeathFromHeartAttack){
                         heartattacktimer += 1;
@@ -744,8 +738,6 @@ public class EnviroDataTracker
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration, 3));
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 3));
                     }
-
-                    //logger.fatal("Сurrent heartattacktimer :" + heartattacktimer + "/" + HeartAttackTimeToDie/2);
 
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 4));
 
@@ -768,8 +760,6 @@ public class EnviroDataTracker
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration, 2));
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 2));
                     }
-                    //logger.fatal("Сurrent heartattacktimer :" + heartattacktimer + "/" + HeartAttackTimeToDie);
-
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 3));
 
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 3));
@@ -782,7 +772,6 @@ public class EnviroDataTracker
                 else if(!isCreative && sanity > 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
                     heartattacktimer = 0;
-                    //logger.fatal("Сurrent heartattacktimer :" + heartattacktimer + "/" + HeartAttackTimeToDie);
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 1));
@@ -791,7 +780,6 @@ public class EnviroDataTracker
                 else if(!isCreative && sanity > 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0))
                 {
                     heartattacktimer = 0;
-                    //logger.fatal("Сurrent heartattacktimer :" + heartattacktimer + "/" + HeartAttackTimeToDie);
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 0));
@@ -799,7 +787,6 @@ public class EnviroDataTracker
 				else if(!isCreative && sanity > 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 75F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0) )
 				{
                     heartattacktimer = 0;
-                    //logger.fatal("Сurrent heartattacktimer :" + heartattacktimer + "/" + HeartAttackTimeToDie);
                     trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 0));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 0));
 

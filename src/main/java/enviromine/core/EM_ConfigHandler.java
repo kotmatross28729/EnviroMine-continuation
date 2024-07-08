@@ -57,13 +57,13 @@ public class EM_ConfigHandler
 	private static final String CATEGORY_WORLD_GENERATION = "World Generation";
 	private static final String CATEGORY_MOD_INTEGRATION = "Mod Integration";
 
+    private static final String CATEGORY_KOTMATROSS_FORK_CHANGES = "Kotmatross Fork Changes";
+
 	// Values
 	public static final int HUD_ID_AIR_QUALITY = 3;
 	public static final int HUD_ID_BODY_TEMPERATURE = 0;
 	public static final int HUD_ID_HYDRATION = 1;
 	public static final int HUD_ID_SANITY = 2;
-
-    public static final int HUD_ID_BLOOD = 4;
 
 	/**
 	 * Configuration version number. If changed the version file will be reset to defaults to prevent glitches
@@ -249,10 +249,6 @@ public class EM_ConfigHandler
 		{
 			HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_SANITY));
 		}
-        else if (!HUDRegistry.isActiveHudItem(HUDRegistry.getHudItemByID(HUD_ID_BLOOD)))
-        {
-            HUDRegistry.enableHudItem(HUDRegistry.getHudItemByID(HUD_ID_BLOOD));
-        }
 	}
 
 	public static int initConfig()
@@ -332,39 +328,51 @@ public class EM_ConfigHandler
 		config.get("Do not Edit", "Current Config Version", CONFIG_VERSION).getString();
 
 
-		// --------------- //
-		// --- General --- //
-		// --------------- //
+        // -------------------- //
+        // --- Fork Changes --- //
+        // -------------------- //
+        EM_Settings.HbmGasMaskBreakMultiplier = config.getInt("Hbm Gas Mask filter break multiplier", CATEGORY_KOTMATROSS_FORK_CHANGES, 10, 0, 65536,  "Multiplier for breaking a hbm gas mask filter");
+        EM_Settings.HbmGasMaskBreakChanceNumber = config.getInt("Hbm Gas Mask filter break chance number", CATEGORY_KOTMATROSS_FORK_CHANGES, 15, 0, 100,  "The number on which the chance of reducing the durability of the hbm filter depends. The lower the number, the greater the chance that the filter durability will decrease");
+        EM_Settings.EnviromineGasMaskBreakMultiplier = config.getInt("Gas Masks break multiplier", CATEGORY_KOTMATROSS_FORK_CHANGES, 10, 0, 65536,  "A number that is subtracted from the current enviromine mask filter durability if the player is in a gas block, that is suffocating");
 
-		//EM_Settings.updateCheck = config.get(Configuration.CATEGORY_GENERAL, "Check For Updates", EM_Settings.updateCheck).getBoolean(EM_Settings.updateCheck);
-        EM_Settings.HbmGasMaskBreakMultiplier = config.getInt("Hbm Gas Mask filter break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "Multiplier for breaking a hbm gas mask filter");
-        EM_Settings.HbmGasMaskBreakChanceNumber = config.getInt("Hbm Gas Mask filter break chance number",Configuration.CATEGORY_GENERAL, 15, 0, 100,  "The number on which the chance of reducing the durability of the hbm filter depends. The lower the number, the greater the chance that the filter durability will decrease");
-        EM_Settings.EnviromineGasMaskBreakMultiplier = config.getInt("Gas Masks break multiplier",Configuration.CATEGORY_GENERAL, 10, 0, 65536,  "A number that is subtracted from the current enviromine mask filter durability if the player is in a gas block, that is suffocating");
+        EM_Settings.SulfurDioxideGasDebugLogger = config.getBoolean("SulfurDioxideGasDebugLogger", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "Don't use unless you are a developer");
+        EM_Settings.CarbonMonoxideGasDebugLogger = config.getBoolean("CarbonMonoxideGasDebugLogger", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "Don't use unless you are a developer");
+        EM_Settings.HydrogenSulfideGasDebugLogger = config.getBoolean("HydrogenSulfideGasDebugLogger", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "Don't use unless you are a developer");
 
-        EM_Settings.SulfurDioxideGasDebugLogger = config.getBoolean("SulfurDioxideGasDebugLogger", Configuration.CATEGORY_GENERAL, false, "Don't use unless you are a developer");
-        EM_Settings.CarbonMonoxideGasDebugLogger = config.getBoolean("CarbonMonoxideGasDebugLogger", Configuration.CATEGORY_GENERAL, false, "Don't use unless you are a developer");
-        EM_Settings.HydrogenSulfideGasDebugLogger = config.getBoolean("HydrogenSulfideGasDebugLogger", Configuration.CATEGORY_GENERAL, false, "Don't use unless you are a developer");
+        EM_Settings.SulfurDioxidePoisoningAmplifier = config.getInt("Sulfur Dioxide Poisoning Amplifier",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "How dense the Sulfur Dioxide gas should  be, in order for it to have the opportunity to poison you?");
+        EM_Settings.SulfurDioxideSeverePoisoningAmplifier = config.getInt("Sulfur Dioxide Severe Poisoning Amplifier",CATEGORY_KOTMATROSS_FORK_CHANGES, 10, 1, 65536,  "How dense the Sulfur Dioxide gas should  be, in order for it to have the opportunity to severe poison you?");
+        EM_Settings.SulfurDioxidePoisoningTime = config.getInt("Sulfur Dioxide Poisoning Time",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "How long does Sulfur Dioxide poisoning last?");
+        EM_Settings.SulfurDioxideSeverePoisoningTime = config.getInt("Sulfur Dioxide Severe Poisoning Time",CATEGORY_KOTMATROSS_FORK_CHANGES, 600, 1, 65536,  "How long does severe Sulfur Dioxide poisoning last?");
+        EM_Settings.SulfurDioxidePoisoningLevel = config.getInt("Sulfur Dioxide Poisoning Level",CATEGORY_KOTMATROSS_FORK_CHANGES, 0, 0, 65536,  "What level of poisoning applies when player is Sulfur Dioxide poisoned?");
+        EM_Settings.SulfurDioxideSeverePoisoningLevel = config.getInt("Sulfur Dioxide Severe Poisoning Level",CATEGORY_KOTMATROSS_FORK_CHANGES, 1, 0, 65536,  "What level of poisoning applies when player is severe Sulfur Dioxide poisoned?");
+        EM_Settings.SulfurDioxidePoisoningChance = config.getInt("Chance of Sulfur Dioxide Poisoning",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Sulfur Dioxide poisoning if the player has no protection?");
 
-        EM_Settings.SulfurDioxidePoisoningAmplifier = config.getInt("Sulfur Dioxide Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "How dense the Sulfur Dioxide gas should  be, in order for it to have the opportunity to poison you?");
-        EM_Settings.SulfurDioxideSeverePoisoningAmplifier = config.getInt("Sulfur Dioxide Severe Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 10, 1, 65536,  "How dense the Sulfur Dioxide gas should  be, in order for it to have the opportunity to severe poison you?");
-        EM_Settings.SulfurDioxidePoisoningTime = config.getInt("Sulfur Dioxide Poisoning Time",Configuration.CATEGORY_GENERAL, 200, 1, 65536,  "How long does Sulfur Dioxide poisoning last?");
-        EM_Settings.SulfurDioxideSeverePoisoningTime = config.getInt("Sulfur Dioxide Severe Poisoning Time",Configuration.CATEGORY_GENERAL, 600, 1, 65536,  "How long does severe Sulfur Dioxide poisoning last?");
-        EM_Settings.SulfurDioxidePoisoningLevel = config.getInt("Sulfur Dioxide Poisoning Level",Configuration.CATEGORY_GENERAL, 0, 0, 65536,  "What level of poisoning applies when player is Sulfur Dioxide poisoned?");
-        EM_Settings.SulfurDioxideSeverePoisoningLevel = config.getInt("Sulfur Dioxide Severe Poisoning Level",Configuration.CATEGORY_GENERAL, 1, 0, 65536,  "What level of poisoning applies when player is severe Sulfur Dioxide poisoned?");
-        EM_Settings.SulfurDioxidePoisoningChance = config.getInt("Chance of Sulfur Dioxide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Sulfur Dioxide poisoning if the player has no protection?");
+        EM_Settings.CarbonMonoxidePoisoningAmplifier = config.getInt("Carbon Monoxide Poisoning Amplifier",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "How dense the Carbon Monoxide gas should  be, in order for it to have the opportunity to poison you?");
+        EM_Settings.CarbonMonoxidePoisoningTime = config.getInt("Carbon Monoxide Poisoning Time",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "How long does Carbon Monoxide poisoning last?");
+        EM_Settings.CarbonMonoxidePoisoningLevel = config.getInt("Carbon Monoxide Poisoning Level",CATEGORY_KOTMATROSS_FORK_CHANGES, 0, 0, 65536,  "What level of poisoning applies when player is Carbon Monoxide poisoned?");
+        EM_Settings.CarbonMonoxidePoisoningChance = config.getInt("Chance of Carbon Monoxide Poisoning",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
 
-        EM_Settings.CarbonMonoxidePoisoningAmplifier = config.getInt("Carbon Monoxide Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "How dense the Carbon Monoxide gas should  be, in order for it to have the opportunity to poison you?");
-        EM_Settings.CarbonMonoxidePoisoningTime = config.getInt("Carbon Monoxide Poisoning Time",Configuration.CATEGORY_GENERAL, 200, 1, 65536,  "How long does Carbon Monoxide poisoning last?");
-        EM_Settings.CarbonMonoxidePoisoningLevel = config.getInt("Carbon Monoxide Poisoning Level",Configuration.CATEGORY_GENERAL, 0, 0, 65536,  "What level of poisoning applies when player is Carbon Monoxide poisoned?");
-        EM_Settings.CarbonMonoxidePoisoningChance = config.getInt("Chance of Carbon Monoxide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        EM_Settings.HydrogenSulfidePoisoningAmplifier = config.getInt("Hydrogen Sulfide Poisoning Amplifier",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "How dense the Hydrogen Sulfide gas should  be, in order for it to have the opportunity to poison you?");
+        EM_Settings.HydrogenSulfideSeverePoisoningAmplifier = config.getInt("Hydrogen Sulfide Severe Poisoning Amplifier",CATEGORY_KOTMATROSS_FORK_CHANGES, 10, 1, 65536,  "How dense the Hydrogen Sulfide gas should  be, in order for it to have the opportunity to severe poison you?");
+        EM_Settings.HydrogenSulfidePoisoningTime = config.getInt("Hydrogen Sulfide Poisoning Time",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "How long does Hydrogen Sulfide poisoning last?");
+        EM_Settings.HydrogenSulfideSeverePoisoningTime = config.getInt("Hydrogen Sulfide Severe Poisoning Time",CATEGORY_KOTMATROSS_FORK_CHANGES, 600, 1, 65536,  "How long does severe Hydrogen Sulfide poisoning last?");
+        EM_Settings.HydrogenSulfidePoisoningLevel = config.getInt("Hydrogen Sulfide Poisoning Level",CATEGORY_KOTMATROSS_FORK_CHANGES, 0, 0, 65536,  "What level of poisoning applies when player is Hydrogen Sulfide poisoned?");
+        EM_Settings.HydrogenSulfideSeverePoisoningLevel = config.getInt("Hydrogen Sulfide Severe Poisoning Level",CATEGORY_KOTMATROSS_FORK_CHANGES, 1, 0, 65536,  "What level of poisoning applies when player is severe Hydrogen Sulfide poisoned?");
+        EM_Settings.HydrogenSulfidePoisoningChance = config.getInt("Chance of Hydrogen Sulfide Poisoning",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Hydrogen Sulfide poisoning if the player has no protection?");
 
-        EM_Settings.HydrogenSulfidePoisoningAmplifier = config.getInt("Hydrogen Sulfide Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "How dense the Hydrogen Sulfide gas should  be, in order for it to have the opportunity to poison you?");
-        EM_Settings.HydrogenSulfideSeverePoisoningAmplifier = config.getInt("Hydrogen Sulfide Severe Poisoning Amplifier",Configuration.CATEGORY_GENERAL, 10, 1, 65536,  "How dense the Hydrogen Sulfide gas should  be, in order for it to have the opportunity to severe poison you?");
-        EM_Settings.HydrogenSulfidePoisoningTime = config.getInt("Hydrogen Sulfide Poisoning Time",Configuration.CATEGORY_GENERAL, 200, 1, 65536,  "How long does Hydrogen Sulfide poisoning last?");
-        EM_Settings.HydrogenSulfideSeverePoisoningTime = config.getInt("Hydrogen Sulfide Severe Poisoning Time",Configuration.CATEGORY_GENERAL, 600, 1, 65536,  "How long does severe Hydrogen Sulfide poisoning last?");
-        EM_Settings.HydrogenSulfidePoisoningLevel = config.getInt("Hydrogen Sulfide Poisoning Level",Configuration.CATEGORY_GENERAL, 0, 0, 65536,  "What level of poisoning applies when player is Hydrogen Sulfide poisoned?");
-        EM_Settings.HydrogenSulfideSeverePoisoningLevel = config.getInt("Hydrogen Sulfide Severe Poisoning Level",Configuration.CATEGORY_GENERAL, 1, 0, 65536,  "What level of poisoning applies when player is severe Hydrogen Sulfide poisoned?");
-        EM_Settings.HydrogenSulfidePoisoningChance = config.getInt("Chance of Hydrogen Sulfide Poisoning",Configuration.CATEGORY_GENERAL, 5, 1, 65536,  "What is the chance of Hydrogen Sulfide poisoning if the player has no protection?");
+        EM_Settings.DeathFromHeartAttack = config.getBoolean("Death From Heart Attack", CATEGORY_KOTMATROSS_FORK_CHANGES, true, "Should a player die from a heart attack if sanity < 5?");
+        EM_Settings.hardcoregases = config.getBoolean("Hardcore gases", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "If true, then all gases will be invisible");
+        EM_Settings.HeartAttackTimeToDie = config.getInt("Heart Attack Time To Die",CATEGORY_KOTMATROSS_FORK_CHANGES, 20, 1, 65536,  "Time after which the player dies from a heart attack (for sanity > 0 but <5, it will be the same number. For sanity = 0, it will be this number / 2). To calculate the time, multiply this number by 3, this will be the time in seconds");
+
+        EM_Settings.LavaBlocksambientTemperature = config.getFloat("LavaBlocksambientTemperature", CATEGORY_KOTMATROSS_FORK_CHANGES, 200F, -65536F, 65536F, "Ambient Temperature will be equal to this number if the player is in lava (or half this number if the armor has 11.Is Temperature Resistance = true)");
+        EM_Settings.BurningambientTemperature = config.getFloat("BurningambientTemperature", CATEGORY_KOTMATROSS_FORK_CHANGES, 75F, -65536F, 65536F, "Ambient Temperature will be equal to this number if the player is on fire (or the player in lava and wearing HEV/Envsuit from hbm's ntm)");
+        EM_Settings.RiseSpeedMin = config.getFloat("RiseSpeedMin", CATEGORY_KOTMATROSS_FORK_CHANGES, 0.1F, -65536F, 65536F, "Minimum RiseSpeed if player is on fire");
+        EM_Settings.RiseSpeedLava = config.getFloat("RiseSpeedLava", CATEGORY_KOTMATROSS_FORK_CHANGES, 1F, -65536F, 65536F, "RiseSpeed if player in lava (or half this number if the armor has 12.Is Temperature Sealed = true)");
+        EM_Settings.SprintambientTemperature = config.getFloat("SprintambientTemperature", CATEGORY_KOTMATROSS_FORK_CHANGES, 2F, -65536F, 65536F, "The player's temperature will increase by this number when he runs");
+
+        // --------------- //
+        // --- General --- //
+        // --------------- //
 
         EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
@@ -378,10 +386,7 @@ public class EM_ConfigHandler
 		EM_Settings.keepStatus = config.get(Configuration.CATEGORY_GENERAL, "Keep statuses on death", EM_Settings.keepStatus).getBoolean(EM_Settings.keepStatus);
 		EM_Settings.renderGear = config.get(Configuration.CATEGORY_GENERAL, "Render Gear", EM_Settings.renderGear ,"Render 3d gear worn on player. Must reload game to take effect").getBoolean(EM_Settings.renderGear);
 		EM_Settings.finiteWater = config.get(Configuration.CATEGORY_GENERAL, "Finite Water", EM_Settings.finiteWater).getBoolean(EM_Settings.finiteWater);
-        EM_Settings.DeathFromHeartAttack = config.getBoolean("Death From Heart Attack", Configuration.CATEGORY_GENERAL, true, "Should a player die from a heart attack if sanity < 5?");
-        EM_Settings.hardcoregases = config.getBoolean("Hardcore gases", Configuration.CATEGORY_GENERAL, false, "If true, then all gases will be invisible");
-        EM_Settings.HeartAttackTimeToDie = config.getInt("Heart Attack Time To Die",Configuration.CATEGORY_GENERAL, 20, 1, 65536,  "Time after which the player dies from a heart attack (for sanity > 0 but <5, it will be the same number. For sanity = 0, it will be this number / 2). To calculate the time, multiply this number by 3, this will be the time in seconds");
-		EM_Settings.cauldronHeatingBlocks = config.get(Configuration.CATEGORY_GENERAL, "Cauldron Heating Blocks", EM_Settings.cauldronHeatingBlocks,
+        EM_Settings.cauldronHeatingBlocks = config.get(Configuration.CATEGORY_GENERAL, "Cauldron Heating Blocks", EM_Settings.cauldronHeatingBlocks,
 				"List of blocks that will purify a cauldron's water when placed underneath the cauldron. Of the form mod:block:meta. Append no meta value in order to use any meta."
 				).getStringList();
 		EM_Settings.blockTempDropoffPower = config.getFloat("Block Temperature Dropoff Power", Configuration.CATEGORY_GENERAL, 0.75F, 0.25F, 2F, "How rapidly the temperature influence of blocks falls off with your distance from them. 2 is realistic for open areas; 1 for large enclosed areas, and lower for more claustrophobic areas. Classic EnviroMine used 0.5.");
