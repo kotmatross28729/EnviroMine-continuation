@@ -49,15 +49,34 @@ public class EM_Settings
 
     //Fork changes
 
-    //ToDo: EM_StatusManager
-    public static float LavaBlocksambientTemperature = 200F;
+    //EM_StatusManager
+    public static float LavaBlockAmbientTemperature = 200F;
     public static float BurningambientTemperature = 75F;
     public static float RiseSpeedMin = 0.1F;
     public static float RiseSpeedLava = 1F;
 
-    public static float SprintambientTemperature = 2F;
-    //ToDo: EM_StatusManager
+    public static float RiseSpeedLavaDecr = 0.3F;
 
+    public static float SprintambientTemperature = 2F;
+
+    public static float SweatTemperature = 38F;
+    public static float SweatDehydrate = 0.1F;
+    public static float SweatHydration = 75F;
+    public static float SweatBodyTemp = 0.01F;
+
+
+    //EnviroDataTracker
+    public static float StrongArmorMaxTemp = 100.0F;
+    public static float LightArmorMaxTemp = 37.7F;
+
+    public static float StrongArmorMinTemp = 30.0F;
+    public static float LightArmorMinTemp = 35.5F;
+
+    public static float BodyTempBest = 0.1F;
+    public static float BodyTempVeryGood = 0.2F;
+    public static float BodyTempGood = 0.3F;
+    public static float BodyTempBad = 0.5F;
+    public static float BodyTempWorst = 0.8F;
 
     public static boolean DeathFromHeartAttack;
     public static int HeartAttackTimeToDie;
@@ -88,8 +107,9 @@ public class EM_Settings
     public static int HydrogenSulfidePoisoningLevel;
     public static int HydrogenSulfideSeverePoisoningLevel;
     public static int HydrogenSulfidePoisoningChance;
-
     public static boolean hardcoregases = false;
+
+
 	public static boolean enablePhysics = false;
 	public static boolean enableLandslide = true;
 	public static boolean waterCollapse = true; // Added out of necessity/annoyance -- AstroTibs

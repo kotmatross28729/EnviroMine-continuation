@@ -16,6 +16,7 @@ import enviromine.client.gui.UI_Settings;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.EM_StatusManager;
+import enviromine.trackers.properties.ArmorProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.EnviroUtils;
@@ -284,8 +285,6 @@ public class EnviroDataTracker
 
 		if (trackedEntity.isPotionActive(Potion.fireResistance) && bodyTemp > 36.6F) {bodyTemp = 36.6F;} // IF you have fire resistance, ambient temperature can never "feel" higher than 36.6
 
-    //TODO : Refactor all this shit
-// Literally other code below: if -> else if, if -> else if, if -> else if, ...
 /// Hbm's Nuclear Tech armor that gives fire protection also prevents you from dying from enviromine heatstroke / hypothermia
    if(isHbmLoaded()) {
        // COLD THINGS START
@@ -296,70 +295,129 @@ public class EnviroDataTracker
                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
                if(chestplate != null) {
 // Adjust the temperature if armor allows
-                   if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < 100.0F) {
+                   if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
                        bodyTemp = 36.6F;
-                   } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < 37.7F) {
+                   } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp) {
+                       bodyTemp = 36.6F;
+                   } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
+                       bodyTemp = 36.6F;
+                   } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
                        bodyTemp = 36.6F;
                    }
+
 // Greatly reduce the effect of ntm temperature if the armor is completely sealed
                    if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate.fireproof)) {
-                       bodyTemp -= 0.1F;
+                       bodyTemp -= EM_Settings.BodyTempBest;
                    } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate.fireproof)) {
-                       bodyTemp -= 0.2F;
+                       bodyTemp -= EM_Settings.BodyTempVeryGood;
                    }
 // Reduce the effect of the NTM temperature if the armor has little resistance
-                   else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                       bodyTemp -= 0.1F;
-                   } else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                       bodyTemp -= 0.3F;
+                   else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                       bodyTemp -= EM_Settings.BodyTempGood;
+                   } else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                       bodyTemp -= EM_Settings.BodyTempBest;
                    } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                       bodyTemp -= 0.5F;
+                       bodyTemp -= EM_Settings.BodyTempBad;
                    }
                }
            }
 // No armor, but still player
-           else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
-               bodyTemp -= 0.3F;
-           }
            else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
-               bodyTemp -= 0.5F;
+               bodyTemp -= EM_Settings.BodyTempBad;
+           }
+           else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
+               bodyTemp -= EM_Settings.BodyTempGood;
            }
            else if (HbmLivingProps.isFrozen(trackedEntity)) {
-               bodyTemp -= 0.8F;
+               bodyTemp -= EM_Settings.BodyTempWorst;
            }
        }
 // For other entities that NOT player
-        if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
-           bodyTemp -= 0.3F;
-       }
-       else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
-           bodyTemp -= 0.5F;
+       if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
+           bodyTemp -= EM_Settings.BodyTempBad;
+       } else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
+           bodyTemp -= EM_Settings.BodyTempGood;
        }
        else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.isFrozen(trackedEntity)) {
-           bodyTemp -= 0.8F;
+           bodyTemp -= EM_Settings.BodyTempWorst;
        }
        // COLD THINGS END
 
-
        // HOT THINGS START
      if (trackedEntity instanceof EntityPlayer player) {
-//         if (ArmorFSB.hasFSBArmor(player)) {
-//               ItemStack plate = player.inventory.armorInventory[2];
-//               ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-//
-//               if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance)) && (chestplate != null && chestplate.fireproof || chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-//                   bodyTemp += 0.0F; // Do nothing
-//               }
-//           }
-           /*else*/ if (!(ArmorFSB.hasFSBArmor(player)) && HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
-               bodyTemp += 0.1F;
+        if (!(ArmorFSB.hasFSBArmor(player)) && HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
+               bodyTemp += EM_Settings.BodyTempBest;
            }
        }
      else if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
-           bodyTemp += 0.1F;
+           bodyTemp += EM_Settings.BodyTempBest;
        }
        // HOT THINGS END
-}
+       ItemStack plate = trackedEntity.getEquipmentInSlot(3);
+       ItemStack legs = trackedEntity.getEquipmentInSlot(2);
+       ItemStack boots = trackedEntity.getEquipmentInSlot(1);
+       ArmorProperties helmetprops = null;
+       ArmorProperties plateprops = null;
+       ArmorProperties legsprops = null;
+       ArmorProperties bootsprops = null;
+       boolean ImmunityBurning = false;
+       boolean ImmunityFull = false;
+       if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+       if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
+       if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+       if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+       if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+           if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+               ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
+               ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+               // All armor isTemperatureSealed ? ImmunityFull = true
+           } else {
+               ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
+           }
+       }
+       if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){
+           bodyTemp = 36.6F; //Translation = even if in lava - 36.6
+       } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
+           bodyTemp = 36.6F; //Translation = if on fire - 36.6, if in lava... a lot
+       } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
+           bodyTemp = 36.6F;
+       } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
+           bodyTemp = 36.6F;
+       }
+} else {
+       ItemStack plate = trackedEntity.getEquipmentInSlot(3);
+       ItemStack legs = trackedEntity.getEquipmentInSlot(2);
+       ItemStack boots = trackedEntity.getEquipmentInSlot(1);
+       ArmorProperties helmetprops = null;
+       ArmorProperties plateprops = null;
+       ArmorProperties legsprops = null;
+       ArmorProperties bootsprops = null;
+       boolean ImmunityBurning = false;
+       boolean ImmunityFull = false;
+       if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+       if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
+       if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+       if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+       if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+           if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+               ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
+               ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+               // All armor isTemperatureSealed ? ImmunityFull = true
+           } else {
+               ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
+           }
+       }
+       if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){
+               bodyTemp = 36.6F;
+       } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
+           bodyTemp = 36.6F;
+       } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
+           bodyTemp = 36.6F;
+       } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
+           bodyTemp = 36.6F;
+       }
+   }
+
         if(bodyTemp - relTemp > 0) // Cold
 		{
 			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
@@ -385,13 +443,13 @@ public class EnviroDataTracker
 		// Hydration checks
 		if(hydration > 0F && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
 		{
-			if(bodyTemp >= 38.02F)
+			if(bodyTemp >= EM_Settings.SweatTemperature)
 			{
-				dehydrate(0.1F);
+				dehydrate(EM_Settings.SweatDehydrate);
 
-				if(hydration >= 75F)
+				if(hydration >= EM_Settings.SweatHydration)
 				{
-					bodyTemp -= 0.01F;
+					bodyTemp -= EM_Settings.SweatBodyTemp;
 				}
 			}
 
