@@ -21,8 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 
-import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
-
 public class ArmorProperties implements SerialisableProperty, PropertyBase
 {
 	public static final ArmorProperties base = new ArmorProperties();

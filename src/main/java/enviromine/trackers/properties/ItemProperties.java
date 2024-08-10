@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Iterator;
 
 import com.hbm.items.ModItems;
-import cpw.mods.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -26,7 +25,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
-import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+import static enviromine.core.EnviroMine.isHbmLoaded;
 
 public class ItemProperties implements SerialisableProperty, PropertyBase {
     public static final ItemProperties base = new ItemProperties();
@@ -340,7 +339,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 			}
 
             else if(isHbmLoaded()) {
-             if(item == ModItems.cigarette_normal || item == ModItems.crackpipe || item == ModItems.cigarette)
+             if(/*item == ModItems.cigarette_normal || */item == ModItems.crackpipe || item == ModItems.cigarette)
             {
                 config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
                 config.get(category, IPName[1], -1).getInt(-1);
@@ -349,8 +348,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                 config.get(category, IPName[4], 0D).getDouble(0D);
                 config.get(category, IPName[5], 0D).getDouble(0D);
                 config.get(category, IPName[6], -0.025D).getDouble(-0.025D);
-                config.get(category, IPName[7], item == ModItems.cigarette_normal ? -5D : item == ModItems.crackpipe ? -1D : -10D).getDouble(item == ModItems.cigarette_normal ? -5D : item == ModItems.crackpipe ? -1D : -10D);
-                config.get(category, IPName[8], item == ModItems.cigarette_normal ? 15D : item == ModItems.crackpipe ? 40D : 30D).getDouble(item == ModItems.cigarette_normal ? 15D : item == ModItems.crackpipe ? 40D : 30D);
+                config.get(category, IPName[7], /*item == ModItems.cigarette_normal ? -5D : */item == ModItems.crackpipe ? -1D : -10D).getDouble(/*item == ModItems.cigarette_normal ? -5D : */item == ModItems.crackpipe ? -1D : -10D);
+                config.get(category, IPName[8], /*item == ModItems.cigarette_normal ? 15D : */item == ModItems.crackpipe ? 40D : 30D).getDouble(/*item == ModItems.cigarette_normal ? 15D : */item == ModItems.crackpipe ? 40D : 30D);
                 config.get(category, IPName[9], 5D).getDouble(5D);
                 config.get(category, IPName[10], 37D).getDouble(37D);
                 config.get(category, IPName[11], 0).getInt(0);

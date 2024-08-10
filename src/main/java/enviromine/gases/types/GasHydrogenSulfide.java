@@ -19,7 +19,7 @@ import net.minecraft.util.MathHelper;
 
 
 import static enviromine.core.EM_Settings.*;
-import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+import static enviromine.core.EnviroMine.isHbmLoaded;
 import static enviromine.trackers.EnviroDataTracker.logger;
 
 public class GasHydrogenSulfide extends EnviroGas

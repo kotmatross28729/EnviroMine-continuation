@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.block.*;
 import org.apache.logging.log4j.Level;
 
@@ -29,7 +28,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
 
-import static enviromine.trackers.EnviroDataTracker.isTCLoaded;
+import static enviromine.core.EnviroMine.isTCLoaded;
 
 public class EnviroUtils
 {

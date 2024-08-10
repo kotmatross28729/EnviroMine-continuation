@@ -7,7 +7,6 @@ import com.hbm.items.armor.ArmorFSB;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroDamageSource;
@@ -82,16 +81,7 @@ public class EnviroDataTracker
 
     public int heartattacktimer = 0;
 	public int updateTimer = 0;
-
-
-    public static boolean isHbmLoaded() {
-        return Loader.isModLoaded("hbm");
-    }
-    public static boolean isTCLoaded() {
-        return Loader.isModLoaded("Thaumcraft");
-    }
-
-	private Side side = FMLCommonHandler.instance().getSide();
+    private Side side = FMLCommonHandler.instance().getSide();
 
 	//Sound Time
 	public long chillPrevTime = 0;
@@ -203,7 +193,7 @@ public class EnviroDataTracker
 			}
 		}
 
-        if (isHbmLoaded()) {
+        if (EnviroMine.isHbmLoaded()) {
             if (helmet != null && !isCreative) {
 
                 if (helmet.getItem() instanceof IGasMask) { // Check if the helmet is a mask
@@ -286,7 +276,7 @@ public class EnviroDataTracker
 		if (trackedEntity.isPotionActive(Potion.fireResistance) && bodyTemp > 36.6F) {bodyTemp = 36.6F;} // IF you have fire resistance, ambient temperature can never "feel" higher than 36.6
 
 /// Hbm's Nuclear Tech armor that gives fire protection also prevents you from dying from enviromine heatstroke / hypothermia
-   if(isHbmLoaded()) {
+   if(EnviroMine.isHbmLoaded()) {
        // COLD THINGS START
 // For player
        if (trackedEntity instanceof EntityPlayer player) {

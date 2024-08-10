@@ -47,15 +47,12 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
-import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+import static enviromine.core.EnviroMine.isHbmLoaded;
 
 public class EM_StatusManager
 {
