@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 
 public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdditionalSpawnData
 {
-
+//я даже трогать это не собираюсь
 	public boolean isAnvil2 = true;
 	public boolean isBreakingAnvil2;
 	public int fallHurtMax2;

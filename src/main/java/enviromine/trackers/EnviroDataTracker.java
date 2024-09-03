@@ -46,6 +46,8 @@ import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
 
 public class EnviroDataTracker
 {
+    //TODO: весь код переписать нахуй
+    //                               ахуеные коментарии, очень даже понятно к чему они - kotmatross(злой)
     public static final Logger logger = LogManager.getLogger("ENVIROMINE_DEBUG_LOGGER");
 	public EntityLivingBase trackedEntity;
 
@@ -142,6 +144,7 @@ public class EnviroDataTracker
 			}
 		}
 
+//TODO TA CHO ZA NAHUI
 		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F) && enviroData[EM_StatusManager.SANITY_DELTA_INDEX] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[EM_StatusManager.SANITY_DELTA_INDEX] = (float)(-1F * EM_Settings.sanityMult);
@@ -253,7 +256,7 @@ public class EnviroDataTracker
 		float temperatureDropSpeed = enviroData[EM_StatusManager.BODY_TEMP_DROP_SPEED_INDEX];
 		float temperatureRiseSpeed = enviroData[EM_StatusManager.BODY_TEMP_RISE_SPEED_INDEX];
 
-		float relTemp = airTemp + 12F;
+		float relTemp = airTemp + 12F; //TODO dsafsdf
 
 		boolean isVampire = false;
 //		boolean isWerewolf = false;
@@ -286,7 +289,7 @@ public class EnviroDataTracker
                if(chestplate != null) {
 // Adjust the temperature if armor allows
                    if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
-                       bodyTemp = 36.6F;
+                       bodyTemp = 36.6F; //TODO nuhaya sebe
                    } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp) {
                        bodyTemp = 36.6F;
                    } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
@@ -313,7 +316,7 @@ public class EnviroDataTracker
            }
 // No armor, but still player
            else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
-               bodyTemp -= EM_Settings.BodyTempBad;
+               bodyTemp -= EM_Settings.BodyTempBad; //TODO PIZDEC NAHUI
            }
            else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
                bodyTemp -= EM_Settings.BodyTempGood;
@@ -397,7 +400,7 @@ public class EnviroDataTracker
                ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
            }
        }
-       if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){
+       if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){ //TODO GREGATECHA
                bodyTemp = 36.6F;
        } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
            bodyTemp = 36.6F;
@@ -456,7 +459,7 @@ public class EnviroDataTracker
 			}
 		} else if(enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == -1 && trackedEntity instanceof EntityAnimal)
 		{
-			hydrate(0.05F);
+			hydrate(0.05F); //TODO s
 		} else if(hydration <= 0F)
 		{
 			hydration = 0;
@@ -580,7 +583,7 @@ public class EnviroDataTracker
 					tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, camelPackFill-1);
 					hydrate((float)EM_Settings.hydrationMult);
 
-					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F)
+					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F) //TODO zaebalsa
 					{
 						bodyTemp -= EM_Settings.tempMult/10F;
 					}
@@ -606,7 +609,7 @@ public class EnviroDataTracker
 		// Apply side effects
 
 
-		if(airTemp <= 10F && bodyTemp <= 35F || bodyTemp <= 30F)
+		if(airTemp <= 10F && bodyTemp <= 35F || bodyTemp <= 30F) //TODO nihua
 		{
 			timeBelow10 += 1;
 		} else
@@ -651,7 +654,7 @@ public class EnviroDataTracker
 				if(!trackedEntity.isPotionActive(Potion.fireResistance))
 				{
 					if(bodyTemp >= 39F && enableHeat && EM_Settings.enableHeatstrokeGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
-					{
+					{//TODO PIZDEC EBUCHIY
                         if(bodyTemp >= 1000F)
                         {
                             trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 10));
@@ -698,7 +701,7 @@ public class EnviroDataTracker
 						)
 				{
 					if(
-							bodyTemp <= 30F
+							bodyTemp <= 30F //TODO ebaT'
 							&& !(trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire)
 							)
 					{
@@ -771,7 +774,7 @@ public class EnviroDataTracker
 				if(hydration <= 0F && !(EM_Settings.witcheryVampireImmunities && isVampire))
 				{
 					trackedEntity.attackEntityFrom(EnviroDamageSource.dehydrate, 4.0F);
-				}
+				} //TODO DA BLYAT, VSE HARDCODED
                 // Sanity checks
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
                 if(!isCreative && sanity <= 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
@@ -873,9 +876,6 @@ public class EnviroDataTracker
 			}
 		}
 
-
-
-
 		this.fixFloatingPointErrors();
 		EM_StatusManager.saveTracker(this);
 	}
@@ -883,7 +883,7 @@ public class EnviroDataTracker
 	@SideOnly(Side.CLIENT)
 	private void playSoundWithTimeCheck(int time, String sound, float volume, float pitch)
 	{
-		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000)
+		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000) //ЕЩВЩ TODO hardocededed
 		{
 			Minecraft.getMinecraft().thePlayer.playSound("enviromine:chill",  UI_Settings.breathVolume, 1.0F);
 			chillPrevTime = Minecraft.getSystemTime();
@@ -908,6 +908,7 @@ public class EnviroDataTracker
 			return EntityProperties.base.getProperty(entity).shouldTrack;
 		}
 
+        //TODO ПИЗДЕЦ ПОЛНЫЙ
 		if(entity.isEntityUndead() || entity instanceof EntityMob)
 		{
 			return false;
@@ -1026,7 +1027,7 @@ public class EnviroDataTracker
 	public void resetData()
 	{
 		airQuality = 100F;
-		bodyTemp = 36.6F;
+		bodyTemp = 36.6F; //SPEAK INGLAND
 		hydration = 100F;
 		sanity = 100F;
 

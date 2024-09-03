@@ -23,11 +23,11 @@ public class UI_Settings {
 	public static int screenWidth;
 	public static int screenHeight;
 	public static boolean overlay = true;
-	
-	public static void writeToNBT(NBTTagCompound nbt) 
+
+	public static void writeToNBT(NBTTagCompound nbt)
 	{
-		
-    	nbt.setBoolean("ShowGuiIcons", ShowGuiIcons); 
+
+    	nbt.setBoolean("ShowGuiIcons", ShowGuiIcons);
     	nbt.setFloat("guiScale", guiScale);
     	nbt.setBoolean("sweatParticals", sweatParticals);
     	nbt.setBoolean("insaneParticals", insaneParticals);
@@ -37,17 +37,13 @@ public class UI_Settings {
     	nbt.setBoolean("breathSound", breathSound);
     	nbt.setInteger("breathPause", breathPause);
     	nbt.setFloat("breathVolume", breathVolume);
-    	nbt.setBoolean("minimalHud",minimalHud); 
+    	nbt.setBoolean("minimalHud",minimalHud);
     	nbt.setBoolean("overlay", overlay);
-
-    	
-		// TODO Auto-generated method stub
-		
 	}
-	
+
 	public static void readFromNBT(NBTTagCompound nbt)
 	{
-	
+
 		ShowGuiIcons = nbt.hasKey("ShowGuiIcons") ? nbt.getBoolean("ShowGuiIcons") : ShowGuiIcons;
 		guiScale = nbt.hasKey("guiScale") ? nbt.getFloat("guiScale") : guiScale;
 		sweatParticals = nbt.hasKey("sweatParticals") ? nbt.getBoolean("sweatParticals") : sweatParticals;
@@ -58,7 +54,7 @@ public class UI_Settings {
 		breathSound = nbt.hasKey("breathSound") ? nbt.getBoolean("breathSound") : breathSound;
 		breathPause = nbt.hasKey("breathPause") ? nbt.getInteger("breathPause") : breathPause;
 		breathVolume = nbt.hasKey("breathVolume") ? nbt.getFloat("breathVolume") : breathVolume;
-		minimalHud = nbt.hasKey("minimalHud") ? nbt.getBoolean("minimalHud") : minimalHud; 
+		minimalHud = nbt.hasKey("minimalHud") ? nbt.getBoolean("minimalHud") : minimalHud;
 		overlay = nbt.hasKey("overlay") ? nbt.getBoolean("overlay") : overlay;
 	}
 }

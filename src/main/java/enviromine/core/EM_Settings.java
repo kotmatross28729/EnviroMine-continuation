@@ -78,6 +78,8 @@ public class EM_Settings
     public static float BodyTempBad = 0.5F;
     public static float BodyTempWorst = 0.8F;
 
+    public static float BodyTempSleep = 10F;
+
     public static boolean DeathFromHeartAttack;
     public static int HeartAttackTimeToDie;
     public static int HbmGasMaskBreakMultiplier;

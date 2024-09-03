@@ -337,6 +337,8 @@ public class EM_ConfigHandler
         EM_Settings.BodyTempGood = config.getFloat("1-3_HBMBodyTempGood", CATEGORY_KOTMATROSS_FORK_CHANGES,0.3F , -65536F, 65536F, "Hbm, subtracted if: HEV/Environment Suit suit and hbm temperature influence < -700 & > -1000, or no fsb armor and influence < -500 & > -700");
         EM_Settings.BodyTempBad = config.getFloat("1-4_HBMBodyTempBad", CATEGORY_KOTMATROSS_FORK_CHANGES,0.5F , -65536F, 65536F, "Hbm, subtracted if: HEV/Environment Suit and player is frozen, or no fsb armor and influence < -700 & > -1000");
         EM_Settings.BodyTempWorst = config.getFloat("1-5_HBMBodyTempWorst", CATEGORY_KOTMATROSS_FORK_CHANGES,0.8F , -65536F, 65536F, "Hbm, subtracted if: no fsb armor and hbm.isFrozen");
+        EM_Settings.BodyTempSleep = config.getFloat("1-5-2_BodyTempSleep", CATEGORY_KOTMATROSS_FORK_CHANGES,10F , -65536F, 65536F, "Maybe add");
+
 
         EM_Settings.StrongArmorMaxTemp = config.getFloat("1-6_StrongArmorMaxTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 100F, -65536F, 65536F, "If the armor has 12.Is Temperature Sealed = true, or the armor is ArmorFSB from hbm's ntm, which has the \"Fireproof\" characteristic, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature does not exceed n");
         EM_Settings.StrongArmorMinTemp = config.getFloat("1-6-2_StrongArmorMinTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 30F, -65536F, 65536F, "If the armor has 12.Is Temperature Sealed = true, or the armor is ArmorFSB from hbm's ntm, which has the \"Fireproof\" characteristic, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature is not less than n");

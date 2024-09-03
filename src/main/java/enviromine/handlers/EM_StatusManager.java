@@ -52,10 +52,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import static enviromine.core.EM_Settings.BodyTempSleep;
 import static enviromine.core.EnviroMine.isHbmLoaded;
 
 public class EM_StatusManager
 {
+    //Current mod maintainer is eblan tupoi
+    //                                      - kotmatross28729, 03.09.2024
 	public static final int AIR_QUALITY_DELTA_INDEX = 0;
 	public static final int AMBIENT_TEMP_INDEX = 1;
 	public static final int NEAR_LAVA_INDEX = 2;
@@ -96,7 +99,7 @@ public class EM_StatusManager
 
 		tracker.updateTimer += 1;
 
-		if(tracker.updateTimer >= 30)
+		if(tracker.updateTimer >= 30) //TODO PIZDEC BLYAT
 		{
 			tracker.updateData();
 
@@ -239,8 +242,8 @@ public class EM_StatusManager
 
         if (!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
             if (dimensionProp == null || !dimensionProp.override || dimensionProp.darkAffectSanity) {
-                sanityStartRate = -0.01F;
-                sanityRate = -0.01F;
+                sanityStartRate = -0.01F; //TODO
+                sanityRate = -0.01F; ///GUH?
             }
         }
 
@@ -383,7 +386,7 @@ public class EM_StatusManager
                     ItemBlock itemBlock = (ItemBlock) stack.getItem();
                     if (itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.worldObj.provider.hasNoSky) && sanityBoost <= 0.1F) {
                         if (((BlockFlower) itemBlock.field_150939_a).getPlantType(entityLiving.worldObj, i, j, k) == EnumPlantType.Plains) {
-                            sanityBoost = 0.1F;
+                            sanityBoost = 0.1F; ///TODO BANBODFSNG
                         }
                     }
                 }
@@ -391,20 +394,22 @@ public class EM_StatusManager
         }
 
         if (lightLev > 1 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality = 2F;
-            sanityRate = 0.5F;
+            quality = 2F; //TODO sdafuhgasdfghuiosdhfg
+            sanityRate = 0.5F; //DFHSDL:FHLKSDHGJKSHDGLKHSKDGKLFHLSKDGHJKLHDFGKSHDLGKJH
         } else if (sanityRate <= sanityStartRate && sanityRate > -0.1F && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
-            sanityRate = -0.1F;
+            sanityRate = -0.1F; //ASFDASDFASDASFASD
         }
 
         if (dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality = 2F;
+            quality = 2F;//f
         }
 
 
         float biomeTemperature = (surroundingBiomeTempSamplesSum / surroundingBiomeTempSamplesCount);
         float maxHighAltitudeTemp = -30F; // Max temp at high altitude
         float minLowAltitudeTemp = 30F; // Min temp at low altitude (Geothermal Heating)
+
+        //TODO CHANGE FUCKING HARDCODE
 
         if (!entityLiving.worldObj.provider.hasNoSky) {
             if (entityLiving.posY < 48) {
@@ -424,7 +429,7 @@ public class EM_StatusManager
 
         if (entityLiving instanceof EntityPlayer) {
             if (((EntityPlayer) entityLiving).isPlayerSleeping()) {
-                biomeTemperature += 10F;
+                biomeTemperature += BodyTempSleep;
             }
         }
 
@@ -433,7 +438,7 @@ public class EM_StatusManager
         } else {
             float biomeTemperatureRain = 6F;
             float biomeTemperatureThunder = 8F;
-            float biomeTemperatureShade = 2.5F;
+            float biomeTemperatureShade = 2.5F; //the FUCK is that
 
             boolean biomeTemperatureRainBool = false;
             boolean biomeTemperatureThunderBool = false;
@@ -448,7 +453,7 @@ public class EM_StatusManager
                     biomeTemperatureThunder = biomeOverride.TemperatureThunderDecrease;
                     biomeTemperatureRainBool = biomeOverride.TemperatureRainBool;
                     biomeTemperatureThunderBool = biomeOverride.TemperatureThunderBool;
-                    biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
+                    biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //Uh what
                 }
             }
 
@@ -460,34 +465,33 @@ public class EM_StatusManager
                     dropSpeed = 0.01F;
                 }
             } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && biomeTemperatureThunderBool) {
-
-
                 biomeTemperature -= biomeTemperatureThunder;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
-                    dropSpeed = 0.01F;
+                    dropSpeed = 0.01F; //TODO BLYAT'
                 }
             }
 
         } // Dimension Overrides End
 
-        float biomeTemperatureShade = 2.5F;
+        float biomeTemperatureShade = 2.5F; //who the fuck writing that code? (-grammar)
         if (biome != null) {
             BiomeProperties biomeOverride = null;
             if (BiomeProperties.base.hasProperty(biome)) {
                 biomeOverride = BiomeProperties.base.getProperty(biome);
             } if (biomeOverride != null && biomeOverride.biomeOveride) {
-                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
+                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //A, it was me
             }
         }
         // 	Shade
         if (!entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.worldObj.isRaining()) {
-            biomeTemperature -= biomeTemperatureShade;
+            biomeTemperature -= biomeTemperatureShade; //WHA-
         }
 
         if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
 
+//|--------------------------------------------|
 //| Ticks                    | Time of the day |
 //|--------------------------|-----------------|
 //| 24000 (0)                |Sunrise          |
@@ -499,6 +503,7 @@ public class EM_StatusManager
 //| 18000                    |Midnight         |
 //| 18000 - 23000            |After midnight   |
 //| 23000 - 24000 (0)        |Dawn             |
+//|--------------------------------------------|
 
             boolean isDesertBiome = false;
             float DesertBiomeTemperatureMultiplier = 1F;
@@ -525,11 +530,24 @@ public class EM_StatusManager
                 }
             }
 
-            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L);
+            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L); //TODO BLYAHA MUHA PIZDEC NAHUI
 //LogManager.getLogger().fatal("currentTime " + currentTime);
 
             float temperatureChange = calculateTemperatureChange(currentTime, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
 //LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
+
+
+            //TODO pizdec
+/**
+            float temperatureChange =
+                calculateTemperatureChange2ultrasupermegapro(
+                    currentTime,
+                    biome_DAWN_TEMPERATURE,
+                    biome_DAY_TEMPERATURE,
+                    biome_DUSK_TEMPERATURE,
+                    biome_NIGHT_TEMPERATURE
+                );
+*/
 
             biomeTemperature -= temperatureChange;
 
@@ -594,17 +612,17 @@ public class EM_StatusManager
                     if (villager.getProfession() == 2) // Priest
                     {
                         if (sanityBoost < 5F) {
-                            sanityBoost = 5F;
+                            sanityBoost = 5F; //TODO BLYAAAAAAAAAAAAAAAAAAT
                         }
 
                         ((EntityPlayer) entityLiving).addStat(EnviroAchievements.tradingFavours, 1);
                     } else if (villager.getProfession() == 0 && isDay) // Farmer
                     {
                         if (tracker.hydration < 50F) {
-                            tracker.hydration = 100F;
+                            tracker.hydration = 100F; //TODO CYKA NAHUI BLYAT
 
                             if (tracker.bodyTemp >= 38F) {
-                                tracker.bodyTemp -= 1F;
+                                tracker.bodyTemp -= 1F; //TODO PIZDEC NAHUI YA EBAL
                             }
                             entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.drink", 1.0F, 1.0F);
                             villager.playSound("mob.villager.yes", 1.0F, 1.0F);
@@ -615,7 +633,7 @@ public class EM_StatusManager
                     } else if (villager.getProfession() == 4 && isDay) // Butcher
                     {
                         FoodStats food = ((EntityPlayer) entityLiving).getFoodStats();
-                        if (food.getFoodLevel() <= 10) {
+                        if (food.getFoodLevel() <= 10) { //TODO AHUET'
                             food.setFoodLevel(20);
                             entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.burp", 0.5F, entityLiving.worldObj.rand.nextFloat() * 0.1F + 0.9F);
                             villager.playSound("mob.villager.yes", 1.0F, 1.0F);
@@ -694,7 +712,7 @@ public class EM_StatusManager
         if (validEntities > 0) {
             avgEntityTemp /= validEntities;
 
-            if (biomeTemperature < avgEntityTemp - 12F) {
+            if (biomeTemperature < avgEntityTemp - 12F) { //TODO CHEGO
                 biomeTemperature = (biomeTemperature + (avgEntityTemp - 12F)) / 2;
             }
         }
@@ -884,6 +902,7 @@ public class EM_StatusManager
             fireProt = 1F - fireProt / 18F;
         }
 
+        //TODO BLYAT
         if (entityLiving.isInWater()) {
             if (biomeTemperature > 25F) {
                 if (biomeTemperature > 50F) {
@@ -900,18 +919,18 @@ public class EM_StatusManager
         if (blockAndItemTempInfluence > biomeTemperature) {
             ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / 2;
             if (blockAndItemTempInfluence > (biomeTemperature + 5F)) {
-                riseSpeed = 0.005F;
+                riseSpeed = 0.005F; //TODO nu blyat, skolko uje mojno to?
             }
         } else {
             ambientTemperature = biomeTemperature;
         }
 
         if (entityLiving.getActivePotionEffect(Potion.hunger) != null) {
-            dehydrateBonus += 0.1F;
+            dehydrateBonus += 0.1F; //TODO wopr
         }
 
         if (nearLava) {
-            if (riseSpeed <= 0.005F) {
+            if (riseSpeed <= 0.005F) { //TODO blyat.
                 riseSpeed = 0.005F;
             }
             dehydrateBonus += 0.05F;
@@ -939,13 +958,13 @@ public class EM_StatusManager
         }
 
         if (biome.getIntRainfall() == 0 && isDay) {
-            dehydrateBonus += 0.05F;
+            dehydrateBonus += 0.05F; //TODO SWOPRDM<LFJ
             if (animalHostility == 0) {
                 animalHostility = 1;
             }
         }
     if(isHbmLoaded()) {
-//TODO
+//TODO SKIP, JUST HIGHLIGHT
 // HBM COMPAT FSB Armor For player
         ItemStack helmet = entityLiving.getEquipmentInSlot(4);
         ItemStack plate0 = entityLiving.getEquipmentInSlot(3);
@@ -992,7 +1011,7 @@ public class EM_StatusManager
                 }
             }
         }
-//TODO
+//TODO SKIP, JUST HIGHLIGHT
 // HBM COMPAT No FSBarmor
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
             if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
@@ -1014,7 +1033,7 @@ public class EM_StatusManager
             }
         }
     }
-//TODO
+//TODO SKIP, JUST HIGHLIGHT
 // NOT HBM
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
         ItemStack helmet = entityLiving.getEquipmentInSlot(4);
@@ -1067,6 +1086,7 @@ public class EM_StatusManager
 
 		if(entityLiving.isSprinting())
 		{
+            //TODO not ][[][][
 			dehydrateBonus += 0.05F;
 			if(riseSpeed < 0.01F)
 			{
@@ -1109,7 +1129,7 @@ public class EM_StatusManager
     // Function to calculate temperature change
     public static float calculateTemperatureChange(float currentTime, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
         float temperatureChange;
-
+//Ama idiot
         // from 0 to 6000 ticks (dawn to noon)
         if (currentTime >= 0 && currentTime < 6000) {
             temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / 6000f) * currentTime;
@@ -1134,15 +1154,59 @@ public class EM_StatusManager
         return temperatureChange;
     }
 
+    public static float calculateTemperatureChange2ultrasupermegapro
+        //TODO make it not shit nahui
+        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        (
+        float currentTime,
+
+        float DAWN_TEMPERATURE,
+        float DAY_TEMPERATURE,
+        float DUSK_TEMPERATURE,
+        float NIGHT_TEMPERATURE,
+
+        float DAWN_TICKS,               //DEFAULT - 0
+        float NOON_TICKS,               //DEFAULT - 6000
+        float DUSK_TICKS,               //DEFAULT - 12000
+        float MIDNIGHT_TICKS,           //DEFAULT - 18000
+        float DAWN2_TICKS//BOOMPALKA FROM RISEWORLD30dfs54d4f64a5sdf654    //DEFAULT - 24000
+        //Lol, looks like some hashcode (ne adekvatniy, srazy vidno)
+        )
+    {
+        float temperatureChange;
+
+        // from DAWN_TICKS to NOON_TICKS
+        if (currentTime >= DAWN_TICKS && currentTime < NOON_TICKS) {
+            temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / NOON_TICKS) * currentTime;
+        }
+        // from NOON_TICKS to DUSK_TICKS
+        else if (currentTime >= NOON_TICKS && currentTime < DUSK_TICKS) {
+            temperatureChange = DAY_TEMPERATURE + ((DUSK_TEMPERATURE - DAY_TEMPERATURE) / NOON_TICKS) * (currentTime - NOON_TICKS);
+        }
+        // from DUSK_TICKS to MIDNIGHT_TICKS
+        else if (currentTime >= DUSK_TICKS && currentTime < MIDNIGHT_TICKS) {
+            temperatureChange = DUSK_TEMPERATURE + ((NIGHT_TEMPERATURE - DUSK_TEMPERATURE) / NOON_TICKS) * (currentTime - DUSK_TICKS);
+        }
+        // from MIDNIGHT_TICKS to DAWN2_TICKS
+        else if (currentTime >= MIDNIGHT_TICKS && currentTime < DAWN2_TICKS) {
+            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - DAWN_TEMPERATURE) / NOON_TICKS) * (currentTime - MIDNIGHT_TICKS);
+        }
+        else {
+            // If currentTime doesn't fall within the specified range
+            temperatureChange = 0;
+        }
+
+        return temperatureChange; //Ahauet'
+    }
+
+    //Nu i nahuya eto?
 	public static float getBiomeTemprature(int x, int y, BiomeGenBase biome)
 	{
 		float temp= 0F;
 
-
 		return temp;
 
 	}
-
 
 	public static void removeTracker(EnviroDataTracker tracker)
 	{
@@ -1188,6 +1252,7 @@ public class EM_StatusManager
 		tags.setFloat("ENVIRO_SAN", tracker.sanity);
 	}
 
+    //Pizdec prosto
 	public static void removeAllTrackers()
 	{
 		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
@@ -1200,6 +1265,7 @@ public class EM_StatusManager
 		trackerList.clear();
 	}
 
+    //EBANIY BLYAT'
 	public static void saveAndDeleteAllTrackers()
 	{
 		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();

@@ -27,7 +27,7 @@
 //	boolean hasChecked = false;
 //	public static String version;
 //	public static String lastSeen;
-//	
+//
 //	@SubscribeEvent
 //	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 //	{
@@ -35,17 +35,17 @@
 //		{
 //			return;
 //		}
-//		
+//
 //		hasChecked = true;
-//		
+//
 //		loadConfigLog();
-//		
+//
 //		loadWordPress();
-//		
+//
 //		displayUpdateCheck(event);
-//		
+//
 //	}
-//	
+//
 //	/**
 //	 * This will get grab Enviromines Change Logs
 //	 */
@@ -55,12 +55,12 @@
 //			WordPressPost.changeLog = getUrl("https://drone.io/github.com/Funwayguy/EnviroMine-1.7/files/build/libs/full_changelog.txt", true);
 //
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
+//			// TODO_ Auto-generated catch block
 //			EnviroMine.logger.log(Level.WARN, "Failed to get ChangeLog file!");
 //		}
 //
 //	}
-//	
+//
 //	/**
 //	 * This will grab Word Press Post Page and sent to parser
 //	 */
@@ -69,14 +69,14 @@
 //		try
 //		{
 //			String page = getUrl("https://enviromine.wordpress.com/news/feed/", true);
-//		
+//
 //			try {
 //				WordPressParser.main(page);
 //			} catch (Exception e) {
 //				EnviroMine.logger.log(Level.WARN, "Failed to parse WordPress News Page");
 //			}
-//			
-//			
+//
+//
 //		}catch(IOException e)
 //		{
 //			if(EM_Settings.updateCheck)
@@ -84,13 +84,13 @@
 //				EnviroMine.logger.log(Level.WARN, "Failed to get WordPress News Page!");
 //			}
 //		}
-//		
+//
 //	}
-//	
+//
 //	@SuppressWarnings("unused")
 //	private void displayUpdateCheck(PlayerLoggedInEvent event)
 //	{
-//		
+//
 //		// File link: http://bit.ly/1r4JJt3;
 //		// DO NOT CHANGE THIS!
 //		if(EM_Settings.VERSION == "FWG_" + "EM" + "_VER")
@@ -98,30 +98,30 @@
 //			event.player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "THIS COPY OF ENIVROMINE IS NOT FOR PUBLIC USE!"));
 //			return;
 //		}
-//		
+//
 //		try
 //		{
 //			String page = getUrl("http://bit.ly/1pwDr2o", true);
 //			String[] data = page.split("\\n");
-//			
+//
 //			String[] rawVer = data[0].trim().split("\\.");
 //			version = rawVer[0] + "." + rawVer[1] + "." + rawVer[2];
-//			
+//
 //			if(!EM_Settings.updateCheck)
 //			{
 //				return;
 //			}
-//			
+//
 //			//Debug stuff that shouldn't be printed to the user's chat window!
 //			/*for(int i = 0; i < data.length; i++)
 //			{
 //				event.player.addChatMessage(new ChatComponentText(EnumChatFormatting.RESET + "" + data[i].trim()));
 //			}*/
-//			
+//
 //			String http = data[0].trim();
-//			
+//
 //			int verStat = EnviroUtils.compareVersions(EM_Settings.VERSION, version);
-//			
+//
 //			if(verStat == -1)
 //			{
 //				event.player.addChatMessage(new ChatComponentTranslation("updatemsg.enviromine.available", version).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
@@ -148,7 +148,7 @@
 //			{
 //				event.player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + StatCollector.translateToLocalFormatted("updatemsg.enviromine.error")));
 //			}
-//			
+//
 //		} catch(IOException e)
 //		{
 //			if(EM_Settings.updateCheck)
@@ -157,7 +157,7 @@
 //			}
 //		}
 //	}
-//	
+//
 //	/**
 //	 * Grabs http webpage and returns data
 //	 * @param link
@@ -173,7 +173,7 @@
 //		con.setDoOutput(false);
 //		con.setReadTimeout(20000);
 //		con.setRequestProperty("Connection", "keep-alive");
-//		
+//
 //		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
 //		((HttpURLConnection)con).setRequestMethod("GET");
 //		con.setConnectTimeout(5000);
@@ -207,11 +207,11 @@
 //			buffer.append(g);
 //		}
 //		final String page = buffer.toString();
-//		
+//
 //		return page;
 //	}
 //
-//	
+//
 //	/**
 //	 *  This will update last seen post by player.
 //	 */
@@ -222,28 +222,28 @@
 //			lastSeen = WordPressPost.Posts.get(0).getPubDate();
 //		}
 //	}
-//	
+//
 //	/**
 //	 * This will compare last seen post with last post and return boolean
 //	 * @return
 //	 */
 //	public static boolean isNewPost()
 //	{
-//		if(lastSeen == null) return true; 
+//		if(lastSeen == null) return true;
 //
 //		 if(!WordPressPost.Posts.isEmpty())
 //		 {
 //			 WordPressPost lastPost = WordPressPost.Posts.get(0);
 //
-//		
+//
 //			 if(lastPost.getPubDate().toLowerCase().trim().equals(lastSeen.toLowerCase().trim()))
 //			 {
 //				 return false;
-//			 }		
+//			 }
 //		 }
 //		return true;
 //	}
-//	
+//
 //	public static void writeToNBT(NBTTagCompound nbt)
 //	{
 //		if(lastSeen != null)
@@ -251,13 +251,13 @@
 //			nbt.setString("LastSeen", lastSeen);
 //		}
 //	}
-//	
+//
 //	public static void readFromNBT(NBTTagCompound nbt)
 //	{
 //		if(nbt.hasKey("LastSeen"))
 //		{
-//			lastSeen = nbt.getString("LastSeen");	
+//			lastSeen = nbt.getString("LastSeen");
 //		}
-//		 
+//
 //	}
 //}
