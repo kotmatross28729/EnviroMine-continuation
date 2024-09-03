@@ -11,11 +11,12 @@ import java.util.jar.JarFile;
 
 public class ClassEnumerator
 {
+    //TODO ping, нафиг нужно?
 	public static Class<?> loadClass(String className) throws Exception
 	{
 		return Class.forName(className);
 	}
-	
+
 	public static void processDirectory(File directory, String pkgname, ArrayList<Class<?>> classes)
 	{
 		// Get the list of the files contained in the package
@@ -47,7 +48,7 @@ public class ClassEnumerator
 			}
 		}
 	}
-	
+
 	public static void processJarfile(String resource, String pkgname, ArrayList<Class<?>> classes)
 	{
 		String relPath = pkgname.replace('.', '/');
@@ -82,7 +83,7 @@ public class ClassEnumerator
 				}
 			}
 		}
-		
+
 		try
 		{
 			jarFile.close();
@@ -91,21 +92,21 @@ public class ClassEnumerator
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static ArrayList<Class<?>> getClassesForPackage(Package pkg)
 	{
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-		
+
 		String pkgname = pkg.getName();
 		String relPath = pkgname.replace('.', '/');
-		
+
 		// Get a File object for the package
 		URL resource = ClassLoader.getSystemClassLoader().getResource(relPath);
 		if(resource == null)
 		{
 			throw new RuntimeException("Unexpected problem: No resource for " + relPath);
 		}
-		
+
 		if(resource.toString().startsWith("jar:"))
 		{
 			processJarfile(resource.getPath(), pkgname, classes);
@@ -119,7 +120,7 @@ public class ClassEnumerator
 				throw new RuntimeException("Unexpected problem: Unable to get path from " + resource.getPath());
 			}
 		}
-		
+
 		return classes;
 	}
 }

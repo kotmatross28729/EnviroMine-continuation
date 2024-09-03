@@ -25,23 +25,23 @@ import net.minecraft.nbt.NBTTagList;
 public class PacketServerOverride implements IMessage
 {
 	protected NBTTagCompound tags = new NBTTagCompound();
-	
+
 	public PacketServerOverride()
 	{
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf)
 	{
 		tags = ByteBufUtils.readTag(buf);
 	}
-	
+
 	@Override
 	public void toBytes(ByteBuf buf)
 	{
 		ByteBufUtils.writeTag(buf, tags);
 	}
-	
+
 	public static class Handler implements IMessageHandler<PacketServerOverride, IMessage>
 	{
 		@SuppressWarnings({"unchecked", "rawtypes"})
@@ -53,18 +53,18 @@ public class PacketServerOverride implements IMessage
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.WARN, "AutoOverride attempted to run serverside! This should not happen!");
 				return null;
 			}
-			
+
 			NBTTagCompound tags = message.tags;
-			
+
 			Field[] fields = EM_Settings.class.getDeclaredFields();
-			
+
 			for(Field f : fields)
 			{
 				try
 				{
 					ShouldOverride anno = f.getAnnotation(ShouldOverride.class);
 					Class<?>[] clazzes;
-					
+
 					if(anno != null)
 					{
 						clazzes = anno.value();
@@ -72,7 +72,8 @@ public class PacketServerOverride implements IMessage
 					{
 						continue;
 					}
-					
+
+                    //TODO ping
 					if(!f.isAccessible()) // This is causing problems for some reason...
 					{
 						if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Field " + f.getName() + " is protected and cannot be synced!");
@@ -82,7 +83,7 @@ public class PacketServerOverride implements IMessage
 						if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Cannot sync non-static field " + f.getName() + "!");
 						continue;
 					}
-					
+
 					if(f.getType() == HashMap.class)
 					{
 						if(clazzes.length < 2)
@@ -90,25 +91,25 @@ public class PacketServerOverride implements IMessage
 							if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Annotation for field " + f.getName() + " (" + f.getType().getName() + ") is missing class types!");
 							continue;
 						}
-						
+
 						NBTTagList nbtList = tags.getTagList(f.getName(), 10);
 						HashMap map = new HashMap();
-						
+
 						for(int i = 0; i < nbtList.tagCount(); i++)
 						{
 							NBTTagCompound tag = nbtList.getCompoundTagAt(i);
 							Object keyObj = this.getNBTValue(tag, "key", clazzes[0]);
 							Object valObj = this.getNBTValue(tag, "value", clazzes[1]);
-							
+
 							if(keyObj == null || valObj == null)
 							{
 								if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Position " + i + " in HashMap " + f.getName() + " returned a null entry! Skipping...");
 								continue;
 							}
-							
+
 							map.put(keyObj, valObj);
 						}
-						
+
 						f.set(null, map);
 					} else if(f.getType() == ArrayList.class)
 					{
@@ -117,36 +118,36 @@ public class PacketServerOverride implements IMessage
 							if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Annotation for field " + f.getName() + " is missing class types!");
 							continue;
 						}
-						
+
 						Class<?> clazz = clazzes[0];
 						NBTTagList nbtList = tags.getTagList(f.getName(), 10);
 						ArrayList list = new ArrayList();
-						
+
 						for(int i = 0; i < nbtList.tagCount(); i++)
 						{
 							NBTTagCompound tag = nbtList.getCompoundTagAt(i);
 							Object valObj = this.getNBTValue(tag, "value", clazz);
-							
+
 							if(valObj == null)
 							{
 								if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Position " + i + " in ArrayList " + f.getName() + " returned a null entry! Skipping...");
 								continue;
 							}
-							
+
 							list.add(valObj);
 						}
-						
+
 						f.set(null, list);
 					} else
 					{
 						Object value = this.getNBTValue(tags, f.getName(), f.getType());
-						
+
 						if(value == null)
 						{
 							if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Field " + f.getName() + " returned a null value! Skipping...");
 							continue;
 						}
-						
+
 						f.set(null, value);
 					}
 				} catch(Exception e)
@@ -154,12 +155,12 @@ public class PacketServerOverride implements IMessage
 					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "An error occurred while syncing setting " + f.getName(), e);
 				}
 			}
-			
+
 			EM_Settings.isOverridden = true;
-			
+
 			return null; //Reply
 		}
-		
+
 		/**
 		 * Returns the value of the given key and class type. If the class type implements SerialisableProperty then it will return a new instance
 		 * of that object from the NBTTagCompound stored under said key.
@@ -174,7 +175,7 @@ public class PacketServerOverride implements IMessage
 			{
 				return null;
 			}
-			
+
 			if(clazz == Boolean.class ||clazz == boolean.class)
 			{
 				return tag.getBoolean(key);
