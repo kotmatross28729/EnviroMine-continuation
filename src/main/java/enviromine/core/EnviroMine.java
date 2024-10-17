@@ -73,6 +73,10 @@ public class EnviroMine
         return Loader.isModLoaded("Thaumcraft");
     }
 
+    public static boolean isSereneSeasonsLoaded() {
+        return Loader.isModLoaded("sereneseasons");
+    }
+
     //public static EM_WorldData theWorldEM;
 
 	@EventHandler

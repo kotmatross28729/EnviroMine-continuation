@@ -58,15 +58,26 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
     public float TemperatureThunderDecrease;
     public boolean TemperatureRainBool;
     public boolean TemperatureThunderBool;
-
     public float TemperatureShadeDecrease;
-
 
     public float ambientTemp_TERRAFORMED;
     public float DAWN_TEMPERATURE_TERRAFORMED;
     public float DAY_TEMPERATURE_TERRAFORMED;
     public float DUSK_TEMPERATURE_TERRAFORMED;
     public float NIGHT_TEMPERATURE_TERRAFORMED;
+
+    public float EARLY_SPRING_TEMPERATURE_DECREASE;
+    public float EARLY_SUMMER_TEMPERATURE_DECREASE;
+    public float EARLY_WINTER_TEMPERATURE_DECREASE;
+    public float EARLY_AUTUMN_TEMPERATURE_DECREASE;
+    public float MID_SPRING_TEMPERATURE_DECREASE;
+    public float MID_SUMMER_TEMPERATURE_DECREASE;
+    public float MID_WINTER_TEMPERATURE_DECREASE;
+    public float MID_AUTUMN_TEMPERATURE_DECREASE;
+    public float LATE_SPRING_TEMPERATURE_DECREASE;
+    public float LATE_SUMMER_TEMPERATURE_DECREASE;
+    public float LATE_WINTER_TEMPERATURE_DECREASE;
+    public float LATE_AUTUMN_TEMPERATURE_DECREASE;
 
 	public BiomeProperties(NBTTagCompound tags)
 	{
@@ -110,7 +121,20 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         float DAWN_TEMPERATURE_TERRAFORMED,
         float DAY_TEMPERATURE_TERRAFORMED,
         float DUSK_TEMPERATURE_TERRAFORMED,
-        float NIGHT_TEMPERATURE_TERRAFORMED
+        float NIGHT_TEMPERATURE_TERRAFORMED,
+
+        float EARLY_SPRING_TEMPERATURE_DECREASE,
+        float EARLY_SUMMER_TEMPERATURE_DECREASE,
+        float EARLY_WINTER_TEMPERATURE_DECREASE,
+        float EARLY_AUTUMN_TEMPERATURE_DECREASE,
+        float MID_SPRING_TEMPERATURE_DECREASE,
+        float MID_SUMMER_TEMPERATURE_DECREASE,
+        float MID_WINTER_TEMPERATURE_DECREASE,
+        float MID_AUTUMN_TEMPERATURE_DECREASE,
+        float LATE_SPRING_TEMPERATURE_DECREASE,
+        float LATE_SUMMER_TEMPERATURE_DECREASE,
+        float LATE_WINTER_TEMPERATURE_DECREASE,
+        float LATE_AUTUMN_TEMPERATURE_DECREASE
     ) {
 		this.id = id;
 		this.biomeOveride = biomeOveride;
@@ -140,6 +164,19 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.DAY_TEMPERATURE_TERRAFORMED    = DAY_TEMPERATURE_TERRAFORMED;
         this.DUSK_TEMPERATURE_TERRAFORMED   = DUSK_TEMPERATURE_TERRAFORMED;
         this.NIGHT_TEMPERATURE_TERRAFORMED  = NIGHT_TEMPERATURE_TERRAFORMED;
+
+        this.EARLY_SPRING_TEMPERATURE_DECREASE = EARLY_SPRING_TEMPERATURE_DECREASE;
+        this.EARLY_SUMMER_TEMPERATURE_DECREASE = EARLY_SUMMER_TEMPERATURE_DECREASE;
+        this.EARLY_WINTER_TEMPERATURE_DECREASE = EARLY_WINTER_TEMPERATURE_DECREASE;
+        this.EARLY_AUTUMN_TEMPERATURE_DECREASE = EARLY_AUTUMN_TEMPERATURE_DECREASE;
+        this.MID_SPRING_TEMPERATURE_DECREASE   =   MID_SPRING_TEMPERATURE_DECREASE;
+        this.MID_SUMMER_TEMPERATURE_DECREASE   =   MID_SUMMER_TEMPERATURE_DECREASE;
+        this.MID_WINTER_TEMPERATURE_DECREASE   =   MID_WINTER_TEMPERATURE_DECREASE;
+        this.MID_AUTUMN_TEMPERATURE_DECREASE   =   MID_AUTUMN_TEMPERATURE_DECREASE;
+        this.LATE_SPRING_TEMPERATURE_DECREASE  =  LATE_SPRING_TEMPERATURE_DECREASE;
+        this.LATE_SUMMER_TEMPERATURE_DECREASE  =  LATE_SUMMER_TEMPERATURE_DECREASE;
+        this.LATE_WINTER_TEMPERATURE_DECREASE  =  LATE_WINTER_TEMPERATURE_DECREASE;
+        this.LATE_AUTUMN_TEMPERATURE_DECREASE  =  LATE_AUTUMN_TEMPERATURE_DECREASE;
 	}
 	/**
 	 * <b>hasProperty(BiomeGenBase biome)</b><bR><br>
@@ -213,6 +250,20 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         tags.setFloat("DUSK_TEMPERATURE_TERRAFORMED", this.DUSK_TEMPERATURE_TERRAFORMED);
         tags.setFloat("NIGHT_TEMPERATURE_TERRAFORMED", this.NIGHT_TEMPERATURE_TERRAFORMED);
 
+
+        tags.setFloat("EARLY_SPRING_TEMPERATURE_DECREASE", this.EARLY_SPRING_TEMPERATURE_DECREASE);
+        tags.setFloat("EARLY_SUMMER_TEMPERATURE_DECREASE", this.EARLY_SUMMER_TEMPERATURE_DECREASE);
+        tags.setFloat("EARLY_WINTER_TEMPERATURE_DECREASE", this.EARLY_WINTER_TEMPERATURE_DECREASE);
+        tags.setFloat("EARLY_AUTUMN_TEMPERATURE_DECREASE", this.EARLY_AUTUMN_TEMPERATURE_DECREASE);
+        tags.setFloat("MID_SPRING_TEMPERATURE_DECREASE", this.MID_SPRING_TEMPERATURE_DECREASE);
+        tags.setFloat("MID_SUMMER_TEMPERATURE_DECREASE", this.MID_SUMMER_TEMPERATURE_DECREASE);
+        tags.setFloat("MID_WINTER_TEMPERATURE_DECREASE", this.MID_WINTER_TEMPERATURE_DECREASE);
+        tags.setFloat("MID_AUTUMN_TEMPERATURE_DECREASE", this.MID_AUTUMN_TEMPERATURE_DECREASE);
+        tags.setFloat("LATE_SPRING_TEMPERATURE_DECREASE", this.LATE_SPRING_TEMPERATURE_DECREASE);
+        tags.setFloat("LATE_SUMMER_TEMPERATURE_DECREASE", this.LATE_SUMMER_TEMPERATURE_DECREASE);
+        tags.setFloat("LATE_WINTER_TEMPERATURE_DECREASE", this.LATE_WINTER_TEMPERATURE_DECREASE);
+        tags.setFloat("LATE_AUTUMN_TEMPERATURE_DECREASE", this.LATE_AUTUMN_TEMPERATURE_DECREASE);
+
 		return tags;
 	}
 
@@ -245,6 +296,20 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.DAY_TEMPERATURE_TERRAFORMED = tags.getFloat("DAY_TEMPERATURE_TERRAFORMED");
         this.DUSK_TEMPERATURE_TERRAFORMED = tags.getFloat("DUSK_TEMPERATURE_TERRAFORMED");
         this.NIGHT_TEMPERATURE_TERRAFORMED = tags.getFloat("NIGHT_TEMPERATURE_TERRAFORMED");
+
+        this.EARLY_SPRING_TEMPERATURE_DECREASE = tags.getFloat("EARLY_SPRING_TEMPERATURE_DECREASE");
+        this.EARLY_SUMMER_TEMPERATURE_DECREASE = tags.getFloat("EARLY_SUMMER_TEMPERATURE_DECREASE");
+        this.EARLY_WINTER_TEMPERATURE_DECREASE = tags.getFloat("EARLY_WINTER_TEMPERATURE_DECREASE");
+        this.EARLY_AUTUMN_TEMPERATURE_DECREASE = tags.getFloat("EARLY_AUTUMN_TEMPERATURE_DECREASE");
+
+        this.MID_SPRING_TEMPERATURE_DECREASE = tags.getFloat("MID_SPRING_TEMPERATURE_DECREASE");
+        this.MID_SUMMER_TEMPERATURE_DECREASE = tags.getFloat("MID_SUMMER_TEMPERATURE_DECREASE");
+        this.MID_WINTER_TEMPERATURE_DECREASE = tags.getFloat("MID_WINTER_TEMPERATURE_DECREASE");
+        this.MID_AUTUMN_TEMPERATURE_DECREASE = tags.getFloat("MID_AUTUMN_TEMPERATURE_DECREASE");
+        this.LATE_SPRING_TEMPERATURE_DECREASE = tags.getFloat("LATE_SPRING_TEMPERATURE_DECREASE");
+        this.LATE_SUMMER_TEMPERATURE_DECREASE = tags.getFloat("LATE_SUMMER_TEMPERATURE_DECREASE");
+        this.LATE_WINTER_TEMPERATURE_DECREASE = tags.getFloat("LATE_WINTER_TEMPERATURE_DECREASE");
+        this.LATE_AUTUMN_TEMPERATURE_DECREASE = tags.getFloat("LATE_AUTUMN_TEMPERATURE_DECREASE");
 	}
 
 	@Override
@@ -275,23 +340,36 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean isDesertBiome = config.get(category, BOName[8], false).getBoolean(false);
         float DesertBiomeTemperatureMultiplier = (float)config.get(category, BOName[9], 1.0).getDouble(1.0);
 
-        float DAWN_TEMPERATURE = (float)config.get(category, BOName[10], 4.0).getDouble(4.0);
-        float DAY_TEMPERATURE = (float)config.get(category, BOName[11], 0.0).getDouble(0.0);
-        float DUSK_TEMPERATURE = (float)config.get(category, BOName[12], 4.0).getDouble(4.0);
+        float DAWN_TEMPERATURE  = (float)config.get(category, BOName[10], 4.0).getDouble(4.0);
+        float DAY_TEMPERATURE   = (float)config.get(category, BOName[11], 0.0).getDouble(0.0);
+        float DUSK_TEMPERATURE  = (float)config.get(category, BOName[12], 4.0).getDouble(4.0);
         float NIGHT_TEMPERATURE = (float)config.get(category, BOName[13], 8.0).getDouble(8.0);
 
         float TemperatureRainDecrease = (float)config.get(category, BOName[14], 6.0).getDouble(6.0);
         float TemperatureThunderDecrease = (float)config.get(category, BOName[15], 8.0).getDouble(8.0);
 
-        boolean TemperatureRainBool = config.get(category, BOName[16], false).getBoolean(false);
-        boolean TemperatureThunderBool = config.get(category, BOName[17], false).getBoolean(false);
+        boolean TemperatureRainBool = config.get(category, BOName[16], true).getBoolean(true);
+        boolean TemperatureThunderBool = config.get(category, BOName[17], true).getBoolean(true);
         float TemperatureShadeDecrease = (float)config.get(category, BOName[18], 2.5).getDouble(2.5);
 
-        float ambientTemp_TERRAFORMED =       (float)config.get(category, BOName[19], 25.0).getDouble(25.0);
-        float DAWN_TEMPERATURE_TERRAFORMED =  (float)config.get(category, BOName[20], 4.0).getDouble(4.0);
-        float DAY_TEMPERATURE_TERRAFORMED =   (float)config.get(category, BOName[21], 0.0).getDouble(0.0);
-        float DUSK_TEMPERATURE_TERRAFORMED =  (float)config.get(category, BOName[22], 4.0).getDouble(4.0);
-        float NIGHT_TEMPERATURE_TERRAFORMED = (float)config.get(category, BOName[23], 8.0).getDouble(8.0);
+        float ambientTemp_TERRAFORMED       =   (float)config.get(category, BOName[19], 25.0).getDouble(25.0);
+        float DAWN_TEMPERATURE_TERRAFORMED  =   (float)config.get(category, BOName[20], 4.0).getDouble(4.0);
+        float DAY_TEMPERATURE_TERRAFORMED   =   (float)config.get(category, BOName[21], 0.0).getDouble(0.0);
+        float DUSK_TEMPERATURE_TERRAFORMED  =   (float)config.get(category, BOName[22], 4.0).getDouble(4.0);
+        float NIGHT_TEMPERATURE_TERRAFORMED =   (float)config.get(category, BOName[23], 8.0).getDouble(8.0);
+
+        float EARLY_SPRING_TEMPERATURE_DECREASE = (float)config.get(category, BOName[24], 5.0).getDouble(5.0);
+        float EARLY_SUMMER_TEMPERATURE_DECREASE = (float)config.get(category, BOName[25], -1.0).getDouble(-1.0);
+        float EARLY_WINTER_TEMPERATURE_DECREASE = (float)config.get(category, BOName[26], 12.0).getDouble(12.0);
+        float EARLY_AUTUMN_TEMPERATURE_DECREASE = (float)config.get(category, BOName[27], 6.0).getDouble(6.0);
+        float MID_SPRING_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[28], -2.0).getDouble(-2.0);
+        float MID_SUMMER_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[29], -3.0).getDouble(-3.0);
+        float MID_WINTER_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[30], 15.0).getDouble(15.0);
+        float MID_AUTUMN_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[31], 8.0).getDouble(8.0);
+        float LATE_SPRING_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[32], -1.0).getDouble(-1.0);
+        float LATE_SUMMER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[33], -1.0).getDouble(-1.0);
+        float LATE_WINTER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[34], 10.0).getDouble(10.0);
+        float LATE_AUTUMN_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[35], 10.0).getDouble(10.0);
 
 		BiomeProperties entry = new BiomeProperties (
             id,
@@ -318,7 +396,19 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
             DAWN_TEMPERATURE_TERRAFORMED,
             DAY_TEMPERATURE_TERRAFORMED,
             DUSK_TEMPERATURE_TERRAFORMED,
-            NIGHT_TEMPERATURE_TERRAFORMED
+            NIGHT_TEMPERATURE_TERRAFORMED,
+            EARLY_SPRING_TEMPERATURE_DECREASE,
+            EARLY_SUMMER_TEMPERATURE_DECREASE,
+            EARLY_WINTER_TEMPERATURE_DECREASE,
+            EARLY_AUTUMN_TEMPERATURE_DECREASE,
+            MID_SPRING_TEMPERATURE_DECREASE,
+            MID_SUMMER_TEMPERATURE_DECREASE,
+            MID_WINTER_TEMPERATURE_DECREASE,
+            MID_AUTUMN_TEMPERATURE_DECREASE,
+            LATE_SPRING_TEMPERATURE_DECREASE,
+            LATE_SUMMER_TEMPERATURE_DECREASE,
+            LATE_WINTER_TEMPERATURE_DECREASE,
+            LATE_AUTUMN_TEMPERATURE_DECREASE
         );
 
 		if(EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
@@ -358,7 +448,21 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(category, BOName[21], this.DAY_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at day if the planet is terraformed").getDouble(this.DAY_TEMPERATURE_TERRAFORMED);
         config.get(category, BOName[22], this.DUSK_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dusk if the planet is terraformed").getDouble(this.DUSK_TEMPERATURE_TERRAFORMED);
         config.get(category, BOName[23], this.NIGHT_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at midnight if the planet is terraformed").getDouble(this.NIGHT_TEMPERATURE_TERRAFORMED);
-	}
+
+        config.get(category, BOName[24], this.EARLY_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early spring").getDouble(this.EARLY_SPRING_TEMPERATURE_DECREASE);
+        config.get(category, BOName[25], this.EARLY_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early summer").getDouble(this.EARLY_SUMMER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[26], this.EARLY_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early winter").getDouble(this.EARLY_WINTER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[27], this.EARLY_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early autumn").getDouble(this.EARLY_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(category, BOName[28], this.MID_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid spring").getDouble(this.MID_SPRING_TEMPERATURE_DECREASE);
+        config.get(category, BOName[29], this.MID_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid summer").getDouble(this.MID_SUMMER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[30], this.MID_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid winter").getDouble(this.MID_WINTER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[31], this.MID_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid autumn").getDouble(this.MID_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(category, BOName[32], this.LATE_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late spring").getDouble(this.LATE_SPRING_TEMPERATURE_DECREASE);
+        config.get(category, BOName[33], this.LATE_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late summer").getDouble(this.LATE_SUMMER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[34], this.LATE_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late winter").getDouble(this.LATE_WINTER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[35], this.LATE_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late autumn").getDouble(this.LATE_AUTUMN_TEMPERATURE_DECREASE);
+
+    }
 
 	@Override
 	public void GenDefaults()
@@ -422,8 +526,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
         double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 8D : typeList.contains(Type.JUNGLE)? 2D : 6D;
         double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 4D : 8D;
-        boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
-        boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
+        //boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
+        //boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
         double TemperatureShadeDecrease = /*typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :*/ 2.5D;
 
         String biomeWater = EnviroUtils.getBiomeWater(biome);
@@ -439,6 +543,92 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         double DAY_TEMPERATURE_TERRAFORMED;
         double DUSK_TEMPERATURE_TERRAFORMED;
         double NIGHT_TEMPERATURE_TERRAFORMED;
+
+
+        double EARLY_SPRING_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -3.0 : //DESERT              (-8 (DEFAULT+8))
+            typeList.contains(Type.JUNGLE) ? 0.0 :                                  //JUNGLE              (-5 (DEFAULT+5))
+            typeList.contains(Type.HOT) ? 3.0 :                                     //ELSE HOT (SAVANNA)  (-2 (DEFAULT+2C))
+            typeList.contains(Type.CONIFEROUS) ? 7.0 :                              //TAIGA               (+2 (DEFAULT-2C))
+            5.0;                                                                    //DEFAULT             (0)
+
+        double MID_SPRING_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -10.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? -7.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? -4.0 :                        // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 0.0 :              // TAIGA               (+2 (DEFAULT-2))
+                            -2.0;                                                   // DEFAULT             (0)
+
+        double LATE_SPRING_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -9.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? -6.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? -3.0 :                        // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 1.0 :              // TAIGA               (+2 (DEFAULT-2))
+                            -1.0;                                                   // DEFAULT             (0)
+
+        double EARLY_SUMMER_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -9.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? -6.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? -3.0 :                        // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 1.0 :              // TAIGA               (+2 (DEFAULT-2))
+                            -1.0;                                                   // DEFAULT             (0)
+
+        double MID_SUMMER_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -11.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? -8.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? -5.0 :                        // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? -1.0 :             // TAIGA               (+2 (DEFAULT-2))
+                            -3.0;                                                   // DEFAULT             (0)
+
+        double LATE_SUMMER_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -9.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? -6.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? -3.0 :                        // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 1.0 :              // TAIGA               (+2 (DEFAULT-2))
+                            -1.0;                                                   // DEFAULT             (0)
+
+        double EARLY_AUTUMN_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -2.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? 1.0 :                              // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? 4.0 :                         // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 8.0 :              // TAIGA               (+2 (DEFAULT-2))
+                            6.0;                                                    // DEFAULT             (0)
+
+        double MID_AUTUMN_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? 0.0 :  // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? 3.0 :                              // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? 6.0 :                         // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 10.0 :             // TAIGA               (+2 (DEFAULT-2))
+                            8.0;                                                    // DEFAULT             (0)
+
+        double LATE_AUTUMN_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -2.0 : // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? 5.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? 8.0 :                         // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 12.0 :             // TAIGA               (+2 (DEFAULT-2))
+                            10.0;                                                   // DEFAULT             (0)
+
+        double EARLY_WINTER_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? 4.0 :   // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? 7.0 :                               // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? 10.0 :                         // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 14.0 :              // TAIGA               (+2 (DEFAULT-2))
+                            12.0;                                                    // DEFAULT             (0)
+
+        double MID_WINTER_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? 8.0 :  // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? 11.0 :                             // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? 14.0 :                        // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2)))
+                            typeList.contains(Type.CONIFEROUS) ? 18.0 :             // TAIGA               (+2 (DEFAULT-2))
+                            16.0;                                                   // DEFAULT             (0)
+
+        double LATE_WINTER_TEMPERATURE_DECREASE =
+            (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? 2.0 :  // DESERT              (-8 (DEFAULT+8))
+                typeList.contains(Type.JUNGLE) ? 5.0 :                              // JUNGLE              (-5 (DEFAULT+5))
+                        typeList.contains(Type.HOT) ? 8.0 :                         // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
+                            typeList.contains(Type.CONIFEROUS) ? 12.0 :             // TAIGA               (+2 (DEFAULT-2))
+                            10.0;                                                   // DEFAULT             (0)
+
 
         if(EnviroMine.isHbmSpaceLoaded()) {
             if (biome instanceof BiomeGenBaseMoho) {
@@ -616,7 +806,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 8D;
                 ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
             }
-        } else {
+        }
+        else {
             DAWN_TEMPERATURE = 4D;
             DAY_TEMPERATURE = 0D;
             DUSK_TEMPERATURE = 4D;
@@ -660,6 +851,19 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(catName, BOName[21], DAY_TEMPERATURE_TERRAFORMED).getDouble(DAY_TEMPERATURE_TERRAFORMED);
         config.get(catName, BOName[22], DUSK_TEMPERATURE_TERRAFORMED).getDouble(DUSK_TEMPERATURE_TERRAFORMED);
         config.get(catName, BOName[23], NIGHT_TEMPERATURE_TERRAFORMED).getDouble(NIGHT_TEMPERATURE_TERRAFORMED);
+
+        config.get(catName, BOName[24], EARLY_SPRING_TEMPERATURE_DECREASE).getDouble(EARLY_SPRING_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[25], EARLY_SUMMER_TEMPERATURE_DECREASE).getDouble(EARLY_SUMMER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[26], EARLY_WINTER_TEMPERATURE_DECREASE).getDouble(EARLY_WINTER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[27], EARLY_AUTUMN_TEMPERATURE_DECREASE).getDouble(EARLY_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[28], MID_SPRING_TEMPERATURE_DECREASE).getDouble(MID_SPRING_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[29], MID_SUMMER_TEMPERATURE_DECREASE).getDouble(MID_SUMMER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[30], MID_WINTER_TEMPERATURE_DECREASE).getDouble(MID_WINTER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[31], MID_AUTUMN_TEMPERATURE_DECREASE).getDouble(MID_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[32], LATE_SPRING_TEMPERATURE_DECREASE).getDouble(LATE_SPRING_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[33], LATE_SUMMER_TEMPERATURE_DECREASE).getDouble(LATE_SUMMER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[34], LATE_WINTER_TEMPERATURE_DECREASE).getDouble(LATE_WINTER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[35], LATE_AUTUMN_TEMPERATURE_DECREASE).getDouble(LATE_AUTUMN_TEMPERATURE_DECREASE);
     }
 
 	@Override
@@ -675,7 +879,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BOName = new String[24];
+		BOName = new String[36];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
@@ -695,10 +899,22 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         BOName[16] = "17.Should biome temperature decrease when rain?";
         BOName[17] = "18.Should biome temperature decrease when thunder?";
         BOName[18] = "19.Biome temperature shadow decrease";
-        BOName[19] = "20.Ambient Temperature terraformed";
-        BOName[20] = "21.Dawn biome temperature decrease terraformed";
-        BOName[21] = "22.Day biome temperature decrease terraformed";
-        BOName[22] = "23.Dusk biome temperature decrease terraformed";
-        BOName[23] = "24.Night biome temperature decrease terraformed";
+        BOName[19] = "20.[HBM] Ambient Temperature terraformed";
+        BOName[20] = "21.[HBM] Dawn biome temperature decrease terraformed";
+        BOName[21] = "22.[HBM] Day biome temperature decrease terraformed";
+        BOName[22] = "23.[HBM] Dusk biome temperature decrease terraformed";
+        BOName[23] = "24.[HBM] Night biome temperature decrease terraformed";
+        BOName[24] = "25.[Serene Seasons] Early spring biome temperature decrease";
+        BOName[25] = "26.[Serene Seasons] Early summer biome temperature decrease";
+        BOName[26] = "27.[Serene Seasons] Early winter biome temperature decrease";
+        BOName[27] = "28.[Serene Seasons] Early autumn biome temperature decrease";
+        BOName[28] = "29.[Serene Seasons] Mid spring biome temperature decrease";
+        BOName[29] = "30.[Serene Seasons] Mid summer biome temperature decrease";
+        BOName[30] = "31.[Serene Seasons] Mid winter biome temperature decrease";
+        BOName[31] = "32.[Serene Seasons] Mid autumn biome temperature decrease";
+        BOName[32] = "33.[Serene Seasons] Late spring biome temperature decrease";
+        BOName[33] = "34.[Serene Seasons] Late summer biome temperature decrease";
+        BOName[34] = "35.[Serene Seasons] Late winter biome temperature decrease";
+        BOName[35] = "36.[Serene Seasons] Late autumn biome temperature decrease";
 	}
 }

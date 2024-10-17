@@ -1,3 +1,7 @@
+# 1.3.143
+* Added support for Serene Seasons
+    * All relevant settings in the parameters of each biome
+
 # 1.3.142
 
 **Attention: for the correct operation of biome temperatures on planets, go to: `Enviromine menu - Custom Editor - Profile settings - default_settings.cfg - Config - Generate Defaults - true`**

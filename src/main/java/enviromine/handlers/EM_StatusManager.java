@@ -58,6 +58,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import sereneseasons.api.season.Season;
+import sereneseasons.api.season.SeasonHelper;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -508,6 +510,21 @@ public class EM_StatusManager
             float biome_DUSK_TEMPERATURE_TERRAFORMED = 4F;
             float biome_NIGHT_TEMPERATURE_TERRAFORMED = 8F;
 
+
+            float biome_EARLY_SPRING_TEMPERATURE_DECREASE =  5.0F;
+            float biome_MID_SPRING_TEMPERATURE_DECREASE   = -2.0F;
+            float biome_LATE_SPRING_TEMPERATURE_DECREASE  = -1.0F;
+            float biome_EARLY_SUMMER_TEMPERATURE_DECREASE = -1.0F;
+            float biome_MID_SUMMER_TEMPERATURE_DECREASE   = -3.0F;
+            float biome_LATE_SUMMER_TEMPERATURE_DECREASE  = -1.0F;
+            float biome_EARLY_AUTUMN_TEMPERATURE_DECREASE =  6.0F;
+            float biome_MID_AUTUMN_TEMPERATURE_DECREASE   =  8.0F;
+            float biome_LATE_AUTUMN_TEMPERATURE_DECREASE  = 10.0F;
+            float biome_EARLY_WINTER_TEMPERATURE_DECREASE = 12.0F;
+            float biome_MID_WINTER_TEMPERATURE_DECREASE   = 16.0F;
+            float biome_LATE_WINTER_TEMPERATURE_DECREASE  = 10.0F;
+
+
             if (biome != null) {
                 BiomeProperties biomeOverride = null;
                 if (BiomeProperties.base.hasProperty(biome)) {
@@ -527,6 +544,19 @@ public class EM_StatusManager
                     biome_DAY_TEMPERATURE_TERRAFORMED = biomeOverride.DAY_TEMPERATURE_TERRAFORMED;
                     biome_DUSK_TEMPERATURE_TERRAFORMED = biomeOverride.DUSK_TEMPERATURE_TERRAFORMED;
                     biome_NIGHT_TEMPERATURE_TERRAFORMED = biomeOverride.NIGHT_TEMPERATURE_TERRAFORMED;
+
+                    biome_EARLY_SPRING_TEMPERATURE_DECREASE  = biomeOverride.EARLY_SPRING_TEMPERATURE_DECREASE;
+                    biome_MID_SPRING_TEMPERATURE_DECREASE    = biomeOverride.MID_SPRING_TEMPERATURE_DECREASE;
+                    biome_LATE_SPRING_TEMPERATURE_DECREASE   = biomeOverride.LATE_SPRING_TEMPERATURE_DECREASE;
+                    biome_EARLY_SUMMER_TEMPERATURE_DECREASE  = biomeOverride.EARLY_SUMMER_TEMPERATURE_DECREASE;
+                    biome_MID_SUMMER_TEMPERATURE_DECREASE    = biomeOverride.MID_SUMMER_TEMPERATURE_DECREASE;
+                    biome_LATE_SUMMER_TEMPERATURE_DECREASE   = biomeOverride.LATE_SUMMER_TEMPERATURE_DECREASE;
+                    biome_EARLY_AUTUMN_TEMPERATURE_DECREASE  = biomeOverride.EARLY_AUTUMN_TEMPERATURE_DECREASE;
+                    biome_MID_AUTUMN_TEMPERATURE_DECREASE    = biomeOverride.MID_AUTUMN_TEMPERATURE_DECREASE;
+                    biome_LATE_AUTUMN_TEMPERATURE_DECREASE   = biomeOverride.LATE_AUTUMN_TEMPERATURE_DECREASE;
+                    biome_EARLY_WINTER_TEMPERATURE_DECREASE  = biomeOverride.EARLY_WINTER_TEMPERATURE_DECREASE;
+                    biome_MID_WINTER_TEMPERATURE_DECREASE    = biomeOverride.MID_WINTER_TEMPERATURE_DECREASE;
+                    biome_LATE_WINTER_TEMPERATURE_DECREASE   = biomeOverride.LATE_WINTER_TEMPERATURE_DECREASE;
                 }
             }
 
@@ -552,23 +582,46 @@ public class EM_StatusManager
                 temperatureChange = calculateTemperatureChange(currentTime % 24000L, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
             }
 
-            biomeTemperature -= temperatureChange;
             if (biome.rainfall <= 0F || isDesertBiome) {
                 biomeTemperature -= temperatureChange * DesertBiomeTemperatureMultiplier;
+            } else {
+                biomeTemperature -= temperatureChange;
+            }
+
+            if(EnviroMine.isSereneSeasonsLoaded()) {
+                Season.SubSeason currentSubSeason = SeasonHelper.getSeasonState(entityLiving.worldObj).getSubSeason();
+                if(currentSubSeason != null) {
+                    switch (currentSubSeason) {
+                        case EARLY_SPRING -> biomeTemperature -= biome_EARLY_SPRING_TEMPERATURE_DECREASE;
+                        case MID_SPRING -> biomeTemperature -= biome_MID_SPRING_TEMPERATURE_DECREASE;
+                        case LATE_SPRING -> biomeTemperature -= biome_LATE_SPRING_TEMPERATURE_DECREASE;
+
+                        case EARLY_SUMMER -> biomeTemperature -= biome_EARLY_SUMMER_TEMPERATURE_DECREASE;
+                        case MID_SUMMER -> biomeTemperature -= biome_MID_SUMMER_TEMPERATURE_DECREASE;
+                        case LATE_SUMMER -> biomeTemperature -= biome_LATE_SUMMER_TEMPERATURE_DECREASE;
+
+                        case EARLY_AUTUMN -> biomeTemperature -= biome_EARLY_AUTUMN_TEMPERATURE_DECREASE;
+                        case MID_AUTUMN -> biomeTemperature -= biome_MID_AUTUMN_TEMPERATURE_DECREASE;
+                        case LATE_AUTUMN -> biomeTemperature -= biome_LATE_AUTUMN_TEMPERATURE_DECREASE;
+
+                        case EARLY_WINTER -> biomeTemperature -= biome_EARLY_WINTER_TEMPERATURE_DECREASE;
+                        case MID_WINTER -> biomeTemperature -= biome_MID_WINTER_TEMPERATURE_DECREASE;
+                        case LATE_WINTER -> biomeTemperature -= biome_LATE_WINTER_TEMPERATURE_DECREASE;
+                    }
+                }
             }
 
             if(EnviroMine.isHbmSpaceLoaded()) {
-
-                ThreeInts pos = new ThreeInts((int)entityLiving.posX, (int)(entityLiving.posY + entityLiving.getEyeHeight()), (int)entityLiving.posZ);
-                //List<AtmosphereBlob> nearbyBlobs = ChunkAtmosphereManager.proxy.getBlobsWithinRadius(entityLiving.worldObj, pos, 3);
-                //I still don't understand why there are other access modifiers besides public?
-                List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(ChunkAtmosphereManager.proxy, entityLiving.worldObj, pos, 256);
-                //List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(entityLiving.worldObj, (int)entityLiving.posX, (int)((float)entityLiving.posY + entityLiving.getEyeHeight()), (int)entityLiving.posZ);
-                    for(AtmosphereBlob blob : nearbyBlobs) {
-                        if(blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
+                if(entityLiving.ticksExisted % 20 == 0) {
+                    ThreeInts pos = new ThreeInts((int) entityLiving.posX, (int) (entityLiving.posY), (int) entityLiving.posZ);
+                    //I still don't understand why there are other access modifiers besides public?
+                    List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(ChunkAtmosphereManager.proxy, entityLiving.worldObj, pos, 256);
+                    for (AtmosphereBlob blob : nearbyBlobs) {
+                        if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
                             biomeTemperature = 24; //TODO HARDCODED
                         }
                     }
+                }
             }
         }
 
