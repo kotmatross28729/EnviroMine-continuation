@@ -181,15 +181,15 @@ public class EnviroUtils
 	}
 
 
-	public static double getBiomeTemp(BiomeGenBase biome)
+	public static float getBiomeTemp(BiomeGenBase biome)
 	{
 		return getBiomeTemp(biome.temperature);
 	}
-	public static double getBiomeTemp(int x, int y, int z, BiomeGenBase biome)
+	public static float getBiomeTemp(int x, int y, int z, BiomeGenBase biome)
 	{
 		return getBiomeTemp(biome.getFloatTemperature(x, y, z));
 	}
-	private static double getBiomeTemp(float biomeTemp)
+	private static float getBiomeTemp(float biomeTemp)
 	{
 		// You can calibrate temperatures using these
 		// This does not take into account the time of day (These are the midday maximums)
@@ -197,7 +197,7 @@ public class EnviroUtils
 		float minTemp = -15F;
 
 		// CALCULATE!
-		return biomeTemp >= 0? Math.sin(Math.toRadians(biomeTemp*45F))*maxTemp : Math.sin(Math.toRadians(biomeTemp*45F))*minTemp;
+        return (float)(biomeTemp >= 0? Math.sin(Math.toRadians(biomeTemp*45F)) *maxTemp : Math.sin(Math.toRadians(biomeTemp*45F)) *minTemp) ;
 	}
 
 	/*

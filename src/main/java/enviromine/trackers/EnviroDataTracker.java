@@ -47,7 +47,6 @@ import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
 public class EnviroDataTracker
 {
     //TODO: весь код переписать нахуй
-    //                               ахуеные коментарии, очень даже понятно к чему они - kotmatross(злой)
     public static final Logger logger = LogManager.getLogger("ENVIROMINE_DEBUG_LOGGER");
 	public EntityLivingBase trackedEntity;
 
@@ -287,9 +286,10 @@ public class EnviroDataTracker
                ItemStack plate = player.inventory.armorInventory[2];
                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
                if(chestplate != null) {
+
 // Adjust the temperature if armor allows
                    if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
-                       bodyTemp = 36.6F; //TODO nuhaya sebe
+                       bodyTemp = 36.6F;
                    } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp) {
                        bodyTemp = 36.6F;
                    } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
@@ -316,7 +316,7 @@ public class EnviroDataTracker
            }
 // No armor, but still player
            else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
-               bodyTemp -= EM_Settings.BodyTempBad; //TODO PIZDEC NAHUI
+               bodyTemp -= EM_Settings.BodyTempBad;
            }
            else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
                bodyTemp -= EM_Settings.BodyTempGood;
@@ -346,70 +346,39 @@ public class EnviroDataTracker
            bodyTemp += EM_Settings.BodyTempBest;
        }
        // HOT THINGS END
-       ItemStack plate = trackedEntity.getEquipmentInSlot(3);
-       ItemStack legs = trackedEntity.getEquipmentInSlot(2);
-       ItemStack boots = trackedEntity.getEquipmentInSlot(1);
-       ArmorProperties helmetprops = null;
-       ArmorProperties plateprops = null;
-       ArmorProperties legsprops = null;
-       ArmorProperties bootsprops = null;
-       boolean ImmunityBurning = false;
-       boolean ImmunityFull = false;
-       if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
-       if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
-       if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
-       if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
-       if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
-           if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-               ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
-               ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-               // All armor isTemperatureSealed ? ImmunityFull = true
-           } else {
-               ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
-           }
-       }
-       if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){
-           bodyTemp = 36.6F; //Translation = even if in lava - 36.6
-       } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
-           bodyTemp = 36.6F; //Translation = if on fire - 36.6, if in lava... a lot
-       } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
-           bodyTemp = 36.6F;
-       } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
-           bodyTemp = 36.6F;
-       }
-} else {
-       ItemStack plate = trackedEntity.getEquipmentInSlot(3);
-       ItemStack legs = trackedEntity.getEquipmentInSlot(2);
-       ItemStack boots = trackedEntity.getEquipmentInSlot(1);
-       ArmorProperties helmetprops = null;
-       ArmorProperties plateprops = null;
-       ArmorProperties legsprops = null;
-       ArmorProperties bootsprops = null;
-       boolean ImmunityBurning = false;
-       boolean ImmunityFull = false;
-       if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
-       if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
-       if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
-       if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
-       if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
-           if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-               ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
-               ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-               // All armor isTemperatureSealed ? ImmunityFull = true
-           } else {
-               ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
-           }
-       }
-       if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){ //TODO GREGATECHA
-               bodyTemp = 36.6F;
-       } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
-           bodyTemp = 36.6F;
-       } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
-           bodyTemp = 36.6F;
-       } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
-           bodyTemp = 36.6F;
-       }
-   }
+}
+
+        ItemStack plate = trackedEntity.getEquipmentInSlot(3);
+        ItemStack legs = trackedEntity.getEquipmentInSlot(2);
+        ItemStack boots = trackedEntity.getEquipmentInSlot(1);
+        ArmorProperties helmetprops = null;
+        ArmorProperties plateprops = null;
+        ArmorProperties legsprops = null;
+        ArmorProperties bootsprops = null;
+        boolean ImmunityBurning = false;
+        boolean ImmunityFull = false;
+        if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+        if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
+        if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+        if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+        if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+            if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+                ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
+                ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+                // All armor isTemperatureSealed ? ImmunityFull = true
+            } else {
+                ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
+            }
+        }
+        if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){
+                bodyTemp = 36.6F;
+        } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
+            bodyTemp = 36.6F;
+        } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
+            bodyTemp = 36.6F;
+        } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
+            bodyTemp = 36.6F;
+        }
 
         if(bodyTemp - relTemp > 0) // Cold
 		{
@@ -569,13 +538,13 @@ public class EnviroDataTracker
 		}
 
 		// Camel Pack Stuff
-		ItemStack plate = trackedEntity.getEquipmentInSlot(3);
+		ItemStack plateC = trackedEntity.getEquipmentInSlot(3);
 
-		if(plate != null && !isCreative)
+		if(plateC != null && !isCreative)
 		{
-			if (plate.hasTagCompound() && plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))
+			if (plateC.hasTagCompound() && plateC.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))
 			{
-				NBTTagCompound tag = plate.getTagCompound();
+				NBTTagCompound tag = plateC.getTagCompound();
 				int camelPackFill = tag.getInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY);
 
 				if(EM_Settings.hydrationMult > 0F && camelPackFill > 0 && (100F - hydration) >= EM_Settings.hydrationMult) // If the camel pack has some durability left and your hydration isn't perfect

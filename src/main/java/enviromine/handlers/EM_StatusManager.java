@@ -1,6 +1,7 @@
 package enviromine.handlers;
 
 import com.google.common.base.Stopwatch;
+import com.hbm.dim.CelestialBody;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -47,6 +48,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -530,24 +532,21 @@ public class EM_StatusManager
                 }
             }
 
-            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L); //TODO BLYAHA MUHA PIZDEC NAHUI
+            float currentTime = entityLiving.worldObj.getWorldTime();
 //LogManager.getLogger().fatal("currentTime " + currentTime);
 
-            float temperatureChange = calculateTemperatureChange(currentTime, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
-//LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
+            float temperatureChange;
+
+            if(EnviroMine.isHbmSpaceLoaded()) {
+                CelestialBody body = CelestialBody.getBody(entityLiving.worldObj);
+                float phasePeriod = Math.round ( (float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod())))/4F );
+                temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+            } else {
+                temperatureChange = calculateTemperatureChange(currentTime % 24000L, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+            }
 
 
-            //TODO pizdec
-/**
-            float temperatureChange =
-                calculateTemperatureChange2ultrasupermegapro(
-                    currentTime,
-                    biome_DAWN_TEMPERATURE,
-                    biome_DAY_TEMPERATURE,
-                    biome_DUSK_TEMPERATURE,
-                    biome_NIGHT_TEMPERATURE
-                );
-*/
+            //LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
 
             biomeTemperature -= temperatureChange;
 
@@ -1129,7 +1128,6 @@ public class EM_StatusManager
     // Function to calculate temperature change
     public static float calculateTemperatureChange(float currentTime, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
         float temperatureChange;
-//Ama idiot
         // from 0 to 6000 ticks (dawn to noon)
         if (currentTime >= 0 && currentTime < 6000) {
             temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / 6000f) * currentTime;
@@ -1153,60 +1151,32 @@ public class EM_StatusManager
 
         return temperatureChange;
     }
-
-    public static float calculateTemperatureChange2ultrasupermegapro
-        //TODO make it not shit nahui
-        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        (
-        float currentTime,
-
-        float DAWN_TEMPERATURE,
-        float DAY_TEMPERATURE,
-        float DUSK_TEMPERATURE,
-        float NIGHT_TEMPERATURE,
-
-        float DAWN_TICKS,               //DEFAULT - 0
-        float NOON_TICKS,               //DEFAULT - 6000
-        float DUSK_TICKS,               //DEFAULT - 12000
-        float MIDNIGHT_TICKS,           //DEFAULT - 18000
-        float DAWN2_TICKS//BOOMPALKA FROM RISEWORLD30dfs54d4f64a5sdf654    //DEFAULT - 24000
-        //Lol, looks like some hashcode (ne adekvatniy, srazy vidno)
-        )
-    {
+    public static float calculateTemperatureChangeSpace(float currentTime, float phasePeriod, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
         float temperatureChange;
-
-        // from DAWN_TICKS to NOON_TICKS
-        if (currentTime >= DAWN_TICKS && currentTime < NOON_TICKS) {
-            temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / NOON_TICKS) * currentTime;
+        // from 0 to 6000 ticks (dawn to noon)
+        if (currentTime >= 0 && currentTime < phasePeriod) {
+            temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / phasePeriod) * currentTime;
         }
-        // from NOON_TICKS to DUSK_TICKS
-        else if (currentTime >= NOON_TICKS && currentTime < DUSK_TICKS) {
-            temperatureChange = DAY_TEMPERATURE + ((DUSK_TEMPERATURE - DAY_TEMPERATURE) / NOON_TICKS) * (currentTime - NOON_TICKS);
+        // from 6000 to 12000 ticks (noon to dusk)
+        else if (currentTime >= phasePeriod && currentTime < phasePeriod*2) {
+            temperatureChange = DAY_TEMPERATURE + ((DUSK_TEMPERATURE - DAY_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod);
         }
-        // from DUSK_TICKS to MIDNIGHT_TICKS
-        else if (currentTime >= DUSK_TICKS && currentTime < MIDNIGHT_TICKS) {
-            temperatureChange = DUSK_TEMPERATURE + ((NIGHT_TEMPERATURE - DUSK_TEMPERATURE) / NOON_TICKS) * (currentTime - DUSK_TICKS);
+        // from 12000 to 18000 ticks (dusk to midnight)
+        else if (currentTime >= phasePeriod*2 && currentTime < phasePeriod*3) {
+            temperatureChange = DUSK_TEMPERATURE + ((NIGHT_TEMPERATURE - DUSK_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod*2);
         }
-        // from MIDNIGHT_TICKS to DAWN2_TICKS
-        else if (currentTime >= MIDNIGHT_TICKS && currentTime < DAWN2_TICKS) {
-            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - DAWN_TEMPERATURE) / NOON_TICKS) * (currentTime - MIDNIGHT_TICKS);
+        // from 18000 to 24000 ticks (midnight to dawn)
+        else if (currentTime >= phasePeriod*3 && currentTime < phasePeriod*4) {
+            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - DAWN_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod*3);
         }
         else {
             // If currentTime doesn't fall within the specified range
             temperatureChange = 0;
         }
 
-        return temperatureChange; //Ahauet'
+        return temperatureChange;
     }
 
-    //Nu i nahuya eto?
-	public static float getBiomeTemprature(int x, int y, BiomeGenBase biome)
-	{
-		float temp= 0F;
-
-		return temp;
-
-	}
 
 	public static void removeTracker(EnviroDataTracker tracker)
 	{

@@ -222,32 +222,4 @@ public class Gui_EventManager
 		}
 
 	}
-
-	//TODO Was used for Debugging Gui
-	/*@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent event)
-	{
-		if(event == null) return;
-		if(event.gui == null) return;
-		System.out.println(event.gui.getClass().getSimpleName().toString());
-		if(event.gui instanceof GuiConfig)
-		{
-			GuiConfig guiConfig = (GuiConfig) event.gui;
-
-			System.out.println("configID:"+guiConfig.configID +" modID:"+ guiConfig.modID);
-
-			Iterator<IConfigElement> elements = guiConfig.configElements.iterator();
-
-			while(elements.hasNext())
-			{
-				IConfigElement element = elements.next();
-
-
-				System.out.println("element name:"+ element.getName() +" Type:"+ element.getType() + " QNamed:"+element.getQualifiedName());
-
-			}
-
-		}
-	}*/
-
 }

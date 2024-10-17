@@ -3,6 +3,14 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.hbm.dim.Ike.BiomeGenIke;
+import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
+import com.hbm.dim.duna.biome.BiomeGenDunaPolar;
+import com.hbm.dim.duna.biome.BiomeGenDunaPolarHills;
+import com.hbm.dim.eve.biome.BiomeGenBaseEve;
+import com.hbm.dim.minmus.biome.BiomeGenBaseMinmus;
+import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
+import com.hbm.dim.moon.BiomeGenMoon;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -373,24 +381,89 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY); //TODO change if needed
         double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
 
-        //TODO change if needed
-        double DAWN_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
-        double DAY_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 0D :*/ 0D;
-        double DUSK_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
-        double NIGHT_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 8D :*/ 8D;
-
         double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 8D : 6D;
         double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D : 8D;
         boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
         boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
         double TemperatureShadeDecrease = /*typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :*/ 2.5D;
 
-		String catName = this.categoryName() + "." + biome.biomeName;
+        double biomeTemp = 25;
+        double DAWN_TEMPERATURE;
+        double DAY_TEMPERATURE;
+        double DUSK_TEMPERATURE;
+        double NIGHT_TEMPERATURE;
 
+//        if(EnviroMine.isHbmSpaceLoaded()) {
+//            if (biome instanceof BiomeGenBaseMoho) {
+//                DAWN_TEMPERATURE =  75D;
+//                DAY_TEMPERATURE =  0D;
+//                DUSK_TEMPERATURE = 75D;
+//                NIGHT_TEMPERATURE = 100D;
+//                biomeTemp = 300;
+//            }
+//            else if (biome instanceof BiomeGenBaseEve) {
+//                DAWN_TEMPERATURE =  71.85D;
+//                DAY_TEMPERATURE =  0D;
+//                DUSK_TEMPERATURE = 71.85D;
+//                NIGHT_TEMPERATURE = 259.98D;
+//                biomeTemp = 146.85;
+//            }
+//            else if (biome instanceof BiomeGenMoon) {
+//                DAWN_TEMPERATURE =  177D;
+//                DAY_TEMPERATURE =  0D;
+//                DUSK_TEMPERATURE = 177D;
+//                NIGHT_TEMPERATURE = 300D;
+//                biomeTemp = 127;
+//                air = -10.0D;
+//            } else if (biome instanceof BiomeGenBaseMinmus) {
+//                DAWN_TEMPERATURE =  64D;
+//                DAY_TEMPERATURE =  0D;
+//                DUSK_TEMPERATURE = 64D;
+//                NIGHT_TEMPERATURE = 121D;
+//                biomeTemp = 14;
+//            }
+//            else if(biome instanceof BiomeGenBaseDuna) {
+//                if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
+//                    DAWN_TEMPERATURE =  98D;
+//                    DAY_TEMPERATURE =  0D;
+//                    DUSK_TEMPERATURE = 98D;
+//                    NIGHT_TEMPERATURE = 173D;
+//                    biomeTemp = 20;
+//                } else {
+//                    DAWN_TEMPERATURE = 69D;
+//                    DAY_TEMPERATURE = 0D;
+//                    DUSK_TEMPERATURE = 69D;
+//                    NIGHT_TEMPERATURE = 98D;
+//                    biomeTemp = 35;
+//                }
+//            } else if (biome instanceof BiomeGenIke) { //From phobos
+//                DAWN_TEMPERATURE =  88D;
+//                DAY_TEMPERATURE =  0D;
+//                DUSK_TEMPERATURE = 88D;
+//                NIGHT_TEMPERATURE = 150D;
+//                biomeTemp = 27;
+//            } else {
+//                DAWN_TEMPERATURE = 4D;
+//                DAY_TEMPERATURE = 0D;
+//                DUSK_TEMPERATURE = 4D;
+//                NIGHT_TEMPERATURE = 8D;
+//                biomeTemp = EnviroUtils.getBiomeTemp(biome);
+//            }
+//        } else {
+            DAWN_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
+            DAY_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 0D :*/ 0D;
+            DUSK_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
+            NIGHT_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 8D :*/ 8D;
+
+            biomeTemp = EnviroUtils.getBiomeTemp(biome);
+//        }
+
+		String catName = this.categoryName() + "." + biome.biomeName;
+//TODO configs not generating properly
 		config.get(catName, BOName[0], biome.biomeID).getInt(biome.biomeID);
-		config.get(catName, BOName[1], false).getBoolean(false);
+		config.get(catName, BOName[1], true).getBoolean(true);
 		config.get(catName, BOName[2], EnviroUtils.getBiomeWater(biome), "Water Quality: dirty, salty, cold, clean").getString();
-		config.get(catName, BOName[3], EnviroUtils.getBiomeTemp(biome), "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(25.00);
+		config.get(catName, BOName[3], biomeTemp, "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(25.00);
 		config.get(catName, BOName[4], temp).getDouble(temp);
 		config.get(catName, BOName[5], sanity).getDouble(sanity);
 		config.get(catName, BOName[6], water).getDouble(water);
@@ -434,10 +507,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		BOName[7] = "08.Air Quality Rate";
         BOName[8] = "09.Is desert biome?";
         BOName[9] = "10.Desert biome temperature multiplier";
-        BOName[10] = "11.Dawn biome temperature";
-        BOName[11] = "12.Day biome temperature";
-        BOName[12] = "13.Dusk biome temperature";
-        BOName[13] = "14.Night biome temperature";
+        BOName[10] = "11.Dawn biome temperature decrease";
+        BOName[11] = "12.Day biome temperature decrease";
+        BOName[12] = "13.Dusk biome temperature decrease";
+        BOName[13] = "14.Night biome temperature decrease";
         BOName[14] = "15.Biome temperature rain decrease";
         BOName[15] = "16.Biome temperature thunder decrease";
         BOName[16] = "17.Should biome temperature decrease when rain?";
