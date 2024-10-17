@@ -38,9 +38,9 @@
 
 - **12)** **Biome temperature system has been completely rewritten depending on the weather | day/night cycle ([github, changelog 1.3.139](https://github.com/kotmatross28729/EnviroMine-continuation/releases/tag/1.3.139))**
 
-- **13)** **Added compat with Hbm's NTM Space (fork)
+- **13)** **Added compat with Hbm's NTM Space (fork)**
 
-- **14)** **Added compat with Serene Seasons
+- **14)** **Added compat with Serene Seasons**
 
 
 
