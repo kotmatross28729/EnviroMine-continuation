@@ -59,8 +59,6 @@ import static enviromine.core.EnviroMine.isHbmLoaded;
 
 public class EM_StatusManager
 {
-    //Current mod maintainer is eblan tupoi
-    //                                      - kotmatross28729, 03.09.2024
 	public static final int AIR_QUALITY_DELTA_INDEX = 0;
 	public static final int AMBIENT_TEMP_INDEX = 1;
 	public static final int NEAR_LAVA_INDEX = 2;
@@ -136,34 +134,16 @@ public class EM_StatusManager
 	{
 		if(entity instanceof EntityPlayer)
 		{
-			if(trackerList.containsKey("" + entity.getCommandSenderName()))
-			{
-				return trackerList.get("" + entity.getCommandSenderName());
-			} else
-			{
-				return null;
-			}
+            return trackerList.getOrDefault("" + entity.getCommandSenderName(), null);
 		} else
 		{
-			if(trackerList.containsKey("" + entity.getEntityId()))
-			{
-				return trackerList.get("" + entity.getEntityId());
-			} else
-			{
-				return null;
-			}
+            return trackerList.getOrDefault("" + entity.getEntityId(), null);
 		}
 	}
 
 	public static EnviroDataTracker lookupTrackerFromUsername(String username)
 	{
-		if(trackerList.containsKey(username))
-		{
-			return trackerList.get(username);
-		} else
-		{
-			return null;
-		}
+        return trackerList.getOrDefault(username, null);
 	}
 
 	private static Stopwatch timer = Stopwatch.createUnstarted();
@@ -340,8 +320,7 @@ public class EM_StatusManager
             }
         }
 
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityLiving;
+        if (entityLiving instanceof EntityPlayer player) {
 
             for (int slot = 0; slot < 9; slot++) {
                 ItemStack stack = player.inventory.mainInventory[slot];
@@ -384,8 +363,7 @@ public class EM_StatusManager
                             sanityBoost = itemProps.ambSanity * stackMult;
                         }
                     }
-                } else if (stack.getItem() instanceof ItemBlock) {
-                    ItemBlock itemBlock = (ItemBlock) stack.getItem();
+                } else if (stack.getItem() instanceof ItemBlock itemBlock) {
                     if (itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.worldObj.provider.hasNoSky) && sanityBoost <= 0.1F) {
                         if (((BlockFlower) itemBlock.field_150939_a).getPlantType(entityLiving.worldObj, i, j, k) == EnumPlantType.Plains) {
                             sanityBoost = 0.1F; ///TODO BANBODFSNG
@@ -423,7 +401,7 @@ public class EM_StatusManager
                     biomeTemperature -= MathHelper.abs(maxHighAltitudeTemp - biomeTemperature) * ((entityLiving.posY - 90F) / 166F);
                 }
             } else if (entityLiving.posY >= 256) {
-                biomeTemperature = biomeTemperature < maxHighAltitudeTemp ? biomeTemperature : maxHighAltitudeTemp;
+                biomeTemperature = Math.min(biomeTemperature, maxHighAltitudeTemp);
             }
         }
 
@@ -600,8 +578,7 @@ public class EM_StatusManager
 //			}
 
             // Villager assistance. Once per day, certain villagers will heal your sanity, hydration, high body temp; or will feed you.
-            if (mob instanceof EntityVillager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist) {
-                EntityVillager villager = (EntityVillager) mob;
+            if (mob instanceof EntityVillager villager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist) {
                 Village village = entityLiving.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(villager.posX), MathHelper.floor_double(villager.posY), MathHelper.floor_double(villager.posZ), 32);
 
                 long assistTime = villager.getEntityData().getLong("Enviro_Assist_Time");
@@ -1153,19 +1130,19 @@ public class EM_StatusManager
     }
     public static float calculateTemperatureChangeSpace(float currentTime, float phasePeriod, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
         float temperatureChange;
-        // from 0 to 6000 ticks (dawn to noon)
+        // dawn to noon
         if (currentTime >= 0 && currentTime < phasePeriod) {
             temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / phasePeriod) * currentTime;
         }
-        // from 6000 to 12000 ticks (noon to dusk)
+        // noon to dusk
         else if (currentTime >= phasePeriod && currentTime < phasePeriod*2) {
             temperatureChange = DAY_TEMPERATURE + ((DUSK_TEMPERATURE - DAY_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod);
         }
-        // from 12000 to 18000 ticks (dusk to midnight)
+        // dusk to midnight
         else if (currentTime >= phasePeriod*2 && currentTime < phasePeriod*3) {
             temperatureChange = DUSK_TEMPERATURE + ((NIGHT_TEMPERATURE - DUSK_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod*2);
         }
-        // from 18000 to 24000 ticks (midnight to dawn)
+        // midnight to dawn
         else if (currentTime >= phasePeriod*3 && currentTime < phasePeriod*4) {
             temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - DAWN_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod*3);
         }
@@ -1225,77 +1202,58 @@ public class EM_StatusManager
     //Pizdec prosto
 	public static void removeAllTrackers()
 	{
-		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-			tracker.isDisabled = true;
-		}
-
+        for (EnviroDataTracker tracker : trackerList.values()) {
+            tracker.isDisabled = true;
+        }
 		trackerList.clear();
 	}
 
     //EBANIY BLYAT'
 	public static void saveAndDeleteAllTrackers()
 	{
-		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-			tracker.isDisabled = true;
-			NBTTagCompound tags = tracker.trackedEntity.getEntityData();
-			tags.setFloat("ENVIRO_AIR", tracker.airQuality);
-			tags.setFloat("ENVIRO_HYD", tracker.hydration);
-			tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
-			tags.setFloat("ENVIRO_SAN", tracker.sanity);
-		}
+        for (EnviroDataTracker tracker : trackerList.values()) {
+            tracker.isDisabled = true;
+            NBTTagCompound tags = tracker.trackedEntity.getEntityData();
+            tags.setFloat("ENVIRO_AIR", tracker.airQuality);
+            tags.setFloat("ENVIRO_HYD", tracker.hydration);
+            tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
+            tags.setFloat("ENVIRO_SAN", tracker.sanity);
+        }
 		trackerList.clear();
 	}
 
 	public static void saveAndDeleteWorldTrackers(World world)
 	{
 		HashMap<String,EnviroDataTracker> tempList = new HashMap<String,EnviroDataTracker>(trackerList);
-		Iterator<EnviroDataTracker> iterator = tempList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-
-			if(tracker.trackedEntity.worldObj == world)
-			{
-				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
-				tags.setFloat("ENVIRO_AIR", tracker.airQuality);
-				tags.setFloat("ENVIRO_HYD", tracker.hydration);
-				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
-				tags.setFloat("ENVIRO_SAN", tracker.sanity);
-				tracker.isDisabled = true;
-				if(tracker.trackedEntity instanceof EntityPlayer)
-				{
-					trackerList.remove(tracker.trackedEntity.getCommandSenderName());
-				} else
-				{
-					trackerList.remove("" + tracker.trackedEntity.getEntityId());
-				}
-			}
-		}
+        for (EnviroDataTracker tracker : tempList.values()) {
+            if (tracker.trackedEntity.worldObj == world) {
+                NBTTagCompound tags = tracker.trackedEntity.getEntityData();
+                tags.setFloat("ENVIRO_AIR", tracker.airQuality);
+                tags.setFloat("ENVIRO_HYD", tracker.hydration);
+                tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
+                tags.setFloat("ENVIRO_SAN", tracker.sanity);
+                tracker.isDisabled = true;
+                if (tracker.trackedEntity instanceof EntityPlayer) {
+                    trackerList.remove(tracker.trackedEntity.getCommandSenderName());
+                } else {
+                    trackerList.remove("" + tracker.trackedEntity.getEntityId());
+                }
+            }
+        }
 	}
 
 	public static void saveAllWorldTrackers(World world)
 	{
 		HashMap<String,EnviroDataTracker> tempList = new HashMap<String,EnviroDataTracker>(trackerList);
-		Iterator<EnviroDataTracker> iterator = tempList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-
-			if(tracker.trackedEntity.worldObj == world)
-			{
-				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
-				tags.setFloat("ENVIRO_AIR", tracker.airQuality);
-				tags.setFloat("ENVIRO_HYD", tracker.hydration);
-				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
-				tags.setFloat("ENVIRO_SAN", tracker.sanity);
-			}
-		}
+        for (EnviroDataTracker tracker : tempList.values()) {
+            if (tracker.trackedEntity.worldObj == world) {
+                NBTTagCompound tags = tracker.trackedEntity.getEntityData();
+                tags.setFloat("ENVIRO_AIR", tracker.airQuality);
+                tags.setFloat("ENVIRO_HYD", tracker.hydration);
+                tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
+                tags.setFloat("ENVIRO_SAN", tracker.sanity);
+            }
+        }
 	}
 
 	public static EntityPlayer findPlayer(String username)

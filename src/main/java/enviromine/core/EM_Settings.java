@@ -185,9 +185,9 @@ public class EM_Settings
 	public static boolean noGases = false;
 
 	//World Gen
-	public static boolean shaftGen = true;
+	public static boolean shaftGen = false;
 	public static boolean gasGen = true;
-	public static boolean oldMineGen = true;
+	public static boolean oldMineGen = false;
 
 	//Properties
 	//@ShouldOverride("enviromine.network.packet.encoders.ArmorPropsEncoder")

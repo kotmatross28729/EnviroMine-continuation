@@ -2,6 +2,7 @@ package enviromine.trackers.properties;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.hbm.dim.Ike.BiomeGenIke;
 import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
@@ -66,8 +67,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public BiomeProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-
-		if(base != null && base != this)
+		if(base != null && base != this) //DONT TOUCH
 		{
 			throw new IllegalStateException();
 		}
@@ -315,39 +315,33 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	{
 		BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
 
-		for(int p = 0; p < biomeArray.length; p++)
-		{
-			BiomeGenBase biome = biomeArray[p];
+        for (BiomeGenBase biome : biomeArray) {
+            if (biome == null) {
+                continue;
+            }
 
-			if(biome == null)
-			{
-				continue;
-			}
+            String modID = ModIdentification.idFromObject(biome);
 
-			String modID = ModIdentification.idFromObject(biome);
+            File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
 
-			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (Exception e) {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
+                        EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + biome.biomeName + "'", e);
+                    continue;
+                }
+            }
 
-			if(!file.exists())
-			{
-				try
-				{
-					file.createNewFile();
-				} catch(Exception e)
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + biome.biomeName + "'", e);
-					continue;
-				}
-			}
+            Configuration config = new Configuration(file, true);
 
-			Configuration config = new Configuration(file, true);
+            config.load();
 
-			config.load();
+            generateEmpty(config, biome);
 
-			generateEmpty(config, biome);
-
-			config.save();
-		}
+            config.save();
+        }
 	}
 
 	@Override
@@ -359,20 +353,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	@Override
 	public void generateEmpty(Configuration config, Object obj)
 	{
-		if(obj == null || !(obj instanceof BiomeGenBase))
+        if(obj == null || !(obj instanceof BiomeGenBase biome)) //DONT TOUCH
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non biome object!", new Exception());
 			return;
 		}
 
-		BiomeGenBase biome = (BiomeGenBase)obj;
-
-		ArrayList<Type> typeList = new ArrayList<Type>();
+        ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
-		for(int i = 0; i < typeArray.length; i++)
-		{
-			typeList.add(typeArray[i]);
-		}
+        Collections.addAll(typeList, typeArray);
 
 		double air = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
@@ -381,82 +370,89 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY); //TODO change if needed
         double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
 
-        double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 8D : 6D;
-        double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D : 8D;
+        double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 8D : typeList.contains(Type.JUNGLE)? 2D : 6D;
+        double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 4D : 8D;
         boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
         boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
         double TemperatureShadeDecrease = /*typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :*/ 2.5D;
 
-        double biomeTemp = 25;
+        double biomeTemp;
         double DAWN_TEMPERATURE;
         double DAY_TEMPERATURE;
         double DUSK_TEMPERATURE;
         double NIGHT_TEMPERATURE;
 
-//        if(EnviroMine.isHbmSpaceLoaded()) {
-//            if (biome instanceof BiomeGenBaseMoho) {
-//                DAWN_TEMPERATURE =  75D;
-//                DAY_TEMPERATURE =  0D;
-//                DUSK_TEMPERATURE = 75D;
-//                NIGHT_TEMPERATURE = 100D;
-//                biomeTemp = 300;
-//            }
-//            else if (biome instanceof BiomeGenBaseEve) {
-//                DAWN_TEMPERATURE =  71.85D;
-//                DAY_TEMPERATURE =  0D;
-//                DUSK_TEMPERATURE = 71.85D;
-//                NIGHT_TEMPERATURE = 259.98D;
-//                biomeTemp = 146.85;
-//            }
-//            else if (biome instanceof BiomeGenMoon) {
-//                DAWN_TEMPERATURE =  177D;
-//                DAY_TEMPERATURE =  0D;
-//                DUSK_TEMPERATURE = 177D;
-//                NIGHT_TEMPERATURE = 300D;
-//                biomeTemp = 127;
-//                air = -10.0D;
-//            } else if (biome instanceof BiomeGenBaseMinmus) {
-//                DAWN_TEMPERATURE =  64D;
-//                DAY_TEMPERATURE =  0D;
-//                DUSK_TEMPERATURE = 64D;
-//                NIGHT_TEMPERATURE = 121D;
-//                biomeTemp = 14;
-//            }
-//            else if(biome instanceof BiomeGenBaseDuna) {
-//                if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
-//                    DAWN_TEMPERATURE =  98D;
-//                    DAY_TEMPERATURE =  0D;
-//                    DUSK_TEMPERATURE = 98D;
-//                    NIGHT_TEMPERATURE = 173D;
-//                    biomeTemp = 20;
-//                } else {
-//                    DAWN_TEMPERATURE = 69D;
-//                    DAY_TEMPERATURE = 0D;
-//                    DUSK_TEMPERATURE = 69D;
-//                    NIGHT_TEMPERATURE = 98D;
-//                    biomeTemp = 35;
-//                }
-//            } else if (biome instanceof BiomeGenIke) { //From phobos
-//                DAWN_TEMPERATURE =  88D;
-//                DAY_TEMPERATURE =  0D;
-//                DUSK_TEMPERATURE = 88D;
-//                NIGHT_TEMPERATURE = 150D;
-//                biomeTemp = 27;
-//            } else {
-//                DAWN_TEMPERATURE = 4D;
-//                DAY_TEMPERATURE = 0D;
-//                DUSK_TEMPERATURE = 4D;
-//                NIGHT_TEMPERATURE = 8D;
-//                biomeTemp = EnviroUtils.getBiomeTemp(biome);
-//            }
-//        } else {
-            DAWN_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
-            DAY_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 0D :*/ 0D;
-            DUSK_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
-            NIGHT_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 8D :*/ 8D;
+        if(EnviroMine.isHbmSpaceLoaded()) {
+            if (biome instanceof BiomeGenBaseMoho) {
+                DAWN_TEMPERATURE =  75D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 75D;
+                NIGHT_TEMPERATURE = 100D;
+                biomeTemp = 300;
+                isDesertBiome = false;
+            }
+            else if (biome instanceof BiomeGenBaseEve) {
+                DAWN_TEMPERATURE =  71.85D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 71.85D;
+                NIGHT_TEMPERATURE = 259.98D;
+                biomeTemp = 146.85;
+                isDesertBiome = false;
+            }
+            else if (biome instanceof BiomeGenMoon) {
+                DAWN_TEMPERATURE =  177D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 177D;
+                NIGHT_TEMPERATURE = 300D;
+                biomeTemp = 127;
+                isDesertBiome = false;
+                air = -10.0D;
+            } else if (biome instanceof BiomeGenBaseMinmus) {
+                DAWN_TEMPERATURE =  64D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 64D;
+                NIGHT_TEMPERATURE = 121D;
+                biomeTemp = 14;
+                isDesertBiome = false;
+            }
+            else if(biome instanceof BiomeGenBaseDuna) {
+                if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
+                    DAWN_TEMPERATURE =  98D;
+                    DAY_TEMPERATURE =  0D;
+                    DUSK_TEMPERATURE = 98D;
+                    NIGHT_TEMPERATURE = 173D;
+                    biomeTemp = 20;
+                    isDesertBiome = false;
+                } else {
+                    DAWN_TEMPERATURE = 69D;
+                    DAY_TEMPERATURE = 0D;
+                    DUSK_TEMPERATURE = 69D;
+                    NIGHT_TEMPERATURE = 98D;
+                    biomeTemp = 35;
+                    isDesertBiome = false;
+                }
+            } else if (biome instanceof BiomeGenIke) { //From phobos
+                DAWN_TEMPERATURE =  88D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 88D;
+                NIGHT_TEMPERATURE = 150D;
+                biomeTemp = 27;
+                isDesertBiome = false;
+            } else {
+                DAWN_TEMPERATURE = 4D;
+                DAY_TEMPERATURE = 0D;
+                DUSK_TEMPERATURE = 4D;
+                NIGHT_TEMPERATURE = 8D;
+                biomeTemp = EnviroUtils.getBiomeTemp(biome);
+            }
+        } else {
+            DAWN_TEMPERATURE = 4D;
+            DAY_TEMPERATURE = 0D;
+            DUSK_TEMPERATURE = 4D;
+            NIGHT_TEMPERATURE = 8D;
 
             biomeTemp = EnviroUtils.getBiomeTemp(biome);
-//        }
+        }
 
 		String catName = this.categoryName() + "." + biome.biomeName;
 //TODO configs not generating properly

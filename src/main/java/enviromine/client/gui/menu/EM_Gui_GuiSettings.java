@@ -166,8 +166,6 @@ public class EM_Gui_GuiSettings extends GuiScreen
 		}
 	}
 
-	//TODO Needs to be better.. and not called every tick
-    //Nu pizdec - kotmatross
 	@Override
 	public void mouseClickMove(int p_146273_1_, int p_146273_2_, int lastbutton, long time)
 	{
@@ -176,8 +174,6 @@ public class EM_Gui_GuiSettings extends GuiScreen
 		{
 			actionPerformed(Slide);
 		}
-
-
 	}
 	@Override
 	public void onGuiClosed()

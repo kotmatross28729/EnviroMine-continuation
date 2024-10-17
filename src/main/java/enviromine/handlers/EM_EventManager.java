@@ -109,6 +109,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -139,10 +140,9 @@ public class EM_EventManager
 
 		if(EM_Settings.foodSpoiling)
 		{
-			if(event.entity instanceof EntityItem)
+			if(event.entity instanceof EntityItem item)
 			{
-				EntityItem item = (EntityItem)event.entity;
-				ItemStack rotStack = RotHandler.doRot(event.world, item.getEntityItem());
+                ItemStack rotStack = RotHandler.doRot(event.world, item.getEntityItem());
 
 				if(item.getEntityItem() != rotStack)
 				{
@@ -152,10 +152,9 @@ public class EM_EventManager
 			{
 				IInventory invo = ((EntityPlayer)event.entity).inventory;
 				RotHandler.rotInvo(event.world, invo);
-			} else if(event.entity instanceof IInventory)
+			} else if(event.entity instanceof IInventory invo)
 			{
-				IInventory invo = (IInventory)event.entity;
-				RotHandler.rotInvo(event.world, invo);
+                RotHandler.rotInvo(event.world, invo);
 			}
 		}
 
@@ -183,7 +182,6 @@ public class EM_EventManager
 					tracker.trackedEntity = (EntityLivingBase)event.entity;
 				}
 
-				//TODO this is for updating clients gui
 				if (event.entity instanceof EntityPlayerMP && !event.world.isRemote)
 				{
 					NBTTagCompound pData = new NBTTagCompound();
@@ -198,11 +196,10 @@ public class EM_EventManager
 
 				}
 			}
-		} else if(event.entity instanceof EntityFallingBlock && !(event.entity instanceof EntityPhysicsBlock) && !event.world.isRemote && event.world.getTotalWorldTime() > EM_PhysManager.worldStartTime + EM_Settings.worldDelay && chunkPhys)
+		} else if(event.entity instanceof EntityFallingBlock oldSand && !(event.entity instanceof EntityPhysicsBlock) && !event.world.isRemote && event.world.getTotalWorldTime() > EM_PhysManager.worldStartTime + EM_Settings.worldDelay && chunkPhys)
 		{
-			EntityFallingBlock oldSand = (EntityFallingBlock)event.entity;
 
-			if(oldSand.func_145805_f() != Blocks.air)
+            if(oldSand.func_145805_f() != Blocks.air)
 			{
 				NBTTagCompound oldTags = new NBTTagCompound();
 				oldSand.writeToNBT(oldTags);
@@ -269,11 +266,9 @@ public class EM_EventManager
 	{
 		doDeath(event.entityLiving);
 
-		if(event.entityLiving instanceof EntityMob && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer)
+		if(event.entityLiving instanceof EntityMob && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer player)
 		{
-			EntityPlayer player = (EntityPlayer)event.source.getEntity();
-			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
-
+            EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
 
 			if(player.isPotionActive(EnviroPotion.insanity) && player.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2)
 			{
@@ -287,7 +282,7 @@ public class EM_EventManager
 			}
 
 			// If player kill mob give some sanity back
-			if(tracker != null && tracker.sanity < 100 && !(event.entityLiving instanceof EntityAnimal))
+            if(tracker != null && tracker.sanity < 100 && !(event.entityLiving instanceof EntityAnimal)) //DONT TOUCH
 			{
 				tracker.sanity += event.entityLiving.worldObj.rand.nextInt(5);
 			}
@@ -397,11 +392,10 @@ public class EM_EventManager
 		{
 			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.entityLiving);
 
-			if(event.entityLiving instanceof EntityPlayer)
+			if(event.entityLiving instanceof EntityPlayer player)
 			{
-				EntityPlayer player = (EntityPlayer)event.entityLiving;
 
-				if(player.capabilities.disableDamage || player.capabilities.isCreativeMode)
+                if(player.capabilities.disableDamage || player.capabilities.isCreativeMode)
 				{
 					return;
 				}
@@ -449,9 +443,8 @@ public class EM_EventManager
 			}
 		}
 
-		if(!event.entityPlayer.worldObj.isRemote)
-		{
-
+//		if(!event.entityPlayer.worldObj.isRemote)
+//		{
 //			EnviroMine.logger.info("CreatureType: " + EnviroUtils.getWitcheryCreatureType(event.entityPlayer));
 //			EnviroMine.logger.info("Vampire level: " + EnviroUtils.getWitcheryVampireLevel(event.entityPlayer));
 //			EnviroMine.logger.info("Werewolf level: " + EnviroUtils.getWitcheryWerewolfLevel(event.entityPlayer));
@@ -492,13 +485,13 @@ public class EM_EventManager
 //					}
 //				}
 //			}
-		}
+//		}
 
 		if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item != null)
 		{
 			if(item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote)
 			{
-				int adjCoords[] = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
+				int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
 
 				if(item.getItem() == Item.getItemFromBlock(Blocks.torch) && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) // Redirect torch placement to our own
 				{
@@ -584,11 +577,9 @@ public class EM_EventManager
 			return;
 		}
 
-		if(event.target != null && event.target instanceof IInventory && EM_Settings.foodSpoiling)
+		if(event.target instanceof IInventory chest && EM_Settings.foodSpoiling)
 		{
-			IInventory chest = (IInventory)event.target;
-
-			RotHandler.rotInvo(event.entityPlayer.worldObj, chest);
+            RotHandler.rotInvo(event.entityPlayer.worldObj, chest);
 		}
 	}
 
@@ -599,7 +590,7 @@ public class EM_EventManager
 			return;
 		}
 
-		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(player.worldObj, player, true);
+		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(player.worldObj, player);
 
 		if(movingobjectposition == null)
 		{
@@ -641,7 +632,7 @@ public class EM_EventManager
 
 	public static void fillBottle(World world, EntityPlayer player, int x, int y, int z, ItemStack item, PlayerInteractEvent event)
 	{
-		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player, true);
+		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player);
 
 		if(movingobjectposition == null)
 		{
@@ -673,13 +664,9 @@ public class EM_EventManager
 
 				if(targetblock == Blocks.water || targetblock == Blocks.flowing_water)
 				{
-					isWater = true;
 
-					// if finite is on.. make sure player cant drink from a infinite flowing water source
-					if(targetmeta > .2f && EM_Settings.finiteWater)
-					{
-						isWater = false;
-					}
+                    // if finite is on.. make sure player cant drink from a infinite flowing water source
+                    isWater = !(targetmeta > .2f) || !EM_Settings.finiteWater;
 
 				} else
 				{
@@ -690,29 +677,28 @@ public class EM_EventManager
 				{
 					Item newItem = Items.potionitem;
 
-					switch(getWaterType(world, i, j, k))
-					{
-						case 0: // Clean
-						{
-							newItem = Items.potionitem;
-							break;
-						}
-						case 1: // Dirty
-						{
-							newItem = ObjectHandler.badWaterBottle;
-							break;
-						}
-						case 2: // Salty
-						{
-							newItem = ObjectHandler.saltWaterBottle;
-							break;
-						}
-						case 3: // Cold
-						{
-							newItem = ObjectHandler.coldWaterBottle;
-							break;
-						}
-					}
+                    switch (getWaterType(world, i, j, k)) {
+                        case 0 -> // Clean
+                        {
+                            newItem = Items.potionitem;
+                            break;
+                        }
+                        case 1 -> // Dirty
+                        {
+                            newItem = ObjectHandler.badWaterBottle;
+                            break;
+                        }
+                        case 2 -> // Salty
+                        {
+                            newItem = ObjectHandler.saltWaterBottle;
+                            break;
+                        }
+                        case 3 -> // Cold
+                        {
+                            newItem = ObjectHandler.coldWaterBottle;
+                            break;
+                        }
+                    }
 
 					if(isValidCauldron && isCauldronHeatingBlock(world.getBlock(i, j-1, k), world.getBlockMetadata(i, j-1, k)))
 					{
@@ -771,7 +757,7 @@ public class EM_EventManager
 		}
 
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(entityPlayer);
-		MovingObjectPosition mop = getMovingObjectPositionFromPlayer(entityPlayer.worldObj, entityPlayer, true);
+		MovingObjectPosition mop = getMovingObjectPositionFromPlayer(entityPlayer.worldObj, entityPlayer);
 
 		if(mop != null)
 		{
@@ -797,23 +783,16 @@ public class EM_EventManager
 				Block targetBlock = entityPlayer.worldObj.getBlock(i, j, k);
 				String targetBlockRegistryName = Block.blockRegistry.getNameForObject(targetBlock);
 
-				boolean isWater = false;
+				boolean isWater = (targetBlock == Blocks.flowing_water || targetBlock == Blocks.water
+                    // Automatically make the block water if it's Streams water
+                    || (EM_Settings.streamsDrink && targetBlockRegistryName.contains(WATER_ROOT_STREAMS))
+                )
+                    // If finite water is on, make sure player can't drink from an infinite flowing water source
+                    && !(entityPlayer.worldObj.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater)
+                    // Automatically make the block not-water if it's BoP blood
+                    && !(targetBlockRegistryName.equals(BLOOD_BLOCK_BOP));
 
-				if(
-						(targetBlock == Blocks.flowing_water  || targetBlock == Blocks.water
-						// Automatically make the block water if it's Streams water
-						|| (EM_Settings.streamsDrink && targetBlockRegistryName.contains(WATER_ROOT_STREAMS))
-						)
-						// If finite water is on, make sure player can't drink from an infinite flowing water source
-						&& !(entityPlayer.worldObj.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater)
-						// Automatically make the block not-water if it's BoP blood
-						&& !(targetBlockRegistryName.equals(BLOOD_BLOCK_BOP))
-						)
-				{
-					isWater = true;
-				}
-
-				boolean isValidCauldron = (entityPlayer.worldObj.getBlock(i, j, k) == Blocks.cauldron && entityPlayer.worldObj.getBlockMetadata(i, j, k) > 0);
+                boolean isValidCauldron = (entityPlayer.worldObj.getBlock(i, j, k) == Blocks.cauldron && entityPlayer.worldObj.getBlockMetadata(i, j, k) > 0);
 
 				if(isWater || isValidCauldron)
 				{
@@ -831,8 +810,8 @@ public class EM_EventManager
 						}
 
 						int werewolfLevel = EnviroUtils.getWitcheryWerewolfLevel(entityPlayer);
-						int werewolfDuration200 = MathHelper.clamp_int(200 - (entityPlayer instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
-						int werewolfDuration600 = MathHelper.clamp_int(600 - (entityPlayer instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
+						int werewolfDuration200 = MathHelper.clamp_int(200 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
+						int werewolfDuration600 = MathHelper.clamp_int(600 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
 						if(type == 0) // Clean
 						{
@@ -866,18 +845,14 @@ public class EM_EventManager
 						{
 							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
 							{
-								if(entityPlayer.getRNG().nextInt(1) == 0)
-								{
-									if(entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0)
-									{
-										int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
-										entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600, amp + 1));
-									} else
-									{
-										entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
-									}
-								}
-							}
+                                entityPlayer.getRNG().nextInt(1);
+                                if (entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0) {
+                                    int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
+                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600, amp + 1));
+                                } else {
+                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
+                                }
+                            }
 
 							if(tracker.bodyTemp >= 37.05)
 							{
@@ -948,10 +923,7 @@ public class EM_EventManager
 
 		ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
-		for(int i = 0; i < typeArray.length; i++)
-		{
-			typeList.add(typeArray[i]);
-		}
+        Collections.addAll(typeList, typeArray);
 
 
 		if(typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad)
@@ -1309,7 +1281,7 @@ public class EM_EventManager
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod = new AttributeModifier(EM_DEHY1_ID, "EM_Dehydrated", -0.25D, 2);
 
-			if(mod != null && attribute.getModifier(mod.getID()) == null)
+			if(attribute.getModifier(mod.getID()) == null)
 			{
 				attribute.applyModifier(mod);
 			}
@@ -1334,7 +1306,7 @@ public class EM_EventManager
 			IAttributeInstance attribute = event.entityLiving.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod = new AttributeModifier(EM_HEAT1_ID, "EM_Heat", -0.25D, 2);
 
-			if(mod != null && attribute.getModifier(mod.getID()) == null)
+			if(attribute.getModifier(mod.getID()) == null)
 			{
 				attribute.applyModifier(mod);
 			}
@@ -1374,7 +1346,7 @@ public class EM_EventManager
 					}
 				}
 			}
-			if(mod != null && attribute.getModifier(mod.getID()) == null)
+			if(attribute.getModifier(mod.getID()) == null)
 			{
 				attribute.applyModifier(mod);
 
@@ -1409,17 +1381,17 @@ public class EM_EventManager
 				return;
 			}
 
-			if(((EntityPlayer)event.entityLiving).isPlayerSleeping() && tracker != null && !event.entityLiving.worldObj.isDaytime())
+			if(((EntityPlayer) event.entityLiving).isPlayerSleeping() && !event.entityLiving.worldObj.isDaytime())
 			{
 				tracker.sleepState = "Asleep";
 				tracker.lastSleepTime = (int)event.entityLiving.worldObj.getWorldInfo().getWorldTime() % 24000;
-			} else if(tracker != null && event.entityLiving.worldObj.isDaytime())
+			} else if(event.entityLiving.worldObj.isDaytime())
 			{
 				int relitiveTime = (int)event.entityLiving.worldObj.getWorldInfo().getWorldTime() % 24000;
 
 				if(tracker.sleepState.equals("Asleep") && tracker.lastSleepTime - relitiveTime > 100)
 				{
-					int timeSlept = MathHelper.floor_float(100*(12000 - (tracker.lastSleepTime - 12000))/12000);
+					int timeSlept = MathHelper.floor_float(100F*(12000F - (tracker.lastSleepTime - 12000F))/12000F);
 
 					if(tracker.sanity + timeSlept > 100F)
 					{
@@ -1484,13 +1456,10 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onWorldLoad(Load event)
 	{
-
 		if(event.world.isRemote)
 		{
 			return;
 		}
-
-
 
 		//Load Custom Configs
 		if (!firstload)
@@ -1575,7 +1544,7 @@ public class EM_EventManager
 		}
 	}
 
-	protected static MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World, EntityPlayer par2EntityPlayer, boolean par3)
+	protected static MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World, EntityPlayer par2EntityPlayer)
 	{
 		float f = 1.0F;
 		float f1 = par2EntityPlayer.prevRotationPitch + (par2EntityPlayer.rotationPitch - par2EntityPlayer.prevRotationPitch) * f;
@@ -1596,7 +1565,7 @@ public class EM_EventManager
 			d3 = ((EntityPlayerMP)par2EntityPlayer).theItemInWorldManager.getBlockReachDistance();
 		}
 		Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		return par1World.func_147447_a(vec3, vec31, par3, !par3, false);
+		return par1World.func_147447_a(vec3, vec31, true, !true, false);
 	}
 
 	/* Client only events */
@@ -1705,51 +1674,49 @@ public class EM_EventManager
 		}
 	}
 
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onRender(RenderLivingEvent.Specials.Pre event)
-	{
-
-
-		/*
-		ItemStack plate = event.entity.getEquipmentInSlot(3);
-		EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
-
-		if(event.entity == thePlayer && Minecraft.getMinecraft().currentScreen != null)
-		{
-			// Prevents the pack from rendering weirdly in the inventory screen
-			return;
-		}
-
-		GL11.glPushMatrix();
-
-		if (plate != null && (event.renderer instanceof RenderBiped || event.renderer instanceof RenderPlayer))
-		{
-			if (plate.getItem() == ObjectHandler.camelPack && !(plate.hasTagCompound() && !plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))) {
-				plate.getItem().onUpdate(plate, event.entity.worldObj, event.entity, 3, false);
-			}
-
-			if (plate.hasTagCompound() && plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))
-			{
-				EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-				double diffX = (event.entity.lastTickPosX + (event.entity.posX - event.entity.lastTickPosX) * partialTicks) - (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks);
-				double diffY = (event.entity.lastTickPosY + (event.entity.posY - event.entity.lastTickPosY) * partialTicks) - (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks) + (event.entity == thePlayer? -0.1D : event.entity.getEyeHeight() + (event.entity instanceof EntityPlayer? -0.1D : (0.1D * (event.entity.width/0.6D))));
-				double diffZ = (event.entity.lastTickPosZ + (event.entity.posZ - event.entity.lastTickPosZ) * partialTicks) - (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks);
-				GL11.glTranslated(diffX, diffY, diffZ);
-				GL11.glRotatef(180F, 0F, 0F, 1F);
-				GL11.glRotatef(180F + (event.entity.renderYawOffset + ((event.entity == player && (player.openContainer != player.inventoryContainer)) ? ((event.entity.renderYawOffset - event.entity.prevRenderYawOffset) * partialTicks) : 0)), 0F, 1F, 0F);
-				GL11.glScaled(event.entity.width/0.6D, event.entity.width/0.6D, event.entity.width/0.6D);
-				if(event.entity.isSneaking())
-				{
-					GL11.glRotatef(30F, 1F, 0F, 0F);
-				}
-				ModelCamelPack.RenderPack(event.entity, 0, 0, 0, 0, 0, .06325f);
-			}
-		}
-		GL11.glPopMatrix();
-
-		*/
-	}
+//	@SubscribeEvent
+//	@SideOnly(Side.CLIENT)
+//	public void onRender(RenderLivingEvent.Specials.Pre event)
+//	{
+//		/*
+//		ItemStack plate = event.entity.getEquipmentInSlot(3);
+//		EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
+//
+//		if(event.entity == thePlayer && Minecraft.getMinecraft().currentScreen != null)
+//		{
+//			// Prevents the pack from rendering weirdly in the inventory screen
+//			return;
+//		}
+//
+//		GL11.glPushMatrix();
+//
+//		if (plate != null && (event.renderer instanceof RenderBiped || event.renderer instanceof RenderPlayer))
+//		{
+//			if (plate.getItem() == ObjectHandler.camelPack && !(plate.hasTagCompound() && !plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))) {
+//				plate.getItem().onUpdate(plate, event.entity.worldObj, event.entity, 3, false);
+//			}
+//
+//			if (plate.hasTagCompound() && plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))
+//			{
+//				EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+//				double diffX = (event.entity.lastTickPosX + (event.entity.posX - event.entity.lastTickPosX) * partialTicks) - (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks);
+//				double diffY = (event.entity.lastTickPosY + (event.entity.posY - event.entity.lastTickPosY) * partialTicks) - (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks) + (event.entity == thePlayer? -0.1D : event.entity.getEyeHeight() + (event.entity instanceof EntityPlayer? -0.1D : (0.1D * (event.entity.width/0.6D))));
+//				double diffZ = (event.entity.lastTickPosZ + (event.entity.posZ - event.entity.lastTickPosZ) * partialTicks) - (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks);
+//				GL11.glTranslated(diffX, diffY, diffZ);
+//				GL11.glRotatef(180F, 0F, 0F, 1F);
+//				GL11.glRotatef(180F + (event.entity.renderYawOffset + ((event.entity == player && (player.openContainer != player.inventoryContainer)) ? ((event.entity.renderYawOffset - event.entity.prevRenderYawOffset) * partialTicks) : 0)), 0F, 1F, 0F);
+//				GL11.glScaled(event.entity.width/0.6D, event.entity.width/0.6D, event.entity.width/0.6D);
+//				if(event.entity.isSneaking())
+//				{
+//					GL11.glRotatef(30F, 1F, 0F, 0F);
+//				}
+//				ModelCamelPack.RenderPack(event.entity, 0, 0, 0, 0, 0, .06325f);
+//			}
+//		}
+//		GL11.glPopMatrix();
+//
+//		*/
+//	}
 
 	float partialTicks = 1F;
 
@@ -1774,7 +1741,7 @@ public class EM_EventManager
 					event.itemStack.getTagCompound().setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, fill);
 				}
 
-				int disp = (fill <= 0 ? 0 : fill > max ? 100 : (int)(((float)fill/(float)max)*100));
+				int disp = fill <= 0 ? 0 : (int)((float)fill/(float)max *100);
 				event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
 				//event.toolTip.add("Water: " + disp + "% ("+fill+"/"+max+")");
 			}
