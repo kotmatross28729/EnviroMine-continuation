@@ -20,10 +20,11 @@ import net.minecraft.item.ItemStack;
 
 public class ModIdentification
 {
+    //TODO REWRITE
 	public static HashMap<String, String> modID_Name = new HashMap<String, String>();
 	// Now uses full path (as a File object) instead of only the file name. This is to prevent identically named files in separate directories.
 	public static HashMap<File, String> modSource_ID = new HashMap<File, String>();
-	
+
 	/**
 	 * Good for UI purposes but not for config entries (use modID instead)
 	 * @param obj
@@ -32,7 +33,7 @@ public class ModIdentification
 	public static String nameFromObject(Object obj)
 	{
 		String modID = idFromObject(obj);
-		
+
 		if(modID.equals("minecraft"))
 		{
 			return "Minecraft";
@@ -44,7 +45,7 @@ public class ModIdentification
 			return "Unknown";
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static String idFromObject(Object obj)
 	{
@@ -65,7 +66,7 @@ public class ModIdentification
 		} else if(obj instanceof Entity || (obj instanceof Class && Entity.class.isAssignableFrom((Class)obj)))
 		{
 			Class clazz;
-			
+
 			if(obj instanceof Entity)
 			{
 				clazz = obj.getClass();
@@ -73,37 +74,37 @@ public class ModIdentification
 			{
 				clazz = (Class)obj;
 			}
-			
+
 			@SuppressWarnings("unchecked")
 			EntityRegistration er = EntityRegistry.instance().lookupModSpawn((Class<? extends Entity>)clazz, true);
-			
+
 			if(er == null)
 			{
 				return "minecraft"; // Entity not registered through forge at all. Vanilla?
 			}
-			
+
 			ModContainer mc =  er.getContainer();
-			
+
 			if(mc != null)
 			{
 				return mc.getModId();
 			}
-			
+
 			// Let the entity pass into the brute force identifier
 		}
-		
+
 		// BRUTE FORCE IDENTIFIER: This is where non-standard objects are identified through their mod file location. May fail in some environments
-		
+
 		File file;
 		String modName = "unknown";
 		String fullPath = "";
 		Class clazz = (obj instanceof Class ? (Class)obj : obj.getClass());
-		
+
 		// Slight changes here so you can throw raw classes at this and still get the correct result as well as converting the string to just a file object and additional error handling
 		try
 		{
 			// Remove class path and URL prefix...
-			
+
 			if(clazz == null)
 			{
 				// No point even passing this to the legacy method if it's null
@@ -113,11 +114,11 @@ public class ModIdentification
 			fullPath = clazz.getResource("").toString();
 			int tmpIndex = fullPath.indexOf("file:/");
 			fullPath = URLDecoder.decode(fullPath.substring(tmpIndex + "file:/".length()), "UTF-8");
-		
+
 			file = new File(fullPath);
-			
+
 			//EnviroMine.logger.log(Level.INFO, "ModID lookup Success for: " + (obj instanceof Class? ((Class)obj).getName() : obj.getClass().getName()) + " {" + fullPath + "}");
-			
+
 			for(File s : modSource_ID.keySet())
 			{
 				if(file.equals(s) || file.getAbsolutePath().startsWith(s.getAbsolutePath()))
@@ -126,14 +127,14 @@ public class ModIdentification
 					break;
 				}
 			}
-			
+
 
 		} catch(Exception e)
 		{
 			//Removing the catch because we want to see if the Legacy identification method can find the ID
-			
+
 			//EnviroMine.logger.log(Level.INFO, "ModID lookup failed for: " + (obj instanceof Class? ((Class)obj).getName() : obj.getClass().getName()) + " {" + fullPath + "}", e);
-			
+
 			if((obj instanceof Class? ((Class)obj).getName() : obj.getClass().getName()).toLowerCase().contains("net.minecraft"))
 			{
 				return "minecraft"; // Biome not registered through forge at all. Vanilla?
@@ -142,7 +143,7 @@ public class ModIdentification
 
 			//return modName;
 		}
-		
+
 		if(modName.equals("unknown"))
 		{
 			modName = OldIdentificationMethod(clazz);
@@ -155,10 +156,10 @@ public class ModIdentification
 		else if(modName.equals("unknown"))
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Unable to find matching ModID for " + clazz.getSimpleName());
-		} 
+		}
 		return modName;
 	}
-	
+
 	/**
 	 * Use the legacy method for identifying the mod in the event the main one fails.
 	 */
@@ -166,7 +167,7 @@ public class ModIdentification
 	{
 		String modName = "unknown";
 		String objPath = "";
-		
+
 		try
 		{
 			objPath = obj.getProtectionDomain().getCodeSource().getLocation().toString();
@@ -174,14 +175,14 @@ public class ModIdentification
 		{
 			return modName;
 		}
-		
+
 		try
 		{
 			objPath = URLDecoder.decode(objPath, "UTF-8");
 		} catch (Exception e)
 		{
-		}		
-		
+		}
+
 		for (File f: modSource_ID.keySet())
 		{
 			if (objPath.contains(f.getName()))
@@ -190,11 +191,11 @@ public class ModIdentification
 				break;
 			}
 		}
-		
-		
+
+
 		return modName;
 	}
-	
+
 	static
 	{
 
@@ -202,7 +203,7 @@ public class ModIdentification
 		{
 			modID_Name.put(mod.getModId(), mod.getName());
 			modSource_ID.put(mod.getSource(), mod.getModId());
-			
+
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.INFO, "Mapped mod: {" + mod.getSource().getAbsolutePath() + "," + mod.getName() + "," + mod.getModId() + "}");
 		}
 	}

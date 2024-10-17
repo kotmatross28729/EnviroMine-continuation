@@ -32,7 +32,7 @@ public class EM_Settings
 	public static File worldDir = null;
 
 	//Mod Data
-	public static final String VERSION = "1.3.141" + " kotmatross edition";
+	public static final String VERSION = "1.3.142" + " kotmatross edition";
 	public static final String MOD_ID = "enviromine";
 	public static final String MOD_NAME = "EnviroMine";
 	public static final String MOD_NAME_COLORIZED = EnumChatFormatting.AQUA + MOD_NAME + EnumChatFormatting.RESET;
@@ -77,6 +77,8 @@ public class EM_Settings
     public static float BodyTempGood = 0.3F;
     public static float BodyTempBad = 0.5F;
     public static float BodyTempWorst = 0.8F;
+
+    public static float BodyTempSleep = 10F;
 
     public static boolean DeathFromHeartAttack;
     public static int HeartAttackTimeToDie;
@@ -183,9 +185,9 @@ public class EM_Settings
 	public static boolean noGases = false;
 
 	//World Gen
-	public static boolean shaftGen = true;
+	public static boolean shaftGen = false;
 	public static boolean gasGen = true;
-	public static boolean oldMineGen = true;
+	public static boolean oldMineGen = false;
 
 	//Properties
 	//@ShouldOverride("enviromine.network.packet.encoders.ArmorPropsEncoder")

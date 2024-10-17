@@ -1,5 +1,6 @@
 package enviromine.core;
 
+import cpw.mods.fml.common.Loader;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -57,7 +58,22 @@ public class EnviroMine
 
 	public SimpleNetworkWrapper network;
 
-	//public static EM_WorldData theWorldEM;
+    public static boolean isHbmLoaded() {
+        return Loader.isModLoaded("hbm");
+    }
+    public static boolean isHbmSpaceLoaded() {
+        try {
+            Class.forName("com.hbm.dim.SolarSystem"); //idk why this, but why not?
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+    public static boolean isTCLoaded() {
+        return Loader.isModLoaded("Thaumcraft");
+    }
+
+    //public static EM_WorldData theWorldEM;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
@@ -174,10 +190,6 @@ public class EnviroMine
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit(event);
-
-		//TODO Moved inside of Config Handler.general config to add in custom list
-		//ObjectHandler.LoadIgnitionSources();
-
 		EM_ConfigHandler.initConfig(); // Second pass for object initialized after pre-init
 	}
 

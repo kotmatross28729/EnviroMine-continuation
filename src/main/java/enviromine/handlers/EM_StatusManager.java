@@ -1,8 +1,18 @@
 package enviromine.handlers;
 
 import com.google.common.base.Stopwatch;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.orbit.WorldProviderOrbit;
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.ThreeInts;
+import com.hbm.handler.atmosphere.AtmosphereBlob;
+import com.hbm.handler.atmosphere.ChunkAtmosphereHandler;
+import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
+import com.hbm.handler.atmosphere.IAtmosphereProvider;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
+import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.EnviroPotion;
 import enviromine.client.gui.UI_Settings;
@@ -49,13 +59,14 @@ import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
-import java.util.Arrays;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
-import static enviromine.trackers.EnviroDataTracker.isHbmLoaded;
+import static enviromine.core.EM_Settings.BodyTempSleep;
+import static enviromine.core.EnviroMine.isHbmLoaded;
 
 public class EM_StatusManager
 {
@@ -99,7 +110,7 @@ public class EM_StatusManager
 
 		tracker.updateTimer += 1;
 
-		if(tracker.updateTimer >= 30)
+		if(tracker.updateTimer >= 30) //TODO HARDCODED
 		{
 			tracker.updateData();
 
@@ -134,34 +145,16 @@ public class EM_StatusManager
 	{
 		if(entity instanceof EntityPlayer)
 		{
-			if(trackerList.containsKey("" + entity.getCommandSenderName()))
-			{
-				return trackerList.get("" + entity.getCommandSenderName());
-			} else
-			{
-				return null;
-			}
+            return trackerList.getOrDefault("" + entity.getCommandSenderName(), null);
 		} else
 		{
-			if(trackerList.containsKey("" + entity.getEntityId()))
-			{
-				return trackerList.get("" + entity.getEntityId());
-			} else
-			{
-				return null;
-			}
+            return trackerList.getOrDefault("" + entity.getEntityId(), null);
 		}
 	}
 
 	public static EnviroDataTracker lookupTrackerFromUsername(String username)
 	{
-		if(trackerList.containsKey(username))
-		{
-			return trackerList.get(username);
-		} else
-		{
-			return null;
-		}
+        return trackerList.getOrDefault(username, null);
 	}
 
 	private static Stopwatch timer = Stopwatch.createUnstarted();
@@ -242,8 +235,8 @@ public class EM_StatusManager
 
         if (!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
             if (dimensionProp == null || !dimensionProp.override || dimensionProp.darkAffectSanity) {
-                sanityStartRate = -0.01F;
-                sanityRate = -0.01F;
+                sanityStartRate = -0.01F; //TODO HARDCODED
+                sanityRate = -0.01F; ///GUH?
             }
         }
 
@@ -273,7 +266,20 @@ public class EM_StatusManager
                             }
 
                             if (biomeOverride != null && biomeOverride.biomeOveride) {
-                                surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
+                                if(EnviroMine.isHbmSpaceLoaded()) {
+                                    CBT_Atmosphere atmosphere = entityLiving.worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(entityLiving.worldObj, CBT_Atmosphere.class);
+                                    if(atmosphere != null) {
+                                        if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
+                                            surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp_TERRAFORMED;
+                                        } else {
+                                            surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
+                                        }
+                                    } else {
+                                        surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
+                                    }
+                                } else {
+                                    surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
+                                }
                             } else {
                                 //surBiomeTemps += EnviroUtils.getBiomeTemp(checkBiome);
                                 surroundingBiomeTempSamplesSum += EnviroUtils.getBiomeTemp((i + x), (j + y), (k + z), checkBiome);
@@ -338,8 +344,7 @@ public class EM_StatusManager
             }
         }
 
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityLiving;
+        if (entityLiving instanceof EntityPlayer player) {
 
             for (int slot = 0; slot < 9; slot++) {
                 ItemStack stack = player.inventory.mainInventory[slot];
@@ -382,17 +387,17 @@ public class EM_StatusManager
                             sanityBoost = itemProps.ambSanity * stackMult;
                         }
                     }
-                } else if (stack.getItem() instanceof ItemBlock) {
-                    ItemBlock itemBlock = (ItemBlock) stack.getItem();
+                } else if (stack.getItem() instanceof ItemBlock itemBlock) {
                     if (itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.worldObj.provider.hasNoSky) && sanityBoost <= 0.1F) {
                         if (((BlockFlower) itemBlock.field_150939_a).getPlantType(entityLiving.worldObj, i, j, k) == EnumPlantType.Plains) {
-                            sanityBoost = 0.1F;
+                            sanityBoost = 0.1F; //TODO HARDCODED
                         }
                     }
                 }
             }
         }
 
+        //TODO HARDCODED
         if (lightLev > 1 && !entityLiving.worldObj.provider.hasNoSky) {
             quality = 2F;
             sanityRate = 0.5F;
@@ -401,13 +406,15 @@ public class EM_StatusManager
         }
 
         if (dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality = 2F;
+            quality = 2F;//f
         }
 
 
         float biomeTemperature = (surroundingBiomeTempSamplesSum / surroundingBiomeTempSamplesCount);
         float maxHighAltitudeTemp = -30F; // Max temp at high altitude
         float minLowAltitudeTemp = 30F; // Min temp at low altitude (Geothermal Heating)
+
+        //TODO CHANGE FUCKING HARDCODE
 
         if (!entityLiving.worldObj.provider.hasNoSky) {
             if (entityLiving.posY < 48) {
@@ -419,7 +426,7 @@ public class EM_StatusManager
                     biomeTemperature -= MathHelper.abs(maxHighAltitudeTemp - biomeTemperature) * ((entityLiving.posY - 90F) / 166F);
                 }
             } else if (entityLiving.posY >= 256) {
-                biomeTemperature = biomeTemperature < maxHighAltitudeTemp ? biomeTemperature : maxHighAltitudeTemp;
+                biomeTemperature = Math.min(biomeTemperature, maxHighAltitudeTemp);
             }
         }
 
@@ -427,7 +434,7 @@ public class EM_StatusManager
 
         if (entityLiving instanceof EntityPlayer) {
             if (((EntityPlayer) entityLiving).isPlayerSleeping()) {
-                biomeTemperature += 10F;
+                biomeTemperature += BodyTempSleep;
             }
         }
 
@@ -436,7 +443,7 @@ public class EM_StatusManager
         } else {
             float biomeTemperatureRain = 6F;
             float biomeTemperatureThunder = 8F;
-            float biomeTemperatureShade = 2.5F;
+            float biomeTemperatureShade = 2.5F; //the FUCK is that
 
             boolean biomeTemperatureRainBool = false;
             boolean biomeTemperatureThunderBool = false;
@@ -451,7 +458,7 @@ public class EM_StatusManager
                     biomeTemperatureThunder = biomeOverride.TemperatureThunderDecrease;
                     biomeTemperatureRainBool = biomeOverride.TemperatureRainBool;
                     biomeTemperatureThunderBool = biomeOverride.TemperatureThunderBool;
-                    biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
+                    biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //Uh what
                 }
             }
 
@@ -463,46 +470,31 @@ public class EM_StatusManager
                     dropSpeed = 0.01F;
                 }
             } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && biomeTemperatureThunderBool) {
-
-
                 biomeTemperature -= biomeTemperatureThunder;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
-                    dropSpeed = 0.01F;
+                    dropSpeed = 0.01F; //TODO HARDCODED
                 }
             }
 
         } // Dimension Overrides End
 
-        float biomeTemperatureShade = 2.5F;
+        float biomeTemperatureShade = 2.5F; //who the fuck writing that code? (-grammar)
         if (biome != null) {
             BiomeProperties biomeOverride = null;
             if (BiomeProperties.base.hasProperty(biome)) {
                 biomeOverride = BiomeProperties.base.getProperty(biome);
             } if (biomeOverride != null && biomeOverride.biomeOveride) {
-                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
+                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //A, it was me
             }
         }
         // 	Shade
         if (!entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.worldObj.isRaining()) {
-            biomeTemperature -= biomeTemperatureShade;
+            biomeTemperature -= biomeTemperatureShade; //WHA-
         }
 
         if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
-
-//| Ticks                    | Time of the day |
-//|--------------------------|-----------------|
-//| 24000 (0)                |Sunrise          |
-//| 1000 - 6000              |Morning          |
-//| 6000                     |Noon             |
-//| 6000 - 12000             |Afternoon        |
-//| 12000                    |Sunset           |
-//| 12000 - 18000            |Dusk             |
-//| 18000                    |Midnight         |
-//| 18000 - 23000            |After midnight   |
-//| 23000 - 24000 (0)        |Dawn             |
-
             boolean isDesertBiome = false;
             float DesertBiomeTemperatureMultiplier = 1F;
 
@@ -510,6 +502,11 @@ public class EM_StatusManager
             float biome_DAY_TEMPERATURE = 0F;
             float biome_DUSK_TEMPERATURE = 4F;
             float biome_NIGHT_TEMPERATURE = 8F;
+
+            float biome_DAWN_TEMPERATURE_TERRAFORMED = 4F;
+            float biome_DAY_TEMPERATURE_TERRAFORMED = 0F;
+            float biome_DUSK_TEMPERATURE_TERRAFORMED = 4F;
+            float biome_NIGHT_TEMPERATURE_TERRAFORMED = 8F;
 
             if (biome != null) {
                 BiomeProperties biomeOverride = null;
@@ -525,19 +522,53 @@ public class EM_StatusManager
                     biome_DAY_TEMPERATURE = biomeOverride.DAY_TEMPERATURE;
                     biome_DUSK_TEMPERATURE = biomeOverride.DUSK_TEMPERATURE;
                     biome_NIGHT_TEMPERATURE = biomeOverride.NIGHT_TEMPERATURE;
+
+                    biome_DAWN_TEMPERATURE_TERRAFORMED = biomeOverride.DAWN_TEMPERATURE_TERRAFORMED;
+                    biome_DAY_TEMPERATURE_TERRAFORMED = biomeOverride.DAY_TEMPERATURE_TERRAFORMED;
+                    biome_DUSK_TEMPERATURE_TERRAFORMED = biomeOverride.DUSK_TEMPERATURE_TERRAFORMED;
+                    biome_NIGHT_TEMPERATURE_TERRAFORMED = biomeOverride.NIGHT_TEMPERATURE_TERRAFORMED;
                 }
             }
 
-            float currentTime = (entityLiving.worldObj.getWorldTime() % 24000L);
-//LogManager.getLogger().fatal("currentTime " + currentTime);
+            float currentTime = entityLiving.worldObj.getWorldTime();
 
-            float temperatureChange = calculateTemperatureChange(currentTime, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
-//LogManager.getLogger().fatal("temperatureChange " + temperatureChange);
+            float temperatureChange;
+
+            if(EnviroMine.isHbmSpaceLoaded()) {
+                CelestialBody body = CelestialBody.getBody(entityLiving.worldObj);
+                float phasePeriod = Math.round ((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod())))/4F);
+
+                CBT_Atmosphere atmosphere = entityLiving.worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(entityLiving.worldObj, CBT_Atmosphere.class);
+                if(atmosphere != null) {
+                    if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
+                        temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE_TERRAFORMED, biome_DAY_TEMPERATURE_TERRAFORMED, biome_DUSK_TEMPERATURE_TERRAFORMED, biome_NIGHT_TEMPERATURE_TERRAFORMED);
+                    } else {
+                        temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+                    }
+                } else {
+                    temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+                }
+            } else {
+                temperatureChange = calculateTemperatureChange(currentTime % 24000L, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+            }
 
             biomeTemperature -= temperatureChange;
-
             if (biome.rainfall <= 0F || isDesertBiome) {
                 biomeTemperature -= temperatureChange * DesertBiomeTemperatureMultiplier;
+            }
+
+            if(EnviroMine.isHbmSpaceLoaded()) {
+
+                ThreeInts pos = new ThreeInts((int)entityLiving.posX, (int)(entityLiving.posY + entityLiving.getEyeHeight()), (int)entityLiving.posZ);
+                //List<AtmosphereBlob> nearbyBlobs = ChunkAtmosphereManager.proxy.getBlobsWithinRadius(entityLiving.worldObj, pos, 3);
+                //I still don't understand why there are other access modifiers besides public?
+                List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(ChunkAtmosphereManager.proxy, entityLiving.worldObj, pos, 256);
+                //List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(entityLiving.worldObj, (int)entityLiving.posX, (int)((float)entityLiving.posY + entityLiving.getEyeHeight()), (int)entityLiving.posZ);
+                    for(AtmosphereBlob blob : nearbyBlobs) {
+                        if(blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
+                            biomeTemperature = 24; //TODO HARDCODED
+                        }
+                    }
             }
         }
 
@@ -586,8 +617,7 @@ public class EM_StatusManager
 //			}
 
             // Villager assistance. Once per day, certain villagers will heal your sanity, hydration, high body temp; or will feed you.
-            if (mob instanceof EntityVillager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist) {
-                EntityVillager villager = (EntityVillager) mob;
+            if (mob instanceof EntityVillager villager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist) {
                 Village village = entityLiving.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(villager.posX), MathHelper.floor_double(villager.posY), MathHelper.floor_double(villager.posZ), 32);
 
                 long assistTime = villager.getEntityData().getLong("Enviro_Assist_Time");
@@ -597,17 +627,17 @@ public class EM_StatusManager
                     if (villager.getProfession() == 2) // Priest
                     {
                         if (sanityBoost < 5F) {
-                            sanityBoost = 5F;
+                            sanityBoost = 5F; //TODO HARDCODED
                         }
 
                         ((EntityPlayer) entityLiving).addStat(EnviroAchievements.tradingFavours, 1);
                     } else if (villager.getProfession() == 0 && isDay) // Farmer
                     {
                         if (tracker.hydration < 50F) {
-                            tracker.hydration = 100F;
+                            tracker.hydration = 100F; //TODO HARDCODED
 
                             if (tracker.bodyTemp >= 38F) {
-                                tracker.bodyTemp -= 1F;
+                                tracker.bodyTemp -= 1F; //TODO HARDCODED
                             }
                             entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.drink", 1.0F, 1.0F);
                             villager.playSound("mob.villager.yes", 1.0F, 1.0F);
@@ -618,7 +648,7 @@ public class EM_StatusManager
                     } else if (villager.getProfession() == 4 && isDay) // Butcher
                     {
                         FoodStats food = ((EntityPlayer) entityLiving).getFoodStats();
-                        if (food.getFoodLevel() <= 10) {
+                        if (food.getFoodLevel() <= 10) { //TODO HARDCODED
                             food.setFoodLevel(20);
                             entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.burp", 0.5F, entityLiving.worldObj.rand.nextFloat() * 0.1F + 0.9F);
                             villager.playSound("mob.villager.yes", 1.0F, 1.0F);
@@ -697,7 +727,7 @@ public class EM_StatusManager
         if (validEntities > 0) {
             avgEntityTemp /= validEntities;
 
-            if (biomeTemperature < avgEntityTemp - 12F) {
+            if (biomeTemperature < avgEntityTemp - 12F) { //TODO HARDCODED
                 biomeTemperature = (biomeTemperature + (avgEntityTemp - 12F)) / 2;
             }
         }
@@ -887,6 +917,7 @@ public class EM_StatusManager
             fireProt = 1F - fireProt / 18F;
         }
 
+        //TODO HARDCODED
         if (entityLiving.isInWater()) {
             if (biomeTemperature > 25F) {
                 if (biomeTemperature > 50F) {
@@ -903,18 +934,18 @@ public class EM_StatusManager
         if (blockAndItemTempInfluence > biomeTemperature) {
             ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / 2;
             if (blockAndItemTempInfluence > (biomeTemperature + 5F)) {
-                riseSpeed = 0.005F;
+                riseSpeed = 0.005F; //TODO HARDCODED
             }
         } else {
             ambientTemperature = biomeTemperature;
         }
 
         if (entityLiving.getActivePotionEffect(Potion.hunger) != null) {
-            dehydrateBonus += 0.1F;
+            dehydrateBonus += 0.1F; //TODO HARDCODED
         }
 
         if (nearLava) {
-            if (riseSpeed <= 0.005F) {
+            if (riseSpeed <= 0.005F) { //TODO HARDCODED
                 riseSpeed = 0.005F;
             }
             dehydrateBonus += 0.05F;
@@ -942,13 +973,13 @@ public class EM_StatusManager
         }
 
         if (biome.getIntRainfall() == 0 && isDay) {
-            dehydrateBonus += 0.05F;
+            dehydrateBonus += 0.05F; //TODO HARDCODED
             if (animalHostility == 0) {
                 animalHostility = 1;
             }
         }
     if(isHbmLoaded()) {
-//TODO
+//TODO SKIP, JUST HIGHLIGHT
 // HBM COMPAT FSB Armor For player
         ItemStack helmet = entityLiving.getEquipmentInSlot(4);
         ItemStack plate0 = entityLiving.getEquipmentInSlot(3);
@@ -995,7 +1026,7 @@ public class EM_StatusManager
                 }
             }
         }
-//TODO
+//TODO SKIP, JUST HIGHLIGHT
 // HBM COMPAT No FSBarmor
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
             if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
@@ -1017,7 +1048,7 @@ public class EM_StatusManager
             }
         }
     }
-//TODO
+//TODO SKIP, JUST HIGHLIGHT
 // NOT HBM
         else if (!entityLiving.isPotionActive(Potion.fireResistance)) {
         ItemStack helmet = entityLiving.getEquipmentInSlot(4);
@@ -1070,6 +1101,7 @@ public class EM_StatusManager
 
 		if(entityLiving.isSprinting())
 		{
+//TODO HARDCODED
 			dehydrateBonus += 0.05F;
 			if(riseSpeed < 0.01F)
 			{
@@ -1112,7 +1144,6 @@ public class EM_StatusManager
     // Function to calculate temperature change
     public static float calculateTemperatureChange(float currentTime, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
         float temperatureChange;
-
         // from 0 to 6000 ticks (dawn to noon)
         if (currentTime >= 0 && currentTime < 6000) {
             temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / 6000f) * currentTime;
@@ -1136,15 +1167,31 @@ public class EM_StatusManager
 
         return temperatureChange;
     }
+    public static float calculateTemperatureChangeSpace(float currentTime, float phasePeriod, float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE) {
+        float temperatureChange;
+        // dawn to noon
+        if (currentTime >= 0 && currentTime < phasePeriod) {
+            temperatureChange = DAWN_TEMPERATURE - ((DAWN_TEMPERATURE - DAY_TEMPERATURE) / phasePeriod) * currentTime;
+        }
+        // noon to dusk
+        else if (currentTime >= phasePeriod && currentTime < phasePeriod*2) {
+            temperatureChange = DAY_TEMPERATURE + ((DUSK_TEMPERATURE - DAY_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod);
+        }
+        // dusk to midnight
+        else if (currentTime >= phasePeriod*2 && currentTime < phasePeriod*3) {
+            temperatureChange = DUSK_TEMPERATURE + ((NIGHT_TEMPERATURE - DUSK_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod*2);
+        }
+        // midnight to dawn
+        else if (currentTime >= phasePeriod*3 && currentTime < phasePeriod*4) {
+            temperatureChange = NIGHT_TEMPERATURE - ((NIGHT_TEMPERATURE - DAWN_TEMPERATURE) / phasePeriod) * (currentTime - phasePeriod*3);
+        }
+        else {
+            // If currentTime doesn't fall within the specified range
+            temperatureChange = 0;
+        }
 
-	public static float getBiomeTemprature(int x, int y, BiomeGenBase biome)
-	{
-		float temp= 0F;
-
-
-		return temp;
-
-	}
+        return temperatureChange;
+    }
 
 
 	public static void removeTracker(EnviroDataTracker tracker)
@@ -1191,78 +1238,61 @@ public class EM_StatusManager
 		tags.setFloat("ENVIRO_SAN", tracker.sanity);
 	}
 
+    //Pizdec prosto
 	public static void removeAllTrackers()
 	{
-		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-			tracker.isDisabled = true;
-		}
-
+        for (EnviroDataTracker tracker : trackerList.values()) {
+            tracker.isDisabled = true;
+        }
 		trackerList.clear();
 	}
 
+    //EBANIY BLYAT'
 	public static void saveAndDeleteAllTrackers()
 	{
-		Iterator<EnviroDataTracker> iterator = trackerList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-			tracker.isDisabled = true;
-			NBTTagCompound tags = tracker.trackedEntity.getEntityData();
-			tags.setFloat("ENVIRO_AIR", tracker.airQuality);
-			tags.setFloat("ENVIRO_HYD", tracker.hydration);
-			tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
-			tags.setFloat("ENVIRO_SAN", tracker.sanity);
-		}
+        for (EnviroDataTracker tracker : trackerList.values()) {
+            tracker.isDisabled = true;
+            NBTTagCompound tags = tracker.trackedEntity.getEntityData();
+            tags.setFloat("ENVIRO_AIR", tracker.airQuality);
+            tags.setFloat("ENVIRO_HYD", tracker.hydration);
+            tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
+            tags.setFloat("ENVIRO_SAN", tracker.sanity);
+        }
 		trackerList.clear();
 	}
 
 	public static void saveAndDeleteWorldTrackers(World world)
 	{
 		HashMap<String,EnviroDataTracker> tempList = new HashMap<String,EnviroDataTracker>(trackerList);
-		Iterator<EnviroDataTracker> iterator = tempList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-
-			if(tracker.trackedEntity.worldObj == world)
-			{
-				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
-				tags.setFloat("ENVIRO_AIR", tracker.airQuality);
-				tags.setFloat("ENVIRO_HYD", tracker.hydration);
-				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
-				tags.setFloat("ENVIRO_SAN", tracker.sanity);
-				tracker.isDisabled = true;
-				if(tracker.trackedEntity instanceof EntityPlayer)
-				{
-					trackerList.remove(tracker.trackedEntity.getCommandSenderName());
-				} else
-				{
-					trackerList.remove("" + tracker.trackedEntity.getEntityId());
-				}
-			}
-		}
+        for (EnviroDataTracker tracker : tempList.values()) {
+            if (tracker.trackedEntity.worldObj == world) {
+                NBTTagCompound tags = tracker.trackedEntity.getEntityData();
+                tags.setFloat("ENVIRO_AIR", tracker.airQuality);
+                tags.setFloat("ENVIRO_HYD", tracker.hydration);
+                tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
+                tags.setFloat("ENVIRO_SAN", tracker.sanity);
+                tracker.isDisabled = true;
+                if (tracker.trackedEntity instanceof EntityPlayer) {
+                    trackerList.remove(tracker.trackedEntity.getCommandSenderName());
+                } else {
+                    trackerList.remove("" + tracker.trackedEntity.getEntityId());
+                }
+            }
+        }
 	}
 
 	public static void saveAllWorldTrackers(World world)
 	{
 		HashMap<String,EnviroDataTracker> tempList = new HashMap<String,EnviroDataTracker>(trackerList);
-		Iterator<EnviroDataTracker> iterator = tempList.values().iterator();
-		while(iterator.hasNext())
-		{
-			EnviroDataTracker tracker = iterator.next();
-
-			if(tracker.trackedEntity.worldObj == world)
-			{
-				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
-				tags.setFloat("ENVIRO_AIR", tracker.airQuality);
-				tags.setFloat("ENVIRO_HYD", tracker.hydration);
-				tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
-				tags.setFloat("ENVIRO_SAN", tracker.sanity);
-			}
-		}
+        for (EnviroDataTracker tracker : tempList.values()) {
+            if (tracker.trackedEntity.worldObj == world) {
+                NBTTagCompound tags = tracker.trackedEntity.getEntityData();
+                tags.setFloat("ENVIRO_AIR", tracker.airQuality);
+                tags.setFloat("ENVIRO_HYD", tracker.hydration);
+                tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
+                tags.setFloat("ENVIRO_SAN", tracker.sanity);
+            }
+        }
 	}
 
 	public static EntityPlayer findPlayer(String username)
@@ -1333,4 +1363,16 @@ public class EM_StatusManager
 	{
 		return cartesianDistance <= scanRadius ? (float) (blockTemperature * (1 - Math.pow(MathHelper.clamp_float(cartesianDistance-EM_Settings.auraRadius, 0, scanRadius)/scanRadius, 1F/dropoffPower))) : 0F;
 	}
+
+    public static List<AtmosphereBlob> getBlobsWithinRadius(ChunkAtmosphereHandler handler, World world, ThreeInts pos, int radius) {
+        try {
+            Method method = ChunkAtmosphereHandler.class.getDeclaredMethod("getBlobsWithinRadius", World.class, ThreeInts.class, int.class);
+            method.setAccessible(true);
+            return (List<AtmosphereBlob>) method.invoke(handler, world, pos, radius);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Handle the exception as needed
+        }
+    }
+
 }

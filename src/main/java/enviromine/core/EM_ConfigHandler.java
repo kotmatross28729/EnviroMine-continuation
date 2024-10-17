@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.world.biome.BiomeGenBase;
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -337,6 +338,8 @@ public class EM_ConfigHandler
         EM_Settings.BodyTempGood = config.getFloat("1-3_HBMBodyTempGood", CATEGORY_KOTMATROSS_FORK_CHANGES,0.3F , -65536F, 65536F, "Hbm, subtracted if: HEV/Environment Suit suit and hbm temperature influence < -700 & > -1000, or no fsb armor and influence < -500 & > -700");
         EM_Settings.BodyTempBad = config.getFloat("1-4_HBMBodyTempBad", CATEGORY_KOTMATROSS_FORK_CHANGES,0.5F , -65536F, 65536F, "Hbm, subtracted if: HEV/Environment Suit and player is frozen, or no fsb armor and influence < -700 & > -1000");
         EM_Settings.BodyTempWorst = config.getFloat("1-5_HBMBodyTempWorst", CATEGORY_KOTMATROSS_FORK_CHANGES,0.8F , -65536F, 65536F, "Hbm, subtracted if: no fsb armor and hbm.isFrozen");
+        EM_Settings.BodyTempSleep = config.getFloat("1-5-2_BodyTempSleep", CATEGORY_KOTMATROSS_FORK_CHANGES,10F , -65536F, 65536F, "Maybe add");
+
 
         EM_Settings.StrongArmorMaxTemp = config.getFloat("1-6_StrongArmorMaxTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 100F, -65536F, 65536F, "If the armor has 12.Is Temperature Sealed = true, or the armor is ArmorFSB from hbm's ntm, which has the \"Fireproof\" characteristic, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature does not exceed n");
         EM_Settings.StrongArmorMinTemp = config.getFloat("1-6-2_StrongArmorMinTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 30F, -65536F, 65536F, "If the armor has 12.Is Temperature Sealed = true, or the armor is ArmorFSB from hbm's ntm, which has the \"Fireproof\" characteristic, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature is not less than n");
@@ -391,7 +394,7 @@ public class EM_ConfigHandler
         // --- General --- //
         // --------------- //
 
-        EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
+        //EM_Settings.versionChecker = config.getBoolean("Version Checker", Configuration.CATEGORY_GENERAL, false, "Displays a client-side chat message on login if there's an update available.");
 		EM_Settings.loggerVerbosity = config.getInt("Logger Verbosity", Configuration.CATEGORY_GENERAL, 2, 0, 3, "Amount of messaging to dump to the console."
 				+ "\n0: No log messages are printed whatsoever"
 				+ "\n1: Minimal log messages are printed"
@@ -407,8 +410,8 @@ public class EM_ConfigHandler
 				"List of blocks that will purify a cauldron's water when placed underneath the cauldron. Of the form mod:block:meta. Append no meta value in order to use any meta."
 				).getStringList();
 		EM_Settings.blockTempDropoffPower = config.getFloat("Block Temperature Dropoff Power", Configuration.CATEGORY_GENERAL, 0.75F, 0.25F, 2F, "How rapidly the temperature influence of blocks falls off with your distance from them. 2 is realistic for open areas; 1 for large enclosed areas, and lower for more claustrophobic areas. Classic EnviroMine used 0.5.");
-//		EM_Settings.scanRadius = config.getInt("Environment scan radius", Configuration.CATEGORY_GENERAL, 6, 1, 10, "Max distance blocks with temperature effects can affect you. Higher radius is more accurate, but more computationally expensive.");
-//		EM_Settings.auraRadius = config.getFloat("Emission Aura Radius", Configuration.CATEGORY_GENERAL, 0.5F, 0F, 5F, "A block with temperature effects maxes out its effects when you're this far from the block's center. ");
+		EM_Settings.scanRadius = config.getInt("Environment scan radius", Configuration.CATEGORY_GENERAL, 6, 1, 10, "Max distance blocks with temperature effects can affect you. Higher radius is more accurate, but more computationally expensive.");
+		EM_Settings.auraRadius = config.getFloat("Emission Aura Radius", Configuration.CATEGORY_GENERAL, 0.5F, 0F, 5F, "A block with temperature effects maxes out its effects when you're this far from the block's center. ");
 
 
 		// --------------- //
@@ -420,7 +423,7 @@ public class EM_ConfigHandler
 		EM_Settings.physInterval = getConfigIntWithMinInt(config.get(CATEGORY_PHYSICS, "Physics Interval", minPhysInterval, "The number of ticks between physics update passes (must be " + minPhysInterval + " or more)"), minPhysInterval);
 		EM_Settings.worldDelay = config.get(CATEGORY_PHYSICS, "World Start Delay", EM_Settings.worldDelay, "How long after world start until the physics system kicks in (DO NOT SET TOO LOW)").getInt(EM_Settings.worldDelay);
 		EM_Settings.chunkDelay = config.get(CATEGORY_PHYSICS, "Chunk Physics Delay", EM_Settings.chunkDelay, "How long until individual chunk's physics starts after loading (DO NOT SET TOO LOW)").getInt(EM_Settings.chunkDelay);
-		EM_Settings.physInterval = EM_Settings.physInterval >= 2 ? EM_Settings.physInterval : 2;
+		EM_Settings.physInterval = Math.max(EM_Settings.physInterval, 2);
 		EM_Settings.entityFailsafe = config.get(CATEGORY_PHYSICS, "Physics entity fail safe level", EM_Settings.entityFailsafe, "0 = No action, 1 = Limit to < 100 per 8x8 block area, 2 = Delete excessive entities & Dump physics (EMERGENCY ONLY)").getInt(EM_Settings.entityFailsafe);
 
 
@@ -779,7 +782,6 @@ public class EM_ConfigHandler
 	{
 				 	try
 				 	{
-
 				 		EM_Settings.armorProperties.clear();
 				 		EM_Settings.blockProperties.clear();
 				 		EM_Settings.itemProperties.clear();
@@ -909,7 +911,11 @@ public class EM_ConfigHandler
 		{
 				ArmorProperties.base.generateEmpty(config, obj);
 				returnValue = "(ItemArmor) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();
-		}
+		} else if(obj instanceof BiomeGenBase && type instanceof BiomeProperties)
+        {
+            BiomeProperties.base.generateEmpty(config, obj);
+            returnValue = "(BiomeGenBase) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();
+        }
 
 		config.save();
 

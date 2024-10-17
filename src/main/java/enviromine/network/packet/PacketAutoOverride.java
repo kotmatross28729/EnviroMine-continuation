@@ -30,19 +30,19 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 			this.tags = readFromSettings();
 		}
 	}
-	
+
 	private NBTTagCompound readFromSettings()
 	{
 		NBTTagCompound nTags = new NBTTagCompound();
 		Field[] fields = EM_Settings.class.getFields();
-		
+
 		for (Field f : fields)
 		{
 			try
 			{
 				ShouldOverride anno = f.getAnnotation(ShouldOverride.class);
 				//Class<?>[] clazzes;
-				
+
 				if(anno != null)
 				{
 					//clazzes = anno.value();
@@ -50,7 +50,7 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 				{
 					continue;
 				}
-				
+				//TODO ping
 				if(!f.isAccessible()) // This is causing problems for some reason...
 				{
 					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Field " + f.getName() + " is protected and cannot be synced!");
@@ -60,14 +60,14 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Cannot sync non-static field " + f.getName() + "!");
 					continue;
 				}
-				
+
 				if(f.getType() == HashMap.class)
 				{
 					HashMap<?,?> map = (HashMap<?,?>)f.get(null);
 					Set<?> keys = map.keySet();
 					Iterator<?> iterator = keys.iterator();
 					NBTTagList nbtList = new NBTTagList();
-					
+
 					while(iterator.hasNext())
 					{
 						NBTTagCompound entry = new NBTTagCompound();
@@ -77,14 +77,14 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 						this.setNBTValue(entry, "value", valObj);
 						nbtList.appendTag(entry);
 					}
-					
+
 					nTags.setTag(f.getName(), nbtList);
 				} else if(f.getType() == ArrayList.class)
 				{
 					ArrayList<?> list = (ArrayList<?>)f.get(null);
 					Iterator<?> iterator = list.iterator();
 					NBTTagList nbtList = new NBTTagList();
-					
+
 					while(iterator.hasNext())
 					{
 						NBTTagCompound entry = new NBTTagCompound();
@@ -92,7 +92,7 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 						this.setNBTValue(entry, "value", valObj);
 						nbtList.appendTag(entry);
 					}
-					
+
 					nTags.setTag(f.getName(), nbtList);
 				} else
 				{
@@ -103,10 +103,10 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "An error occured while syncing setting " + f.getName(), e);
 			}
 		}
-		
+
 		return nTags;
 	}
-		
+
 	public void setNBTValue(NBTTagCompound tag, String key, Object value)
 	{
 		if(key == null || key.length() <= 0 || value == null)
@@ -114,7 +114,7 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to set NBTTagCompound without a value and or key!");
 			return;
 		}
-		
+
 		if(value instanceof Boolean)
 		{
 			tag.setBoolean(key, (Boolean)value);
@@ -153,7 +153,7 @@ public class PacketAutoOverride extends PacketServerOverride implements IMessage
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Cannot set NBTTagCompound a value type of " + value.getClass().getSimpleName());
 		}
 	}
-	
+
 	public static class Handler implements IMessageHandler<PacketAutoOverride, IMessage>
 	{
 		@Override

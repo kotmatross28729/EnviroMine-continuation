@@ -36,7 +36,9 @@
 dependencies {
     compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
     runtimeOnly("com.github.GTNewHorizons:Baubles:1.0.1.16:dev")
-    compileOnly name: 'HBM-NTM-[1.0.27_X4915]'
+    compileOnly name: 'HBM-NTM-.1.0.27_X5119_H261'
+	compileOnly name: 'SereneSeasons-1.7.10-1.3.1'
+	
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     compileOnly fileTree(dir: 'libs', include: '*.zip')
 }

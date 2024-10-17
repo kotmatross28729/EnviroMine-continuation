@@ -2,7 +2,19 @@ package enviromine.trackers.properties;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import com.hbm.dim.Ike.BiomeGenIke;
+import com.hbm.dim.dres.biome.BiomeGenBaseDres;
+import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
+import com.hbm.dim.duna.biome.BiomeGenDunaPolar;
+import com.hbm.dim.duna.biome.BiomeGenDunaPolarHills;
+import com.hbm.dim.eve.biome.BiomeGenBaseEve;
+import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
+import com.hbm.dim.minmus.biome.BiomeGenBaseMinmus;
+import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
+import com.hbm.dim.moon.BiomeGenMoon;
+import com.hbm.dim.orbit.BiomeGenOrbit;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -20,7 +32,6 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.DRY;
-
 
 public class BiomeProperties implements SerialisableProperty, PropertyBase
 {
@@ -50,6 +61,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
     public float TemperatureShadeDecrease;
 
+
+    public float ambientTemp_TERRAFORMED;
+    public float DAWN_TEMPERATURE_TERRAFORMED;
+    public float DAY_TEMPERATURE_TERRAFORMED;
+    public float DUSK_TEMPERATURE_TERRAFORMED;
+    public float NIGHT_TEMPERATURE_TERRAFORMED;
+
 	public BiomeProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
@@ -58,8 +76,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public BiomeProperties()
 	{
 		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-
-		if(base != null && base != this)
+		if(base != null && base != this) //DONT TOUCH
 		{
 			throw new IllegalStateException();
 		}
@@ -87,7 +104,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         float TemperatureThunderDecrease,
         boolean TemperatureRainBool,
         boolean TemperatureThunderBool,
-        float TemperatureShadeDecrease
+        float TemperatureShadeDecrease,
+
+        float ambientTemp_TERRAFORMED,
+        float DAWN_TEMPERATURE_TERRAFORMED,
+        float DAY_TEMPERATURE_TERRAFORMED,
+        float DUSK_TEMPERATURE_TERRAFORMED,
+        float NIGHT_TEMPERATURE_TERRAFORMED
     ) {
 		this.id = id;
 		this.biomeOveride = biomeOveride;
@@ -101,16 +124,22 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.isDesertBiome = isDesertBiome;
         this.DesertBiomeTemperatureMultiplier = DesertBiomeTemperatureMultiplier;
 
-        this.DAWN_TEMPERATURE = DAWN_TEMPERATURE;
-        this.DAY_TEMPERATURE = DAY_TEMPERATURE;
-        this.DUSK_TEMPERATURE = DUSK_TEMPERATURE;
+        this.DAWN_TEMPERATURE  = DAWN_TEMPERATURE;
+        this.DAY_TEMPERATURE   = DAY_TEMPERATURE;
+        this.DUSK_TEMPERATURE  = DUSK_TEMPERATURE;
         this.NIGHT_TEMPERATURE = NIGHT_TEMPERATURE;
 
-        this.TemperatureRainDecrease = TemperatureRainDecrease;
+        this.TemperatureRainDecrease    = TemperatureRainDecrease;
         this.TemperatureThunderDecrease = TemperatureThunderDecrease;
-        this.TemperatureRainBool = TemperatureRainBool;
-        this.TemperatureThunderBool = TemperatureThunderBool;
-        this.TemperatureShadeDecrease = TemperatureShadeDecrease;
+        this.TemperatureRainBool        = TemperatureRainBool;
+        this.TemperatureThunderBool     = TemperatureThunderBool;
+        this.TemperatureShadeDecrease   = TemperatureShadeDecrease;
+
+        this.ambientTemp_TERRAFORMED        = ambientTemp_TERRAFORMED;
+        this.DAWN_TEMPERATURE_TERRAFORMED   = DAWN_TEMPERATURE_TERRAFORMED;
+        this.DAY_TEMPERATURE_TERRAFORMED    = DAY_TEMPERATURE_TERRAFORMED;
+        this.DUSK_TEMPERATURE_TERRAFORMED   = DUSK_TEMPERATURE_TERRAFORMED;
+        this.NIGHT_TEMPERATURE_TERRAFORMED  = NIGHT_TEMPERATURE_TERRAFORMED;
 	}
 	/**
 	 * <b>hasProperty(BiomeGenBase biome)</b><bR><br>
@@ -178,6 +207,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         tags.setBoolean("TemperatureThunderBool", this.TemperatureThunderBool);
         tags.setFloat("TemperatureShadeDecrease", this.TemperatureShadeDecrease);
 
+        tags.setFloat("ambientTemp_TERRAFORMED", this.ambientTemp_TERRAFORMED);
+        tags.setFloat("DAWN_TEMPERATURE_TERRAFORMED", this.DAWN_TEMPERATURE_TERRAFORMED);
+        tags.setFloat("DAY_TEMPERATURE_TERRAFORMED", this.DAY_TEMPERATURE_TERRAFORMED);
+        tags.setFloat("DUSK_TEMPERATURE_TERRAFORMED", this.DUSK_TEMPERATURE_TERRAFORMED);
+        tags.setFloat("NIGHT_TEMPERATURE_TERRAFORMED", this.NIGHT_TEMPERATURE_TERRAFORMED);
+
 		return tags;
 	}
 
@@ -204,6 +239,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.TemperatureRainBool = tags.getBoolean("TemperatureRainBool");
         this.TemperatureThunderBool = tags.getBoolean("TemperatureThunderBool");
         this.TemperatureShadeDecrease = tags.getFloat("TemperatureShadeDecrease");
+
+        this.ambientTemp_TERRAFORMED = tags.getFloat("ambientTemp_TERRAFORMED");
+        this.DAWN_TEMPERATURE_TERRAFORMED = tags.getFloat("DAWN_TEMPERATURE_TERRAFORMED");
+        this.DAY_TEMPERATURE_TERRAFORMED = tags.getFloat("DAY_TEMPERATURE_TERRAFORMED");
+        this.DUSK_TEMPERATURE_TERRAFORMED = tags.getFloat("DUSK_TEMPERATURE_TERRAFORMED");
+        this.NIGHT_TEMPERATURE_TERRAFORMED = tags.getFloat("NIGHT_TEMPERATURE_TERRAFORMED");
 	}
 
 	@Override
@@ -246,6 +287,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean TemperatureThunderBool = config.get(category, BOName[17], false).getBoolean(false);
         float TemperatureShadeDecrease = (float)config.get(category, BOName[18], 2.5).getDouble(2.5);
 
+        float ambientTemp_TERRAFORMED =       (float)config.get(category, BOName[19], 25.0).getDouble(25.0);
+        float DAWN_TEMPERATURE_TERRAFORMED =  (float)config.get(category, BOName[20], 4.0).getDouble(4.0);
+        float DAY_TEMPERATURE_TERRAFORMED =   (float)config.get(category, BOName[21], 0.0).getDouble(0.0);
+        float DUSK_TEMPERATURE_TERRAFORMED =  (float)config.get(category, BOName[22], 4.0).getDouble(4.0);
+        float NIGHT_TEMPERATURE_TERRAFORMED = (float)config.get(category, BOName[23], 8.0).getDouble(8.0);
+
 		BiomeProperties entry = new BiomeProperties (
             id,
             biomeOveride,
@@ -266,7 +313,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
             TemperatureThunderDecrease,
             TemperatureRainBool,
             TemperatureThunderBool,
-            TemperatureShadeDecrease
+            TemperatureShadeDecrease,
+            ambientTemp_TERRAFORMED,
+            DAWN_TEMPERATURE_TERRAFORMED,
+            DAY_TEMPERATURE_TERRAFORMED,
+            DUSK_TEMPERATURE_TERRAFORMED,
+            NIGHT_TEMPERATURE_TERRAFORMED
         );
 
 		if(EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
@@ -290,16 +342,22 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(category, BOName[8], this.isDesertBiome, "Affects the temperature difference at night / day (useful for deserts)").getBoolean(this.isDesertBiome);
         config.get(category, BOName[9], this.DesertBiomeTemperatureMultiplier, "The temperatureChange will be multiplied by this number if isDesertBiome=true").getDouble(this.DesertBiomeTemperatureMultiplier);
 
-        config.get(category, BOName[10], this.DAWN_TEMPERATURE, "The temperatureChange will be equal to this number at dawn").getDouble(this.DAWN_TEMPERATURE);
-        config.get(category, BOName[11], this.DAY_TEMPERATURE, "The temperatureChange will be equal to this number at day").getDouble(this.DAY_TEMPERATURE);
-        config.get(category, BOName[12], this.DUSK_TEMPERATURE, "The temperatureChange will be equal to this number at dusk").getDouble(this.DUSK_TEMPERATURE);
-        config.get(category, BOName[13], this.NIGHT_TEMPERATURE, "The temperatureChange will be equal to this number at midnight").getDouble(this.NIGHT_TEMPERATURE);
-//TODO change
+        config.get(category, BOName[10], this.DAWN_TEMPERATURE, "Biome temperature will decrease by this amount at dawn").getDouble(this.DAWN_TEMPERATURE);
+        config.get(category, BOName[11], this.DAY_TEMPERATURE, "Biome temperature will decrease by this amount at day").getDouble(this.DAY_TEMPERATURE);
+        config.get(category, BOName[12], this.DUSK_TEMPERATURE, "Biome temperature will decrease by this amount at dusk").getDouble(this.DUSK_TEMPERATURE);
+        config.get(category, BOName[13], this.NIGHT_TEMPERATURE, "Biome temperature will decrease by this amount at midnight").getDouble(this.NIGHT_TEMPERATURE);
+
         config.get(category, BOName[14], this.TemperatureRainDecrease, "Biome temperature decreases by n degrees if it rains").getDouble(this.TemperatureRainDecrease);
         config.get(category, BOName[15], this.TemperatureThunderDecrease, "Biome temperature decreases by n degrees if there is a thunderstorm").getDouble(this.TemperatureThunderDecrease);
         config.get(category, BOName[16], this.TemperatureRainBool, "Should the biome temperature decreases if it rains?").getBoolean(this.TemperatureRainBool);
         config.get(category, BOName[17], this.TemperatureThunderBool, "Should the biome temperature decreases if there is a thunderstorm?").getBoolean(this.TemperatureThunderBool);
         config.get(category, BOName[18], this.TemperatureShadeDecrease, "Biome temperature decreases by n degrees if player in the shadow").getDouble(this.TemperatureShadeDecrease);
+
+        config.get(category, BOName[19], this.ambientTemp_TERRAFORMED, "Air temperature will be equal to this number if the planet is terraformed").getDouble(this.ambientTemp_TERRAFORMED);
+        config.get(category, BOName[20], this.DAWN_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dawn if the planet is terraformed").getDouble(this.DAWN_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[21], this.DAY_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at day if the planet is terraformed").getDouble(this.DAY_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[22], this.DUSK_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dusk if the planet is terraformed").getDouble(this.DUSK_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[23], this.NIGHT_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at midnight if the planet is terraformed").getDouble(this.NIGHT_TEMPERATURE_TERRAFORMED);
 	}
 
 	@Override
@@ -307,39 +365,33 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	{
 		BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
 
-		for(int p = 0; p < biomeArray.length; p++)
-		{
-			BiomeGenBase biome = biomeArray[p];
+        for (BiomeGenBase biome : biomeArray) {
+            if (biome == null) {
+                continue;
+            }
 
-			if(biome == null)
-			{
-				continue;
-			}
+            String modID = ModIdentification.idFromObject(biome);
 
-			String modID = ModIdentification.idFromObject(biome);
+            File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
 
-			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (Exception e) {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
+                        EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + biome.biomeName + "'", e);
+                    continue;
+                }
+            }
 
-			if(!file.exists())
-			{
-				try
-				{
-					file.createNewFile();
-				} catch(Exception e)
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + biome.biomeName + "'", e);
-					continue;
-				}
-			}
+            Configuration config = new Configuration(file, true);
 
-			Configuration config = new Configuration(file, true);
+            config.load();
 
-			config.load();
+            generateEmpty(config, biome);
 
-			generateEmpty(config, biome);
-
-			config.save();
-		}
+            config.save();
+        }
 	}
 
 	@Override
@@ -351,20 +403,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	@Override
 	public void generateEmpty(Configuration config, Object obj)
 	{
-		if(obj == null || !(obj instanceof BiomeGenBase))
+        if(obj == null || !(obj instanceof BiomeGenBase biome)) //DONT TOUCH
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non biome object!", new Exception());
 			return;
 		}
 
-		BiomeGenBase biome = (BiomeGenBase)obj;
-
-		ArrayList<Type> typeList = new ArrayList<Type>();
+        ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
-		for(int i = 0; i < typeArray.length; i++)
-		{
-			typeList.add(typeArray[i]);
-		}
+        Collections.addAll(typeList, typeArray);
 
 		double air = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
@@ -373,24 +420,223 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY); //TODO change if needed
         double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
 
-        //TODO change if needed
-        double DAWN_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
-        double DAY_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 0D :*/ 0D;
-        double DUSK_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 4D :*/ 4D;
-        double NIGHT_TEMPERATURE = /*typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 8D :*/ 8D;
-
-        double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 8D : 6D;
-        double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D : 8D;
+        double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 8D : typeList.contains(Type.JUNGLE)? 2D : 6D;
+        double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 4D : 8D;
         boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
         boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
         double TemperatureShadeDecrease = /*typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :*/ 2.5D;
 
+        String biomeWater = EnviroUtils.getBiomeWater(biome);
+
+        double biomeTemp;
+        double DAWN_TEMPERATURE;
+        double DAY_TEMPERATURE;
+        double DUSK_TEMPERATURE;
+        double NIGHT_TEMPERATURE;
+
+        double ambientTemp_TERRAFORMED;
+        double DAWN_TEMPERATURE_TERRAFORMED;
+        double DAY_TEMPERATURE_TERRAFORMED;
+        double DUSK_TEMPERATURE_TERRAFORMED;
+        double NIGHT_TEMPERATURE_TERRAFORMED;
+
+        if(EnviroMine.isHbmSpaceLoaded()) {
+            if (biome instanceof BiomeGenBaseMoho) {
+                DAWN_TEMPERATURE =  75D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 75D;
+                NIGHT_TEMPERATURE = 100D;
+                biomeTemp = 300D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  10D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 10D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 25D;
+                ambientTemp_TERRAFORMED = 60D;
+            }
+            else if (biome instanceof BiomeGenBaseEve) {
+                DAWN_TEMPERATURE =  71.85D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 71.85D;
+                NIGHT_TEMPERATURE = 259.98D;
+                biomeTemp = 146.85D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  7D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 7D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 10D;
+                ambientTemp_TERRAFORMED = 29.37D;
+            }
+            else if (biome instanceof BiomeGenMoon) {
+                DAWN_TEMPERATURE =  177D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 177D;
+                NIGHT_TEMPERATURE = 300D;
+                biomeTemp = 127D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  8D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 8D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 15D;
+                ambientTemp_TERRAFORMED = 30D;
+
+            } else if (biome instanceof BiomeGenBaseMinmus) {
+                DAWN_TEMPERATURE =  64D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 64D;
+                NIGHT_TEMPERATURE = 121D;
+                biomeTemp = 14D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  10D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 10D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 25D;
+                ambientTemp_TERRAFORMED = 20D;
+
+                biomeWater = "cold";
+            }
+            else if(biome instanceof BiomeGenBaseDuna) {
+                if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
+                    DAWN_TEMPERATURE =  98D;
+                    DAY_TEMPERATURE =  0D;
+                    DUSK_TEMPERATURE = 98D;
+                    NIGHT_TEMPERATURE = 173D;
+                    biomeTemp = 20D;
+
+                    isDesertBiome = false;
+                    DesertBiomeTemperatureMultiplier = 1;
+
+                    DAWN_TEMPERATURE_TERRAFORMED =  5D;
+                    DAY_TEMPERATURE_TERRAFORMED =  0D;
+                    DUSK_TEMPERATURE_TERRAFORMED = 5D;
+                    NIGHT_TEMPERATURE_TERRAFORMED = 10D;
+                    ambientTemp_TERRAFORMED = 22D;
+
+                    biomeWater = "cold";
+                } else {
+                    DAWN_TEMPERATURE = 69D;
+                    DAY_TEMPERATURE = 0D;
+                    DUSK_TEMPERATURE = 69D;
+                    NIGHT_TEMPERATURE = 98D;
+                    biomeTemp = 35D;
+
+                    isDesertBiome = false;
+                    DesertBiomeTemperatureMultiplier = 1;
+
+                    DAWN_TEMPERATURE_TERRAFORMED =  5D;
+                    DAY_TEMPERATURE_TERRAFORMED =  0D;
+                    DUSK_TEMPERATURE_TERRAFORMED = 5D;
+                    NIGHT_TEMPERATURE_TERRAFORMED = 10D;
+                    ambientTemp_TERRAFORMED = 27D;
+                }
+            } else if (biome instanceof BiomeGenIke) { //From phobos
+                DAWN_TEMPERATURE =  88D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 88D;
+                NIGHT_TEMPERATURE = 150D;
+                biomeTemp = 27D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  6D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 6D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 10D;
+                ambientTemp_TERRAFORMED = 25D;
+            } else if (biome instanceof BiomeGenBaseDres) { //From Ceres
+                DAWN_TEMPERATURE =  34D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 34D;
+                NIGHT_TEMPERATURE = 68D;
+                biomeTemp = -75D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  30D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 30D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 50D;
+                ambientTemp_TERRAFORMED = 10D;
+            } else if (biome instanceof BiomeGenBaseLaythe) {
+                DAWN_TEMPERATURE =  7D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 7D;
+                NIGHT_TEMPERATURE = 10D;
+                biomeTemp = 28D;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  7D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 7D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 10D;
+                ambientTemp_TERRAFORMED = 28D;
+
+                biomeWater = "clean";
+            } else if (biome instanceof BiomeGenOrbit) {
+                DAWN_TEMPERATURE =  50D;
+                DAY_TEMPERATURE =  0D;
+                DUSK_TEMPERATURE = 50D;
+                NIGHT_TEMPERATURE = 100D;
+                biomeTemp = -100;
+
+                isDesertBiome = false;
+                DesertBiomeTemperatureMultiplier = 1;
+
+                DAWN_TEMPERATURE_TERRAFORMED =  50D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 50D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 100D;
+                ambientTemp_TERRAFORMED = -100D;
+            } else {
+                DAWN_TEMPERATURE = 4D;
+                DAY_TEMPERATURE = 0D;
+                DUSK_TEMPERATURE = 4D;
+                NIGHT_TEMPERATURE = 8D;
+                biomeTemp = EnviroUtils.getBiomeTemp(biome);
+
+                DAWN_TEMPERATURE_TERRAFORMED =  4D;
+                DAY_TEMPERATURE_TERRAFORMED =  0D;
+                DUSK_TEMPERATURE_TERRAFORMED = 4D;
+                NIGHT_TEMPERATURE_TERRAFORMED = 8D;
+                ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
+            }
+        } else {
+            DAWN_TEMPERATURE = 4D;
+            DAY_TEMPERATURE = 0D;
+            DUSK_TEMPERATURE = 4D;
+            NIGHT_TEMPERATURE = 8D;
+
+            biomeTemp = EnviroUtils.getBiomeTemp(biome);
+
+            DAWN_TEMPERATURE_TERRAFORMED =  4D;
+            DAY_TEMPERATURE_TERRAFORMED =  0D;
+            DUSK_TEMPERATURE_TERRAFORMED = 4D;
+            NIGHT_TEMPERATURE_TERRAFORMED = 8D;
+            ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
+        }
+
 		String catName = this.categoryName() + "." + biome.biomeName;
 
 		config.get(catName, BOName[0], biome.biomeID).getInt(biome.biomeID);
-		config.get(catName, BOName[1], false).getBoolean(false);
-		config.get(catName, BOName[2], EnviroUtils.getBiomeWater(biome), "Water Quality: dirty, salty, cold, clean").getString();
-		config.get(catName, BOName[3], EnviroUtils.getBiomeTemp(biome), "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(25.00);
+		config.get(catName, BOName[1], true).getBoolean(true);
+		config.get(catName, BOName[2], biomeWater, "Water Quality: dirty, salty, cold, clean").getString();
+		config.get(catName, BOName[3], biomeTemp, "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(25.00);
 		config.get(catName, BOName[4], temp).getDouble(temp);
 		config.get(catName, BOName[5], sanity).getDouble(sanity);
 		config.get(catName, BOName[6], water).getDouble(water);
@@ -408,6 +654,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(catName, BOName[16], TemperatureRainBool).getBoolean(TemperatureRainBool);
         config.get(catName, BOName[17], TemperatureThunderBool).getBoolean(TemperatureThunderBool);
         config.get(catName, BOName[18], TemperatureShadeDecrease).getDouble(TemperatureShadeDecrease);
+
+        config.get(catName, BOName[19], ambientTemp_TERRAFORMED).getDouble(ambientTemp_TERRAFORMED);
+        config.get(catName, BOName[20], DAWN_TEMPERATURE_TERRAFORMED).getDouble(DAWN_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[21], DAY_TEMPERATURE_TERRAFORMED).getDouble(DAY_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[22], DUSK_TEMPERATURE_TERRAFORMED).getDouble(DUSK_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[23], NIGHT_TEMPERATURE_TERRAFORMED).getDouble(NIGHT_TEMPERATURE_TERRAFORMED);
     }
 
 	@Override
@@ -423,7 +675,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BOName = new String[19];
+		BOName = new String[24];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
@@ -434,14 +686,19 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		BOName[7] = "08.Air Quality Rate";
         BOName[8] = "09.Is desert biome?";
         BOName[9] = "10.Desert biome temperature multiplier";
-        BOName[10] = "11.Dawn biome temperature";
-        BOName[11] = "12.Day biome temperature";
-        BOName[12] = "13.Dusk biome temperature";
-        BOName[13] = "14.Night biome temperature";
+        BOName[10] = "11.Dawn biome temperature decrease";
+        BOName[11] = "12.Day biome temperature decrease";
+        BOName[12] = "13.Dusk biome temperature decrease";
+        BOName[13] = "14.Night biome temperature decrease";
         BOName[14] = "15.Biome temperature rain decrease";
         BOName[15] = "16.Biome temperature thunder decrease";
         BOName[16] = "17.Should biome temperature decrease when rain?";
         BOName[17] = "18.Should biome temperature decrease when thunder?";
         BOName[18] = "19.Biome temperature shadow decrease";
+        BOName[19] = "20.Ambient Temperature terraformed";
+        BOName[20] = "21.Dawn biome temperature decrease terraformed";
+        BOName[21] = "22.Day biome temperature decrease terraformed";
+        BOName[22] = "23.Dusk biome temperature decrease terraformed";
+        BOName[23] = "24.Night biome temperature decrease terraformed";
 	}
 }

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import static enviromine.trackers.EnviroDataTracker.isTCLoaded;
+import static enviromine.core.EnviroMine.isTCLoaded;
 
 public class EM_PhysManager
 {

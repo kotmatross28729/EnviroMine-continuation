@@ -63,7 +63,6 @@ public class ConfigLegacy extends LegacyHandler
 	@Override
 	public boolean didRun()
 	{
-		// TODO Auto-generated method stub
 		return this.didRun;
 	}
 
@@ -222,7 +221,7 @@ public class ConfigLegacy extends LegacyHandler
 		try {
 			Files.delete(configFile.toPath());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO_ Auto-generated catch block
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Legacy Tried to Remove Enviromine.cfg... But failed! " +  e);
 		}
 
