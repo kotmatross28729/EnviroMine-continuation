@@ -12,21 +12,36 @@
 
 ## Differences from the Galaxy Odyssey version:
 
-1) more sanity debuffs (due to the fact that sanity in the original enviromine does almost nothing dangerous (+, if your sanity is less than or equal to 5 you will die from a heart attack after 1 minute (configurable + you can disable death, but instead, some debuffs will become of a higher level))
 
-2) Compatibility with Hbm's Nuclear Tech filters/masks/protective helmets
 
-3) Updated build script, thanks to GTNH!
+- **1)** more sanity debuffs (due to the fact that sanity in the original enviromine does almost nothing dangerous (+, from 1.3.134 version, if your sanity is less than or equal to 5 (but greater than 0) you will die from a heart attack after 1 minute, but if your sanity is 0, then you will die after 30 seconds, and, if more than 30 seconds have passed and your sanity has JUST dropped to 0, you will die instantly(configurable + you can disable death, but instead, some debuffs will become of a higher level))
 
-4) Fixed a bug where the sound of the gas mask was played even when the game was paused
+- **2)** **Compatibility with Hbm's Nuclear Tech filters/masks/protective helmets**
 
-5) Added a bunch of configs
+- **3)** **Updated build script, thanks to GTNH!**
 
-6) Completely rewritten biome temperature system
+- **4)** Fixed a bug where the sound of the gas mask was played even when the game was paused
 
-7) Completely rewritte armor temperature system
+- **5)** Added the Hardcore gases option, with it, all gases will become invisible (disabled by default)
 
-8) Added compat with Hbm's NTM Space (fork)
+- **6)** Fixed a bug due to which, when specifying a change in the parameter of an item when using it, this parameter changed 2 times more than needed (config thing)
+
+- **7)** Added compatibility with thaumcraft leaves
+
+- **8)** Fixed a bug that caused `/envirostat set air` didn't work
+
+- **9)** **A lot of things related to armor from Hbm's Nuclear Tech Mod and enviromine temperature**
+
+- **10)** **Fix a bunch of logic errors with gases, this includes bugs where poisoning was not applied to the player, even if he didn't have any protection (the mod considered that the player was in creative, even if he was in survival, or he considered that the player already has a mask, although there was none)**
+
+- **11)** Added a bunch of configuration options related to the characteristics of poisoning (how long the effect is applied, what level the effect is, how dense the gas should be for poisoning, etc.)
+
+- **12)** **Biome temperature system has been completely rewritten depending on the weather | day/night cycle ([github, changelog 1.3.139](https://github.com/kotmatross28729/EnviroMine-continuation/releases/tag/1.3.139))**
+
+- **13)** **Added compat with Hbm's NTM Space (fork)
+
+- **14)** **Added compat with Serene Seasons
+
 
 
 # Credits:
