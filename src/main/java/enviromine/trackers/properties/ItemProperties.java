@@ -337,7 +337,6 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
 			}
-
             else if(isHbmLoaded()) {
              if(/*item == ModItems.cigarette_normal || */item == ModItems.crackpipe || item == ModItems.cigarette)
             {

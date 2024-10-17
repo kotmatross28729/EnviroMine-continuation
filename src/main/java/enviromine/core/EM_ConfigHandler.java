@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.world.biome.BiomeGenBase;
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -781,7 +782,6 @@ public class EM_ConfigHandler
 	{
 				 	try
 				 	{
-
 				 		EM_Settings.armorProperties.clear();
 				 		EM_Settings.blockProperties.clear();
 				 		EM_Settings.itemProperties.clear();
@@ -911,7 +911,11 @@ public class EM_ConfigHandler
 		{
 				ArmorProperties.base.generateEmpty(config, obj);
 				returnValue = "(ItemArmor) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();
-		}
+		} else if(obj instanceof BiomeGenBase && type instanceof BiomeProperties)
+        {
+            BiomeProperties.base.generateEmpty(config, obj);
+            returnValue = "(BiomeGenBase) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();
+        }
 
 		config.save();
 
