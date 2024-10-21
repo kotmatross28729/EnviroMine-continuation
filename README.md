@@ -44,19 +44,7 @@
 
 
 ## Current TODO:
-
-- **1)** **[NTM Space compat] Heaters/coolers powered by HE that can raise/lower the ambient temperature/temperature rate.**
-   + Necessary for use on some planets to avoid using a suit, or for other mobs that cannot wear a suit. 
-   + 3 types: normal, advanced and industrial (vacuum). 
-      + Normal can raise/lower temperatures by a small amount and work in a small radius. Advanced have a larger temperature selection and a larger radius. Industrial (vacuum) have the same characteristics as advanced, but can work even in a vacuum.
-   + The graphical interface contains 3 elements:
-      + 1) battery slot
-      + 2) temperature regulator (graphically similar to DFC)
-      + 3) temperature rate regulator (graphically similar to DFC)
-      + 4) radius regulator (in blocks, graphically similar to DFC)
-   + Can be powered via cable like other machines, in all 6 directions
-
-- **2)** **[NTM Space compat] More severe temperature conditions on planets.**
+- **1)** **[NTM Space compat] More severe temperature conditions on planets.**
    + At the moment, low/high temperatures don't pose a particular threat, both because of the suit and because of the low “temperature rate” (even at -200/200, the body cools/heats for a very long time)
       + "Cyclic temperature rate":
          + The same as “n temperature decrease”, but for temperature rate, that is, separate configs for Dawn, Day, Dusk, Night. Thus, on the moon without a suit, during the day you will get fried very quickly, and at night you will become icy without even realizing it
@@ -65,13 +53,13 @@
          + Temperatures that can penetrate weak suits without fire resistance (HEV/MITTY)
          + It may not be necessary with "Cyclic temperature rate", but who knows
 
-- **3)** **Ability to change parameters for mobs from other mods.**
+- **2)** **Ability to change parameters for mobs from other mods.**
    + Mobs that aren't registered in the vanilla tab aren't displayed in the enviromine configuration. I plan to fix this (if I can)
 
-- **4)** **Сode refactoring.**
+- **3)** **Сode refactoring.**
    + The name speaks for itself
 
-- **5)** **UNHARDCODE ALL HARDCODED VALUES.**
+- **4)** **UNHARDCODE ALL HARDCODED VALUES.**
    + There are a lot of values ​​in enviromine that could be changed in some situations. This is the last thing I plan to do
 
 
