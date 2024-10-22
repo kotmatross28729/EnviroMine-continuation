@@ -132,14 +132,16 @@ public class EM_ClientProxy extends EM_CommonProxy
 				//	ModelPlayerAPI.register(EM_Settings.ModID, ModelPlayerEM.class);
 				//	RenderPlayerAPI.register(EM_Settings.ModID, RenderPlayerEM.class);
 
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Enviromine Doesn't support Player-API/Render-API yet! Config setting \"Render 3D Gear\" set to false");
+				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                    EnviroMine.logger.log(Level.WARN, "Enviromine Doesn't support Player-API/Render-API yet! Config setting \"Render 3D Gear\" set to false");
 
 				EM_Settings.renderGear = false;
 				isLoadedRenderApi = true;
 			}
 
+		 if(EM_Settings.renderGear && !isLoadedRenderApi)
+             RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, new RenderPlayerEM());
 
-		 if(EM_Settings.renderGear && !isLoadedRenderApi) RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, new RenderPlayerEM());
 		}catch(ClassCastException e)
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to Render Enviromine Gear, but Failed! Known issues with Render Player API.:- "+ e);

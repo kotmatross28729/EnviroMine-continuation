@@ -5,6 +5,7 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.extprop.HbmLivingProps;
+import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.Fluids;
@@ -257,20 +258,17 @@ public class EnviroDataTracker
         }
 
         if(EnviroMine.isHbmSpaceLoaded()) {
-                if (trackedEntity instanceof EntityPlayerMP || trackedEntity.ticksExisted % 20 == 0) {
-                    CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
-                    if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
-                        airQuality -= 10; //TODO HARDCODED
-                    }
-                }
-        }
-        if(EnviroMine.isHbmSpaceLoaded()) {
-            List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(trackedEntity.worldObj, (int)trackedEntity.posX, (int)((float)trackedEntity.posY + trackedEntity.getEyeHeight()), (int)trackedEntity.posZ);
-            for(AtmosphereBlob blob : blobs) {
-                if(blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
-                    airQuality += 10; //TODO HARDCODED
-                }
+            CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
+            if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
+                airQuality -= 10; //TODO HARDCODED
             }
+             ThreeInts pos = new ThreeInts(MathHelper.floor_double(trackedEntity.posX), MathHelper.floor_double(trackedEntity.posY + trackedEntity.getEyeHeight()), MathHelper.floor_double(trackedEntity.posZ));
+             List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(trackedEntity.worldObj, pos.x, pos.y, pos.z);
+             for (AtmosphereBlob blob : currentBlobs) {
+                 if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
+                     airQuality += 10; //TODO HARDCODED
+                 }
+             }
         }
 		airQuality = MathHelper.clamp_float(airQuality, 0F, 100F);
 
@@ -338,7 +336,7 @@ public class EnviroDataTracker
                    if(EnviroMine.isHbmSpaceLoaded()) {
                        if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
                            bodyTemp = 36.6F;
-                       }else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
+                       } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
                            bodyTemp = 36.6F;
                        }
                    } else {

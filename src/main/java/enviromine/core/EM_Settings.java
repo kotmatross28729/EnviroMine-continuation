@@ -276,7 +276,7 @@ public class EM_Settings
 	public static float thingChance = 0.000001F;
 	public static boolean noNausea = false;
 	public static boolean keepStatus = false;
-	public static boolean renderGear = true;
+	public static boolean renderGear = false;
 	public static String[] cauldronHeatingBlocks = new String[]{ // Added on request - AstroTibs
 			"minecraft:fire",
 			"minecraft:lava",

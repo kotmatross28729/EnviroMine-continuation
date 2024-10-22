@@ -6,13 +6,10 @@ import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
-import com.hbm.handler.atmosphere.ChunkAtmosphereHandler;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
-import com.hbm.handler.atmosphere.IAtmosphereProvider;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
-import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.EnviroPotion;
 import enviromine.client.gui.UI_Settings;
@@ -57,14 +54,11 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import static enviromine.core.EM_Settings.BodyTempSleep;
@@ -612,16 +606,15 @@ public class EM_StatusManager
             }
 
             if(EnviroMine.isHbmSpaceLoaded()) {
-                if(entityLiving.ticksExisted % 20 == 0) {
-                    ThreeInts pos = new ThreeInts((int) entityLiving.posX, (int) (entityLiving.posY), (int) entityLiving.posZ);
-                    //I still don't understand why there are other access modifiers besides public?
-                    List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(ChunkAtmosphereManager.proxy, entityLiving.worldObj, pos, 256);
-                    for (AtmosphereBlob blob : nearbyBlobs) {
+                //How stupid am I, that I simply forgot that `(int)` does crazy things with negative numbers?
+                ThreeInts pos = new ThreeInts(MathHelper.floor_double(entityLiving.posX), MathHelper.floor_double(entityLiving.posY + entityLiving.getEyeHeight()), MathHelper.floor_double(entityLiving.posZ));
+
+                List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(entityLiving.worldObj, pos.x, pos.y, pos.z);
+                    for (AtmosphereBlob blob : currentBlobs) {
                         if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
                             biomeTemperature = 24; //TODO HARDCODED
                         }
                     }
-                }
             }
         }
 
@@ -1416,16 +1409,4 @@ public class EM_StatusManager
 	{
 		return cartesianDistance <= scanRadius ? (float) (blockTemperature * (1 - Math.pow(MathHelper.clamp_float(cartesianDistance-EM_Settings.auraRadius, 0, scanRadius)/scanRadius, 1F/dropoffPower))) : 0F;
 	}
-
-    public static List<AtmosphereBlob> getBlobsWithinRadius(ChunkAtmosphereHandler handler, World world, ThreeInts pos, int radius) {
-        try {
-            Method method = ChunkAtmosphereHandler.class.getDeclaredMethod("getBlobsWithinRadius", World.class, ThreeInts.class, int.class);
-            method.setAccessible(true);
-            return (List<AtmosphereBlob>) method.invoke(handler, world, pos, radius);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // Handle the exception as needed
-        }
-    }
-
 }
