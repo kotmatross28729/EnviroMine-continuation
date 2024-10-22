@@ -79,6 +79,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
     public float LATE_WINTER_TEMPERATURE_DECREASE;
     public float LATE_AUTUMN_TEMPERATURE_DECREASE;
 
+    public float tempRate_DAWN;
+    public float tempRate_DAY;
+    public float tempRate_DUSK;
+    public float tempRate_NIGHT;
+
+    public boolean tempRate_HARD;
+
 	public BiomeProperties(NBTTagCompound tags)
 	{
 		this.ReadFromNBT(tags);
@@ -134,7 +141,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         float LATE_SPRING_TEMPERATURE_DECREASE,
         float LATE_SUMMER_TEMPERATURE_DECREASE,
         float LATE_WINTER_TEMPERATURE_DECREASE,
-        float LATE_AUTUMN_TEMPERATURE_DECREASE
+        float LATE_AUTUMN_TEMPERATURE_DECREASE,
+        float tempRate_DAWN,
+        float tempRate_DAY,
+        float tempRate_DUSK,
+        float tempRate_NIGHT,
+        boolean tempRate_HARD
     ) {
 		this.id = id;
 		this.biomeOveride = biomeOveride;
@@ -177,6 +189,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.LATE_SUMMER_TEMPERATURE_DECREASE  =  LATE_SUMMER_TEMPERATURE_DECREASE;
         this.LATE_WINTER_TEMPERATURE_DECREASE  =  LATE_WINTER_TEMPERATURE_DECREASE;
         this.LATE_AUTUMN_TEMPERATURE_DECREASE  =  LATE_AUTUMN_TEMPERATURE_DECREASE;
+
+        this.tempRate_DAWN   = tempRate_DAWN;
+        this.tempRate_DAY    = tempRate_DAY;
+        this.tempRate_DUSK   = tempRate_DUSK;
+        this.tempRate_NIGHT  = tempRate_NIGHT;
+
+        this.tempRate_HARD = tempRate_HARD;
 	}
 	/**
 	 * <b>hasProperty(BiomeGenBase biome)</b><bR><br>
@@ -264,6 +283,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         tags.setFloat("LATE_WINTER_TEMPERATURE_DECREASE", this.LATE_WINTER_TEMPERATURE_DECREASE);
         tags.setFloat("LATE_AUTUMN_TEMPERATURE_DECREASE", this.LATE_AUTUMN_TEMPERATURE_DECREASE);
 
+        tags.setFloat("tempRate_DAWN", this.tempRate_DAWN);
+        tags.setFloat("tempRate_DAY", this.tempRate_DAY);
+        tags.setFloat("tempRate_DUSK", this.tempRate_DUSK);
+        tags.setFloat("tempRate_NIGHT", this.tempRate_NIGHT);
+
+        tags.setBoolean("tempRate_HARD", this.tempRate_HARD);
+
 		return tags;
 	}
 
@@ -310,6 +336,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.LATE_SUMMER_TEMPERATURE_DECREASE = tags.getFloat("LATE_SUMMER_TEMPERATURE_DECREASE");
         this.LATE_WINTER_TEMPERATURE_DECREASE = tags.getFloat("LATE_WINTER_TEMPERATURE_DECREASE");
         this.LATE_AUTUMN_TEMPERATURE_DECREASE = tags.getFloat("LATE_AUTUMN_TEMPERATURE_DECREASE");
+
+        this.tempRate_DAWN = tags.getFloat("tempRate_DAWN");
+        this.tempRate_DAY = tags.getFloat("tempRate_DAY");
+        this.tempRate_DUSK = tags.getFloat("tempRate_DUSK");
+        this.tempRate_NIGHT = tags.getFloat("tempRate_NIGHT");
+
+        this.tempRate_HARD = tags.getBoolean("tempRate_HARD");
 	}
 
 	@Override
@@ -371,6 +404,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         float LATE_WINTER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[34], 10.0).getDouble(10.0);
         float LATE_AUTUMN_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[35], 10.0).getDouble(10.0);
 
+        float tempRate_DAWN = (float)config.get(category, BOName[36], 0.0).getDouble(0.0);
+        float tempRate_DAY = (float)config.get(category, BOName[37], 0.0).getDouble(0.0);
+        float tempRate_DUSK = (float)config.get(category, BOName[38], 0.0).getDouble(0.0);
+        float tempRate_NIGHT = (float)config.get(category, BOName[39], 0.0).getDouble(0.0);
+
+        boolean tempRate_HARD = config.get(category, BOName[40], false).getBoolean(false);
+
 		BiomeProperties entry = new BiomeProperties (
             id,
             biomeOveride,
@@ -408,7 +448,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
             LATE_SPRING_TEMPERATURE_DECREASE,
             LATE_SUMMER_TEMPERATURE_DECREASE,
             LATE_WINTER_TEMPERATURE_DECREASE,
-            LATE_AUTUMN_TEMPERATURE_DECREASE
+            LATE_AUTUMN_TEMPERATURE_DECREASE,
+            tempRate_DAWN,
+            tempRate_DAY,
+            tempRate_DUSK,
+            tempRate_NIGHT,
+            tempRate_HARD
         );
 
 		if(EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
@@ -462,6 +507,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(category, BOName[34], this.LATE_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late winter").getDouble(this.LATE_WINTER_TEMPERATURE_DECREASE);
         config.get(category, BOName[35], this.LATE_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late autumn").getDouble(this.LATE_AUTUMN_TEMPERATURE_DECREASE);
 
+        config.get(category, BOName[36], this.tempRate_DAWN).getDouble(this.tempRate_DAWN);
+        config.get(category, BOName[37], this.tempRate_DAY).getDouble(this.tempRate_DAY);
+        config.get(category, BOName[38], this.tempRate_DUSK).getDouble(this.tempRate_DUSK);
+        config.get(category, BOName[39], this.tempRate_NIGHT).getDouble(this.tempRate_NIGHT);
+
+        config.get(category, BOName[40], this.tempRate_HARD).getBoolean(this.tempRate_HARD);
     }
 
 	@Override
@@ -544,6 +595,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         double DUSK_TEMPERATURE_TERRAFORMED;
         double NIGHT_TEMPERATURE_TERRAFORMED;
 
+        double tempRate_DAWN  = temp;
+        double tempRate_DAY   = temp;
+        double tempRate_DUSK  = temp;
+        double tempRate_NIGHT = temp;
+
+        boolean tempRate_HARD = false;
 
         double EARLY_SPRING_TEMPERATURE_DECREASE =
             (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -3.0 : //DESERT              (-8 (DEFAULT+8))
@@ -646,6 +703,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 DUSK_TEMPERATURE_TERRAFORMED = 10D;
                 NIGHT_TEMPERATURE_TERRAFORMED = 25D;
                 ambientTemp_TERRAFORMED = 60D;
+
+                //Fun fact: this value was calculated using my calculations regarding heating a pizza in a 250-degree oven for 420 seconds, from 20 to 120 degrees
+                tempRate_DAWN = 0.294D;
+                tempRate_DAY = 1.272D;
+                tempRate_DUSK = 0.294D;
+                tempRate_NIGHT = 0.169D;
+                tempRate_HARD = true;
             }
             else if (biome instanceof BiomeGenBaseEve) {
                 DAWN_TEMPERATURE =  71.85D;
@@ -662,6 +726,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 DUSK_TEMPERATURE_TERRAFORMED = 7D;
                 NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                 ambientTemp_TERRAFORMED = 29.37D;
+
+                tempRate_DAWN = 0.0398D;
+                tempRate_DAY = 0.113D;
+                tempRate_DUSK = 0.0398D;
+                tempRate_NIGHT = -0.154D;
+                tempRate_HARD = true;
             }
             else if (biome instanceof BiomeGenMoon) {
                 DAWN_TEMPERATURE =  177D;
@@ -679,6 +749,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 15D;
                 ambientTemp_TERRAFORMED = 30D;
 
+                tempRate_DAWN = -0.129D;
+                tempRate_DAY = 0.1D;
+                tempRate_DUSK = -0.129D;
+                tempRate_NIGHT = -0.654D;
             } else if (biome instanceof BiomeGenBaseMinmus) {
                 DAWN_TEMPERATURE =  64D;
                 DAY_TEMPERATURE =  0D;
@@ -695,6 +769,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 25D;
                 ambientTemp_TERRAFORMED = 20D;
 
+                tempRate_DAWN = -0.129D;
+                tempRate_DAY = 0.0D;
+                tempRate_DUSK = -0.129D;
+                tempRate_NIGHT = -0.454D;
                 biomeWater = "cold";
             }
             else if(biome instanceof BiomeGenBaseDuna) {
@@ -714,7 +792,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                     ambientTemp_TERRAFORMED = 22D;
 
+                    tempRate_DAWN = -0.229D;
+                    tempRate_DAY = 0.0D;
+                    tempRate_DUSK = -0.229D;
+                    tempRate_NIGHT = -0.584D;
                     biomeWater = "cold";
+
+                    tempRate_HARD = true;
                 } else {
                     DAWN_TEMPERATURE = 69D;
                     DAY_TEMPERATURE = 0D;
@@ -730,6 +814,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     DUSK_TEMPERATURE_TERRAFORMED = 5D;
                     NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                     ambientTemp_TERRAFORMED = 27D;
+
+                    tempRate_DAWN = -0.1D;
+                    tempRate_DAY = 0.0D;
+                    tempRate_DUSK = -0.1D;
+                    tempRate_NIGHT = -0.2D;
                 }
             } else if (biome instanceof BiomeGenIke) { //From phobos
                 DAWN_TEMPERATURE =  88D;
@@ -746,6 +835,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 DUSK_TEMPERATURE_TERRAFORMED = 6D;
                 NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                 ambientTemp_TERRAFORMED = 25D;
+
+                tempRate_DAWN = -0.1D;
+                tempRate_DAY = 0.0D;
+                tempRate_DUSK = -0.1D;
+                tempRate_NIGHT = -0.2D;
             } else if (biome instanceof BiomeGenBaseDres) { //From Ceres
                 DAWN_TEMPERATURE =  34D;
                 DAY_TEMPERATURE =  0D;
@@ -761,6 +855,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 DUSK_TEMPERATURE_TERRAFORMED = 30D;
                 NIGHT_TEMPERATURE_TERRAFORMED = 50D;
                 ambientTemp_TERRAFORMED = 10D;
+
+                tempRate_DAWN = -0.14D;
+                tempRate_DAY = -0.1D;
+                tempRate_DUSK = -0.14D;
+                tempRate_NIGHT = -0.584D;
+                tempRate_HARD = true;
             } else if (biome instanceof BiomeGenBaseLaythe) {
                 DAWN_TEMPERATURE =  7D;
                 DAY_TEMPERATURE =  0D;
@@ -793,6 +893,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 DUSK_TEMPERATURE_TERRAFORMED = 50D;
                 NIGHT_TEMPERATURE_TERRAFORMED = 100D;
                 ambientTemp_TERRAFORMED = -100D;
+
+                tempRate_DAWN = -0.1D;
+                tempRate_DAY = -0.1D;
+                tempRate_DUSK = -0.1D;
+                tempRate_NIGHT = -0.1D;
             } else {
                 DAWN_TEMPERATURE = 4D;
                 DAY_TEMPERATURE = 0D;
@@ -864,6 +969,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(catName, BOName[33], LATE_SUMMER_TEMPERATURE_DECREASE).getDouble(LATE_SUMMER_TEMPERATURE_DECREASE);
         config.get(catName, BOName[34], LATE_WINTER_TEMPERATURE_DECREASE).getDouble(LATE_WINTER_TEMPERATURE_DECREASE);
         config.get(catName, BOName[35], LATE_AUTUMN_TEMPERATURE_DECREASE).getDouble(LATE_AUTUMN_TEMPERATURE_DECREASE);
+
+        config.get(catName, BOName[36], tempRate_DAWN).getDouble(tempRate_DAWN);
+        config.get(catName, BOName[37], tempRate_DAY).getDouble(tempRate_DAY);
+        config.get(catName, BOName[38], tempRate_DUSK).getDouble(tempRate_DUSK);
+        config.get(catName, BOName[39], tempRate_NIGHT).getDouble(tempRate_NIGHT);
+
+        config.get(catName, BOName[40], tempRate_HARD).getBoolean(tempRate_HARD);
     }
 
 	@Override
@@ -879,42 +991,47 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BOName = new String[36];
+		BOName = new String[41];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
 		BOName[3] = "04.Ambient Temperature";
-		BOName[4] = "05.Temp Rate";
+		BOName[4] = "05.Temperature Rate";
 		BOName[5] = "06.Sanity Rate";
 		BOName[6] = "07.Dehydrate Rate";
 		BOName[7] = "08.Air Quality Rate";
         BOName[8] = "09.Is desert biome?";
-        BOName[9] = "10.Desert biome temperature multiplier";
-        BOName[10] = "11.Dawn biome temperature decrease";
-        BOName[11] = "12.Day biome temperature decrease";
-        BOName[12] = "13.Dusk biome temperature decrease";
-        BOName[13] = "14.Night biome temperature decrease";
-        BOName[14] = "15.Biome temperature rain decrease";
-        BOName[15] = "16.Biome temperature thunder decrease";
-        BOName[16] = "17.Should biome temperature decrease when rain?";
-        BOName[17] = "18.Should biome temperature decrease when thunder?";
-        BOName[18] = "19.Biome temperature shadow decrease";
-        BOName[19] = "20.[HBM] Ambient Temperature terraformed";
-        BOName[20] = "21.[HBM] Dawn biome temperature decrease terraformed";
-        BOName[21] = "22.[HBM] Day biome temperature decrease terraformed";
-        BOName[22] = "23.[HBM] Dusk biome temperature decrease terraformed";
-        BOName[23] = "24.[HBM] Night biome temperature decrease terraformed";
-        BOName[24] = "25.[Serene Seasons] Early spring biome temperature decrease";
-        BOName[25] = "26.[Serene Seasons] Early summer biome temperature decrease";
-        BOName[26] = "27.[Serene Seasons] Early winter biome temperature decrease";
-        BOName[27] = "28.[Serene Seasons] Early autumn biome temperature decrease";
-        BOName[28] = "29.[Serene Seasons] Mid spring biome temperature decrease";
-        BOName[29] = "30.[Serene Seasons] Mid summer biome temperature decrease";
-        BOName[30] = "31.[Serene Seasons] Mid winter biome temperature decrease";
-        BOName[31] = "32.[Serene Seasons] Mid autumn biome temperature decrease";
-        BOName[32] = "33.[Serene Seasons] Late spring biome temperature decrease";
-        BOName[33] = "34.[Serene Seasons] Late summer biome temperature decrease";
-        BOName[34] = "35.[Serene Seasons] Late winter biome temperature decrease";
-        BOName[35] = "36.[Serene Seasons] Late autumn biome temperature decrease";
+        BOName[9] = "10.Desert Biome Temperature Multiplier";
+        BOName[10] = "11.Dawn Biome Temperature Decrease";
+        BOName[11] = "12.Day Biome Temperature Decrease";
+        BOName[12] = "13.Dusk Biome Temperature Decrease";
+        BOName[13] = "14.Night Biome Temperature Decrease";
+        BOName[14] = "15.Biome Temperature Rain Decrease";
+        BOName[15] = "16.Biome Temperature Thunder Decrease";
+        BOName[16] = "17.Should Biome Temperature Decrease When Rain?";
+        BOName[17] = "18.Should Biome Temperature Decrease When Thunder?";
+        BOName[18] = "19.Biome Temperature Shadow Decrease";
+        BOName[19] = "20.[HBM] Ambient Temperature Terraformed";
+        BOName[20] = "21.[HBM] Dawn Biome Temperature Decrease Terraformed";
+        BOName[21] = "22.[HBM] Day Biome Temperature Decrease Terraformed";
+        BOName[22] = "23.[HBM] Dusk Biome Temperature Decrease Terraformed";
+        BOName[23] = "24.[HBM] Night Biome Temperature Decrease Terraformed";
+        BOName[24] = "25.[Serene Seasons] Early Spring Biome Temperature Decrease";
+        BOName[25] = "26.[Serene Seasons] Early Summer Biome Temperature Decrease";
+        BOName[26] = "27.[Serene Seasons] Early Winter Biome Temperature Decrease";
+        BOName[27] = "28.[Serene Seasons] Early Autumn Biome Temperature Decrease";
+        BOName[28] = "29.[Serene Seasons] Mid Spring Biome Temperature Decrease";
+        BOName[29] = "30.[Serene Seasons] Mid Summer Biome Temperature Decrease";
+        BOName[30] = "31.[Serene Seasons] Mid Winter Biome Temperature Decrease";
+        BOName[31] = "32.[Serene Seasons] Mid Autumn Biome Temperature Decrease";
+        BOName[32] = "33.[Serene Seasons] Late Spring Biome Temperature Decrease";
+        BOName[33] = "34.[Serene Seasons] Late Summer Biome Temperature Decrease";
+        BOName[34] = "35.[Serene Seasons] Late Winter Biome Temperature Decrease";
+        BOName[35] = "36.[Serene Seasons] Late Autumn Biome Temperature Decrease";
+        BOName[36] = "37.Dawn Biome Temperature Rate";
+        BOName[37] = "38.Day Biome Temperature Rate";
+        BOName[38] = "39.Dusk Biome Temperature Rate";
+        BOName[39] = "40.Night Biome Temperature Rate";
+        BOName[40] = "41.[HBM] Hard Biome Temperature Rate";
 	}
 }

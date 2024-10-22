@@ -315,9 +315,9 @@ public class EnviroDataTracker
                        isSealed = false;
                    }
                }
-               if (isSealed && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp) {
+               if (isSealed && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp && !EM_StatusManager.temperatureRateHARD) {
                    bodyTemp = 36.6F;
-               } else if (isSealed && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
+               } else if (isSealed && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp && !EM_StatusManager.temperatureRateHARD) {
                    bodyTemp = 36.6F;
                }
                if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && isSealed) {
@@ -342,11 +342,11 @@ public class EnviroDataTracker
                    } else {
                        if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
                            bodyTemp = 36.6F;
-                       } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp) {
+                       } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp && !EM_StatusManager.temperatureRateHARD) {
                            bodyTemp = 36.6F;
                        } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
                            bodyTemp = 36.6F;
-                       } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
+                       } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp && !EM_StatusManager.temperatureRateHARD) {
                            bodyTemp = 36.6F;
                        }
                    }
@@ -429,13 +429,13 @@ public class EnviroDataTracker
                 ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
             }
         }
-        if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp){
+        if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
                 bodyTemp = 36.6F;
-        } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp){
+        } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp && !EM_StatusManager.temperatureRateHARD){
             bodyTemp = 36.6F;
         } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
             bodyTemp = 36.6F;
-        } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp) {
+        } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp && !EM_StatusManager.temperatureRateHARD) {
             bodyTemp = 36.6F;
         }
 
