@@ -1,8 +1,6 @@
 package enviromine.trackers;
 
 import api.hbm.item.IGasMask;
-import com.hbm.dim.CelestialBody;
-import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.ThreeInts;
@@ -23,6 +21,7 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.properties.ArmorProperties;
+import enviromine.trackers.properties.BiomeProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.EnviroUtils;
@@ -35,19 +34,19 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.List;
 
 import static enviromine.core.EM_Settings.DeathFromHeartAttack;
@@ -207,31 +206,22 @@ public class EnviroDataTracker
 
         if (EnviroMine.isHbmLoaded()) {
             if (helmet != null && !isCreative) {
-
-                if (helmet.getItem() instanceof IGasMask) { // Check if the helmet is a mask
+                if (helmet.getItem() instanceof IGasMask) {
                     IGasMask mask = (IGasMask) helmet.getItem();
-                    ItemStack filter = mask.getFilter(helmet, trackedEntity); // Get the filter of the mask
+                    ItemStack filter = mask.getFilter(helmet, trackedEntity);
 
                     if (filter != null) {
 
-                        if (EM_Settings.airMult > 0F && (100F - airQuality) >= EM_Settings.airMult) // If your air isn't perfect
+                        if (EM_Settings.airMult > 0F && (100F - airQuality) >= EM_Settings.airMult)
                         {
                             float airToFill = 100F - airQuality;
 
-                            // Scale the amount of air to be filled by config factor
                             airToFill *= EM_Settings.gasMaskUpdateRestoreFraction;
 
                             if (airToFill > 0F) {
-                                // Check whether the mask provides protection against coarse/exact type of pollution you want to handle
                                 if (ArmorRegistry.hasProtection(trackedEntity, 3, ArmorRegistry.HazardClass.PARTICLE_COARSE)) {
-
-                                    // Increase air quality
                                     airQuality += airToFill;
-                                    // Random chance to damage the filter proportional to the amount of air restored
-                                    /*if (trackedEntity.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - MathHelper.floor_float(airToFill), 1)) == 0) {*/
                                         ArmorUtil.damageGasMaskFilter(trackedEntity, MathHelper.floor_float(airToFill*EM_Settings.HbmGasMaskBreakMultiplier));
-                                   // }
-
                                 }
                             }
                         }
@@ -241,16 +231,10 @@ public class EnviroDataTracker
                         if (EM_Settings.airMult > 0F && (100F - airQuality) >= EM_Settings.airMult)
                         {
                             float airToFill = 100F - airQuality;
-                            // Scale the amount of air to be filled by config factor
                             airToFill *= EM_Settings.gasMaskUpdateRestoreFraction;
                             if (airToFill > 0F) {
-                                // Check whether the mask provides protection against coarse/exact type of pollution you want to handle
-                                // Increase air quality
                                 airQuality += airToFill;
-                                // Random chance to damage the filter proportional to the amount of air restored
-                                /*if (trackedEntity.getRNG().nextInt(Math.max(EM_Settings.HbmGasMaskBreakChanceNumber - MathHelper.floor_float(airToFill), 1)) == 0) {*/
                                     ArmorUtil.damageGasMaskFilter(trackedEntity, MathHelper.floor_float(airToFill*EM_Settings.HbmGasMaskBreakMultiplier));
-                                //}
                             }
                         }
                      }
@@ -299,113 +283,120 @@ public class EnviroDataTracker
 
 		if (trackedEntity.isPotionActive(Potion.fireResistance) && bodyTemp > 36.6F) {bodyTemp = 36.6F;} // IF you have fire resistance, ambient temperature can never "feel" higher than 36.6
 
+        boolean CANCELEXTERNALINFLUENCE = false;
+        boolean temperatureRateHARD = false;
+
+        BiomeProperties biomeProp;
+        Chunk chunk = trackedEntity.worldObj.getChunkFromBlockCoords(i, k);
+        if(chunk != null) {
+            BiomeGenBase biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, trackedEntity.worldObj.getWorldChunkManager());
+            if (BiomeProperties.base.hasProperty(biome)) {
+                biomeProp = BiomeProperties.base.getProperty(biome);
+                if (biomeProp != null && biomeProp.biomeOveride) {
+                    temperatureRateHARD = biomeProp.tempRate_HARD;
+                }
+            }
+        }
+
 /// Hbm's Nuclear Tech armor that gives fire protection also prevents you from dying from enviromine heatstroke / hypothermia
    if(EnviroMine.isHbmLoaded()) {
-       // COLD THINGS START
 // For player
        if (trackedEntity instanceof EntityPlayer player) {
            boolean isSealed = false;
 
            if(EnviroMine.isHbmSpaceLoaded()) {
+
                for (int g = 0; g < 4; g++) {
                    ItemStack stack = player.getCurrentArmor(g);
                    if (stack != null && (stack.getItem() instanceof ArmorFSB)) {
                        isSealed = ((ArmorFSB) stack.getItem()).canSeal;
                    } else {
                        isSealed = false;
+                       break;
                    }
                }
-               if (isSealed && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp && !EM_StatusManager.temperatureRateHARD) {
-                   bodyTemp = 36.6F;
-               } else if (isSealed && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp && !EM_StatusManager.temperatureRateHARD) {
-                   bodyTemp = 36.6F;
+
+               if(isSealed) {
+                   if (bodyTemp >= 36.6F && bodyTemp <= EM_Settings.LightArmorMaxTemp && !temperatureRateHARD) {
+                       bodyTemp = 36.6F;
+                       CANCELEXTERNALINFLUENCE = true;
+                   } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.LightArmorMinTemp && !temperatureRateHARD) {
+                       bodyTemp = 36.6F;
+                       CANCELEXTERNALINFLUENCE = true;
+                   }
+                   if (HbmLivingProps.getTemperature(trackedEntity) <= -700 && HbmLivingProps.getTemperature(trackedEntity) >= -1000) {
+                       bodyTemp -= EM_Settings.BodyTempGood;
+                   } else if (HbmLivingProps.getTemperature(trackedEntity) <= -500 && HbmLivingProps.getTemperature(trackedEntity) >= -700) {
+                       bodyTemp -= EM_Settings.BodyTempBest;
+                   } else if (HbmLivingProps.isFrozen(trackedEntity)) {
+                       bodyTemp -= EM_Settings.BodyTempBad;
+                   }
                }
-               if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && isSealed) {
-                   bodyTemp -= EM_Settings.BodyTempGood;
-               } else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700 && isSealed) {
-                   bodyTemp -= EM_Settings.BodyTempBest;
-               } else if (HbmLivingProps.isFrozen(trackedEntity) && isSealed) {
-                   bodyTemp -= EM_Settings.BodyTempBad;
-               }
+
            }
            if (ArmorFSB.hasFSBArmor(player)) {
                ItemStack plate = player.inventory.armorInventory[2];
                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
                if(chestplate != null) {
-// Adjust the temperature if armor allows
-                   if(EnviroMine.isHbmSpaceLoaded()) {
-                       if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
+                   if(chestplate.fireproof) {
+                       if (bodyTemp >= 36.6F && bodyTemp <= EM_Settings.StrongArmorMaxTemp) {
                            bodyTemp = 36.6F;
-                       } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
+                           CANCELEXTERNALINFLUENCE = true;
+                       } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.StrongArmorMinTemp) {
                            bodyTemp = 36.6F;
+                           CANCELEXTERNALINFLUENCE = true;
                        }
-                   } else {
-                       if ((chestplate.fireproof) && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
-                           bodyTemp = 36.6F;
-                       } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp && !EM_StatusManager.temperatureRateHARD) {
-                           bodyTemp = 36.6F;
-                       } else if ((chestplate.fireproof) && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
-                           bodyTemp = 36.6F;
-                       } else if ((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp && !EM_StatusManager.temperatureRateHARD) {
-                           bodyTemp = 36.6F;
+                       if (HbmLivingProps.getTemperature(trackedEntity) <= -700 && HbmLivingProps.getTemperature(trackedEntity) >= -1000) {
+                           bodyTemp -= EM_Settings.BodyTempBest;
+                       } else if (HbmLivingProps.isFrozen(trackedEntity)) {
+                           bodyTemp -= EM_Settings.BodyTempVeryGood;
                        }
                    }
-                   if(EnviroMine.isHbmSpaceLoaded()) {
-                       if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate.fireproof)) {
-                           bodyTemp -= EM_Settings.BodyTempBest;
-                       } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate.fireproof)) {
-                           bodyTemp -= EM_Settings.BodyTempVeryGood;
-                       }
-                   } else {
-// Greatly reduce the effect of ntm temperature if the armor is completely sealed
-                       if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate.fireproof)) {
-                           bodyTemp -= EM_Settings.BodyTempBest;
-                       } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate.fireproof)) {
-                           bodyTemp -= EM_Settings.BodyTempVeryGood;
-                       }
-// Reduce the effect of the NTM temperature if the armor has little resistance
-                       else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                           bodyTemp -= EM_Settings.BodyTempGood;
-                       } else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700 && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                           bodyTemp -= EM_Settings.BodyTempBest;
-                       } else if (HbmLivingProps.isFrozen(trackedEntity) && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                           bodyTemp -= EM_Settings.BodyTempBad;
+                   if(!EnviroMine.isHbmSpaceLoaded()) {
+                       if((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
+                           if ( bodyTemp >= 36.6F && bodyTemp <= EM_Settings.LightArmorMaxTemp && !temperatureRateHARD) {
+                               bodyTemp = 36.6F;
+                               CANCELEXTERNALINFLUENCE = true;
+                           } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.LightArmorMinTemp && !temperatureRateHARD) {
+                               bodyTemp = 36.6F;
+                               CANCELEXTERNALINFLUENCE = true;
+                           }
+                           if (HbmLivingProps.getTemperature(trackedEntity) <= -700 && HbmLivingProps.getTemperature(trackedEntity) >= -1000) {
+                               bodyTemp -= EM_Settings.BodyTempGood;
+                           } else if (HbmLivingProps.getTemperature(trackedEntity) <= -500 && HbmLivingProps.getTemperature(trackedEntity) >= -700) {
+                               bodyTemp -= EM_Settings.BodyTempBest;
+                           } else if (HbmLivingProps.isFrozen(trackedEntity)) {
+                               bodyTemp -= EM_Settings.BodyTempBad;
+                           }
                        }
                    }
                }
            }
-// No armor, but still player
-           else if (HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
+           else if (HbmLivingProps.getTemperature(trackedEntity) <= -700 && HbmLivingProps.getTemperature(trackedEntity) >= -1000) {
                bodyTemp -= EM_Settings.BodyTempBad;
            }
-           else if (HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
+           else if (HbmLivingProps.getTemperature(trackedEntity) <= -500 && HbmLivingProps.getTemperature(trackedEntity) >= -700) {
                bodyTemp -= EM_Settings.BodyTempGood;
            }
            else if (HbmLivingProps.isFrozen(trackedEntity)) {
                bodyTemp -= EM_Settings.BodyTempWorst;
            }
        }
-// For other entities that NOT player
-       if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -700 && HbmLivingProps.getTemperature(trackedEntity) > -1000) {
+
+       else if (HbmLivingProps.getTemperature(trackedEntity) <= -700 && HbmLivingProps.getTemperature(trackedEntity) >= -1000) {
            bodyTemp -= EM_Settings.BodyTempBad;
-       } else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.getTemperature(trackedEntity) < -500 && HbmLivingProps.getTemperature(trackedEntity) > -700) {
+       } else if (HbmLivingProps.getTemperature(trackedEntity) <= -500 && HbmLivingProps.getTemperature(trackedEntity) >= -700) {
            bodyTemp -= EM_Settings.BodyTempGood;
        }
-       else if (!(trackedEntity instanceof EntityPlayer) && HbmLivingProps.isFrozen(trackedEntity)) {
+       else if (HbmLivingProps.isFrozen(trackedEntity)) {
            bodyTemp -= EM_Settings.BodyTempWorst;
        }
-       // COLD THINGS END
 
-       // HOT THINGS START
      if (trackedEntity instanceof EntityPlayer player) {
         if (!(ArmorFSB.hasFSBArmor(player)) && HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
-               bodyTemp += EM_Settings.BodyTempBest;
-           }
-       }
-     else if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
-           bodyTemp += EM_Settings.BodyTempBest;
-       }
-       // HOT THINGS END
+               bodyTemp += EM_Settings.BodyTempBest;}
+       } else if (HbmLivingProps.isBurning(trackedEntity) && !(trackedEntity.isPotionActive(Potion.fireResistance))) {
+           bodyTemp += EM_Settings.BodyTempBest;}
 }
         ItemStack plate = trackedEntity.getEquipmentInSlot(3);
         ItemStack legs = trackedEntity.getEquipmentInSlot(2);
@@ -422,24 +413,30 @@ public class EnviroDataTracker
         if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
         if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
             if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
+                ImmunityBurning = true;
                 ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-                // All armor isTemperatureSealed ? ImmunityFull = true
-            } else {
-                ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
             }
         }
-        if(ImmunityFull && bodyTemp > 36.6F && bodyTemp < EM_Settings.StrongArmorMaxTemp) {
+
+        if(ImmunityFull) {
+            if(bodyTemp >= 36.6F && bodyTemp <= EM_Settings.StrongArmorMaxTemp) {
                 bodyTemp = 36.6F;
-        } else if (ImmunityBurning && bodyTemp > 36.6F && bodyTemp < EM_Settings.LightArmorMaxTemp && !EM_StatusManager.temperatureRateHARD){
-            bodyTemp = 36.6F;
-        } else if (ImmunityFull && bodyTemp < 36.6F && bodyTemp > EM_Settings.StrongArmorMinTemp) {
-            bodyTemp = 36.6F;
-        } else if (ImmunityBurning && bodyTemp < 36.6F && bodyTemp > EM_Settings.LightArmorMinTemp && !EM_StatusManager.temperatureRateHARD) {
-            bodyTemp = 36.6F;
+                CANCELEXTERNALINFLUENCE = true;
+            } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.StrongArmorMinTemp) {
+                bodyTemp = 36.6F;
+                CANCELEXTERNALINFLUENCE = true;
+            }
+        } else if (ImmunityBurning) {
+            if (bodyTemp >= 36.6F && bodyTemp <= EM_Settings.LightArmorMaxTemp && !temperatureRateHARD){
+                bodyTemp = 36.6F;
+                CANCELEXTERNALINFLUENCE = true;
+            } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.LightArmorMinTemp && !temperatureRateHARD) {
+                bodyTemp = 36.6F;
+                CANCELEXTERNALINFLUENCE = true;
+            }
         }
 
-        if(bodyTemp - relTemp > 0) // Cold
+        if(bodyTemp - relTemp > 0 && !CANCELEXTERNALINFLUENCE) // Cold
 		{
 			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
 			if(bodyTemp - relTemp >= temperatureDropSpeed * temperatureSpeedAmplification)
@@ -449,7 +446,7 @@ public class EnviroDataTracker
 			{
 				bodyTemp = relTemp;
 			}
-		} else if(bodyTemp - relTemp < 0) // Hot
+		} else if(bodyTemp - relTemp < 0 && !CANCELEXTERNALINFLUENCE) // Hot
 		{
 			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
 			if(bodyTemp - relTemp <= -temperatureRiseSpeed * temperatureSpeedAmplification)

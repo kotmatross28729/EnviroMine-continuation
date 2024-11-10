@@ -74,9 +74,6 @@ public class EM_StatusManager
 	public static final int BODY_TEMP_RISE_SPEED_INDEX = 5;
 	public static final int ANIMAL_HOSTILITY_INDEX = 6;
 	public static final int SANITY_DELTA_INDEX = 7;
-
-    public static boolean temperatureRateHARD = false;
-
 	public static HashMap<String,EnviroDataTracker> trackerList = new HashMap<String,EnviroDataTracker>();
 
 	public static void addToManager(EnviroDataTracker tracker)
@@ -185,6 +182,8 @@ public class EM_StatusManager
         int i = MathHelper.floor_double(entityLiving.posX);
         int j = MathHelper.floor_double(entityLiving.posY);
         int k = MathHelper.floor_double(entityLiving.posZ);
+
+        boolean airVentConst = false;
 
         if (entityLiving.worldObj == null) {
             return data;
@@ -567,6 +566,7 @@ public class EM_StatusManager
                 if(atmosphere != null) {
                     if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
                         temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE_TERRAFORMED, biome_DAY_TEMPERATURE_TERRAFORMED, biome_DUSK_TEMPERATURE_TERRAFORMED, biome_NIGHT_TEMPERATURE_TERRAFORMED);
+                        airVentConst = true;
                     } else {
                         temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
                     }
@@ -613,7 +613,8 @@ public class EM_StatusManager
                 List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(entityLiving.worldObj, pos.x, pos.y, pos.z);
                     for (AtmosphereBlob blob : currentBlobs) {
                         if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
-                            biomeTemperature = 24; //TODO HARDCODED
+                            biomeTemperature = 24.6F; //TODO HARDCODED
+                            airVentConst = true;
                         }
                     }
             }
@@ -1015,8 +1016,6 @@ public class EM_StatusManager
                 }
 
                 float temperatureRate = 0;
-                temperatureRateHARD = biomeProp.tempRate_HARD;
-
                 if(biomeProp.tempRate_DAWN != 0 || biomeProp.tempRate_DAY != 0 || biomeProp.tempRate_DUSK != 0 || biomeProp.tempRate_NIGHT != 0) {
                     float currentTime = entityLiving.worldObj.getWorldTime();
                     if(EnviroMine.isHbmSpaceLoaded()) {
@@ -1028,11 +1027,16 @@ public class EM_StatusManager
                         temperatureRate = calculateTemperatureChange(currentTime % 24000L, biomeProp.tempRate_DAWN, biomeProp.tempRate_DAY, biomeProp.tempRate_DUSK, biomeProp.tempRate_NIGHT);
                     }
                 }
-                if (temperatureRate > 0) {
-                    riseSpeed += temperatureRate;
-                } else {
-                    dropSpeed += temperatureRate;
+
+                if(!airVentConst) {
+                    if (temperatureRate > 0) {
+                        riseSpeed += temperatureRate;
+                    } else {
+                        dropSpeed -= temperatureRate; //INVERTED LOGIC, AND MULTIPLIED BY 10,  FU-
+                    }
                 }
+
+
 
                 sanityRate += biomeProp.sanityRate;
             }

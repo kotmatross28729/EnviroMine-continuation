@@ -705,10 +705,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 ambientTemp_TERRAFORMED = 60D;
 
                 //Fun fact: this value was calculated using my calculations regarding heating a pizza in a 250-degree oven for 420 seconds, from 20 to 120 degrees
-                tempRate_DAWN = 0.294D;
-                tempRate_DAY = 1.272D;
-                tempRate_DUSK = 0.294D;
-                tempRate_NIGHT = 0.169D;
+                tempRate_DAWN = 0.0294D;
+                tempRate_DAY = 0.1272D;
+                tempRate_DUSK = 0.0294D;
+                tempRate_NIGHT = 0.0169D;
                 tempRate_HARD = true;
             }
             else if (biome instanceof BiomeGenBaseEve) {
@@ -727,10 +727,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                 ambientTemp_TERRAFORMED = 29.37D;
 
-                tempRate_DAWN = 0.0398D;
-                tempRate_DAY = 0.113D;
-                tempRate_DUSK = 0.0398D;
-                tempRate_NIGHT = -0.154D;
+                tempRate_DAWN = 0.00398D;
+                tempRate_DAY = 0.0113D;
+                tempRate_DUSK = 0.00398D;
+                tempRate_NIGHT = -0.0154D;
                 tempRate_HARD = true;
             }
             else if (biome instanceof BiomeGenMoon) {
@@ -749,10 +749,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 15D;
                 ambientTemp_TERRAFORMED = 30D;
 
-                tempRate_DAWN = -0.129D;
-                tempRate_DAY = 0.1D;
-                tempRate_DUSK = -0.129D;
-                tempRate_NIGHT = -0.654D;
+                tempRate_DAWN = -0.0129D;
+                tempRate_DAY = 0.01D;
+                tempRate_DUSK = -0.0129D;
+                tempRate_NIGHT = -0.0654D;
             } else if (biome instanceof BiomeGenBaseMinmus) {
                 DAWN_TEMPERATURE =  64D;
                 DAY_TEMPERATURE =  0D;
@@ -769,10 +769,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 25D;
                 ambientTemp_TERRAFORMED = 20D;
 
-                tempRate_DAWN = -0.129D;
+                tempRate_DAWN = -0.0129D;
                 tempRate_DAY = 0.0D;
-                tempRate_DUSK = -0.129D;
-                tempRate_NIGHT = -0.454D;
+                tempRate_DUSK = -0.0129D;
+                tempRate_NIGHT = -0.0454D;
                 biomeWater = "cold";
             }
             else if(biome instanceof BiomeGenBaseDuna) {
@@ -792,10 +792,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                     ambientTemp_TERRAFORMED = 22D;
 
-                    tempRate_DAWN = -0.229D;
+                    tempRate_DAWN = -0.0229D;
                     tempRate_DAY = 0.0D;
-                    tempRate_DUSK = -0.229D;
-                    tempRate_NIGHT = -0.584D;
+                    tempRate_DUSK = -0.0229D;
+                    tempRate_NIGHT = -0.0584D;
                     biomeWater = "cold";
 
                     tempRate_HARD = true;
@@ -815,10 +815,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                     ambientTemp_TERRAFORMED = 27D;
 
-                    tempRate_DAWN = -0.1D;
+                    tempRate_DAWN = -0.01D;
                     tempRate_DAY = 0.0D;
-                    tempRate_DUSK = -0.1D;
-                    tempRate_NIGHT = -0.2D;
+                    tempRate_DUSK = -0.01D;
+                    tempRate_NIGHT = -0.02D;
                 }
             } else if (biome instanceof BiomeGenIke) { //From phobos
                 DAWN_TEMPERATURE =  88D;
@@ -836,10 +836,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 10D;
                 ambientTemp_TERRAFORMED = 25D;
 
-                tempRate_DAWN = -0.1D;
+                tempRate_DAWN = -0.01D;
                 tempRate_DAY = 0.0D;
-                tempRate_DUSK = -0.1D;
-                tempRate_NIGHT = -0.2D;
+                tempRate_DUSK = -0.01D;
+                tempRate_NIGHT = -0.02D;
             } else if (biome instanceof BiomeGenBaseDres) { //From Ceres
                 DAWN_TEMPERATURE =  34D;
                 DAY_TEMPERATURE =  0D;
@@ -856,10 +856,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 50D;
                 ambientTemp_TERRAFORMED = 10D;
 
-                tempRate_DAWN = -0.14D;
-                tempRate_DAY = -0.1D;
-                tempRate_DUSK = -0.14D;
-                tempRate_NIGHT = -0.584D;
+                tempRate_DAWN = -0.014D;
+                tempRate_DAY = -0.01D;
+                tempRate_DUSK = -0.014D;
+                tempRate_NIGHT = -0.0584D;
                 tempRate_HARD = true;
             } else if (biome instanceof BiomeGenBaseLaythe) {
                 DAWN_TEMPERATURE =  7D;
@@ -894,10 +894,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 NIGHT_TEMPERATURE_TERRAFORMED = 100D;
                 ambientTemp_TERRAFORMED = -100D;
 
-                tempRate_DAWN = -0.1D;
-                tempRate_DAY = -0.1D;
-                tempRate_DUSK = -0.1D;
-                tempRate_NIGHT = -0.1D;
+                tempRate_DAWN = -0.01D;
+                tempRate_DAY = -0.01D;
+                tempRate_DUSK = -0.01D;
+                tempRate_NIGHT = -0.01D;
             } else {
                 DAWN_TEMPERATURE = 4D;
                 DAY_TEMPERATURE = 0D;

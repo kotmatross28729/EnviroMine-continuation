@@ -1,3 +1,14 @@
+# 1.3.144
+-  **[NTM Space compat] More severe temperature conditions on planets.**
+   + "Cyclic temperature rate":
+      + The same as “n temperature decrease”, but for temperature rate, that is, separate configs for Dawn, Day, Dusk, Night.
+   + Hard temperatures
+      + Temperatures that can penetrate weak suits without fire resistance (HEV/MITTY)
+   + Highly optimized armor checks for temperature, ~7.246 times faster
+
+-  **[NTM compat] Machines affect body temperature**
+    + TODO
+
 # 1.3.143
 * Added support for Serene Seasons
     * All relevant settings in the parameters of each biome

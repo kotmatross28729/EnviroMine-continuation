@@ -44,23 +44,14 @@
 
 
 ## Current TODO:
-- **1)** **[NTM Space compat] More severe temperature conditions on planets.**
-   + At the moment, low/high temperatures don't pose a particular threat, both because of the suit and because of the low “temperature rate” (even at -200/200, the body cools/heats for a very long time)
-      + "Cyclic temperature rate":
-         + The same as “n temperature decrease”, but for temperature rate, that is, separate configs for Dawn, Day, Dusk, Night. Thus, on the moon without a suit, during the day you will get fried very quickly, and at night you will become icy without even realizing it
-         + Should probably be compensated by Heaters/coolers
-      + Hard temperatures
-         + Temperatures that can penetrate weak suits without fire resistance (HEV/MITTY)
-         + It may not be necessary with "Cyclic temperature rate", but who knows
-
-- **2)** **Ability to change parameters for mobs from other mods.**
+- **1)** **Ability to change parameters for mobs from other mods.**
    + Mobs that aren't registered in the vanilla tab aren't displayed in the enviromine configuration. I plan to fix this (if I can)
 
-- **3)** **Сode refactoring.**
+- **2)** **Сode refactoring.**
    + The name speaks for itself
 
-- **4)** **UNHARDCODE ALL HARDCODED VALUES.**
-   + There are a lot of values ​​in enviromine that could be changed in some situations. This is the last thing I plan to do
+- **3)** **UNHARDCODE ALL HARDCODED VALUES.**
+   + There are a lot of values in enviromine that could be changed in some situations. This is the last thing I plan to do
 
 
 
