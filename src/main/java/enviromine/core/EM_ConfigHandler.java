@@ -392,19 +392,31 @@ public class EM_ConfigHandler
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean("41_Player Insanity Random Mob Render", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "If true, then if a player has the insanity effect, his model is replaced with a random mob. Causes bugs with the model");
 
         EM_Settings.FireboxHeatDivisor = config.getFloat("42_Firebox Heat Divisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
-        EM_Settings.HeaterOvenHeatDivisor = config.getFloat("43_Heater Oven Heat Divisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.HeaterOvenHeatDivisor = config.getFloat("43_Heater Oven Heat Divisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 4, 1, 65536,  "");
         EM_Settings.HeaterOilburnerHeatDivisor = config.getFloat("44_HeaterOilburnerHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
-        EM_Settings.HeaterElectricHeatDivisor = config.getFloat("45_HeaterElectricHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 20, 1, 65536,  "");
-        EM_Settings.FurnaceIronHeatDivisor = config.getFloat("46_FurnaceIronHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
-        EM_Settings.FurnaceSteelHeatDivisor = config.getFloat("47_FurnaceSteelHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
 
-        //EM_Settings.FurnaceCombinationHeatDivisor = config.getInt("48_FurnaceCombinationHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
-        //EM_Settings.BoilerHeatDivisor = config.getInt("49_BoilerHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
-        //EM_Settings.BoilerIndustrialHeatDivisor = config.getInt("50_BoilerIndustrialHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
-        //EM_Settings.FurnaceBrickHeatDivisor = config.getInt("51_FurnaceBrickHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
-        //EM_Settings.DiFurnaceHeatDivisor = config.getInt("52_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
-        //EM_Settings.DiFurnaceRTGHeatDivisor = config.getInt("53_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
-        //EM_Settings.NukeFurnaceHeatDivisor = config.getInt("54_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        EM_Settings.HeaterElectricHeatDivisor = config.getFloat("45-1_HeaterElectricHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 20, 1, 65536,  "");
+        EM_Settings.HeaterElectricHeatHardCap = config.getFloat("45-2_HeaterElectricHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 250, 1, 65536,  "");
+
+        EM_Settings.FurnaceIronHeatDivisor = config.getFloat("46-1_FurnaceIronHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.FurnaceIronHeatHardCap = config.getFloat("46-2_FurnaceIronHeatHardCap",CATEGORY_KOTMATROSS_FORK_CHANGES, 1000, 1, 65536,  "");
+
+        EM_Settings.FurnaceSteelHeatDivisor = config.getFloat("47_FurnaceSteelHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
+        EM_Settings.FurnaceCombinationHeatDivisor = config.getInt("48_FurnaceCombinationHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
+
+        EM_Settings.BoilerHeatDivisor = config.getInt("49-1_BoilerHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
+        EM_Settings.BoilerHeaterOvenDivisorConstant = config.getInt("49-2_BoilerHeaterOvenDivisorConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.BoilerMAXDivisorConstant = config.getInt("49-3_BoilerMAXDivisorConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, 10, 1, 65536,  "");
+
+
+        EM_Settings.BoilerIndustrialHeatDivisor = config.getInt("50-1_BoilerIndustrialHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
+        EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant = config.getInt("50-2_BoilerIndustrialHeaterOvenDivisorConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.BoilerIndustrialMAXDivisorConstant = config.getInt("50-3_BoilerIndustrialMAXDivisorConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, 10, 1, 65536,  "");
+
+        //EM_Settings.FurnaceBrickHeatDivisor = config.getInt("51_FurnaceBrickHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "");
+        //EM_Settings.DiFurnaceHeatDivisor = config.getInt("52_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "");
+        //EM_Settings.DiFurnaceRTGHeatDivisor = config.getInt("53_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "");
+        //EM_Settings.NukeFurnaceHeatDivisor = config.getInt("54_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "");
 
         // --------------- //
         // --- General --- //

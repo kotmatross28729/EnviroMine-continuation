@@ -320,59 +320,97 @@ public class EM_StatusManager
                     if(isHbmLoaded()) {
                         TileEntity tileentity = entityLiving.worldObj.getTileEntity(i + x, j + y, k + z);
 
-                        if(tileentity instanceof TileEntityHeaterFirebox) {
-                            if(((TileEntityHeaterFirebox) tileentity).burnTime > 0) {
-                                //Coal - 200 = 100D
-                                //Bale - 1500 = 750D
-                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterFirebox) tileentity).burnHeat / EM_Settings.FireboxHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                        if (tileentity != null) {
+                            float FireboxMax = TileEntityHeaterFirebox.maxHeatEnergy;
+                            float HeaterOvenMax = TileEntityHeaterOven.maxHeatEnergy;
+
+                            //Calculation accuracy:
+                            //✅ - close to the expected value
+                            //🟧 - different from the expected value, but not much
+                            //❌ - very different from the expected value
+
+                            //Expected - ((value/DIV) / 2) ≈ temp in deg
+                            if (tileentity instanceof TileEntityHeaterFirebox) {
+                                if (((TileEntityHeaterFirebox) tileentity).burnTime > 0) {
+                                    //Coal - 200/2 = 52(60)℃ (expected 50) ✅
+                                    //Bale - 1500/2 = 350(309)℃ (expected 375) ✅
+                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterFirebox) tileentity).burnHeat / EM_Settings.FireboxHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-                        if(tileentity instanceof TileEntityHeaterOven) {
-                            if(((TileEntityHeaterOven) tileentity).burnTime > 0) {
-                                //Coal - 200 = 100D
-                                //Bale - 1500 = 750D
-                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOven) tileentity).burnHeat / EM_Settings.HeaterOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            if (tileentity instanceof TileEntityHeaterOven) {
+                                if (((TileEntityHeaterOven) tileentity).burnTime > 0) {
+                                    //Coal - 1000/4 = 129(112)℃  (expected 125) ✅
+                                    //Bale - 7500/4 = 869(877)℃ (expected 937,5) 🟧
+                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOven) tileentity).burnHeat / EM_Settings.HeaterOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-                        if(tileentity instanceof TileEntityHeaterOilburner) {
-                            if(((TileEntityHeaterOilburner) tileentity).isOn) {
-                                //Max - 100_000 = 500
-                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOilburner) tileentity).heatEnergy / EM_Settings.HeaterOilburnerHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            if (tileentity instanceof TileEntityHeaterOilburner) {
+                                if (((TileEntityHeaterOilburner) tileentity).isOn) {
+                                    //Max - 100_000/200 = 245℃ (expected 250) ✅
+                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOilburner) tileentity).heatEnergy / EM_Settings.HeaterOilburnerHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-                        if(tileentity instanceof TileEntityHeaterElectric) {
-                            if(((TileEntityHeaterElectric) tileentity).isOn) {
-                                //Max - 10_000 = 500
-                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterElectric) tileentity).heatEnergy / EM_Settings.HeaterElectricHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            if (tileentity instanceof TileEntityHeaterElectric) {
+                                if (((TileEntityHeaterElectric) tileentity).isOn) {
+                                    //Max (no) - 10_000/20 = 244(249)℃ (expected 250) - 250℃ hard-cap ✅
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(((TileEntityHeaterElectric) tileentity).heatEnergy / EM_Settings.HeaterElectricHeatDivisor, (EM_Settings.HeaterElectricHeatHardCap*2)) , dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-                        if(tileentity instanceof TileEntityFurnaceIron) {
-                            if(((TileEntityFurnaceIron) tileentity).wasOn) {
-                                //Coal - 1600 = 800
-                                blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceIron) tileentity).burnTime / EM_Settings.FurnaceIronHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            if (tileentity instanceof TileEntityFurnaceIron) {
+                                if (((TileEntityFurnaceIron) tileentity).wasOn) {
+                                    //Coal - 2000/2 = 458℃ (expected 500) ✅
+                                    //Bale - 64000/2 = 15343℃ (expected 16000) - 1000℃ hard-cap ✅
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(((TileEntityFurnaceIron) tileentity).burnTime / EM_Settings.FurnaceIronHeatDivisor, (EM_Settings.FurnaceIronHeatHardCap*2)), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-                        if(tileentity instanceof TileEntityFurnaceSteel) {
-                            if(((TileEntityFurnaceSteel) tileentity).wasOn) {
-                                //Max - 100_000 = 500
-                                blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceSteel) tileentity).heat / EM_Settings.FurnaceSteelHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            if (tileentity instanceof TileEntityFurnaceSteel) {
+                                if (((TileEntityFurnaceSteel) tileentity).wasOn) {
+                                    //Max - 100_000/200 = 180℃ (expected 250) 🟧
+                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceSteel) tileentity).heat / EM_Settings.FurnaceSteelHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-//                        if(tileentity instanceof TileEntityFurnaceCombination) {
-//                            LogManager.getLogger().fatal("TileEntityFurnaceCombination : ");
-//                            LogManager.getLogger().fatal("heat : " + ((TileEntityFurnaceCombination) tileentity).heat);
-//                            LogManager.getLogger().fatal("wasOn : " + ((TileEntityFurnaceCombination) tileentity).wasOn);
-//                        }
-//                        if(tileentity instanceof TileEntityHeatBoiler) {
-//                            LogManager.getLogger().fatal("TileEntityHeatBoiler : ");
-//                            LogManager.getLogger().fatal("heat : " + ((TileEntityHeatBoiler) tileentity).heat);
-//                            LogManager.getLogger().fatal("isOn : " + ((TileEntityHeatBoiler) tileentity).isOn);
-//                        }
-//                        if(tileentity instanceof TileEntityHeatBoilerIndustrial) {
-//                            LogManager.getLogger().fatal("TileEntityHeatBoilerIndustrial : ");
-//                            LogManager.getLogger().fatal("heat : " + ((TileEntityHeatBoilerIndustrial) tileentity).heat);
-//                            LogManager.getLogger().fatal("isOn : " + ((TileEntityHeatBoilerIndustrial) tileentity).isOn);
-//                        }
+                            if (tileentity instanceof TileEntityFurnaceCombination) {
+                                if (((TileEntityFurnaceCombination) tileentity).wasOn) {
+                                    //Max - 100_000/200 = 228℃ (expected 250) ✅
+                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceCombination) tileentity).heat / EM_Settings.FurnaceCombinationHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
+                            }
+                            if (tileentity instanceof TileEntityHeatBoiler) {
+//                                if (((TileEntityHeatBoiler) tileentity).isOn) {
+                                    float heat = ((TileEntityHeatBoiler) tileentity).heat;
+
+                                    if (heat <= FireboxMax) {
+                                        heat = ((TileEntityHeatBoiler) tileentity).heat / EM_Settings.BoilerHeatDivisor;
+                                    } else if (heat <= HeaterOvenMax) {
+                                        heat = Math.max(((TileEntityHeatBoiler) tileentity).heat / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerHeaterOvenDivisorConstant), ((FireboxMax / EM_Settings.BoilerHeatDivisor) / 2));
+                                    } else if (heat <= TileEntityHeatBoiler.maxHeat) {
+                                        heat = Math.max(((TileEntityHeatBoiler) tileentity).heat / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerMAXDivisorConstant), ((HeaterOvenMax / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerHeaterOvenDivisorConstant)) / 2));
+                                    }
+                                    //Max (real) - 3_200_000/(200*10) = ?℃ (expected 800)
+                                    //Max (HO)     - 500_000/(200*2)  = ?℃ (expected 625)
+                                    //Max (FB)     - 100_000/200      = ?℃ (expected 250)
+                                    blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+//                                }
+                            }
+                            if (tileentity instanceof TileEntityHeatBoilerIndustrial) {
+//                                if (((TileEntityHeatBoilerIndustrial) tileentity).isOn) {
+
+                                    float heat = ((TileEntityHeatBoilerIndustrial) tileentity).heat;
+
+                                    if (heat <= FireboxMax) {
+                                        heat = ((TileEntityHeatBoilerIndustrial) tileentity).heat / EM_Settings.BoilerIndustrialHeatDivisor;
+                                    } else if (heat <= HeaterOvenMax) {
+                                        heat = Math.max(((TileEntityHeatBoilerIndustrial) tileentity).heat / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant), ((FireboxMax / EM_Settings.BoilerIndustrialHeatDivisor) / 2));
+                                    } else if (heat <= TileEntityHeatBoilerIndustrial.maxHeat) {
+                                        heat = Math.max(((TileEntityHeatBoilerIndustrial) tileentity).heat / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialMAXDivisorConstant), ((HeaterOvenMax / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant)) / 2));
+                                    }
+
+                                    //Max (real)   - 12_800_000/(200*10) = ?℃ (expected 3_200)
+                                    //Max (HO)        - 500_000/(200*2)  = ?℃ (expected 625)
+                                    //Max (FB)        - 100_000/200      = ?℃ (expected 250)
+                                    blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+//                                }
+                            }
 //                        if(tileentity instanceof TileEntityFurnaceBrick) {
 //                            LogManager.getLogger().fatal("TileEntityFurnaceBrick : ");
 //                            LogManager.getLogger().fatal("burnTime : " + ((TileEntityFurnaceBrick) tileentity).burnTime);
@@ -392,7 +430,7 @@ public class EM_StatusManager
 //                            LogManager.getLogger().fatal("TileEntityNukeFurnace : ");
 //                            LogManager.getLogger().fatal("dualPower : " + ((TileEntityNukeFurnace) tileentity).dualPower);
 //                        }
-
+                        }
 
                     }
 

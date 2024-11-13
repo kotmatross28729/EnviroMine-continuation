@@ -117,11 +117,18 @@ public class EM_Settings
     public static float HeaterOvenHeatDivisor;
     public static float HeaterOilburnerHeatDivisor;
     public static float HeaterElectricHeatDivisor;
+    public static float HeaterElectricHeatHardCap;
     public static float FurnaceIronHeatDivisor;
+    public static float FurnaceIronHeatHardCap;
     public static float FurnaceSteelHeatDivisor;
     public static float FurnaceCombinationHeatDivisor;
     public static float BoilerHeatDivisor;
+    public static float BoilerHeaterOvenDivisorConstant;
+    public static float BoilerMAXDivisorConstant;
     public static float BoilerIndustrialHeatDivisor;
+    public static float BoilerIndustrialHeaterOvenDivisorConstant;
+    public static float BoilerIndustrialMAXDivisorConstant;
+
     public static float FurnaceBrickHeatDivisor;
     public static float DiFurnaceHeatDivisor;
     public static float DiFurnaceRTGHeatDivisor;
