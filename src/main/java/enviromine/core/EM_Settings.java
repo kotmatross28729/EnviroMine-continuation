@@ -80,54 +80,54 @@ public class EM_Settings
 
     public static float BodyTempSleep = 10F;
 
-    public static boolean DeathFromHeartAttack;
-    public static int HeartAttackTimeToDie;
-    public static int HbmGasMaskBreakMultiplier;
-    public static int EnviromineGasMaskBreakMultiplier;
-    public static int HbmGasMaskBreakChanceNumber;
-    public static boolean SulfurDioxideGasDebugLogger;
-    public static boolean CarbonMonoxideGasDebugLogger;
-    public static boolean HydrogenSulfideGasDebugLogger;
+    public static boolean DeathFromHeartAttack = true;
+    public static int HeartAttackTimeToDie = 20;
+    public static int HbmGasMaskBreakMultiplier = 10;
+    public static int EnviromineGasMaskBreakMultiplier = 10;
+    public static int HbmGasMaskBreakChanceNumber = 15;
+    public static boolean SulfurDioxideGasDebugLogger = false;
+    public static boolean CarbonMonoxideGasDebugLogger = false;
+    public static boolean HydrogenSulfideGasDebugLogger = false;
 //SulfurDioxide
-    public static int SulfurDioxidePoisoningAmplifier;
-    public static int SulfurDioxideSeverePoisoningAmplifier;
-    public static int SulfurDioxidePoisoningTime;
-    public static int SulfurDioxideSeverePoisoningTime;
-    public static int SulfurDioxidePoisoningLevel;
-    public static int SulfurDioxideSeverePoisoningLevel;
-    public static int SulfurDioxidePoisoningChance;
+    public static int SulfurDioxidePoisoningAmplifier = 5;
+    public static int SulfurDioxideSeverePoisoningAmplifier = 10;
+    public static int SulfurDioxidePoisoningTime = 200;
+    public static int SulfurDioxideSeverePoisoningTime = 600;
+    public static int SulfurDioxidePoisoningLevel = 0;
+    public static int SulfurDioxideSeverePoisoningLevel = 1;
+    public static int SulfurDioxidePoisoningChance = 5;
 //CarbonMonoxide
-    public static int CarbonMonoxidePoisoningAmplifier;
-    public static int CarbonMonoxidePoisoningTime;
-    public static int CarbonMonoxidePoisoningLevel;
-    public static int CarbonMonoxidePoisoningChance;
+    public static int CarbonMonoxidePoisoningAmplifier = 5;
+    public static int CarbonMonoxidePoisoningTime = 200;
+    public static int CarbonMonoxidePoisoningLevel = 0;
+    public static int CarbonMonoxidePoisoningChance = 5;
 //HydrogenSulfide
-    public static int HydrogenSulfidePoisoningAmplifier;
-    public static int HydrogenSulfideSeverePoisoningAmplifier;
-    public static int HydrogenSulfidePoisoningTime;
-    public static int HydrogenSulfideSeverePoisoningTime;
-    public static int HydrogenSulfidePoisoningLevel;
-    public static int HydrogenSulfideSeverePoisoningLevel;
-    public static int HydrogenSulfidePoisoningChance;
+    public static int HydrogenSulfidePoisoningAmplifier = 5;
+    public static int HydrogenSulfideSeverePoisoningAmplifier = 10;
+    public static int HydrogenSulfidePoisoningTime = 200;
+    public static int HydrogenSulfideSeverePoisoningTime = 600;
+    public static int HydrogenSulfidePoisoningLevel = 0;
+    public static int HydrogenSulfideSeverePoisoningLevel = 1;
+    public static int HydrogenSulfidePoisoningChance = 5;
     public static boolean hardcoregases = false;
     public static boolean enablePlayerRandomMobRender = false;
 
     //MACHINES
-    public static float FireboxHeatDivisor;
-    public static float HeaterOvenHeatDivisor;
-    public static float HeaterOilburnerHeatDivisor;
-    public static float HeaterElectricHeatDivisor;
-    public static float HeaterElectricHeatHardCap;
-    public static float FurnaceIronHeatDivisor;
-    public static float FurnaceIronHeatHardCap;
-    public static float FurnaceSteelHeatDivisor;
-    public static float FurnaceCombinationHeatDivisor;
-    public static float BoilerHeatDivisor;
-    public static float BoilerHeaterOvenDivisorConstant;
-    public static float BoilerMAXDivisorConstant;
-    public static float BoilerIndustrialHeatDivisor;
-    public static float BoilerIndustrialHeaterOvenDivisorConstant;
-    public static float BoilerIndustrialMAXDivisorConstant;
+    public static float FireboxHeatDivisor = 2;
+    public static float HeaterOvenHeatDivisor = 4;
+    public static float HeaterOilburnerHeatDivisor = 200;
+    public static float HeaterElectricHeatDivisor = 20;
+    public static float HeaterElectricHeatHardCap = 250;
+    public static float FurnaceIronHeatDivisor = 2;
+    public static float FurnaceIronHeatHardCap = 1000;
+    public static float FurnaceSteelHeatDivisor = 200;
+    public static float FurnaceCombinationHeatDivisor = 200;
+    public static float BoilerHeatDivisor = 200;
+    public static float BoilerHeaterOvenDivisorConstant = 2;
+    public static float BoilerMAXDivisorConstant = 10;
+    public static float BoilerIndustrialHeatDivisor = 200;
+    public static float BoilerIndustrialHeaterOvenDivisorConstant = 2;
+    public static float BoilerIndustrialMAXDivisorConstant = 10;
 
     public static float FurnaceBrickHeatDivisor;
     public static float DiFurnaceHeatDivisor;
