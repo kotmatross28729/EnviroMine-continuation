@@ -340,7 +340,6 @@ public class EM_ConfigHandler
         EM_Settings.BodyTempWorst = config.getFloat("1-5_HBMBodyTempWorst", CATEGORY_KOTMATROSS_FORK_CHANGES,0.8F , -65536F, 65536F, "Hbm, subtracted if: no fsb armor and hbm.isFrozen");
         EM_Settings.BodyTempSleep = config.getFloat("1-5-2_BodyTempSleep", CATEGORY_KOTMATROSS_FORK_CHANGES,10F , -65536F, 65536F, "Maybe add");
 
-
         EM_Settings.StrongArmorMaxTemp = config.getFloat("1-6_StrongArmorMaxTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 100F, -65536F, 65536F, "If the armor has 12.Is Temperature Sealed = true, or the armor is ArmorFSB from hbm's ntm, which has the \"Fireproof\" characteristic, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature does not exceed n");
         EM_Settings.StrongArmorMinTemp = config.getFloat("1-6-2_StrongArmorMinTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 30F, -65536F, 65536F, "If the armor has 12.Is Temperature Sealed = true, or the armor is ArmorFSB from hbm's ntm, which has the \"Fireproof\" characteristic, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature is not less than n");
         EM_Settings.LightArmorMaxTemp = config.getFloat("1-7_LightArmorMaxTemp", CATEGORY_KOTMATROSS_FORK_CHANGES, 37.7F, -65536F, 65536F, "If the armor has 11.Is Temperature Resistance = true, or the armor is HEV/Environment Suit from hbm's ntm, then the body temperature will be maintained at 36.6, if at the moment the player's body temperature does not exceed n");
@@ -391,6 +390,21 @@ public class EM_ConfigHandler
         EM_Settings.HydrogenSulfidePoisoningChance = config.getInt("40_Chance of Hydrogen Sulfide Poisoning",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Hydrogen Sulfide poisoning if the player has no protection?");
 
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean("41_Player Insanity Random Mob Render", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "If true, then if a player has the insanity effect, his model is replaced with a random mob. Causes bugs with the model");
+
+        EM_Settings.FireboxHeatDivisor = config.getFloat("42_Firebox Heat Divisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.HeaterOvenHeatDivisor = config.getFloat("43_Heater Oven Heat Divisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.HeaterOilburnerHeatDivisor = config.getFloat("44_HeaterOilburnerHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
+        EM_Settings.HeaterElectricHeatDivisor = config.getFloat("45_HeaterElectricHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 20, 1, 65536,  "");
+        EM_Settings.FurnaceIronHeatDivisor = config.getFloat("46_FurnaceIronHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 2, 1, 65536,  "");
+        EM_Settings.FurnaceSteelHeatDivisor = config.getFloat("47_FurnaceSteelHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 200, 1, 65536,  "");
+
+        //EM_Settings.FurnaceCombinationHeatDivisor = config.getInt("48_FurnaceCombinationHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        //EM_Settings.BoilerHeatDivisor = config.getInt("49_BoilerHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        //EM_Settings.BoilerIndustrialHeatDivisor = config.getInt("50_BoilerIndustrialHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        //EM_Settings.FurnaceBrickHeatDivisor = config.getInt("51_FurnaceBrickHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        //EM_Settings.DiFurnaceHeatDivisor = config.getInt("52_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        //EM_Settings.DiFurnaceRTGHeatDivisor = config.getInt("53_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
+        //EM_Settings.NukeFurnaceHeatDivisor = config.getInt("54_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Carbon Monoxide poisoning if the player has no protection?");
 
         // --------------- //
         // --- General --- //

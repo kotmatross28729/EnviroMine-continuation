@@ -110,8 +110,32 @@ public class EM_Settings
     public static int HydrogenSulfideSeverePoisoningLevel;
     public static int HydrogenSulfidePoisoningChance;
     public static boolean hardcoregases = false;
-
     public static boolean enablePlayerRandomMobRender = false;
+
+    //MACHINES
+    public static float FireboxHeatDivisor;
+    public static float HeaterOvenHeatDivisor;
+    public static float HeaterOilburnerHeatDivisor;
+    public static float HeaterElectricHeatDivisor;
+    public static float FurnaceIronHeatDivisor;
+    public static float FurnaceSteelHeatDivisor;
+    public static float FurnaceCombinationHeatDivisor;
+    public static float BoilerHeatDivisor;
+    public static float BoilerIndustrialHeatDivisor;
+    public static float FurnaceBrickHeatDivisor;
+    public static float DiFurnaceHeatDivisor;
+    public static float DiFurnaceRTGHeatDivisor;
+    public static float NukeFurnaceHeatDivisor;
+
+
+
+
+    //HAZARDS
+
+
+
+
+
 
 	public static boolean enablePhysics = false;
 	public static boolean enableLandslide = true;

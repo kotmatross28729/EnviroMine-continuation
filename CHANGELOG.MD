@@ -6,8 +6,13 @@
       + Temperatures that can penetrate weak suits without fire resistance (HEV/MITTY)
    + Highly optimized armor checks for temperature, ~7.246 times faster
 
--  **[NTM compat] Machines affect body temperature**
-    + TODO
+-  **[NTM compat] Machines affect body temperature | Support for hbm's ntm blocks/items by default**
+    + Some machines will now increase the ambient temperature.
+      + Pro-tip: don't lean against a working hbm's ntm furnace, the ambient temperature can reach ~X degrees
+    + Now items with certain hazards will affect you
+      + "Pyrophoric / Hot" items increase ambient temperature
+      + "Coal dust" / "Asbestos" items decrease air quality
+      + "Digamma Radiation" items decrease sanity
 
 # 1.3.143
 * Added support for Serene Seasons

@@ -1,6 +1,7 @@
 package enviromine.handlers;
 
 import com.google.common.base.Stopwatch;
+import com.hbm.blocks.machine.HeaterOven;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
@@ -13,6 +14,20 @@ import com.hbm.hazard.HazardSystem;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
+import com.hbm.tileentity.machine.TileEntityDiFurnace;
+import com.hbm.tileentity.machine.TileEntityDiFurnaceRTG;
+import com.hbm.tileentity.machine.TileEntityFireboxBase;
+import com.hbm.tileentity.machine.TileEntityFurnaceBrick;
+import com.hbm.tileentity.machine.TileEntityFurnaceCombination;
+import com.hbm.tileentity.machine.TileEntityFurnaceIron;
+import com.hbm.tileentity.machine.TileEntityFurnaceSteel;
+import com.hbm.tileentity.machine.TileEntityHeatBoiler;
+import com.hbm.tileentity.machine.TileEntityHeatBoilerIndustrial;
+import com.hbm.tileentity.machine.TileEntityHeaterElectric;
+import com.hbm.tileentity.machine.TileEntityHeaterFirebox;
+import com.hbm.tileentity.machine.TileEntityHeaterOilburner;
+import com.hbm.tileentity.machine.TileEntityHeaterOven;
+import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.EnviroPotion;
 import enviromine.client.gui.UI_Settings;
@@ -47,6 +62,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.MathHelper;
@@ -57,6 +73,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -173,7 +190,7 @@ public class EM_StatusManager
         float dropSpeed = 0.001F;
         float riseSpeed = 0.001F;
 
-        float blockAndItemTempInfluence = -999F;
+        float blockAndItemTempInfluence = 0F;
         float cooling = 0;
         float dehydrateBonus = 0.0F;
         int animalHostility = 0;
@@ -300,6 +317,88 @@ public class EM_StatusManager
 
                     block = entityLiving.worldObj.getBlock(i + x, j + y, k + z);
 
+                    if(isHbmLoaded()) {
+                        TileEntity tileentity = entityLiving.worldObj.getTileEntity(i + x, j + y, k + z);
+
+                        if(tileentity instanceof TileEntityHeaterFirebox) {
+                            if(((TileEntityHeaterFirebox) tileentity).burnTime > 0) {
+                                //Coal - 200 = 100D
+                                //Bale - 1500 = 750D
+                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterFirebox) tileentity).burnHeat / EM_Settings.FireboxHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
+                        }
+                        if(tileentity instanceof TileEntityHeaterOven) {
+                            if(((TileEntityHeaterOven) tileentity).burnTime > 0) {
+                                //Coal - 200 = 100D
+                                //Bale - 1500 = 750D
+                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOven) tileentity).burnHeat / EM_Settings.HeaterOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
+                        }
+                        if(tileentity instanceof TileEntityHeaterOilburner) {
+                            if(((TileEntityHeaterOilburner) tileentity).isOn) {
+                                //Max - 100_000 = 500
+                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOilburner) tileentity).heatEnergy / EM_Settings.HeaterOilburnerHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
+                        }
+                        if(tileentity instanceof TileEntityHeaterElectric) {
+                            if(((TileEntityHeaterElectric) tileentity).isOn) {
+                                //Max - 10_000 = 500
+                                blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterElectric) tileentity).heatEnergy / EM_Settings.HeaterElectricHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
+                        }
+                        if(tileentity instanceof TileEntityFurnaceIron) {
+                            if(((TileEntityFurnaceIron) tileentity).wasOn) {
+                                //Coal - 1600 = 800
+                                blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceIron) tileentity).burnTime / EM_Settings.FurnaceIronHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
+                        }
+                        if(tileentity instanceof TileEntityFurnaceSteel) {
+                            if(((TileEntityFurnaceSteel) tileentity).wasOn) {
+                                //Max - 100_000 = 500
+                                blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceSteel) tileentity).heat / EM_Settings.FurnaceSteelHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
+                        }
+//                        if(tileentity instanceof TileEntityFurnaceCombination) {
+//                            LogManager.getLogger().fatal("TileEntityFurnaceCombination : ");
+//                            LogManager.getLogger().fatal("heat : " + ((TileEntityFurnaceCombination) tileentity).heat);
+//                            LogManager.getLogger().fatal("wasOn : " + ((TileEntityFurnaceCombination) tileentity).wasOn);
+//                        }
+//                        if(tileentity instanceof TileEntityHeatBoiler) {
+//                            LogManager.getLogger().fatal("TileEntityHeatBoiler : ");
+//                            LogManager.getLogger().fatal("heat : " + ((TileEntityHeatBoiler) tileentity).heat);
+//                            LogManager.getLogger().fatal("isOn : " + ((TileEntityHeatBoiler) tileentity).isOn);
+//                        }
+//                        if(tileentity instanceof TileEntityHeatBoilerIndustrial) {
+//                            LogManager.getLogger().fatal("TileEntityHeatBoilerIndustrial : ");
+//                            LogManager.getLogger().fatal("heat : " + ((TileEntityHeatBoilerIndustrial) tileentity).heat);
+//                            LogManager.getLogger().fatal("isOn : " + ((TileEntityHeatBoilerIndustrial) tileentity).isOn);
+//                        }
+//                        if(tileentity instanceof TileEntityFurnaceBrick) {
+//                            LogManager.getLogger().fatal("TileEntityFurnaceBrick : ");
+//                            LogManager.getLogger().fatal("burnTime : " + ((TileEntityFurnaceBrick) tileentity).burnTime);
+//                            LogManager.getLogger().fatal("progress : " + ((TileEntityFurnaceBrick) tileentity).progress);
+//                        }
+//                        if(tileentity instanceof TileEntityDiFurnace) {
+//                            LogManager.getLogger().fatal("TileEntityDiFurnace : ");
+//                            LogManager.getLogger().fatal("fuel : " + ((TileEntityDiFurnace) tileentity).fuel);
+//                            LogManager.getLogger().fatal("progress : " + ((TileEntityDiFurnace) tileentity).progress);
+//                        }
+//                        if(tileentity instanceof TileEntityDiFurnaceRTG) {
+//                            LogManager.getLogger().fatal("TileEntityDiFurnaceRTG : ");
+//                            LogManager.getLogger().fatal("progress : " + ((TileEntityDiFurnaceRTG) tileentity).progress);
+//                        }
+//
+//                        if(tileentity instanceof TileEntityNukeFurnace) {
+//                            LogManager.getLogger().fatal("TileEntityNukeFurnace : ");
+//                            LogManager.getLogger().fatal("dualPower : " + ((TileEntityNukeFurnace) tileentity).dualPower);
+//                        }
+
+
+                    }
+
+
+
+
                     if (block != Blocks.air) {
                         meta = entityLiving.worldObj.getBlockMetadata(i + x, j + y, k + z);
                     }
@@ -314,7 +413,7 @@ public class EM_StatusManager
                         }
                         if (blockProps.enableTemp) {
                             if (blockAndItemTempInfluence <= getTempFalloff(blockProps.temp, dist, cubeRadius, EM_Settings.blockTempDropoffPower) && blockProps.temp > 0F) {
-                                blockAndItemTempInfluence = getTempFalloff(blockProps.temp, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                blockAndItemTempInfluence += getTempFalloff(blockProps.temp, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             } else if (blockProps.temp < 0F) {
                                 cooling += getTempFalloff(-blockProps.temp, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
@@ -366,7 +465,7 @@ public class EM_StatusManager
 //
 //                if(HotlevelCelc > 0) {
 //                    if (blockAndItemTempInfluence <= HotlevelCelc * stackMult && HotlevelCelc > 0F) {
-//                        blockAndItemTempInfluence = HotlevelCelc * stackMult;
+//                        blockAndItemTempInfluence += HotlevelCelc * stackMult;
 //                    }
 //                }
 //                if(Asbestoslevel > 0) {
@@ -394,7 +493,7 @@ public class EM_StatusManager
                         quality += itemProps.ambAir * stackMult;
                     }
                     if (blockAndItemTempInfluence <= itemProps.ambTemp * stackMult && itemProps.enableTemp && itemProps.ambTemp > 0F) {
-                        blockAndItemTempInfluence = itemProps.ambTemp * stackMult;
+                        blockAndItemTempInfluence += itemProps.ambTemp * stackMult;
                     } else if (itemProps.enableTemp && itemProps.ambTemp < 0F) {
                         cooling += -itemProps.ambTemp * stackMult;
                     }
