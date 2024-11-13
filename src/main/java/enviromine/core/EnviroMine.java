@@ -132,19 +132,6 @@ public class EnviroMine
 		// Load Configuration files And Custom files
 		EM_ConfigHandler.initConfig();
 
-
-        // Version check monitors
-		// Have to be initialized after the configs so that the value is read
-/*    	if ((EM_Settings.VERSION).contains("DEV"))
-    	{
-    		FMLCommonHandler.instance().bus().register(DevVersionWarning.instance);
-    	}
-    	else if (EM_Settings.versionChecker)
-    	{
-    		FMLCommonHandler.instance().bus().register(VersionChecker.instance);
-    	}
-*/
-
 		ObjectHandler.registerGases();
 		ObjectHandler.registerEntities();
 

@@ -55,7 +55,6 @@ import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
 
 public class EnviroDataTracker
 {
-    //TODO: весь код переписать нахуй
     public static final Logger logger = LogManager.getLogger("ENVIROMINE_DEBUG_LOGGER");
 	public EntityLivingBase trackedEntity;
 
@@ -1052,7 +1051,7 @@ public class EnviroDataTracker
 	public void resetData()
 	{
 		airQuality = 100F;
-		bodyTemp = 36.6F; //SPEAK INGLAND
+		bodyTemp = 36.6F;
 		hydration = 100F;
 		sanity = 100F;
 

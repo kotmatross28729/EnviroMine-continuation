@@ -4,9 +4,12 @@ import com.google.common.base.Stopwatch;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
+import com.hbm.hazard.HazardRegistry;
+import com.hbm.hazard.HazardSystem;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
@@ -232,7 +235,7 @@ public class EM_StatusManager
         if (!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
             if (dimensionProp == null || !dimensionProp.override || dimensionProp.darkAffectSanity) {
                 sanityStartRate = -0.01F; //TODO HARDCODED
-                sanityRate = -0.01F; ///GUH?
+                sanityRate = -0.01F;
             }
         }
 
@@ -307,7 +310,7 @@ public class EM_StatusManager
                         if (blockProps.air > 0F) {
                             leaves += (blockProps.air / 0.1F);
                         } else if (quality >= blockProps.air && blockProps.air < 0 && quality <= 0) {
-                            quality = blockProps.air;
+                            quality += blockProps.air;
                         }
                         if (blockProps.enableTemp) {
                             if (blockAndItemTempInfluence <= getTempFalloff(blockProps.temp, dist, cubeRadius, EM_Settings.blockTempDropoffPower) && blockProps.temp > 0F) {
@@ -317,17 +320,17 @@ public class EM_StatusManager
                             }
                         }
                         if (sanityRate >= blockProps.sanity && blockProps.sanity < 0 && sanityRate <= 0) {
-                            sanityRate = blockProps.sanity;
+                            sanityRate += blockProps.sanity;
                         } else if (sanityRate <= blockProps.sanity && blockProps.sanity > 0F) {
                             if (block instanceof BlockFlower) {
                                 if (isDay || entityLiving.worldObj.provider.hasNoSky) {
                                     if (sanityBoost < blockProps.sanity) {
-                                        sanityBoost = blockProps.sanity;
+                                        sanityBoost += blockProps.sanity;
                                     }
                                 }
                             } else {
                                 if (sanityBoost < blockProps.sanity) {
-                                    sanityBoost = blockProps.sanity;
+                                    sanityBoost += blockProps.sanity;
                                 }
                             }
                         }
@@ -354,6 +357,33 @@ public class EM_StatusManager
                 if (stack.stackSize > 1) {
                     stackMult = (stack.stackSize - 1F) / 63F + 1F;
                 }
+//TODO dynamic hazards
+
+//                float HotlevelCelc = (HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.HOT)) * 100F;
+//                float Asbestoslevel = -(HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.ASBESTOS));
+//                float Coallevel = -((HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.COAL)) / 2);
+//                float Digammalevel = -((HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.DIGAMMA)) * 5);
+//
+//                if(HotlevelCelc > 0) {
+//                    if (blockAndItemTempInfluence <= HotlevelCelc * stackMult && HotlevelCelc > 0F) {
+//                        blockAndItemTempInfluence = HotlevelCelc * stackMult;
+//                    }
+//                }
+//                if(Asbestoslevel > 0) {
+//                    if (quality >= Asbestoslevel * stackMult && Asbestoslevel < 0 && quality <= 0) {
+//                        quality += Asbestoslevel * stackMult;
+//                    }
+//                }
+//                if(Coallevel > 0) {
+//                    if (quality >= Coallevel * stackMult && Coallevel < 0 && quality <= 0) {
+//                        quality += Coallevel * stackMult;
+//                    }
+//                }
+//                if(Digammalevel > 0) {
+//                    if (sanityRate >= Digammalevel * stackMult && Digammalevel < 0 && sanityRate <= 0) {
+//                        sanityRate += Digammalevel * stackMult;
+//                    }
+//                }
 
                 if (ItemProperties.base.hasProperty(stack)) {
                     ItemProperties itemProps = ItemProperties.base.getProperty(stack);
@@ -361,32 +391,33 @@ public class EM_StatusManager
                     if (itemProps.ambAir > 0F) {
                         leaves += (itemProps.ambAir / 0.1F) * stackMult;
                     } else if (quality >= itemProps.ambAir * stackMult && itemProps.ambAir < 0 && quality <= 0) {
-                        quality = itemProps.ambAir * stackMult;
+                        quality += itemProps.ambAir * stackMult;
                     }
                     if (blockAndItemTempInfluence <= itemProps.ambTemp * stackMult && itemProps.enableTemp && itemProps.ambTemp > 0F) {
                         blockAndItemTempInfluence = itemProps.ambTemp * stackMult;
                     } else if (itemProps.enableTemp && itemProps.ambTemp < 0F) {
                         cooling += -itemProps.ambTemp * stackMult;
                     }
+
                     if (sanityRate >= itemProps.ambSanity * stackMult && itemProps.ambSanity < 0 && sanityRate <= 0) {
-                        sanityRate = itemProps.ambSanity * stackMult;
+                        sanityRate += itemProps.ambSanity * stackMult;
                     } else if (sanityBoost <= itemProps.ambSanity * stackMult && itemProps.ambSanity > 0F) {
                         if (stack.getItem() instanceof ItemBlock) {
                             if (((ItemBlock) stack.getItem()).field_150939_a instanceof BlockFlower) {
                                 if (isDay || entityLiving.worldObj.provider.hasNoSky) {
-                                    sanityBoost = itemProps.ambSanity * stackMult;
+                                    sanityBoost += itemProps.ambSanity * stackMult;
                                 }
                             } else {
-                                sanityBoost = itemProps.ambSanity * stackMult;
+                                sanityBoost += itemProps.ambSanity * stackMult;
                             }
                         } else {
-                            sanityBoost = itemProps.ambSanity * stackMult;
+                            sanityBoost += itemProps.ambSanity * stackMult;
                         }
                     }
                 } else if (stack.getItem() instanceof ItemBlock itemBlock) {
                     if (itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.worldObj.provider.hasNoSky) && sanityBoost <= 0.1F) {
                         if (((BlockFlower) itemBlock.field_150939_a).getPlantType(entityLiving.worldObj, i, j, k) == EnumPlantType.Plains) {
-                            sanityBoost = 0.1F; //TODO HARDCODED
+                            sanityBoost += 0.1F; //TODO HARDCODED
                         }
                     }
                 }
@@ -395,14 +426,14 @@ public class EM_StatusManager
 
         //TODO HARDCODED
         if (lightLev > 1 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality = 2F;
-            sanityRate = 0.5F;
+            quality += 2F;
+            sanityRate += 0.5F;
         } else if (sanityRate <= sanityStartRate && sanityRate > -0.1F && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
-            sanityRate = -0.1F;
+            sanityRate += -0.1F;
         }
 
         if (dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality = 2F;//f
+            quality += 2F;
         }
 
 
@@ -710,41 +741,21 @@ public class EM_StatusManager
 
             if (livingProps != null && entityLiving.canEntityBeSeen(mob)) {
                 if (sanityRate >= livingProps.ambSanity && livingProps.ambSanity < 0 && sanityRate <= 0) {
-                    sanityRate = livingProps.ambSanity;
+                    sanityRate += livingProps.ambSanity;
                 } else if (sanityRate <= livingProps.ambSanity && livingProps.ambSanity > 0F) {
                     if (sanityBoost < livingProps.ambSanity) {
-                        sanityBoost = livingProps.ambSanity;
+                        sanityBoost += livingProps.ambSanity;
                     }
                 }
 
                 if (livingProps.ambAir > 0F) {
                     leaves += (livingProps.ambAir / 0.1F);
                 } else if (quality >= livingProps.ambAir && livingProps.ambAir < 0 && quality <= 0) {
-                    quality = livingProps.ambAir;
+                    quality += livingProps.ambAir;
                 }
 
                 dehydrateBonus -= livingProps.ambHydration;
             }
-
-//			else if(mob instanceof EntityBat && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob))
-//			{
-//				if(sanityRate <= sanityStartRate && sanityRate > -0.01F)
-//				{
-//					sanityRate = -0.01F;
-//				}
-//			} else if(mob.getCommandSenderName().toLowerCase().contains("ender") && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob))
-//			{
-//				if(sanityRate <= sanityStartRate && sanityRate > -0.1F)
-//				{
-//					sanityRate = -0.1F;
-//				}
-//			} else if(((EntityLivingBase)mob).getCreatureAttribute() == EnumCreatureAttribute.UNDEAD && entityLiving.canEntityBeSeen(mob))
-//			{
-//				if(sanityRate <= sanityStartRate && sanityRate > -0.01F)
-//				{
-//					sanityRate = -0.01F;
-//				}
-//			}
 
             if (mobTrack != null) {
                 if (livingProps != null) {
@@ -826,13 +837,13 @@ public class EM_StatusManager
                     if (props.air > 0F) {
                         leaves += (props.air / 0.1F);
                     } else if (quality >= props.air && props.air < 0 && quality <= 0) {
-                        quality = props.air;
+                        quality += props.air;
                     }
 
                     if (sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0) {
-                        sanityRate = props.sanity;
+                        sanityRate += props.sanity;
                     } else if (sanityBoost <= props.sanity && props.sanity > 0F) {
-                        sanityBoost = props.sanity;
+                        sanityBoost += props.sanity;
                     }
                 }
             }
@@ -867,13 +878,13 @@ public class EM_StatusManager
                     }
 
                     if ((quality <= props.air && props.air > 0F) || (quality >= props.air && props.air < 0 && quality <= 0)) {
-                        quality = props.air;
+                        quality += props.air;
                     }
 
                     if (sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0) {
-                        sanityRate = props.sanity;
+                        sanityRate += props.sanity;
                     } else if (sanityBoost <= props.sanity && props.sanity > 0F) {
-                        sanityBoost = props.sanity;
+                        sanityBoost += props.sanity;
                     }
                 }
             }
@@ -908,13 +919,13 @@ public class EM_StatusManager
                     }
 
                     if ((quality <= props.air && props.air > 0F) || (quality >= props.air && props.air < 0 && quality <= 0)) {
-                        quality = props.air;
+                        quality += props.air;
                     }
 
                     if (sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0) {
-                        sanityRate = props.sanity;
+                        sanityRate += props.sanity;
                     } else if (sanityBoost <= props.sanity && props.sanity > 0F) {
-                        sanityBoost = props.sanity;
+                        sanityBoost += props.sanity;
                     }
                 }
             }
@@ -949,13 +960,13 @@ public class EM_StatusManager
                     }
 
                     if ((quality <= props.air && props.air > 0F) || (quality >= props.air && props.air < 0 && quality <= 0)) {
-                        quality = props.air;
+                        quality += props.air;
                     }
 
                     if (sanityRate >= props.sanity && props.sanity < 0 && sanityRate <= 0) {
-                        sanityRate = props.sanity;
+                        sanityRate += props.sanity;
                     } else if (sanityBoost <= props.sanity && props.sanity > 0F) {
-                        sanityBoost = props.sanity;
+                        sanityBoost += props.sanity;
                     }
                 }
             }
@@ -1049,55 +1060,55 @@ public class EM_StatusManager
                 animalHostility = 1;
             }
         }
-    if(isHbmLoaded()) {
+        if(isHbmLoaded()) {
 //TODO SKIP, JUST HIGHLIGHT
 // HBM COMPAT FSB Armor For player
-        ItemStack helmet = entityLiving.getEquipmentInSlot(4);
-        ItemStack plate0 = entityLiving.getEquipmentInSlot(3);
-        ItemStack legs = entityLiving.getEquipmentInSlot(2);
-        ItemStack boots = entityLiving.getEquipmentInSlot(1);
-        ArmorProperties helmetprops = null;
-        ArmorProperties plateprops = null;
-        ArmorProperties legsprops = null;
-        ArmorProperties bootsprops = null;
-        boolean ImmunityBurning = false;
-        boolean ImmunityFull = false;
-        if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
-        if(plate0 != null) {if (ArmorProperties.base.hasProperty(plate0)) {plateprops = ArmorProperties.base.getProperty(plate0);}}
-        if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
-        if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
-        if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
-            if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
-                ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-                // All armor isTemperatureSealed ? ImmunityFull = true
-            } else {
-                ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
+            ItemStack helmet = entityLiving.getEquipmentInSlot(4);
+            ItemStack plate0 = entityLiving.getEquipmentInSlot(3);
+            ItemStack legs = entityLiving.getEquipmentInSlot(2);
+            ItemStack boots = entityLiving.getEquipmentInSlot(1);
+            ArmorProperties helmetprops = null;
+            ArmorProperties plateprops = null;
+            ArmorProperties legsprops = null;
+            ArmorProperties bootsprops = null;
+            boolean ImmunityBurning = false;
+            boolean ImmunityFull = false;
+            if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
+            if(plate0 != null) {if (ArmorProperties.base.hasProperty(plate0)) {plateprops = ArmorProperties.base.getProperty(plate0);}}
+            if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
+            if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
+            if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
+                if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
+                    ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
+                    ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
+                    // All armor isTemperatureSealed ? ImmunityFull = true
+                } else {
+                    ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
+                }
             }
-        }
 
-        if (entityLiving instanceof EntityPlayer player && ArmorFSB.hasFSBArmor(player)) {
-            ItemStack plate = player.inventory.armorInventory[2];
-            ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-            if (!entityLiving.isPotionActive(Potion.fireResistance) && !(chestplate.fireproof)) {
-                if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityFull) {
-                    ambientTemperature += EM_Settings.LavaBlockAmbientTemperature;
-                    riseSpeed += EM_Settings.RiseSpeedLava;
-                } else if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityFull) {
-                    ambientTemperature += EM_Settings.BurningambientTemperature;
-                    riseSpeed += EM_Settings.RiseSpeedLavaDecr;
-                }
-                else if (entityLiving.isBurning() && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityBurning) {
-                    if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+            if (entityLiving instanceof EntityPlayer player && ArmorFSB.hasFSBArmor(player)) {
+                ItemStack plate = player.inventory.armorInventory[2];
+                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
+                if (!entityLiving.isPotionActive(Potion.fireResistance) && !(chestplate.fireproof)) {
+                    if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityFull) {
+                        ambientTemperature += EM_Settings.LavaBlockAmbientTemperature;
+                        riseSpeed += EM_Settings.RiseSpeedLava;
+                    } else if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityFull) {
                         ambientTemperature += EM_Settings.BurningambientTemperature;
+                        riseSpeed += EM_Settings.RiseSpeedLavaDecr;
                     }
-                    if (riseSpeed < EM_Settings.RiseSpeedMin) {
-                        riseSpeed = EM_Settings.RiseSpeedMin;
+                    else if (entityLiving.isBurning() && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityBurning) {
+                        if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+                            ambientTemperature += EM_Settings.BurningambientTemperature;
+                        }
+                        if (riseSpeed < EM_Settings.RiseSpeedMin) {
+                            riseSpeed = EM_Settings.RiseSpeedMin;
+                        }
                     }
                 }
             }
         }
-    }
         if (!entityLiving.isPotionActive(Potion.fireResistance)) {
             ItemStack helmet = entityLiving.getEquipmentInSlot(4);
             ItemStack plate = entityLiving.getEquipmentInSlot(3);
@@ -1121,26 +1132,30 @@ public class EM_StatusManager
                     ImmunityBurning = false;
                 }
             }
-                if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
-                    if(ImmunityBurning) {
-                        ambientTemperature += EM_Settings.BurningambientTemperature;
-                        riseSpeed = EM_Settings.RiseSpeedLavaDecr;
-                    } else {
-                        ambientTemperature += EM_Settings.LavaBlockAmbientTemperature;
-                        riseSpeed = EM_Settings.RiseSpeedLava;
-                    }
-                } else if (entityLiving.isBurning() && !ImmunityBurning) {
-                    if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
-                        ambientTemperature += EM_Settings.BurningambientTemperature;
-                    }
-                    if (riseSpeed < EM_Settings.RiseSpeedMin) {
-                        riseSpeed = EM_Settings.RiseSpeedMin;
-                    }
+            if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
+                if(ImmunityBurning) {
+                    ambientTemperature += EM_Settings.BurningambientTemperature;
+                    riseSpeed = EM_Settings.RiseSpeedLavaDecr;
+                } else {
+                    ambientTemperature += EM_Settings.LavaBlockAmbientTemperature;
+                    riseSpeed = EM_Settings.RiseSpeedLava;
                 }
+            } else if (entityLiving.isBurning() && !ImmunityBurning) {
+                if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
+                    ambientTemperature += EM_Settings.BurningambientTemperature;
+                }
+                if (riseSpeed < EM_Settings.RiseSpeedMin) {
+                    riseSpeed = EM_Settings.RiseSpeedMin;
+                }
+            }
         }
 
 		quality += (leaves * 0.1F);
 		sanityRate += sanityBoost;
+
+        if(isHbmLoaded()) {
+            sanityRate -= HbmLivingProps.getDigamma(entityLiving);
+        }
 
 		if(quality < 0)
 		{

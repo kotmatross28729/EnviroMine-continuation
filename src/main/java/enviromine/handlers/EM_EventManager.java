@@ -1602,121 +1602,72 @@ public class EM_EventManager
 	@SideOnly(Side.CLIENT)
 	public void onRender(RenderPlayerEvent.Pre event)
 	{
-		if(Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity) && Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2)
-		{
-			event.setCanceled(true);
+        if(EM_Settings.enablePlayerRandomMobRender) {
+            if (Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity) && Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2) {
+                event.setCanceled(true);
 
-			EntityLivingBase entity = playerMob.get(event.entityPlayer.getCommandSenderName());
-			if(entity == null || entity.worldObj != event.entityPlayer.worldObj)
-			{
-				BiomeGenBase biome = event.entityPlayer.worldObj.getBiomeGenForCoords(MathHelper.floor_double(event.entityPlayer.posX), MathHelper.floor_double(event.entityPlayer.posZ));
-				ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>)biome.getSpawnableList(EnumCreatureType.monster);
+                EntityLivingBase entity = playerMob.get(event.entityPlayer.getCommandSenderName());
+                if (entity == null || entity.worldObj != event.entityPlayer.worldObj) {
+                    BiomeGenBase biome = event.entityPlayer.worldObj.getBiomeGenForCoords(MathHelper.floor_double(event.entityPlayer.posX), MathHelper.floor_double(event.entityPlayer.posZ));
+                    ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>) biome.getSpawnableList(EnumCreatureType.monster);
 
-				if(spawnList.size() <= 0)
-				{
-					entity = new EntityZombie(event.entityPlayer.worldObj);
-				} else
-				{
-					int spawnIndex = event.entityPlayer.getRNG().nextInt(spawnList.size());
-					try
-					{
-						entity = (EntityLiving)spawnList.get(spawnIndex).entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {event.entityPlayer.worldObj});
-					} catch(Exception e)
-					{
-						entity = new EntityZombie(event.entityPlayer.worldObj);
-					}
-				}
+                    if (spawnList.size() <= 0) {
+                        entity = new EntityZombie(event.entityPlayer.worldObj);
+                    } else {
+                        int spawnIndex = event.entityPlayer.getRNG().nextInt(spawnList.size());
+                        try {
+                            entity = (EntityLiving) spawnList.get(spawnIndex).entityClass.getConstructor(new Class[]{World.class}).newInstance(new Object[]{event.entityPlayer.worldObj});
+                        } catch (Exception e) {
+                            entity = new EntityZombie(event.entityPlayer.worldObj);
+                        }
+                    }
 
-				playerMob.put(event.entityPlayer.getCommandSenderName(), entity);
-			}
-			entity.renderYawOffset = event.entityPlayer.renderYawOffset;
-			entity.prevRenderYawOffset = event.entityPlayer.prevRenderYawOffset;
-			entity.cameraPitch = event.entityPlayer.cameraPitch;
-			entity.posX = event.entityPlayer.posX;
-			entity.posY = event.entityPlayer.posY - event.entityPlayer.yOffset;
-			entity.posZ = event.entityPlayer.posZ;
-			entity.prevPosX = event.entityPlayer.prevPosX;
-			entity.prevPosY = event.entityPlayer.prevPosY - event.entityPlayer.yOffset;
-			entity.prevPosZ = event.entityPlayer.prevPosZ;
-			entity.lastTickPosX = event.entityPlayer.lastTickPosX;
-			entity.lastTickPosY = event.entityPlayer.lastTickPosY - event.entityPlayer.yOffset;
-			entity.lastTickPosZ = event.entityPlayer.lastTickPosZ;
-			entity.rotationPitch = event.entityPlayer.rotationPitch;
-			entity.prevRotationPitch = event.entityPlayer.prevRotationPitch;
-			entity.rotationYaw = event.entityPlayer.rotationYaw;
-			entity.prevRotationYaw = event.entityPlayer.prevRotationYaw;
-			entity.rotationYawHead = event.entityPlayer.rotationYawHead;
-			entity.prevRotationYawHead = event.entityPlayer.prevRotationYawHead;
-			entity.limbSwingAmount = event.entityPlayer.limbSwingAmount;
-			entity.prevLimbSwingAmount = event.entityPlayer.prevLimbSwingAmount;
-			entity.limbSwing = event.entityPlayer.limbSwing;
-			entity.prevSwingProgress = event.entityPlayer.prevSwingProgress;
-			entity.swingProgress = event.entityPlayer.swingProgress;
-			entity.swingProgressInt = event.entityPlayer.swingProgressInt;
-			ItemStack[] equipped = event.entityPlayer.getLastActiveItems();
-			entity.setCurrentItemOrArmor(0, event.entityPlayer.getHeldItem());
-			entity.setCurrentItemOrArmor(1, equipped[0]);
-			entity.setCurrentItemOrArmor(2, equipped[1]);
-			entity.setCurrentItemOrArmor(3, equipped[2]);
-			entity.setCurrentItemOrArmor(4, equipped[3]);
-			entity.motionX = event.entityPlayer.motionX;
-			entity.motionY = event.entityPlayer.motionY;
-			entity.motionZ = event.entityPlayer.motionZ;
-			entity.ticksExisted = event.entityPlayer.ticksExisted;
-			GL11.glPushMatrix();
-			//GL11.glRotatef(180F, 0F, 1F, 0F);
-			//GL11.glRotatef(180F - (event.entityPlayer.renderYawOffset + (event.entityPlayer.renderYawOffset - event.entityPlayer.prevRenderYawOffset) * partialTicks), 0F, 1F, 0F);
-			RenderManager.instance.renderEntitySimple(entity, partialTicks);
-			GL11.glPopMatrix();
-		} else
-		{
-			playerMob.clear();
-		}
+                    playerMob.put(event.entityPlayer.getCommandSenderName(), entity);
+                }
+                entity.renderYawOffset = event.entityPlayer.renderYawOffset;
+                entity.prevRenderYawOffset = event.entityPlayer.prevRenderYawOffset;
+                entity.cameraPitch = event.entityPlayer.cameraPitch;
+                entity.posX = event.entityPlayer.posX;
+                entity.posY = event.entityPlayer.posY - event.entityPlayer.yOffset;
+                entity.posZ = event.entityPlayer.posZ;
+                entity.prevPosX = event.entityPlayer.prevPosX;
+                entity.prevPosY = event.entityPlayer.prevPosY - event.entityPlayer.yOffset;
+                entity.prevPosZ = event.entityPlayer.prevPosZ;
+                entity.lastTickPosX = event.entityPlayer.lastTickPosX;
+                entity.lastTickPosY = event.entityPlayer.lastTickPosY - event.entityPlayer.yOffset;
+                entity.lastTickPosZ = event.entityPlayer.lastTickPosZ;
+                entity.rotationPitch = event.entityPlayer.rotationPitch;
+                entity.prevRotationPitch = event.entityPlayer.prevRotationPitch;
+                entity.rotationYaw = event.entityPlayer.rotationYaw;
+                entity.prevRotationYaw = event.entityPlayer.prevRotationYaw;
+                entity.rotationYawHead = event.entityPlayer.rotationYawHead;
+                entity.prevRotationYawHead = event.entityPlayer.prevRotationYawHead;
+                entity.limbSwingAmount = event.entityPlayer.limbSwingAmount;
+                entity.prevLimbSwingAmount = event.entityPlayer.prevLimbSwingAmount;
+                entity.limbSwing = event.entityPlayer.limbSwing;
+                entity.prevSwingProgress = event.entityPlayer.prevSwingProgress;
+                entity.swingProgress = event.entityPlayer.swingProgress;
+                entity.swingProgressInt = event.entityPlayer.swingProgressInt;
+                ItemStack[] equipped = event.entityPlayer.getLastActiveItems();
+                entity.setCurrentItemOrArmor(0, event.entityPlayer.getHeldItem());
+                entity.setCurrentItemOrArmor(1, equipped[0]);
+                entity.setCurrentItemOrArmor(2, equipped[1]);
+                entity.setCurrentItemOrArmor(3, equipped[2]);
+                entity.setCurrentItemOrArmor(4, equipped[3]);
+                entity.motionX = event.entityPlayer.motionX;
+                entity.motionY = event.entityPlayer.motionY;
+                entity.motionZ = event.entityPlayer.motionZ;
+                entity.ticksExisted = event.entityPlayer.ticksExisted;
+                GL11.glPushMatrix();
+                //GL11.glRotatef(180F, 0F, 1F, 0F);
+                //GL11.glRotatef(180F - (event.entityPlayer.renderYawOffset + (event.entityPlayer.renderYawOffset - event.entityPlayer.prevRenderYawOffset) * partialTicks), 0F, 1F, 0F);
+                RenderManager.instance.renderEntitySimple(entity, partialTicks);
+                GL11.glPopMatrix();
+            } else {
+                playerMob.clear();
+            }
+        }
 	}
-
-//	@SubscribeEvent
-//	@SideOnly(Side.CLIENT)
-//	public void onRender(RenderLivingEvent.Specials.Pre event)
-//	{
-//		/*
-//		ItemStack plate = event.entity.getEquipmentInSlot(3);
-//		EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
-//
-//		if(event.entity == thePlayer && Minecraft.getMinecraft().currentScreen != null)
-//		{
-//			// Prevents the pack from rendering weirdly in the inventory screen
-//			return;
-//		}
-//
-//		GL11.glPushMatrix();
-//
-//		if (plate != null && (event.renderer instanceof RenderBiped || event.renderer instanceof RenderPlayer))
-//		{
-//			if (plate.getItem() == ObjectHandler.camelPack && !(plate.hasTagCompound() && !plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))) {
-//				plate.getItem().onUpdate(plate, event.entity.worldObj, event.entity, 3, false);
-//			}
-//
-//			if (plate.hasTagCompound() && plate.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY))
-//			{
-//				EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-//				double diffX = (event.entity.lastTickPosX + (event.entity.posX - event.entity.lastTickPosX) * partialTicks) - (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks);
-//				double diffY = (event.entity.lastTickPosY + (event.entity.posY - event.entity.lastTickPosY) * partialTicks) - (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks) + (event.entity == thePlayer? -0.1D : event.entity.getEyeHeight() + (event.entity instanceof EntityPlayer? -0.1D : (0.1D * (event.entity.width/0.6D))));
-//				double diffZ = (event.entity.lastTickPosZ + (event.entity.posZ - event.entity.lastTickPosZ) * partialTicks) - (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks);
-//				GL11.glTranslated(diffX, diffY, diffZ);
-//				GL11.glRotatef(180F, 0F, 0F, 1F);
-//				GL11.glRotatef(180F + (event.entity.renderYawOffset + ((event.entity == player && (player.openContainer != player.inventoryContainer)) ? ((event.entity.renderYawOffset - event.entity.prevRenderYawOffset) * partialTicks) : 0)), 0F, 1F, 0F);
-//				GL11.glScaled(event.entity.width/0.6D, event.entity.width/0.6D, event.entity.width/0.6D);
-//				if(event.entity.isSneaking())
-//				{
-//					GL11.glRotatef(30F, 1F, 0F, 0F);
-//				}
-//				ModelCamelPack.RenderPack(event.entity, 0, 0, 0, 0, 0, .06325f);
-//			}
-//		}
-//		GL11.glPopMatrix();
-//
-//		*/
-//	}
 
 	float partialTicks = 1F;
 

@@ -111,6 +111,7 @@ public class EM_Settings
     public static int HydrogenSulfidePoisoningChance;
     public static boolean hardcoregases = false;
 
+    public static boolean enablePlayerRandomMobRender = false;
 
 	public static boolean enablePhysics = false;
 	public static boolean enableLandslide = true;

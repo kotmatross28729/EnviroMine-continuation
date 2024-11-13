@@ -514,7 +514,6 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		}
 
 		Block block = (Block)obj;
-
 		String[] regName = Block.blockRegistry.getNameForObject(block).split(":");
 
 		if(regName.length <= 0)

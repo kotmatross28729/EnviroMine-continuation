@@ -299,89 +299,72 @@ public class EnviroPotion extends Potion
 				String sound = "";
 				if(entityLiving.getRNG().nextInt(chance) == 0 && entityLiving instanceof EntityPlayer)
 				{
-					switch(entityLiving.getRNG().nextInt(16))
-					{
-						case 0:
-						{
-							sound = "ambient.cave.cave";
-							break;
-						}
-						case 1:
-						{
-							sound = "random.explode";
-							break;
-						}
-						case 2:
-						{
-							sound = "creeper.primed";
-							break;
-						}
-						case 3:
-						{
-							sound = "mob.zombie.say";
-							break;
-						}
-						case 4:
-						{
-							sound = "mob.endermen.idle";
-							break;
-						}
-						case 5:
-						{
-							sound = "mob.skeleton.say";
-							break;
-						}
-						case 6:
-						{
-							sound = "mob.wither.idle";
-							break;
-						}
-						case 7:
-						{
-							sound = "mob.spider.say";
-							break;
-						}
-						case 8:
-						{
-							sound = "ambient.weather.thunder";
-							break;
-						}
-						case 9:
-						{
-							sound = "liquid.lava";
-							break;
-						}
-						case 10:
-						{
-							sound = "liquid.water";
-							break;
-						}
-						case 11:
-						{
-							sound = "mob.ghast.moan";
-							break;
-						}
-						case 12:
-						{
-							sound = "random.bowhit";
-							break;
-						}
-						case 13:
-						{
-							sound = "game.player.hurt";
-							break;
-						}
-						case 14:
-						{
-							sound = "mob.enderdragon.growl";
-							break;
-						}
-						case 15:
-						{
-							sound = "mob.endermen.portal";
-							break;
-						}
-					}
+                    switch (entityLiving.getRNG().nextInt(16)) {
+                        case 0 -> {
+                            sound = "ambient.cave.cave";
+                            break;
+                        }
+                        case 1 -> {
+                            sound = "random.explode";
+                            break;
+                        }
+                        case 2 -> {
+                            sound = "creeper.primed";
+                            break;
+                        }
+                        case 3 -> {
+                            sound = "mob.zombie.say";
+                            break;
+                        }
+                        case 4 -> {
+                            sound = "mob.endermen.idle";
+                            break;
+                        }
+                        case 5 -> {
+                            sound = "mob.skeleton.say";
+                            break;
+                        }
+                        case 6 -> {
+                            sound = "mob.wither.idle";
+                            break;
+                        }
+                        case 7 -> {
+                            sound = "mob.spider.say";
+                            break;
+                        }
+                        case 8 -> {
+                            sound = "ambient.weather.thunder";
+                            break;
+                        }
+                        case 9 -> {
+                            sound = "liquid.lava";
+                            break;
+                        }
+                        case 10 -> {
+                            sound = "liquid.water";
+                            break;
+                        }
+                        case 11 -> {
+                            sound = "mob.ghast.moan";
+                            break;
+                        }
+                        case 12 -> {
+                            sound = "random.bowhit";
+                            break;
+                        }
+                        case 13 -> {
+                            sound = "game.player.hurt";
+                            break;
+                        }
+                        case 14 -> {
+                            sound = "mob.enderdragon.growl";
+                            break;
+                        }
+                        case 15 -> {
+                            sound = "mob.endermen.portal";
+                            break;
+                        }
+                    }
 
 					EntityPlayer player = ((EntityPlayer)entityLiving);
 

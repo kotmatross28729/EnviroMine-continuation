@@ -390,6 +390,8 @@ public class EM_ConfigHandler
         EM_Settings.HydrogenSulfideSeverePoisoningLevel = config.getInt("39_Hydrogen Sulfide Severe Poisoning Level",CATEGORY_KOTMATROSS_FORK_CHANGES, 1, 0, 65536,  "What level of poisoning applies when player is severe Hydrogen Sulfide poisoned?");
         EM_Settings.HydrogenSulfidePoisoningChance = config.getInt("40_Chance of Hydrogen Sulfide Poisoning",CATEGORY_KOTMATROSS_FORK_CHANGES, 5, 1, 65536,  "What is the chance of Hydrogen Sulfide poisoning if the player has no protection?");
 
+        EM_Settings.enablePlayerRandomMobRender = config.getBoolean("41_Player Insanity Random Mob Render", CATEGORY_KOTMATROSS_FORK_CHANGES, false, "If true, then if a player has the insanity effect, his model is replaced with a random mob. Causes bugs with the model");
+
         // --------------- //
         // --- General --- //
         // --------------- //

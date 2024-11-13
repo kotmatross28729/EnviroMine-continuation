@@ -24,23 +24,21 @@
 
 - **5)** Added the Hardcore gases option, with it, all gases will become invisible (disabled by default)
 
-- **6)** Fixed a bug due to which, when specifying a change in the parameter of an item when using it, this parameter changed 2 times more than needed (config thing)
+- **6)** Added compatibility with thaumcraft leaves
 
-- **7)** Added compatibility with thaumcraft leaves
+- **7)** Fixed a bug that caused `/envirostat set air` didn't work
 
-- **8)** Fixed a bug that caused `/envirostat set air` didn't work
+- **8)** **A lot of things related to armor from Hbm's Nuclear Tech Mod and enviromine temperature**
 
-- **9)** **A lot of things related to armor from Hbm's Nuclear Tech Mod and enviromine temperature**
+- **9)** **Fix a bunch of logic errors with gases, this includes bugs where poisoning was not applied to the player, even if he didn't have any protection (the mod considered that the player was in creative, even if he was in survival, or he considered that the player already has a mask, although there was none)**
 
-- **10)** **Fix a bunch of logic errors with gases, this includes bugs where poisoning was not applied to the player, even if he didn't have any protection (the mod considered that the player was in creative, even if he was in survival, or he considered that the player already has a mask, although there was none)**
+- **10)** Added a bunch of configuration options related to the characteristics of poisoning (how long the effect is applied, what level the effect is, how dense the gas should be for poisoning, etc.)
 
-- **11)** Added a bunch of configuration options related to the characteristics of poisoning (how long the effect is applied, what level the effect is, how dense the gas should be for poisoning, etc.)
+- **11)** **Biome temperature system has been completely rewritten depending on the weather | day/night cycle ([github, changelog 1.3.139](https://github.com/kotmatross28729/EnviroMine-continuation/releases/tag/1.3.139))**
 
-- **12)** **Biome temperature system has been completely rewritten depending on the weather | day/night cycle ([github, changelog 1.3.139](https://github.com/kotmatross28729/EnviroMine-continuation/releases/tag/1.3.139))**
+- **12)** **Added compat with Hbm's NTM Space (fork)**
 
-- **13)** **Added compat with Hbm's NTM Space (fork)**
-
-- **14)** **Added compat with Serene Seasons**
+- **13)** **Added compat with Serene Seasons**
 
 
 ## Current TODO:
