@@ -14,6 +14,7 @@
       + "Pyrophoric / Hot" items increase ambient temperature
       + "Coal dust" / "Asbestos" items decrease air quality
       + "Digamma Radiation" items decrease sanity
+- Fixed several minor (and not so) bugs
 
 # 1.3.143
 * Added support for Serene Seasons

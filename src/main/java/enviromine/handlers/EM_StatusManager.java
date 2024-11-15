@@ -1,7 +1,6 @@
 package enviromine.handlers;
 
 import com.google.common.base.Stopwatch;
-import com.hbm.blocks.machine.HeaterOven;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
@@ -9,14 +8,11 @@ import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
-import com.hbm.hazard.HazardRegistry;
-import com.hbm.hazard.HazardSystem;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSB;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityDiFurnaceRTG;
-import com.hbm.tileentity.machine.TileEntityFireboxBase;
 import com.hbm.tileentity.machine.TileEntityFurnaceBrick;
 import com.hbm.tileentity.machine.TileEntityFurnaceCombination;
 import com.hbm.tileentity.machine.TileEntityFurnaceIron;
@@ -41,7 +37,6 @@ import com.hbm.tileentity.machine.TileEntityRtgFurnace;
 import com.hbm.tileentity.machine.oil.TileEntityMachineCoker;
 import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.EnviroPotion;
 import enviromine.client.gui.UI_Settings;
@@ -87,10 +82,10 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -331,7 +326,7 @@ public class EM_StatusManager
 
                     block = entityLiving.worldObj.getBlock(i + x, j + y, k + z);
 
-                    if(isHbmLoaded()) {
+                    if(isHbmLoaded() && EM_Settings.EnableHBMMachinesHeat) {
                         TileEntity tileentity = entityLiving.worldObj.getTileEntity(i + x, j + y, k + z);
 
                         if (tileentity != null) {
@@ -344,234 +339,257 @@ public class EM_StatusManager
                             //❌ - very different from the expected value
                             //Expected - ((value/DIV) / 2) ≈ temp in deg
 
-                            if (tileentity instanceof TileEntityMachinePress) {
-                                if (((TileEntityMachinePress) tileentity).burnTime > 0 && ((TileEntityMachinePress) tileentity).speed > 0) {
+                            if (tileentity instanceof TileEntityMachinePress press) {
+                                if (press.burnTime > 0 && press.speed > 0) {
                                     //Coal - 1600/16 = 64℃ (expected 50) ✅
                                     //Bale - 32000/16 = 514℃ (expected 1000) - 500℃ hard-cap ✅
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min((((TileEntityMachinePress) tileentity).burnTime / EM_Settings.BurnerPressHeatDivisor), EM_Settings.BurnerPressHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ✅
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min((press.burnTime / EM_Settings.BurnerPressHeatDivisor), EM_Settings.BurnerPressHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityHeaterFirebox) {
-                                if (((TileEntityHeaterFirebox) tileentity).burnTime > 0 && ((TileEntityHeaterFirebox) tileentity).heatEnergy > 0) {
+                            else if (tileentity instanceof TileEntityHeaterFirebox firebox) {
+                                if (firebox.burnTime > 0 && firebox.heatEnergy > 0) {
                                     //Coal - 200/2 = 52(60)℃ (expected 50) ✅
                                     //Bale - 1500/2 = 350(309)℃ (expected 375) ✅
-                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterFirebox) tileentity).burnHeat / EM_Settings.FireboxHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(firebox.burnHeat / EM_Settings.FireboxHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityHeaterOven) {
-                                if (((TileEntityHeaterOven) tileentity).burnTime > 0 && ((TileEntityHeaterOven) tileentity).heatEnergy > 0) {
+                            else if (tileentity instanceof TileEntityHeaterOven heaterOven) {
+                                if (heaterOven.burnTime > 0 && heaterOven.heatEnergy > 0) {
                                     //Coal - 1000/4 = 129(112)℃  (expected 125) ✅
                                     //Bale - 7500/4 = 869(877)℃ (expected 937,5) 🟧
-                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOven) tileentity).burnHeat / EM_Settings.HeaterOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(heaterOven.burnHeat / EM_Settings.HeaterOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityHeaterOilburner) {
-                                if (((TileEntityHeaterOilburner) tileentity).isOn && ((TileEntityHeaterOilburner) tileentity).heatEnergy > 0) {
+                            else if (tileentity instanceof TileEntityHeaterOilburner oilburner) {
+                                if (oilburner.isOn && oilburner.heatEnergy > 0) {
                                     //Max - 100_000/200 = 245℃ (expected 250) ✅
-                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityHeaterOilburner) tileentity).heatEnergy / EM_Settings.FluidBurnerHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(oilburner.heatEnergy / EM_Settings.FluidBurnerHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityHeaterElectric) {
-                                if (((TileEntityHeaterElectric) tileentity).isOn && ((TileEntityHeaterElectric) tileentity).heatEnergy > 0) {
+                            else if (tileentity instanceof TileEntityHeaterElectric heaterElectric) {
+                                if (heaterElectric.isOn && heaterElectric.heatEnergy > 0) {
                                     //Max (no) - 10_000/20 = 244(249)℃ (expected 250) - 250℃ hard-cap ✅
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min(((TileEntityHeaterElectric) tileentity).heatEnergy / EM_Settings.HeaterElectricHeatDivisor, (EM_Settings.HeaterElectricHeatHardCap*2)) , dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ✅
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(heaterElectric.heatEnergy / EM_Settings.HeaterElectricHeatDivisor, (EM_Settings.HeaterElectricHeatHardCap*2)) , dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityFurnaceIron) {
-                                if (((TileEntityFurnaceIron) tileentity).wasOn) {
+                            else if (tileentity instanceof TileEntityFurnaceIron furnaceIron) {
+                                if (furnaceIron.wasOn) {
                                     //Coal - 2000/2 = 458℃ (expected 500) ✅
                                     //Bale - 64000/2 = 15343℃ (expected 16000) - 1000℃ hard-cap ✅
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min(((TileEntityFurnaceIron) tileentity).burnTime / EM_Settings.IronFurnaceHeatDivisor, (EM_Settings.IronFurnaceHeatHardCap*2)), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(furnaceIron.burnTime / EM_Settings.IronFurnaceHeatDivisor, (EM_Settings.IronFurnaceHeatHardCap*2)), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityFurnaceSteel) {
-                                if (((TileEntityFurnaceSteel) tileentity).wasOn) {
+                            else if (tileentity instanceof TileEntityFurnaceSteel furnaceSteel) {
+                                if (furnaceSteel.wasOn) {
                                     //Max - 100_000 (35000)/200 = 85℃ (expected 87,5) ✅
-                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceSteel) tileentity).heat / EM_Settings.SteelFurnaceHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(furnaceSteel.heat / EM_Settings.SteelFurnaceHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityFurnaceCombination) {
-                                if (((TileEntityFurnaceCombination) tileentity).wasOn) {
+                            else if (tileentity instanceof TileEntityFurnaceCombination furnaceCombination) {
+                                if (furnaceCombination.wasOn) {
                                     //Max - 100_000/200 = 228℃ (expected 250) ✅
-                                    blockAndItemTempInfluence += getTempFalloff(((TileEntityFurnaceCombination) tileentity).heat / EM_Settings.CombinationOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(furnaceCombination.heat / EM_Settings.CombinationOvenHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            if (tileentity instanceof TileEntityHeatBoiler) {
-                                    float heat = ((TileEntityHeatBoiler) tileentity).heat;
+                            else if (tileentity instanceof TileEntityHeatBoiler boiler) {
+                                float heat = boiler.heat;
 
-                                    if (heat <= FireboxMax) {
-                                        heat = ((TileEntityHeatBoiler) tileentity).heat / EM_Settings.BoilerHeatDivisor;
-                                    } else if (heat <= HeaterOvenMax) {
-                                        heat = Math.max(((TileEntityHeatBoiler) tileentity).heat / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerHeaterOvenDivisorConstant), ((FireboxMax / EM_Settings.BoilerHeatDivisor)));
-                                    } else if (heat <= TileEntityHeatBoiler.maxHeat) {
-                                        heat = Math.max(((TileEntityHeatBoiler) tileentity).heat / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerMAXDivisorConstant), ((HeaterOvenMax / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerHeaterOvenDivisorConstant))));
-                                    }
-                                    //Max (real) - 3_200_000/(200*10) - actually 999_001/(200*10) = 510℃
-                                    //Max (HO)     - 500_000/(200*2)  = 592℃ (expected 625) ✅
-                                    //Max (FB)     - 100_000/200      = 245℃ (expected 250) ✅
-                                    blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                if (heat <= FireboxMax) {
+                                    heat = boiler.heat / EM_Settings.BoilerHeatDivisor;
+                                } else if (heat <= HeaterOvenMax) {
+                                    heat = Math.max(boiler.heat / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerHeaterOvenDivisorConstant), ((FireboxMax / EM_Settings.BoilerHeatDivisor)));
+                                } else if (heat <= TileEntityHeatBoiler.maxHeat) {
+                                    heat = Math.max(boiler.heat / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerMAXDivisorConstant), ((HeaterOvenMax / (EM_Settings.BoilerHeatDivisor * EM_Settings.BoilerHeaterOvenDivisorConstant))));
+                                }
+                                //Max (real) - 3_200_000/(200*10) - actually 999_001/(200*10) = 510℃
+                                //Max (HO)     - 500_000/(200*2)  = 592℃ (expected 625) ✅
+                                //Max (FB)     - 100_000/200      = 245℃ (expected 250) ✅
+                                //Works in space - ✅
+                                blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
-                            if (tileentity instanceof TileEntityHeatBoilerIndustrial) {
-                                    float heat = ((TileEntityHeatBoilerIndustrial) tileentity).heat;
+                            else if (tileentity instanceof TileEntityHeatBoilerIndustrial boilerIndustrial) {
+                                float heat = boilerIndustrial.heat;
 
-                                    if (heat <= FireboxMax) {
-                                        heat = ((TileEntityHeatBoilerIndustrial) tileentity).heat / EM_Settings.BoilerIndustrialHeatDivisor;
-                                    } else if (heat <= HeaterOvenMax) {
-                                        heat = Math.max(((TileEntityHeatBoilerIndustrial) tileentity).heat / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant), ((FireboxMax / EM_Settings.BoilerIndustrialHeatDivisor)));
-                                    } else if (heat <= TileEntityHeatBoilerIndustrial.maxHeat) {
-                                        heat = Math.max(((TileEntityHeatBoilerIndustrial) tileentity).heat / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialMAXDivisorConstant), ((HeaterOvenMax / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant))));
-                                    }
+                                if (heat <= FireboxMax) {
+                                    heat = boilerIndustrial.heat / EM_Settings.BoilerIndustrialHeatDivisor;
+                                } else if (heat <= HeaterOvenMax) {
+                                    heat = Math.max(boilerIndustrial.heat / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant), ((FireboxMax / EM_Settings.BoilerIndustrialHeatDivisor)));
+                                } else if (heat <= TileEntityHeatBoilerIndustrial.maxHeat) {
+                                    heat = Math.max(boilerIndustrial.heat / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialMAXDivisorConstant), ((HeaterOvenMax / (EM_Settings.BoilerIndustrialHeatDivisor * EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant))));
+                                }
 
-                                    //Max (real)   - 12_800_000/(200*10) - actually 999_001/(200*10) = 506℃
-                                    //Max (HO)        - 500_000/(200*2)  = 510℃ (expected 625) 🟧
-                                    //Max (FB)        - 100_000/200      = 210℃ (expected 250) ✅
-                                    blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                //Max (real)   - 12_800_000/(200*10) - actually 999_001/(200*10) = 506℃
+                                //Max (HO)        - 500_000/(200*2)  = 510℃ (expected 625) 🟧
+                                //Max (FB)        - 100_000/200      = 210℃ (expected 250) ✅
+                                //Works in space - ✅
+                                blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
-                        if(tileentity instanceof TileEntityFurnaceBrick) {
-                            if (((TileEntityFurnaceBrick) tileentity).burnTime > 0) {
+                        else if(tileentity instanceof TileEntityFurnaceBrick furnaceBrick) {
+                            if (furnaceBrick.burnTime > 0) {
                                 //Coal - 1600/  = ?℃ (expected ) ❔
                                 //Bale - 32000/ = ?℃ (expected ) - 500℃ hard-cap ❔
-                                blockAndItemTempInfluence += getTempFalloff(Math.min((((TileEntityFurnaceBrick) tileentity).burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                //Works in space - ❌
+                                blockAndItemTempInfluence += getTempFalloff(Math.min((furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
 
-                        if(tileentity instanceof TileEntityDiFurnace) {
-                            if(((TileEntityDiFurnace) tileentity).progress > 0) {
+                        else if(tileentity instanceof TileEntityDiFurnace diFurnace) {
+                            if(diFurnace.progress > 0) {
                                 //FUEL - 12800/64 = ℃ (expected 100) ❔
-                                blockAndItemTempInfluence += getTempFalloff((((TileEntityDiFurnace) tileentity).fuel / EM_Settings.DiFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                //Works in space - ❌
+                                blockAndItemTempInfluence += getTempFalloff((diFurnace.fuel / EM_Settings.DiFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
-                        if(tileentity instanceof TileEntityDiFurnaceRTG) {
-                            if(((TileEntityDiFurnaceRTG) tileentity).progress > 0) {
+                        else if(tileentity instanceof TileEntityDiFurnaceRTG diFurnaceRTG) {
+                            if(diFurnaceRTG.progress > 0) {
                                 //Power level (max) = 600 X6 = 3600/2 = ℃ (expected 900) ❔
                                 //Power level (min) = 3 X6 =     18/2 = ℃ (expected 4.5) ❔
-                                blockAndItemTempInfluence += getTempFalloff((((TileEntityDiFurnaceRTG) tileentity).getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                //Works in space - ✅
+                                blockAndItemTempInfluence += getTempFalloff((diFurnaceRTG.getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
 
-                        if(tileentity instanceof TileEntityNukeFurnace) {
-                            if(((TileEntityNukeFurnace) tileentity).isProcessing()) {
+                        else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
+                            if(nukeFurnace.isProcessing()) {
                                 //Operations (max) = 200/0.2 = ℃ (expected 500) ❔
                                 //Operations (min) =   5/0.2 = ℃ (expected 12,5) ❔
-                                blockAndItemTempInfluence += getTempFalloff((((TileEntityNukeFurnace) tileentity).dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                //Works in space - ✅
+                                blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
 
-                        if(tileentity instanceof TileEntityRtgFurnace) {
+                        else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
                             //TODO
                             //isProcessing = only when active
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityRtgFurnace : ");
-                            LogManager.getLogger().fatal("isProcessing : " + ((TileEntityRtgFurnace) tileentity).isProcessing());
+//                            LogManager.getLogger().fatal("TileEntityRtgFurnace : ");
+//                            LogManager.getLogger().fatal("isProcessing : " + ((TileEntityRtgFurnace) tileentity).isProcessing());
                         }
-                        if(tileentity instanceof TileEntityMachineWoodBurner) {
-                            if(((TileEntityMachineWoodBurner) tileentity).isOn && ((TileEntityMachineWoodBurner) tileentity).getPower() < ((TileEntityMachineWoodBurner) tileentity).getMaxPower() ) {
+                        else if(tileentity instanceof TileEntityMachineWoodBurner woodBurner) {
+                                int powerGen = 0;
+                                try {
+                                    Field powerGenz = TileEntityMachineWoodBurner.class.getDeclaredField("powerGen");
+                                    powerGenz.setAccessible(true);
+                                    powerGen = (int) powerGenz.get(woodBurner);
+                                } catch (NoSuchFieldException | IllegalAccessException ignored) {}
+
+                                if(woodBurner.isOn && powerGen > 0 ) {
                                 //Coal - 1600/16 = 59℃ (expected 50) ✅
-                                blockAndItemTempInfluence += getTempFalloff((((TileEntityMachineWoodBurner) tileentity).burnTime / EM_Settings.WoodBurningGenHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                //Works in space - ❌
+                                blockAndItemTempInfluence += getTempFalloff((woodBurner.burnTime / EM_Settings.WoodBurningGenHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
+
+
                         }
-                        if(tileentity instanceof TileEntityMachineDiesel) {
+                        else if(tileentity instanceof TileEntityMachineDiesel diesel) {
                             //TODO
-                            //power =
                             //active =
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityMachineDiesel : ");
-                            LogManager.getLogger().fatal("active (cust) : " + (((TileEntityMachineDiesel) tileentity).tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(((TileEntityMachineDiesel) tileentity).tank.getTankType()) > 0L));
+                            //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineDiesel : ");
+//                            LogManager.getLogger().fatal("active (cust) : " + (((TileEntityMachineDiesel) tileentity).tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(((TileEntityMachineDiesel) tileentity).tank.getTankType()) > 0L));
                         }
-                        if(tileentity instanceof TileEntityMachineCombustionEngine) {
+                        else if(tileentity instanceof TileEntityMachineCombustionEngine combustionEngine) {
                             //TODO
-                            //power =
                             //isOn =
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityMachineCombustionEngine : ");
-                            LogManager.getLogger().fatal("isOn : " + ((TileEntityMachineCombustionEngine) tileentity).isOn);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineCombustionEngine : ");
+//                            LogManager.getLogger().fatal("isOn : " + ((TileEntityMachineCombustionEngine) tileentity).isOn);
                         }
 
-                        if(tileentity instanceof TileEntityMachineCyclotron) {
+                        else if(tileentity instanceof TileEntityMachineCyclotron cyclotron) {
                             //TODO
-                            //power =
                             //isOn =
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityMachineCyclotron : ");
-                            LogManager.getLogger().fatal("isOn : " + (((TileEntityMachineCyclotron) tileentity).progress > 0));
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineCyclotron : ");
+//                            LogManager.getLogger().fatal("isOn : " + (((TileEntityMachineCyclotron) tileentity).progress > 0));
                         }
-                        if(tileentity instanceof TileEntityMachineHephaestus) { //GeoThermal
+                        else if(tileentity instanceof TileEntityMachineHephaestus hephaestus) { //GeoThermal
                             //TODO
                             //bufferedHeat =
                             //Concl. = NOT CONST - bufferedHeat
-                            LogManager.getLogger().fatal("TileEntityMachineHephaestus : ");
-                            LogManager.getLogger().fatal("bufferedHeat : " + ((TileEntityMachineHephaestus) tileentity).bufferedHeat);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineHephaestus : ");
+//                            LogManager.getLogger().fatal("bufferedHeat : " + ((TileEntityMachineHephaestus) tileentity).bufferedHeat);
                         }
 
-                        if(tileentity instanceof TileEntityRBMKBase) {
+                        else if(tileentity instanceof TileEntityRBMKBase rbmkBase) {
                             //TODO
                             //heat =
                             //Concl. = NOT CONST - heat
-                            LogManager.getLogger().fatal("TileEntityRBMKBase : ");
-                            LogManager.getLogger().fatal("heat : " + ((TileEntityRBMKBase) tileentity).heat);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityRBMKBase : ");
+//                            LogManager.getLogger().fatal("heat : " + ((TileEntityRBMKBase) tileentity).heat);
                         }
 
-                        if(tileentity instanceof TileEntityMachineArcFurnaceLarge) {
+                        else if(tileentity instanceof TileEntityMachineArcFurnaceLarge arcFurnaceLarge) {
                             //TODO
-                            //power =
                             //progress =
                             //isProgressing =
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityMachineArcFurnaceLarge : ");
-                            LogManager.getLogger().fatal("progress : " + ((TileEntityMachineArcFurnaceLarge) tileentity).progress);
-                            LogManager.getLogger().fatal("isProgressing : " + ((TileEntityMachineArcFurnaceLarge) tileentity).isProgressing);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineArcFurnaceLarge : ");
+//                            LogManager.getLogger().fatal("progress : " + ((TileEntityMachineArcFurnaceLarge) tileentity).progress);
+//                            LogManager.getLogger().fatal("isProgressing : " + ((TileEntityMachineArcFurnaceLarge) tileentity).isProgressing);
                         }
 
-                        if(tileentity instanceof TileEntityMachineGasFlare) {
+                        else if(tileentity instanceof TileEntityMachineGasFlare gasFlare) {
                             //TODO
-                            //power =
                             //isOn =
                             //doesBurn =
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityMachineGasFlare : ");
-                            LogManager.getLogger().fatal("isOn : " + ((TileEntityMachineGasFlare) tileentity).isOn);
-                            LogManager.getLogger().fatal("doesBurn : " + ((TileEntityMachineGasFlare) tileentity).doesBurn);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineGasFlare : ");
+//                            LogManager.getLogger().fatal("isOn : " + ((TileEntityMachineGasFlare) tileentity).isOn);
+//                            LogManager.getLogger().fatal("doesBurn : " + ((TileEntityMachineGasFlare) tileentity).doesBurn);
                         }
 
-                        if(tileentity instanceof TileEntityMachineCoker) {
+                        else if(tileentity instanceof TileEntityMachineCoker coker) {
                             //TODO
                             //wasOn =
                             //progress =
                             //heat =
                             //Concl. = NOT CONST - heat
-                            LogManager.getLogger().fatal("TileEntityMachineCoker : ");
-                            LogManager.getLogger().fatal("wasOn : " + ((TileEntityMachineCoker) tileentity).wasOn);
-                            LogManager.getLogger().fatal("progress : " + ((TileEntityMachineCoker) tileentity).progress);
-                            LogManager.getLogger().fatal("heat : " + ((TileEntityMachineCoker) tileentity).heat);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineCoker : ");
+//                            LogManager.getLogger().fatal("wasOn : " + ((TileEntityMachineCoker) tileentity).wasOn);
+//                            LogManager.getLogger().fatal("progress : " + ((TileEntityMachineCoker) tileentity).progress);
+//                            LogManager.getLogger().fatal("heat : " + ((TileEntityMachineCoker) tileentity).heat);
                         }
 
-                        if(tileentity instanceof TileEntityMachineTurbofan) {
+                        else if(tileentity instanceof TileEntityMachineTurbofan turbofan) {
                             //TODO
-                            //power =
                             //wasOn =
                             //Concl. = CONST
-                            LogManager.getLogger().fatal("TileEntityMachineTurbofan : ");
-                            LogManager.getLogger().fatal("wasOn : " + ((TileEntityMachineTurbofan) tileentity).wasOn);
+                                //Works in space - ❔
+//                            LogManager.getLogger().fatal("TileEntityMachineTurbofan : ");
+//                            LogManager.getLogger().fatal("wasOn : " + ((TileEntityMachineTurbofan) tileentity).wasOn);
                         }
 
-                        if(tileentity instanceof TileEntityMachineTurbineGas) {
-                            //TODO
-                            //power =
-                            //state =
-                            //active =
-                            //temp =
-                            //Concl. = NOT CONST - temp
-                            LogManager.getLogger().fatal("TileEntityMachineTurbineGas : ");
-                            LogManager.getLogger().fatal("state : " + ((TileEntityMachineTurbineGas) tileentity).state);
-                            LogManager.getLogger().fatal("active (cust) : " + (((TileEntityMachineTurbineGas) tileentity).state == 1));
-                            LogManager.getLogger().fatal("temp : " + ((TileEntityMachineTurbineGas) tileentity).temp );
+                        else if(tileentity instanceof TileEntityMachineTurbineGas turbineGas) {
+                                //TODO
+                                //state =
+                                //active =
+                                //temp =
+                                //Concl. = NOT CONST - temp
+                                //Works in space - ❔
+//                                LogManager.getLogger().fatal("TileEntityMachineTurbineGas : ");
+//                                LogManager.getLogger().fatal("state : " + ((TileEntityMachineTurbineGas) tileentity).state);
+//                                LogManager.getLogger().fatal("active (cust) : " + (((TileEntityMachineTurbineGas) tileentity).state == 1));
+//                                LogManager.getLogger().fatal("temp : " + ((TileEntityMachineTurbineGas) tileentity).temp);
+                            }
                         }
-                        }
-
                     }
-
-
-
 
                     if (block != Blocks.air) {
                         meta = entityLiving.worldObj.getBlockMetadata(i + x, j + y, k + z);
@@ -702,7 +720,7 @@ public class EM_StatusManager
             quality += 2F;
             sanityRate += 0.5F;
         } else if (sanityRate <= sanityStartRate && sanityRate > -0.1F && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
-            sanityRate += -0.1F;
+            sanityRate -= 0.1F;
         }
 
         if (dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky) {
@@ -738,12 +756,10 @@ public class EM_StatusManager
             }
         }
 
-        if (dimensionProp != null && dimensionProp.override && !dimensionProp.weatherAffectsTemp) {
-
-        } else {
+        if(dimensionProp == null || !dimensionProp.override || dimensionProp.weatherAffectsTemp) {
             float biomeTemperatureRain = 6F;
             float biomeTemperatureThunder = 8F;
-            float biomeTemperatureShade = 2.5F; //the FUCK is that
+            //float biomeTemperatureShade = 2.5F; //the FUCK is that
 
             boolean biomeTemperatureRainBool = false;
             boolean biomeTemperatureThunderBool = false;
@@ -758,7 +774,7 @@ public class EM_StatusManager
                     biomeTemperatureThunder = biomeOverride.TemperatureThunderDecrease;
                     biomeTemperatureRainBool = biomeOverride.TemperatureRainBool;
                     biomeTemperatureThunderBool = biomeOverride.TemperatureThunderBool;
-                    biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //Uh what
+                    //biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //Uh what
                 }
             }
 
@@ -807,7 +823,6 @@ public class EM_StatusManager
             float biome_DAY_TEMPERATURE_TERRAFORMED = 0F;
             float biome_DUSK_TEMPERATURE_TERRAFORMED = 4F;
             float biome_NIGHT_TEMPERATURE_TERRAFORMED = 8F;
-
 
             float biome_EARLY_SPRING_TEMPERATURE_DECREASE =  5.0F;
             float biome_MID_SPRING_TEMPERATURE_DECREASE   = -2.0F;
@@ -864,18 +879,18 @@ public class EM_StatusManager
 
             if(EnviroMine.isHbmSpaceLoaded()) {
                 CelestialBody body = CelestialBody.getBody(entityLiving.worldObj);
-                float phasePeriod = Math.round ((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod())))/4F);
-
+                float fullCycle = Math.round((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()))));
+                float phasePeriod = fullCycle/4F;
                 CBT_Atmosphere atmosphere = entityLiving.worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(entityLiving.worldObj, CBT_Atmosphere.class);
                 if(atmosphere != null) {
                     if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
-                        temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE_TERRAFORMED, biome_DAY_TEMPERATURE_TERRAFORMED, biome_DUSK_TEMPERATURE_TERRAFORMED, biome_NIGHT_TEMPERATURE_TERRAFORMED);
+                        temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE_TERRAFORMED, biome_DAY_TEMPERATURE_TERRAFORMED, biome_DUSK_TEMPERATURE_TERRAFORMED, biome_NIGHT_TEMPERATURE_TERRAFORMED);
                         airVentConst = true;
                     } else {
-                        temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+                        temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
                     }
                 } else {
-                    temperatureChange = calculateTemperatureChangeSpace(currentTime, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
+                    temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
                 }
             } else {
                 temperatureChange = calculateTemperatureChange(currentTime % 24000L, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);

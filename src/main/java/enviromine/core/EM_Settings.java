@@ -113,6 +113,7 @@ public class EM_Settings
     public static boolean enablePlayerRandomMobRender = false;
 
     //MACHINES
+    public static boolean EnableHBMMachinesHeat = true;
     public static float BurnerPressHeatDivisor = 16;
     public static float BurnerPressHeatHardCap = 500;
     public static float FireboxHeatDivisor = 2;

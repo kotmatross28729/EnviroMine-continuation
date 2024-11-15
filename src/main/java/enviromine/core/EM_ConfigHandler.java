@@ -393,6 +393,9 @@ public class EM_ConfigHandler
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean("41_Player Insanity Random Mob Render", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.enablePlayerRandomMobRender, "If true, then if a player has the insanity effect, his model is replaced with a random mob. Causes bugs with the model");
 
         //MACHINES
+
+        EM_Settings.EnableHBMMachinesHeat = config.getBoolean("42-0X_Enable HBM Machines Heat", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.EnableHBMMachinesHeat, "");
+
         EM_Settings.BurnerPressHeatDivisor = config.getFloat("42-1_BurnerPressHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BurnerPressHeatDivisor, 1, 65536,  "");
         EM_Settings.BurnerPressHeatHardCap = config.getFloat("42-2_BurnerPressHeatHardCap", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BurnerPressHeatHardCap, 1, 65536,  "");
 
