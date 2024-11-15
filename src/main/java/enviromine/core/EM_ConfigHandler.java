@@ -364,6 +364,7 @@ public class EM_ConfigHandler
         EM_Settings.HbmGasMaskBreakChanceNumber = config.getInt("18_Hbm Gas Mask filter break chance number", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HbmGasMaskBreakChanceNumber, 0, 100,  "The number on which the chance of reducing the durability of the hbm filter depends. The lower the number, the greater the chance that the filter durability will decrease");
         EM_Settings.EnviromineGasMaskBreakMultiplier = config.getInt("19_Gas Masks break multiplier", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.EnviromineGasMaskBreakMultiplier, 0, 65536,  "A number that is subtracted from the current enviromine mask filter durability if the player is in a gas block, that is suffocating");
 
+        //GAS
         EM_Settings.SulfurDioxideGasDebugLogger = config.getBoolean("20_SulfurDioxideGasDebugLogger", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SulfurDioxideGasDebugLogger, "Don't use unless you are a developer");
         EM_Settings.CarbonMonoxideGasDebugLogger = config.getBoolean("21_CarbonMonoxideGasDebugLogger", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CarbonMonoxideGasDebugLogger, "Don't use unless you are a developer");
         EM_Settings.HydrogenSulfideGasDebugLogger = config.getBoolean("22_HydrogenSulfideGasDebugLogger", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HydrogenSulfideGasDebugLogger, "Don't use unless you are a developer");
@@ -391,32 +392,40 @@ public class EM_ConfigHandler
 
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean("41_Player Insanity Random Mob Render", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.enablePlayerRandomMobRender, "If true, then if a player has the insanity effect, his model is replaced with a random mob. Causes bugs with the model");
 
-        EM_Settings.FireboxHeatDivisor = config.getFloat("42_Firebox Heat Divisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FireboxHeatDivisor, 1, 65536,  "");
-        EM_Settings.HeaterOvenHeatDivisor = config.getFloat("43_Heater Oven Heat Divisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterOvenHeatDivisor, 1, 65536,  "");
-        EM_Settings.HeaterOilburnerHeatDivisor = config.getFloat("44_HeaterOilburnerHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterOilburnerHeatDivisor, 1, 65536,  "");
+        //MACHINES
+        EM_Settings.BurnerPressHeatDivisor = config.getFloat("42-1_BurnerPressHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BurnerPressHeatDivisor, 1, 65536,  "");
+        EM_Settings.BurnerPressHeatHardCap = config.getFloat("42-2_BurnerPressHeatHardCap", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BurnerPressHeatHardCap, 1, 65536,  "");
 
-        EM_Settings.HeaterElectricHeatDivisor = config.getFloat("45-1_HeaterElectricHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterElectricHeatDivisor, 1, 65536,  "");
-        EM_Settings.HeaterElectricHeatHardCap = config.getFloat("45-2_HeaterElectricHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterElectricHeatHardCap, 1, 65536,  "");
+        EM_Settings.FireboxHeatDivisor = config.getFloat("43_Firebox Heat Divisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FireboxHeatDivisor, 1, 65536,  "");
+        EM_Settings.HeaterOvenHeatDivisor = config.getFloat("44_Heater Oven Heat Divisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterOvenHeatDivisor, 1, 65536,  "");
+        EM_Settings.FluidBurnerHeatDivisor = config.getFloat("45_FluidBurnerHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FluidBurnerHeatDivisor, 1, 65536,  "");
 
-        EM_Settings.FurnaceIronHeatDivisor = config.getFloat("46-1_FurnaceIronHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceIronHeatDivisor, 1, 65536,  "");
-        EM_Settings.FurnaceIronHeatHardCap = config.getFloat("46-2_FurnaceIronHeatHardCap", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceIronHeatHardCap, 1, 65536,  "");
+        EM_Settings.HeaterElectricHeatDivisor = config.getFloat("46-1_HeaterElectricHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterElectricHeatDivisor, 1, 65536,  "");
+        EM_Settings.HeaterElectricHeatHardCap = config.getFloat("46-2_HeaterElectricHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HeaterElectricHeatHardCap, 1, 65536,  "");
 
-        EM_Settings.FurnaceSteelHeatDivisor = config.getFloat("47_FurnaceSteelHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceSteelHeatDivisor, 1, 65536,  "");
-        EM_Settings.FurnaceCombinationHeatDivisor = config.getFloat("48_FurnaceCombinationHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceCombinationHeatDivisor, 1, 65536,  "");
+        EM_Settings.IronFurnaceHeatDivisor = config.getFloat("47-1_IronFurnaceHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.IronFurnaceHeatDivisor, 1, 65536,  "");
+        EM_Settings.IronFurnaceHeatHardCap = config.getFloat("47-2_IronFurnaceHeatHardCap", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.IronFurnaceHeatHardCap, 1, 65536,  "");
 
-        EM_Settings.BoilerHeatDivisor = config.getFloat("49-1_BoilerHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerHeatDivisor, 1, 65536,  "");
-        EM_Settings.BoilerHeaterOvenDivisorConstant = config.getFloat("49-2_BoilerHeaterOvenDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerHeaterOvenDivisorConstant, 1, 65536,  "");
-        EM_Settings.BoilerMAXDivisorConstant = config.getFloat("49-3_BoilerMAXDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerMAXDivisorConstant, 1, 65536,  "");
+        EM_Settings.SteelFurnaceHeatDivisor = config.getFloat("48_SteelFurnaceHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SteelFurnaceHeatDivisor, 1, 65536,  "");
+        EM_Settings.CombinationOvenHeatDivisor = config.getFloat("49_CombinationOvenHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CombinationOvenHeatDivisor, 1, 65536,  "");
+
+        EM_Settings.CrucibleHeatDivisor = config.getFloat("50_CrucibleHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CrucibleHeatDivisor, 1, 65536,  "");
+
+        EM_Settings.BoilerHeatDivisor = config.getFloat("51-1_BoilerHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerHeatDivisor, 1, 65536,  "");
+        EM_Settings.BoilerHeaterOvenDivisorConstant = config.getFloat("51-2_BoilerHeaterOvenDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerHeaterOvenDivisorConstant, 1, 65536,  "");
+        EM_Settings.BoilerMAXDivisorConstant = config.getFloat("51-3_BoilerMAXDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerMAXDivisorConstant, 1, 65536,  "");
+
+        EM_Settings.BoilerIndustrialHeatDivisor = config.getFloat("52-1_BoilerIndustrialHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerIndustrialHeatDivisor, 1, 65536,  "");
+        EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant = config.getFloat("52-2_BoilerIndustrialHeaterOvenDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant, 1, 65536,  "");
+        EM_Settings.BoilerIndustrialMAXDivisorConstant = config.getFloat("52-3_BoilerIndustrialMAXDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerIndustrialMAXDivisorConstant, 1, 65536,  "");
+
+        EM_Settings.FurnaceBrickHeatDivisor = config.getFloat("53-1_FurnaceBrickHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceBrickHeatDivisor, 1, 65536,  "");
+        EM_Settings.FurnaceBrickHeatHardCap = config.getFloat("53-2_FurnaceBrickHeatHardCap",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceBrickHeatHardCap, 1, 65536,  "");
 
 
-        EM_Settings.BoilerIndustrialHeatDivisor = config.getFloat("50-1_BoilerIndustrialHeatDivisor", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerIndustrialHeatDivisor, 1, 65536,  "");
-        EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant = config.getFloat("50-2_BoilerIndustrialHeaterOvenDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerIndustrialHeaterOvenDivisorConstant, 1, 65536,  "");
-        EM_Settings.BoilerIndustrialMAXDivisorConstant = config.getFloat("50-3_BoilerIndustrialMAXDivisorConstant", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.BoilerIndustrialMAXDivisorConstant, 1, 65536,  "");
-
-        //EM_Settings.FurnaceBrickHeatDivisor = config.getFloat("51_FurnaceBrickHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceBrickHeatDivisor, 1, 65536,  "");
-        //EM_Settings.DiFurnaceHeatDivisor = config.getFloat("52_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceHeatDivisor, 1, 65536,  "");
-        //EM_Settings.DiFurnaceRTGHeatDivisor = config.getFloat("53_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceRTGHeatDivisor, 1, 65536,  "");
-        //EM_Settings.NukeFurnaceHeatDivisor = config.getFloat("54_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NukeFurnaceHeatDivisor, 1, 65536,  "");
+        //EM_Settings.DiFurnaceHeatDivisor = config.getFloat("54_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceHeatDivisor, 1, 65536,  "");
+        //EM_Settings.DiFurnaceRTGHeatDivisor = config.getFloat("55_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceRTGHeatDivisor, 1, 65536,  "");
+        //EM_Settings.NukeFurnaceHeatDivisor = config.getFloat("56_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NukeFurnaceHeatDivisor, 1, 65536,  "");
 
         // --------------- //
         // --- General --- //

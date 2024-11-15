@@ -113,26 +113,44 @@ public class EM_Settings
     public static boolean enablePlayerRandomMobRender = false;
 
     //MACHINES
+    public static float BurnerPressHeatDivisor = 16;
+    public static float BurnerPressHeatHardCap = 500;
     public static float FireboxHeatDivisor = 2;
     public static float HeaterOvenHeatDivisor = 4;
-    public static float HeaterOilburnerHeatDivisor = 200;
+    public static float FluidBurnerHeatDivisor = 200;
     public static float HeaterElectricHeatDivisor = 20;
     public static float HeaterElectricHeatHardCap = 250;
-    public static float FurnaceIronHeatDivisor = 2;
-    public static float FurnaceIronHeatHardCap = 1000;
-    public static float FurnaceSteelHeatDivisor = 200;
-    public static float FurnaceCombinationHeatDivisor = 200;
+    public static float IronFurnaceHeatDivisor = 2;
+    public static float IronFurnaceHeatHardCap = 1000;
+    public static float SteelFurnaceHeatDivisor = 200;
+    public static float CombinationOvenHeatDivisor = 200;
+    public static float CrucibleHeatDivisor; //TODO
     public static float BoilerHeatDivisor = 200;
     public static float BoilerHeaterOvenDivisorConstant = 2;
     public static float BoilerMAXDivisorConstant = 10;
     public static float BoilerIndustrialHeatDivisor = 200;
     public static float BoilerIndustrialHeaterOvenDivisorConstant = 2;
     public static float BoilerIndustrialMAXDivisorConstant = 10;
+    public static float FurnaceBrickHeatDivisor = 16;
+    public static float FurnaceBrickHeatHardCap = 500;
 
-    public static float FurnaceBrickHeatDivisor;
-    public static float DiFurnaceHeatDivisor;
+    public static float DiFurnaceHeatDivisor = 64; //TODO
     public static float DiFurnaceRTGHeatDivisor;
     public static float NukeFurnaceHeatDivisor;
+
+    public static float RTGFurnaceHeatDivisor;
+    public static float WoodBurningGenHeatDivisor = 16; //TODO
+    public static float DieselGenHeatDivisor;
+    public static float ICEHeatDivisor;
+    public static float CyclotronHeatDivisor;
+    public static float GeothermalGenHeatDivisor;
+    public static float RBMKRodHeatDivisor;
+    public static float ArcFurnaceHeatDivisor;
+    public static float FlareStackHeatDivisor;
+    public static float CokerHeatDivisor;
+    public static float TurbofanHeatDivisor;
+
+    public static float CCGasTurbineHeatDivisor;
 
 
 

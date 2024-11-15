@@ -8,7 +8,8 @@
 
 -  **[NTM compat] Machines affect body temperature | Support for hbm's ntm blocks/items by default**
     + Some machines will now increase the ambient temperature.
-      + Pro-tip: don't lean against a working hbm's ntm furnace, the ambient temperature can reach ~X degrees
+      + Сan be disabled in config
+      + The divisors for the heat value can also be changed in config (ambient temperature of most machines is calculated from the heating of the machine, but we don't use "raw" values, since they can be around several thousand, so we use divisors so that the ambient temperature is in an acceptable range. Machines without heat (e.g. diesel generator) generate heat simply due to the fact that they are turned on, their heat values are constant, and can also be changed in the config)
     + Now items with certain hazards will affect you
       + "Pyrophoric / Hot" items increase ambient temperature
       + "Coal dust" / "Asbestos" items decrease air quality
