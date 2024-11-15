@@ -429,62 +429,49 @@ public class EM_StatusManager
                             }
                         if(tileentity instanceof TileEntityFurnaceBrick) {
                             if (((TileEntityFurnaceBrick) tileentity).burnTime > 0) {
-                                //Coal - 1600/ = ℃ (expected ) ✅
-                                //Bale - 32000/ = ℃ (expected ) - 500℃ hard-cap ✅
+                                //Coal - 1600/  = ?℃ (expected ) ❔
+                                //Bale - 32000/ = ?℃ (expected ) - 500℃ hard-cap ❔
                                 blockAndItemTempInfluence += getTempFalloff(Math.min((((TileEntityFurnaceBrick) tileentity).burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
 
                         if(tileentity instanceof TileEntityDiFurnace) {
-                            //fuel (powerTime) = 12800 (max, only when active) = maxFuel
-                            //progress (cookTime) = only when active (so > 0)
-                            //Concl. = NOT CONST - fuel
-
-                            //FUEL - 12800/64 = ℃ (expected 100)
-
-                            if( ((TileEntityDiFurnace) tileentity).progress > 0 ) {
+                            if(((TileEntityDiFurnace) tileentity).progress > 0) {
+                                //FUEL - 12800/64 = ℃ (expected 100) ❔
                                 blockAndItemTempInfluence += getTempFalloff((((TileEntityDiFurnace) tileentity).fuel / EM_Settings.DiFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
-
-                            LogManager.getLogger().fatal("TileEntityDiFurnace : ");
-                            LogManager.getLogger().fatal("fuel : " + ((TileEntityDiFurnace) tileentity).fuel);
-                            LogManager.getLogger().fatal("progress : " + ((TileEntityDiFurnace) tileentity).progress);
                         }
                         if(tileentity instanceof TileEntityDiFurnaceRTG) {
-                            //progress =
-                            //getPower =
-                            //Concl. = NOT CONST - getPower
-                            LogManager.getLogger().fatal("TileEntityDiFurnaceRTG : ");
-                            LogManager.getLogger().fatal("progress : " + ((TileEntityDiFurnaceRTG) tileentity).progress);
-                            LogManager.getLogger().fatal("getPower : " + ((TileEntityDiFurnaceRTG) tileentity).getPower());
+                            if(((TileEntityDiFurnaceRTG) tileentity).progress > 0) {
+                                //Power level (max) = 600 X6 = 3600/2 = ℃ (expected 900) ❔
+                                //Power level (min) = 3 X6 =     18/2 = ℃ (expected 4.5) ❔
+                                blockAndItemTempInfluence += getTempFalloff((((TileEntityDiFurnaceRTG) tileentity).getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
                         }
 
                         if(tileentity instanceof TileEntityNukeFurnace) {
-                            //dualPower  = worth N operations
-                            //isProcessing = only when active
-                            //Concl. = NOT CONST - dualPower
-                            LogManager.getLogger().fatal("TileEntityNukeFurnace : ");
-                            LogManager.getLogger().fatal("dualPower : " + ((TileEntityNukeFurnace) tileentity).dualPower);
-                            LogManager.getLogger().fatal("isProcessing : " + ((TileEntityNukeFurnace) tileentity).isProcessing());
+                            if(((TileEntityNukeFurnace) tileentity).isProcessing()) {
+                                //Operations (max) = 200/0.2 = ℃ (expected 500) ❔
+                                //Operations (min) =   5/0.2 = ℃ (expected 12,5) ❔
+                                blockAndItemTempInfluence += getTempFalloff((((TileEntityNukeFurnace) tileentity).dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            }
                         }
 
                         if(tileentity instanceof TileEntityRtgFurnace) {
+                            //TODO
                             //isProcessing = only when active
                             //Concl. = CONST
                             LogManager.getLogger().fatal("TileEntityRtgFurnace : ");
                             LogManager.getLogger().fatal("isProcessing : " + ((TileEntityRtgFurnace) tileentity).isProcessing());
                         }
                         if(tileentity instanceof TileEntityMachineWoodBurner) {
-                            //burnTime = from fuel (NOT only when active, if buffer full)
-                            //isOn = switcher
-                            //Concl. = NOT CONST - burnTime
-
                             if(((TileEntityMachineWoodBurner) tileentity).isOn && ((TileEntityMachineWoodBurner) tileentity).getPower() < ((TileEntityMachineWoodBurner) tileentity).getMaxPower() ) {
                                 //Coal - 1600/16 = 59℃ (expected 50) ✅
                                 blockAndItemTempInfluence += getTempFalloff((((TileEntityMachineWoodBurner) tileentity).burnTime / EM_Settings.WoodBurningGenHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
                         if(tileentity instanceof TileEntityMachineDiesel) {
+                            //TODO
                             //power =
                             //active =
                             //Concl. = CONST
@@ -492,6 +479,7 @@ public class EM_StatusManager
                             LogManager.getLogger().fatal("active (cust) : " + (((TileEntityMachineDiesel) tileentity).tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(((TileEntityMachineDiesel) tileentity).tank.getTankType()) > 0L));
                         }
                         if(tileentity instanceof TileEntityMachineCombustionEngine) {
+                            //TODO
                             //power =
                             //isOn =
                             //Concl. = CONST
@@ -500,6 +488,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityMachineCyclotron) {
+                            //TODO
                             //power =
                             //isOn =
                             //Concl. = CONST
@@ -507,6 +496,7 @@ public class EM_StatusManager
                             LogManager.getLogger().fatal("isOn : " + (((TileEntityMachineCyclotron) tileentity).progress > 0));
                         }
                         if(tileentity instanceof TileEntityMachineHephaestus) { //GeoThermal
+                            //TODO
                             //bufferedHeat =
                             //Concl. = NOT CONST - bufferedHeat
                             LogManager.getLogger().fatal("TileEntityMachineHephaestus : ");
@@ -514,6 +504,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityRBMKBase) {
+                            //TODO
                             //heat =
                             //Concl. = NOT CONST - heat
                             LogManager.getLogger().fatal("TileEntityRBMKBase : ");
@@ -521,6 +512,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityMachineArcFurnaceLarge) {
+                            //TODO
                             //power =
                             //progress =
                             //isProgressing =
@@ -531,6 +523,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityMachineGasFlare) {
+                            //TODO
                             //power =
                             //isOn =
                             //doesBurn =
@@ -541,6 +534,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityMachineCoker) {
+                            //TODO
                             //wasOn =
                             //progress =
                             //heat =
@@ -552,6 +546,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityMachineTurbofan) {
+                            //TODO
                             //power =
                             //wasOn =
                             //Concl. = CONST
@@ -560,6 +555,7 @@ public class EM_StatusManager
                         }
 
                         if(tileentity instanceof TileEntityMachineTurbineGas) {
+                            //TODO
                             //power =
                             //state =
                             //active =
@@ -570,10 +566,6 @@ public class EM_StatusManager
                             LogManager.getLogger().fatal("active (cust) : " + (((TileEntityMachineTurbineGas) tileentity).state == 1));
                             LogManager.getLogger().fatal("temp : " + ((TileEntityMachineTurbineGas) tileentity).temp );
                         }
-
-
-
-
                         }
 
                     }

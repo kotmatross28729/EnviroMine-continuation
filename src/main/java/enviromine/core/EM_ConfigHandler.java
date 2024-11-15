@@ -422,10 +422,9 @@ public class EM_ConfigHandler
         EM_Settings.FurnaceBrickHeatDivisor = config.getFloat("53-1_FurnaceBrickHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceBrickHeatDivisor, 1, 65536,  "");
         EM_Settings.FurnaceBrickHeatHardCap = config.getFloat("53-2_FurnaceBrickHeatHardCap",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FurnaceBrickHeatHardCap, 1, 65536,  "");
 
-
-        //EM_Settings.DiFurnaceHeatDivisor = config.getFloat("54_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceHeatDivisor, 1, 65536,  "");
-        //EM_Settings.DiFurnaceRTGHeatDivisor = config.getFloat("55_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceRTGHeatDivisor, 1, 65536,  "");
-        //EM_Settings.NukeFurnaceHeatDivisor = config.getFloat("56_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NukeFurnaceHeatDivisor, 1, 65536,  "");
+        EM_Settings.DiFurnaceHeatDivisor = config.getFloat("54_DiFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceHeatDivisor, 1, 65536,  "");
+        EM_Settings.DiFurnaceRTGHeatDivisor = config.getFloat("55_DiFurnaceRTGHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DiFurnaceRTGHeatDivisor, 1, 65536,  "");
+        EM_Settings.NukeFurnaceHeatDivisor = config.getFloat("56_NukeFurnaceHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NukeFurnaceHeatDivisor, 1, 65536,  "");
 
         // --------------- //
         // --- General --- //

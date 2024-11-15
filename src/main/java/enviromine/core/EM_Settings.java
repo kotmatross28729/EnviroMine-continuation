@@ -134,9 +134,9 @@ public class EM_Settings
     public static float FurnaceBrickHeatDivisor = 16;
     public static float FurnaceBrickHeatHardCap = 500;
 
-    public static float DiFurnaceHeatDivisor = 64; //TODO
-    public static float DiFurnaceRTGHeatDivisor;
-    public static float NukeFurnaceHeatDivisor;
+    public static float DiFurnaceHeatDivisor = 64;
+    public static float DiFurnaceRTGHeatDivisor = 2;
+    public static float NukeFurnaceHeatDivisor = 0.2F;
 
     public static float RTGFurnaceHeatDivisor;
     public static float WoodBurningGenHeatDivisor = 16; //TODO
@@ -156,7 +156,7 @@ public class EM_Settings
 
 
     //HAZARDS
-
+    //...
 
 
 
