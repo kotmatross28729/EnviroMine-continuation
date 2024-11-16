@@ -572,7 +572,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double water = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.05D : 0D;
 		double temp = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.005D : 0D;
-        boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY); //TODO change if needed
+        boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY);
         double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
 
         double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 8D : typeList.contains(Type.JUNGLE)? 2D : 6D;

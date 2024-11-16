@@ -48,9 +48,11 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 
 import static enviromine.core.EM_Settings.DeathFromHeartAttack;
 import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
+import static enviromine.core.EnviroMine.isHbmLoaded;
 
 
 public class EnviroDataTracker
@@ -151,7 +153,7 @@ public class EnviroDataTracker
 			}
 		}
 
-//TODO TA CHO ZA NAHUI
+//TODO HARDCODED
 		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F) && enviroData[EM_StatusManager.SANITY_DELTA_INDEX] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[EM_StatusManager.SANITY_DELTA_INDEX] = (float)(-1F * EM_Settings.sanityMult);
@@ -483,7 +485,7 @@ public class EnviroDataTracker
 			}
 		} else if(enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == -1 && trackedEntity instanceof EntityAnimal)
 		{
-			hydrate(0.05F); //TODO s
+			hydrate(0.05F); //TODO HARDCODED
 		} else if(hydration <= 0F)
 		{
 			hydration = 0;
@@ -607,7 +609,7 @@ public class EnviroDataTracker
 					tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, camelPackFill-1);
 					hydrate((float)EM_Settings.hydrationMult);
 
-					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F) //TODO zaebalsa
+					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F) //TODO HARDCODED
 					{
 						bodyTemp -= EM_Settings.tempMult/10F;
 					}
@@ -632,8 +634,23 @@ public class EnviroDataTracker
 
 		// Apply side effects
 
+        if(isHbmLoaded()) {
+            if(airQuality > 50 && (HbmLivingProps.getAsbestos(trackedEntity) > 43_200 || //60% //TODO HARDCODED
+                HbmLivingProps.getBlackLung(trackedEntity) > 115_200 //80% //TODO HARDCODED
+            )) {
+                airQuality -= 50; //TODO HARDCODED
+            }
 
-		if(airTemp <= 10F && bodyTemp <= 35F || bodyTemp <= 30F) //TODO nihua
+            float rad = HbmLivingProps.getRadiation(trackedEntity);
+            if(rad > 200) //TODO HARDCODED
+            {
+                bodyTemp += ((rad/10F) * 0.1F); //200=38.6, 500=41.6, 999=46.59 //TODO HARDCODED
+            }
+
+            sanity -= HbmLivingProps.getDigamma(trackedEntity);
+        }
+
+		if(airTemp <= 10F && bodyTemp <= 35F || bodyTemp <= 30F) //TODO HARDCODED
 		{
 			timeBelow10 += 1;
 		} else
@@ -678,7 +695,7 @@ public class EnviroDataTracker
 				if(!trackedEntity.isPotionActive(Potion.fireResistance))
 				{
 					if(bodyTemp >= 39F && enableHeat && EM_Settings.enableHeatstrokeGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
-					{//TODO PIZDEC EBUCHIY
+					{//TODO HARDCODED
                         if(bodyTemp >= 1000F)
                         {
                             trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 10));
@@ -725,7 +742,7 @@ public class EnviroDataTracker
 						)
 				{
 					if(
-							bodyTemp <= 30F //TODO ebaT'
+							bodyTemp <= 30F //TODO HARDCODED
 							&& !(trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire)
 							)
 					{
@@ -798,7 +815,7 @@ public class EnviroDataTracker
 				if(hydration <= 0F && !(EM_Settings.witcheryVampireImmunities && isVampire))
 				{
 					trackedEntity.attackEntityFrom(EnviroDamageSource.dehydrate, 4.0F);
-				} //TODO DA BLYAT, VSE HARDCODED
+				} //TODO HARDCODED
                 // Sanity checks
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
                 if(!isCreative && sanity <= 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
@@ -907,7 +924,7 @@ public class EnviroDataTracker
 	@SideOnly(Side.CLIENT)
 	private void playSoundWithTimeCheck(int time, String sound, float volume, float pitch)
 	{
-		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000) //ЕЩВЩ TODO hardocededed
+		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000) //TODO HARDCODED
 		{
 			Minecraft.getMinecraft().thePlayer.playSound("enviromine:chill",  UI_Settings.breathVolume, 1.0F);
 			chillPrevTime = Minecraft.getSystemTime();
@@ -932,44 +949,43 @@ public class EnviroDataTracker
 			return EntityProperties.base.getProperty(entity).shouldTrack;
 		}
 
-        //TODO ПИЗДЕЦ ПОЛНЫЙ
 		if(entity.isEntityUndead() || entity instanceof EntityMob)
 		{
 			return false;
-		} else if(name == "Enderman")
+		} else if(name.equals("Enderman"))
 		{
 			return false;
-		} else if(name == "Villager")
+		} else if(name.equals("Villager"))
 		{
 			return false;
-		} else if(name == "Slime")
+		} else if(name.equals("Slime"))
 		{
 			return false;
-		} else if(name == "Ghast")
+		} else if(name.equals("Ghast"))
 		{
 			return false;
-		} else if(name == "Squid")
+		} else if(name.equals("Squid"))
 		{
 			return false;
-		} else if(name == "Blaze")
+		} else if(name.equals("Blaze"))
 		{
 			return false;
-		} else if(name == "LavaSlime")
+		} else if(name.equals("LavaSlime"))
 		{
 			return false;
-		} else if(name == "SnowMan")
+		} else if(name.equals("SnowMan"))
 		{
 			return false;
-		} else if(name == "MushroomCow")
+		} else if(name.equals("MushroomCow"))
 		{
 			return false;
-		} else if(name == "WitherBoss")
+		} else if(name.equals("WitherBoss"))
 		{
 			return false;
-		} else if(name == "EnderDragon")
+		} else if(name.equals("EnderDragon"))
 		{
 			return false;
-		} else if(name == "VillagerGolem")
+		} else if(name.equals("VillagerGolem"))
 		{
 			return false;
 		} else
@@ -1054,7 +1070,6 @@ public class EnviroDataTracker
 		bodyTemp = 36.6F;
 		hydration = 100F;
 		sanity = 100F;
-
 
 		// Added by AstroTibs to ensure no BS
 		trackedEntity.clearActivePotions();

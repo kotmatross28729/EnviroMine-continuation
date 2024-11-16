@@ -20,7 +20,6 @@ import net.minecraft.world.EnumSkyBlock;
 
 public class HandlingTheThing
 {
-    //TODO perepisat' vse shto hardcoded
 	public static Calendar date = Calendar.getInstance();
 	static ArrayList<String> messages = new ArrayList<String>();
 
