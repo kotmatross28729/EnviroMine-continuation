@@ -346,6 +346,7 @@ public class EM_StatusManager
                                     //Coal - 1600/16 = 64℃ (expected 50) ✅
                                     //Bale - 32000/16 = 514℃ (expected 1000) - 500℃ hard-cap ✅
                                     //Works in space - ✅
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff(Math.min((press.burnTime / EM_Settings.BurnerPressHeatDivisor), EM_Settings.BurnerPressHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -376,6 +377,7 @@ public class EM_StatusManager
                                 if (heaterElectric.isOn && heaterElectric.heatEnergy > 0) {
                                     //Max (no) - 10_000/20 = 244(249)℃ (expected 250) - 250℃ hard-cap ✅
                                     //Works in space - ✅
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff(Math.min(heaterElectric.heatEnergy / EM_Settings.HeaterElectricHeatDivisor, (EM_Settings.HeaterElectricHeatHardCap*2)) , dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -384,6 +386,7 @@ public class EM_StatusManager
                                     //Coal - 2000/2 = 458℃ (expected 500) ✅
                                     //Bale - 64000/2 = 15343℃ (expected 16000) - 1000℃ hard-cap ✅
                                     //Works in space - ❌
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff(Math.min(furnaceIron.burnTime / EM_Settings.IronFurnaceHeatDivisor, (EM_Settings.IronFurnaceHeatHardCap*2)), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -446,6 +449,7 @@ public class EM_StatusManager
                                     //Coal - 1600/16  = 58℃ (expected 50) ✅
                                     //Bale - 32000/16 = 475℃ (expected 1000) - 500℃ hard-cap ✅
                                     //Works in space - ❌
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff(Math.min((furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -476,6 +480,7 @@ public class EM_StatusManager
                                 //this shouldn't really be a constant, but I don't give a fuck
                                 if(rtgFurnace.isProcessing()){
                                     //Works in space - ✅
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -496,30 +501,34 @@ public class EM_StatusManager
                             else if(tileentity instanceof TileEntityMachineDiesel diesel) {
                                 if(diesel.tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(diesel.tank.getTankType()) > 0L) {
                                     //Works in space - ❌
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.DieselGenHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineCombustionEngine combustionEngine) {
                                 if(combustionEngine.wasOn) {
                                     //Works in space - ❌
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.ICEHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineCyclotron cyclotron) {
                                 if(cyclotron.progress > 0) {
                                     //Works in space - ✅
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.CyclotronHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineHephaestus hephaestus) { //GeoThermal
                                 if(hephaestus.getTotalHeat() > 0) {
-                                    //Max   - 10_000/10      = 493℃ (expected 500) ✅
+                                    //Max - 10_000/10 = 493℃ (expected 500) ✅
                                     //Works in space - ✅
                                     blockAndItemTempInfluence += getTempFalloff((hephaestus.getTotalHeat() / EM_Settings.GeothermalGenHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityRBMKBase rbmkBase) {
                                 if(rbmkBase.heat > 0) {
+                                    //Max - 1500/5 = 293℃ (expected 300) ✅
                                     //Works in space - ✅
                                     blockAndItemTempInfluence += getTempFalloff(Math.min(((float)rbmkBase.heat / EM_Settings.RBMKRodHeatDivisor), EM_Settings.RBMKRodHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
@@ -527,6 +536,7 @@ public class EM_StatusManager
                             else if(tileentity instanceof TileEntityMachineArcFurnaceLarge arcFurnaceLarge) {
                                 if(arcFurnaceLarge.isProgressing) {
                                     //Works in space - ✅
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.ArcFurnaceHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -538,41 +548,30 @@ public class EM_StatusManager
                                     powerGen = (int) output.get(gasFlare);
                                 } catch (NoSuchFieldException | IllegalAccessException ignored) {}
                                 if(gasFlare.doesBurn && powerGen > 0) {
-                                    //Works in space - ❔
+                                    //Works in space - ✅ (why?)
+                                    //TODO CONSTANT ALERT
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.FlareStackHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineCoker coker) {
-                                //TODO
-                                //wasOn =
-                                //progress =
-                                //heat =
-                                //Concl. = NOT CONST - heat
-                                //Works in space - ❔
-                                LogManager.getLogger().fatal("TileEntityMachineCoker : ");
-                                LogManager.getLogger().fatal("wasOn : " + coker.wasOn);
-                                LogManager.getLogger().fatal("progress : " + coker.progress);
-                                LogManager.getLogger().fatal("heat : " + coker.heat);
+                                if(coker.wasOn && coker.heat > 0) {
+                                    //Max - 100_000/1000 = 58℃ (expected 50)✅
+                                    //Works in space - ✅
+                                    blockAndItemTempInfluence += getTempFalloff((coker.heat / EM_Settings.CokerHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
                             else if(tileentity instanceof TileEntityMachineTurbofan turbofan) {
-                                //TODO
-                                //wasOn =
-                                //Concl. = CONST
-                                //Works in space - ❔
-                                LogManager.getLogger().fatal("TileEntityMachineTurbofan : ");
-                                LogManager.getLogger().fatal("wasOn : " + turbofan.wasOn);
+                                if(turbofan.wasOn) {
+                                    //Works in space - ❌
+                                    //TODO CONSTANT ALERT
+                                    blockAndItemTempInfluence += getTempFalloff((turbofan.afterburner > 0 ? EM_Settings.TurbofanAfterburnerHeatConstant*2 : EM_Settings.TurbofanHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
                             else if(tileentity instanceof TileEntityMachineTurbineGas turbineGas) {
-                                    //TODO
-                                    //state =
-                                    //active =
-                                    //temp =
-                                    //Concl. = NOT CONST - temp
-                                    //Works in space - ❔
-                                    LogManager.getLogger().fatal("TileEntityMachineTurbineGas : ");
-                                    LogManager.getLogger().fatal("state : " + turbineGas.state);
-                                    LogManager.getLogger().fatal("active (cust) : " + (turbineGas.state == 1));
-                                    LogManager.getLogger().fatal("temp : " + turbineGas.temp);
+                                    if(turbineGas.temp > 0) {
+                                        //Works in space - ✅
+                                        blockAndItemTempInfluence += getTempFalloff((turbineGas.temp / EM_Settings.CCGasTurbineHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    }
                                 }
                             }
                     }
@@ -1265,7 +1264,7 @@ public class EM_StatusManager
         float ambientTemperature = 0F;
 
         if (blockAndItemTempInfluence > biomeTemperature) {
-            ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / 2; //TODO HARDCODED
+            ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / 2; //TODO HARDCODED, CONSTANT ALERT
             if (blockAndItemTempInfluence > (biomeTemperature + 5F)) {
                 riseSpeed = 0.005F; //TODO HARDCODED
             }

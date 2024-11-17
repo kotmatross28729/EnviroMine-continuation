@@ -441,7 +441,10 @@ public class EM_ConfigHandler
         EM_Settings.ArcFurnaceHeatConstant = config.getFloat("64_ArcFurnaceHeatConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.ArcFurnaceHeatConstant, 1, 65536,  "The ambient temperature from this machine is a constant you can specify (in Celsius degrees)");
         EM_Settings.FlareStackHeatConstant = config.getFloat("65_FlareStackHeatConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FlareStackHeatConstant, 1, 65536,  "The ambient temperature from this machine is a constant you can specify (in Celsius degrees)");
         EM_Settings.CokerHeatDivisor = config.getFloat("66_CokerHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CokerHeatDivisor, 1, 65536,  "Divider value for temperature. The temperature itself depends on the specifics of the machine");
-        EM_Settings.TurbofanHeatConstant = config.getFloat("67_TurbofanHeatConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.TurbofanHeatConstant, 1, 65536,  "The ambient temperature from this machine is a constant you can specify (in Celsius degrees)");
+
+        EM_Settings.TurbofanHeatConstant = config.getFloat("67-1_TurbofanHeatConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.TurbofanHeatConstant, 1, 65536,  "The ambient temperature from this machine is a constant you can specify (in Celsius degrees)");
+        EM_Settings.TurbofanAfterburnerHeatConstant = config.getFloat("67-2_TurbofanAfterburnerHeatConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.TurbofanAfterburnerHeatConstant, 1, 65536,  "The ambient temperature from this machine is a constant you can specify (in Celsius degrees)");
+
         EM_Settings.CCGasTurbineHeatDivisor = config.getFloat("68_CCGasTurbineHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CCGasTurbineHeatDivisor, 1, 65536,  "Divider value for temperature. The temperature itself depends on the specifics of the machine");
 
 
