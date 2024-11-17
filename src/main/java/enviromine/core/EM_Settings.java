@@ -138,16 +138,17 @@ public class EM_Settings
     public static float DiFurnaceRTGHeatDivisor = 2;
     public static float NukeFurnaceHeatDivisor = 0.2F;
 
-    public static float RTGFurnaceHeatConstant; //TODO
-
+    public static float RTGFurnaceHeatConstant = 100;
     public static float WoodBurningGenHeatDivisor = 16;
-    public static float DieselGenHeatConstant; //TODO
-    public static float ICEHeatConstant; //TODO
-    public static float CyclotronHeatConstant; //TODO
-    public static float GeothermalGenHeatDivisor; //TODO
-    public static float RBMKRodHeatDivisor; //TODO
-    public static float ArcFurnaceHeatConstant; //TODO
+    public static float DieselGenHeatConstant = 50;
+    public static float ICEHeatConstant = 100; //TODO
+    public static float CyclotronHeatConstant = 150; //TODO
+    public static float GeothermalGenHeatDivisor = 10; //TODO
+    public static float RBMKRodHeatDivisor = 5; //TODO
+    public static float RBMKRodHeatHardCap = 1500; //TODO
 
+
+    public static float ArcFurnaceHeatConstant; //TODO
     public static float FlareStackHeatConstant; //TODO
     public static float CokerHeatDivisor; //TODO
     public static float TurbofanHeatConstant; //TODO

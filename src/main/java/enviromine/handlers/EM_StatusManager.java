@@ -403,8 +403,8 @@ public class EM_StatusManager
                             }
                             else if (tileentity instanceof TileEntityCrucible crucible) {
                                 if(crucible.heat > 0) {
-                                    //Max - 100_000/1000 = ℃ (expected 100) ✅
-                                    //Works in space - ❔
+                                    //Max - 100_000/1000 = 101℃ (expected 100) ✅
+                                    //Works in space - ✅
                                     blockAndItemTempInfluence += getTempFalloff(crucible.heat / EM_Settings.CrucibleHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -441,48 +441,44 @@ public class EM_StatusManager
                                 //Works in space - ✅
                                 blockAndItemTempInfluence += getTempFalloff(heat, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
-                        else if(tileentity instanceof TileEntityFurnaceBrick furnaceBrick) {
-                            if (furnaceBrick.burnTime > 0) {
-                                //Coal - 1600/16  = ?℃ (expected 50) ❔
-                                //Bale - 32000/16 = ?℃ (expected 1000) - 500℃ hard-cap ❔
-                                //Works in space - ❌
-                                blockAndItemTempInfluence += getTempFalloff(Math.min((furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            else if(tileentity instanceof TileEntityFurnaceBrick furnaceBrick) {
+                                if (furnaceBrick.burnTime > 0) {
+                                    //Coal - 1600/16  = 58℃ (expected 50) ✅
+                                    //Bale - 32000/16 = 475℃ (expected 1000) - 500℃ hard-cap ✅
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min((furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-
-                        else if(tileentity instanceof TileEntityDiFurnace diFurnace) {
-                            if(diFurnace.progress > 0) {
-                                //FUEL - 12800/64 = ℃ (expected 100) ❔
-                                //Works in space - ❌
-                                blockAndItemTempInfluence += getTempFalloff((diFurnace.fuel / EM_Settings.DiFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            else if(tileentity instanceof TileEntityDiFurnace diFurnace) {
+                                if(diFurnace.progress > 0) {
+                                    //FUEL - 12800/64 = 105℃ (expected 100) ✅
+                                    //Works in space - ❌
+                                    blockAndItemTempInfluence += getTempFalloff((diFurnace.fuel / EM_Settings.DiFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-                        else if(tileentity instanceof TileEntityDiFurnaceRTG diFurnaceRTG) {
-                            if(diFurnaceRTG.progress > 0) {
-                                //Power level (max) = 600 X6 = 3600/2 = ℃ (expected 900) ❔
-                                //Power level (min) = 3 X6 =     18/2 = ℃ (expected 4.5) ❔
-                                //Works in space - ✅
-                                blockAndItemTempInfluence += getTempFalloff((diFurnaceRTG.getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            else if(tileentity instanceof TileEntityDiFurnaceRTG diFurnaceRTG) {
+                                if(diFurnaceRTG.progress > 0) {
+                                    //Power level (max) = 600 X6 = 3600/2 = who knows, TO FUCKING FAST℃ (expected 900) ❔
+                                    //Power level (min) = 3 X6 =     18/2 = too small amount, not even shown℃ (expected 4.5) ❔
+                                    //Works in space - ✅
+                                    blockAndItemTempInfluence += getTempFalloff((diFurnaceRTG.getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-
-                        else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
-                            if(nukeFurnace.isProcessing()) {
-                                //Operations (max) = 200/0.2 = ℃ (expected 500) ❔
-                                //Operations (min) =   5/0.2 = ℃ (expected 12,5) ❔
-                                //Works in space - ✅
-                                blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                            else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
+                                if(nukeFurnace.isProcessing()) {
+                                    //Operations (max) = 200/0.2 = 114℃ (expected 500) ❌
+                                    //Operations (min) =   5/0.2 = not enough to see℃ (expected 12,5) ❔
+                                    //Works in space - ✅
+                                    blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
-
-                        else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
-                            //TODO
-                            //isProcessing = only when active
-                            //Concl. = CONST
-//                            LogManager.getLogger().fatal("TileEntityRtgFurnace : ");
-//                            LogManager.getLogger().fatal("isProcessing : " + rtgFurnace.isProcessing());
-                        }
-                        else if(tileentity instanceof TileEntityMachineWoodBurner woodBurner) {
+                            else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
+                                if(rtgFurnace.isProcessing()){
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
+                            }
+                            else if(tileentity instanceof TileEntityMachineWoodBurner woodBurner) {
                                 int powerGen = 0;
                                 try {
                                     Field powerGenz = TileEntityMachineWoodBurner.class.getDeclaredField("powerGen");
@@ -496,99 +492,89 @@ public class EM_StatusManager
                                 blockAndItemTempInfluence += getTempFalloff((woodBurner.burnTime / EM_Settings.WoodBurningGenHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                             }
                         }
-                        else if(tileentity instanceof TileEntityMachineDiesel diesel) {
-                            //TODO
-                            //active =
-                            //Concl. = CONST
-                            //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineDiesel : ");
-//                            LogManager.getLogger().fatal("active (cust) : " + (diesel.tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(diesel.tank.getTankType()) > 0L));
-                        }
-                        else if(tileentity instanceof TileEntityMachineCombustionEngine combustionEngine) {
-                            //TODO
-                            //isOn =
-                            //Concl. = CONST
-                                //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineCombustionEngine : ");
-//                            LogManager.getLogger().fatal("isOn : " + combustionEngine.isOn);
-                        }
-                        else if(tileentity instanceof TileEntityMachineCyclotron cyclotron) {
-                            //TODO
-                            //isOn =
-                            //Concl. = CONST
-                                //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineCyclotron : ");
-//                            LogManager.getLogger().fatal("isOn : " + (cyclotron.progress > 0));
-                        }
-                        else if(tileentity instanceof TileEntityMachineHephaestus hephaestus) { //GeoThermal
-                            //TODO
-                            //bufferedHeat =
-                            //Concl. = NOT CONST - bufferedHeat
-                                //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineHephaestus : ");
-//                            LogManager.getLogger().fatal("bufferedHeat : " + hephaestus.bufferedHeat);
-                        }
-                        else if(tileentity instanceof TileEntityRBMKBase rbmkBase) {
-                            //TODO
-                            //heat =
-                            //Concl. = NOT CONST - heat
-                                //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityRBMKBase : ");
-//                            LogManager.getLogger().fatal("heat : " + rbmkBase.heat);
-                        }
-                        else if(tileentity instanceof TileEntityMachineArcFurnaceLarge arcFurnaceLarge) {
-                            //TODO
-                            //progress =
-                            //isProgressing =
-                            //Concl. = CONST
-                            //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineArcFurnaceLarge : ");
-//                            LogManager.getLogger().fatal("progress : " + arcFurnaceLarge.progress);
-//                            LogManager.getLogger().fatal("isProgressing : " + arcFurnaceLarge.isProgressing);
-                        }
-                        else if(tileentity instanceof TileEntityMachineGasFlare gasFlare) {
-                            //TODO
-                            //isOn =
-                            //doesBurn =
-                            //Concl. = CONST
-                            //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineGasFlare : ");
-//                            LogManager.getLogger().fatal("isOn : " + gasFlare.isOn);
-//                            LogManager.getLogger().fatal("doesBurn : " + gasFlare.doesBurn);
-                        }
-                        else if(tileentity instanceof TileEntityMachineCoker coker) {
-                            //TODO
-                            //wasOn =
-                            //progress =
-                            //heat =
-                            //Concl. = NOT CONST - heat
-                            //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineCoker : ");
-//                            LogManager.getLogger().fatal("wasOn : " + coker.wasOn);
-//                            LogManager.getLogger().fatal("progress : " + coker.progress);
-//                            LogManager.getLogger().fatal("heat : " + coker.heat);
-                        }
-                        else if(tileentity instanceof TileEntityMachineTurbofan turbofan) {
-                            //TODO
-                            //wasOn =
-                            //Concl. = CONST
-                            //Works in space - ❔
-//                            LogManager.getLogger().fatal("TileEntityMachineTurbofan : ");
-//                            LogManager.getLogger().fatal("wasOn : " + turbofan.wasOn);
-                        }
-                        else if(tileentity instanceof TileEntityMachineTurbineGas turbineGas) {
-                                //TODO
-                                //state =
-                                //active =
-                                //temp =
-                                //Concl. = NOT CONST - temp
-                                //Works in space - ❔
-//                                LogManager.getLogger().fatal("TileEntityMachineTurbineGas : ");
-//                                LogManager.getLogger().fatal("state : " + turbineGas.state);
-//                                LogManager.getLogger().fatal("active (cust) : " + (turbineGas.state == 1));
-//                                LogManager.getLogger().fatal("temp : " + turbineGas.temp);
+                            else if(tileentity instanceof TileEntityMachineDiesel diesel) {
+                                if(diesel.tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(diesel.tank.getTankType()) > 0L) {
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.DieselGenHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
-                        }
+                            else if(tileentity instanceof TileEntityMachineCombustionEngine combustionEngine) {
+                                if(combustionEngine.isOn) {
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.ICEHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
+                            }
+                            else if(tileentity instanceof TileEntityMachineCyclotron cyclotron) {
+                                if(cyclotron.progress > 0) {
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.CyclotronHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
+                            }
+                            else if(tileentity instanceof TileEntityMachineHephaestus hephaestus) { //GeoThermal
+                                if(hephaestus.bufferedHeat > 0) {
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff((hephaestus.bufferedHeat / EM_Settings.GeothermalGenHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
+                            }
+                            else if(tileentity instanceof TileEntityRBMKBase rbmkBase) {
+                                if(rbmkBase.heat > 0) {
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(((float)rbmkBase.heat / EM_Settings.RBMKRodHeatDivisor), EM_Settings.RBMKRodHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
+                            }
+                            else if(tileentity instanceof TileEntityMachineArcFurnaceLarge arcFurnaceLarge) {
+                                //TODO
+                                //progress =
+                                //isProgressing =
+                                //Concl. = CONST
+                                //Works in space - ❔
+//                                LogManager.getLogger().fatal("TileEntityMachineArcFurnaceLarge : ");
+//                                LogManager.getLogger().fatal("progress : " + arcFurnaceLarge.progress);
+//                                LogManager.getLogger().fatal("isProgressing : " + arcFurnaceLarge.isProgressing);
+                            }
+                            else if(tileentity instanceof TileEntityMachineGasFlare gasFlare) {
+                                //TODO
+                                //isOn =
+                                //doesBurn =
+                                //Concl. = CONST
+                                //Works in space - ❔
+//                                LogManager.getLogger().fatal("TileEntityMachineGasFlare : ");
+//                                LogManager.getLogger().fatal("isOn : " + gasFlare.isOn);
+//                                LogManager.getLogger().fatal("doesBurn : " + gasFlare.doesBurn);
+                            }
+                            else if(tileentity instanceof TileEntityMachineCoker coker) {
+                                //TODO
+                                //wasOn =
+                                //progress =
+                                //heat =
+                                //Concl. = NOT CONST - heat
+                                //Works in space - ❔
+//                                LogManager.getLogger().fatal("TileEntityMachineCoker : ");
+//                                LogManager.getLogger().fatal("wasOn : " + coker.wasOn);
+//                                LogManager.getLogger().fatal("progress : " + coker.progress);
+//                                LogManager.getLogger().fatal("heat : " + coker.heat);
+                            }
+                            else if(tileentity instanceof TileEntityMachineTurbofan turbofan) {
+                                //TODO
+                                //wasOn =
+                                //Concl. = CONST
+                                //Works in space - ❔
+//                                LogManager.getLogger().fatal("TileEntityMachineTurbofan : ");
+//                                LogManager.getLogger().fatal("wasOn : " + turbofan.wasOn);
+                            }
+                            else if(tileentity instanceof TileEntityMachineTurbineGas turbineGas) {
+                                    //TODO
+                                    //state =
+                                    //active =
+                                    //temp =
+                                    //Concl. = NOT CONST - temp
+                                    //Works in space - ❔
+//                                    LogManager.getLogger().fatal("TileEntityMachineTurbineGas : ");
+//                                    LogManager.getLogger().fatal("state : " + turbineGas.state);
+//                                    LogManager.getLogger().fatal("active (cust) : " + (turbineGas.state == 1));
+//                                    LogManager.getLogger().fatal("temp : " + turbineGas.temp);
+                                }
+                            }
                     }
 
                     if (block != Blocks.air) {
