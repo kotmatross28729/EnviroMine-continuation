@@ -125,7 +125,7 @@ public class EM_Settings
     public static float IronFurnaceHeatHardCap = 1000;
     public static float SteelFurnaceHeatDivisor = 200;
     public static float CombinationOvenHeatDivisor = 200;
-    public static float CrucibleHeatDivisor; //TODO
+    public static float CrucibleHeatDivisor = 500;
     public static float BoilerHeatDivisor = 200;
     public static float BoilerHeaterOvenDivisorConstant = 2;
     public static float BoilerMAXDivisorConstant = 10;

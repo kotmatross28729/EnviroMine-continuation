@@ -402,8 +402,11 @@ public class EM_StatusManager
                                 }
                             }
                             else if (tileentity instanceof TileEntityCrucible crucible) {
-                                LogManager.getLogger().fatal("TileEntityCrucible : ");
-                                LogManager.getLogger().fatal("heat : " + crucible.heat);
+                                if(crucible.heat > 0) {
+                                    //Max - 100_000/1000 = ℃ (expected 100) ✅
+                                    //Works in space - ❔
+                                    blockAndItemTempInfluence += getTempFalloff(crucible.heat / EM_Settings.CrucibleHeatDivisor, dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                }
                             }
                             else if (tileentity instanceof TileEntityHeatBoiler boiler) {
                                 float heat = boiler.heat;

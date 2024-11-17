@@ -948,47 +948,46 @@ public class EnviroDataTracker
 		{
 			return EntityProperties.base.getProperty(entity).shouldTrack;
 		}
-
-		if(entity.isEntityUndead() || entity instanceof EntityMob)
-		{
-			return false;
-		} else if(name.equals("Enderman"))
-		{
-			return false;
-		} else if(name.equals("Villager"))
-		{
-			return false;
-		} else if(name.equals("Slime"))
-		{
-			return false;
-		} else if(name.equals("Ghast"))
-		{
-			return false;
-		} else if(name.equals("Squid"))
-		{
-			return false;
-		} else if(name.equals("Blaze"))
-		{
-			return false;
-		} else if(name.equals("LavaSlime"))
-		{
-			return false;
-		} else if(name.equals("SnowMan"))
-		{
-			return false;
-		} else if(name.equals("MushroomCow"))
-		{
-			return false;
-		} else if(name.equals("WitherBoss"))
-		{
-			return false;
-		} else if(name.equals("EnderDragon"))
-		{
-			return false;
-		} else if(name.equals("VillagerGolem"))
-		{
-			return false;
-		} else
+        if(entity.isEntityUndead() || entity instanceof EntityMob)
+        {
+            return false;
+        } else if(name == "Enderman")
+        {
+            return false;
+        } else if(name == "Villager")
+        {
+            return false;
+        } else if(name == "Slime")
+        {
+            return false;
+        } else if(name == "Ghast")
+        {
+            return false;
+        } else if(name == "Squid")
+        {
+            return false;
+        } else if(name == "Blaze")
+        {
+            return false;
+        } else if(name == "LavaSlime")
+        {
+            return false;
+        } else if(name == "SnowMan")
+        {
+            return false;
+        } else if(name == "MushroomCow")
+        {
+            return false;
+        } else if(name == "WitherBoss")
+        {
+            return false;
+        } else if(name == "EnderDragon")
+        {
+            return false;
+        } else if(name == "VillagerGolem")
+        {
+            return false;
+        } else
 		{
 			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(entity);
 
