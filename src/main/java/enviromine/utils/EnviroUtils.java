@@ -225,20 +225,41 @@ public class EnviroUtils
 			typeList.add(typeArray[i]);
 		}
 
-
-		if(typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || looksBad)
-		{
-			return "dirty";
-		} else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
-		{
-			return "salty";
-		} else if(typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F)
-		{
-			return "cold";
-		} else
-		{
-			return "clean";
-		}
+        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA))
+        {
+            return "hot"; //-3
+        }
+        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad))
+        {
+            return "dirty warm"; //-2
+        }
+        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET))
+        {
+            return "clean warm"; //-1
+        }
+        else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || looksBad) )
+        {
+            return "dirty"; //1
+        }
+        else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
+        {
+            return "salty"; //2
+        }
+        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F && !looksBad))
+        {
+            return "clean cold"; //3
+        }
+        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F && looksBad))
+        {
+            return "dirty cold"; //4
+        }
+        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY))
+        {
+            return "frosty"; //5
+        }
+        else {
+            return "clean"; //0
+        }
 	}
 
 	public static StabilityType getDefaultStabilityType(Block block)

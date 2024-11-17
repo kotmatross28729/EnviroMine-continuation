@@ -3,6 +3,12 @@ language.name=English
 item.enviromine.badwater.name=Dirty Water Bottle
 item.enviromine.saltwater.name=Salt Water Bottle
 item.enviromine.coldwater.name=Cold Water Bottle
+item.enviromine.warmwater.name=Warm Water Bottle
+item.enviromine.badcoldwater.name=Dirty Cold Water Bottle
+item.enviromine.badwarmwater.name=Dirty Warm Water Bottle
+item.enviromine.frostywater.name=Frosty Water Bottle
+item.enviromine.hotwater.name=Hot Water Bottle
+
 item.enviromine.camelpack.name=Camel Pack
 item.enviromine.gasmask.name=Respirator
 item.enviromine.hardhat.name=Hard Hat

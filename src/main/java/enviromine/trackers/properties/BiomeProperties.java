@@ -220,21 +220,26 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	public int getWaterQualityId()
 	{
-		if(this.waterQuality.trim().equalsIgnoreCase("dirty"))
-		{
-			return 1;
-		} else if(this.waterQuality.trim().equalsIgnoreCase("salty"))
-		{
-			return 2;
-		} else if(this.waterQuality.trim().equalsIgnoreCase("cold"))
-		{
-			return 3;
-		} else if(this.waterQuality.trim().equalsIgnoreCase("clean"))
-		{
-			return 0;
-		} else
-		{
-			return -1;
+        if(this.waterQuality.trim().equalsIgnoreCase("frosty")) {
+            return 5;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("dirty cold")) {
+            return 4;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("clean cold")) {
+            return 3;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("salty")) {
+            return 2;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("dirty")) {
+            return 1;
+        }  else if(this.waterQuality.trim().equalsIgnoreCase("clean")) {
+            return 0;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("clean warm")) {
+            return -1;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("dirty warm")) {
+            return -2;
+        }   else if(this.waterQuality.trim().equalsIgnoreCase("hot")) {
+            return -3;
+        } else {
+			return -4;
 		}
 	}
 
@@ -468,7 +473,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	{
 		config.get(category, BOName[0], this.id).getInt(0);
 		config.get(category, BOName[1], this.biomeOveride).getBoolean(this.biomeOveride);
-		config.get(category, BOName[2], this.waterQuality, "Water Quality: dirty, salty, cold, clean").getString();
+		config.get(category, BOName[2], this.waterQuality, "Water Quality: dirty, salty, cold, dirty cold, frosty, warm, dirty warm, hot, clean").getString();
 		config.get(category, BOName[3], this.ambientTemp, "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(this.ambientTemp);
 		config.get(category, BOName[4], this.tempRate).getDouble(this.tempRate);
 		config.get(category, BOName[5], this.sanityRate).getDouble(this.sanityRate);

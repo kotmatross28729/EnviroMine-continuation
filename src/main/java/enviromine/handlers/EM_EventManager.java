@@ -113,6 +113,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static net.minecraftforge.common.BiomeDictionary.Type.SAVANNA;
+import static net.minecraftforge.common.BiomeDictionary.Type.WET;
+
 public class EM_EventManager
 {
 	private static final String BLOOD_BLOCK_BOP = "BiomesOPlenty:hell_blood";
@@ -678,6 +681,21 @@ public class EM_EventManager
 					Item newItem = Items.potionitem;
 
                     switch (getWaterType(world, i, j, k)) {
+                        case -3 -> // Hot
+                        {
+                            newItem = ObjectHandler.hotWaterBottle;
+                            break;
+                        }
+                        case -2 -> // Dirty warm
+                        {
+                            newItem = ObjectHandler.badWarmWaterBottle;
+                            break;
+                        }
+                        case -1 -> // Clean warm
+                        {
+                            newItem = ObjectHandler.warmWaterBottle;
+                            break;
+                        }
                         case 0 -> // Clean
                         {
                             newItem = Items.potionitem;
@@ -693,16 +711,34 @@ public class EM_EventManager
                             newItem = ObjectHandler.saltWaterBottle;
                             break;
                         }
-                        case 3 -> // Cold
+                        case 3 -> // Clean cold
                         {
                             newItem = ObjectHandler.coldWaterBottle;
+                            break;
+                        }
+                        case 4 -> // Dirty cold
+                        {
+                            newItem = ObjectHandler.badColdWaterBottle;
+                            break;
+                        }
+                        case 5 -> // Frosty
+                        {
+                            newItem = ObjectHandler.frostyWaterBottle;
                             break;
                         }
                     }
 
 					if(isValidCauldron && isCauldronHeatingBlock(world.getBlock(i, j-1, k), world.getBlockMetadata(i, j-1, k)))
 					{
-						newItem = Items.potionitem;
+                        if(getWaterType(world, i, j, k) == 5) {
+                            newItem = ObjectHandler.coldWaterBottle;
+                        } else if(getWaterType(world, i, j, k) == 1 || getWaterType(world, i, j, k) == 2  || getWaterType(world, i, j, k) == 3 || getWaterType(world, i, j, k) == 4) {
+                            newItem = Items.potionitem;
+                        } else if (getWaterType(world, i, j, k) == 0) {
+                            newItem = ObjectHandler.warmWaterBottle;
+                        } else if (getWaterType(world, i, j, k) == -2 || getWaterType(world, i, j, k) == -1){
+                            newItem = ObjectHandler.hotWaterBottle;
+                        }
 					}
 
 					if(isValidCauldron)
@@ -813,15 +849,47 @@ public class EM_EventManager
 						int werewolfDuration200 = MathHelper.clamp_int(200 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
 						int werewolfDuration600 = MathHelper.clamp_int(600 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
-						if(type == 0) // Clean
+                        //TODO HARDCODED
+                        if(type == -3) // Hot
+                        {
+                            if(tracker.bodyTemp >= 0F)
+                            {
+                                tracker.bodyTemp += 0.5;
+                            }
+                            tracker.hydrate(10F);
+                        } else if(type == -2) // Dirty warm
+                        {
+                            if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
+                            {
+                                if(entityPlayer.getRNG().nextInt(2) == 0)
+                                {
+                                    entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration200));
+                                }
+                                if(entityPlayer.getRNG().nextInt(4) == 0)
+                                {
+                                    entityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, werewolfDuration200));
+                                }
+                            }
+                            if(tracker.bodyTemp >= 0F)
+                            {
+                                tracker.bodyTemp += 0.1;
+                            }
+                            tracker.hydrate(10F);
+                        } else if(type == -1) // Warm
+                        {
+                            if(tracker.bodyTemp >= 0F)
+                            {
+                                tracker.bodyTemp += 0.1;
+                            }
+                            tracker.hydrate(10F);
+                        } else if(type == 0) // Clean
 						{
 							if(tracker.bodyTemp >= 37.05F)
 							{
 								tracker.bodyTemp -= 0.05;
 							}
 							tracker.hydrate(10F);
-						}
-						else if(type == 1) // Dirty
+						} else if(type == 1) // Dirty
 						{
 							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
 							{
@@ -840,8 +908,7 @@ public class EM_EventManager
 								tracker.bodyTemp -= 0.05;
 							}
 							tracker.hydrate(10F);
-						}
-						else if(type == 2) // Salty
+						} else if(type == 2) // Salty
 						{
 							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
 							{
@@ -859,15 +926,38 @@ public class EM_EventManager
 								tracker.bodyTemp -= 0.05;
 							}
 							tracker.hydrate(5F);
-						}
-						else if(type == 3) // Cold
+						} else if(type == 3) // Cold
 						{
 							if(tracker.bodyTemp >= 30.1)
 							{
 								tracker.bodyTemp -= 0.1;
 							}
 							tracker.hydrate(10F);
-						}
+						} else if(type == 4) // Dirty cold
+                        {
+                            if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
+                            {
+                                entityPlayer.getRNG().nextInt(1);
+                                if (entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0) {
+                                    int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
+                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600, amp + 1));
+                                } else {
+                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
+                                }
+                            }
+                            if(tracker.bodyTemp >= 30.1)
+                            {
+                                tracker.bodyTemp -= 0.1;
+                            }
+                            tracker.hydrate(10F);
+                        } else if(type == 5) // Frosty
+                        {
+                            if(tracker.bodyTemp >= 30.1)
+                            {
+                                tracker.bodyTemp -= 0.5;
+                            }
+                            tracker.hydrate(10F);
+                        }
 
 						if(isValidCauldron)
 						{
@@ -925,22 +1015,50 @@ public class EM_EventManager
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
         Collections.addAll(typeList, typeArray);
 
+        //-3 - hot
+        //-2 - dirty warm
+        //-1 - clean warm
+        // 0 - clean normal
+        // 1 - dirty normal
+        // 2 - salty
+        // 3 - clean cold
+        // 4 - dirty cold
+        // 5 - frosty
 
-		if(typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad)
+        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA))
+        {
+            return -3; // hot
+        }
+        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad))
+        {
+            return -2; // dirty warm
+        }
+        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET))
+        {
+            return -2; // clean warm
+        }
+		else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad) )
 		{
-			return 1; // Dirty
+			return 1; // dirty
 		}
 		else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
 		{
-			return 2; // Salty
+			return 2; // salty
 		}
-		else if(typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2)
+		else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && !looksBad)
 		{
-			return 3; // Cold
+			return 3; // clean Cold
 		}
-		else
-		{
-			return 0; // Regular
+        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && looksBad)
+        {
+            return 4; // dirty cold
+        }
+        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY))
+        {
+            return 5; // frosty
+        }
+        else {
+			return 0; // clean
 		}
 	}
 
