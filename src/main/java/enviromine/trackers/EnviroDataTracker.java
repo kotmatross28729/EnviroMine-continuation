@@ -154,7 +154,7 @@ public class EnviroDataTracker
 		}
 
 //TODO HARDCODED
-		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F) && enviroData[EM_StatusManager.SANITY_DELTA_INDEX] > (float)(-1F * EM_Settings.sanityMult))
+		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F || bodyTemp <= 30F) && enviroData[EM_StatusManager.SANITY_DELTA_INDEX] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[EM_StatusManager.SANITY_DELTA_INDEX] = (float)(-1F * EM_Settings.sanityMult);
 		}
@@ -183,20 +183,18 @@ public class EnviroDataTracker
 				NBTTagCompound tag = helmet.getTagCompound();
 				int gasMaskFill = tag.getInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY);
 
-				if(EM_Settings.airMult > 0F && gasMaskFill > 0 && (100F-airQuality) >= EM_Settings.airMult) // If the gas mask has some filter durability left and your air isn't perfect
+				if(EM_Settings.airMult > 0F && gasMaskFill > 0 && (100F-airQuality) >= EM_Settings.airMult)
 				{
 					float airToFill = 100F - airQuality;
 
-					// Scale the amount of air to be filled by config factor
 					airToFill *= EM_Settings.gasMaskUpdateRestoreFraction;
 
-					if (airToFill > gasMaskFill) {airToFill = (float)gasMaskFill;} // Can't heal more air than there is quality left in the mask
+					if (airToFill > gasMaskFill) {airToFill = (float)gasMaskFill;}
 
 					if(airToFill > 0F)
 					{
-						// Increase air quality
 						airQuality += airToFill;
-						// Reduce the mask quality
+
 						int newMaskQuality = gasMaskFill - MathHelper.floor_float(airToFill+this.trackedEntity.worldObj.rand.nextFloat());
 						if (newMaskQuality<0) {newMaskQuality=0;} // Just in case
 						tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, newMaskQuality);
@@ -207,12 +205,9 @@ public class EnviroDataTracker
 
         if (EnviroMine.isHbmLoaded()) {
             if (helmet != null && !isCreative) {
-                if (helmet.getItem() instanceof IGasMask) {
-                    IGasMask mask = (IGasMask) helmet.getItem();
+                if (helmet.getItem() instanceof IGasMask mask) {
                     ItemStack filter = mask.getFilter(helmet, trackedEntity);
-
                     if (filter != null) {
-
                         if (EM_Settings.airMult > 0F && (100F - airQuality) >= EM_Settings.airMult)
                         {
                             float airToFill = 100F - airQuality;
@@ -355,7 +350,7 @@ public class EnviroDataTracker
                    }
                    if(!EnviroMine.isHbmSpaceLoaded()) {
                        if((chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate)) {
-                           if ( bodyTemp >= 36.6F && bodyTemp <= EM_Settings.LightArmorMaxTemp && !temperatureRateHARD) {
+                           if (bodyTemp >= 36.6F && bodyTemp <= EM_Settings.LightArmorMaxTemp && !temperatureRateHARD) {
                                bodyTemp = 36.6F;
                                CANCELEXTERNALINFLUENCE = true;
                            } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.LightArmorMinTemp && !temperatureRateHARD) {
@@ -820,7 +815,7 @@ public class EnviroDataTracker
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
                 if(!isCreative && sanity <= 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
                 {
-                    if (DeathFromHeartAttack){
+                    if (DeathFromHeartAttack) {
                         heartattacktimer += 1;
                         if (heartattacktimer >= HeartAttackTimeToDie/2){
                             trackedEntity.attackEntityFrom(EnviroDamageSource.heartattack, 25000.0F);
@@ -832,14 +827,13 @@ public class EnviroDataTracker
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 3));
                     }
 
-                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 4));
-
+                  trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 4));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 4));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.confusion.id, 60, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 3));
-                }					//trackedEntity.attackEntityFrom(EnviroDamageSource.heartattack, 25000.0F);
+                }
                 else if(!isCreative && sanity > 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
                     if (DeathFromHeartAttack) {
@@ -853,34 +847,32 @@ public class EnviroDataTracker
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration, 2));
                         trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 2));
                     }
-                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 3));
-
+                  trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 3));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 3));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.confusion.id, 60, 0));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 2));
-
                 }
                 else if(!isCreative && sanity > 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
-                    heartattacktimer = 0;
-                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 2));
+                  heartattacktimer = 0;
+                  trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 1));
                 }
                 else if(!isCreative && sanity > 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0))
                 {
-                    heartattacktimer = 0;
-                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 1));
+                  heartattacktimer = 0;
+                  trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 0));
                 }
 				else if(!isCreative && sanity > 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 75F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0) )
 				{
-                    heartattacktimer = 0;
-                    trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 0));
+                  heartattacktimer = 0;
+                  trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 0));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 0));
 
 				}
