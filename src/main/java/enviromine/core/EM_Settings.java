@@ -159,6 +159,81 @@ public class EM_Settings
     //...
 
 
+    //UNHARDCODE PROJECT
+
+    //WATER
+    public static float FrostyWaterTemperatureInfluence = -0.5F;
+    public static float DirtyColdWaterTemperatureInfluence = -0.1F;
+    public static float CleanColdWaterTemperatureInfluence = -0.1F;
+    public static float SaltyWaterTemperatureInfluence = -0.05F;
+    public static float DirtyWaterTemperatureInfluence = -0.05F;
+    public static float CleanWaterTemperatureInfluence = -0.05F;
+    public static float CleanWarmWaterTemperatureInfluence = 0.1F;
+    public static float DirtyWarmWaterTemperatureInfluence = 0.1F;
+    public static float HotWarmWaterTemperatureInfluence = 0.5F;
+
+    public static float WaterReducesTemperatureStartingValue = 37.05F;
+    public static float ColdFrostyWaterReducesTemperatureStartingValue = 30.1F;
+    public static float WarmHotWaterReducesTemperatureStartingValue = 0.0F;
+    public static float FrostyWaterHydrate              = 25.0F;
+    public static float DirtyColdWaterHydrate           = 25.0F;
+    public static float CleanColdWaterHydrate           = 25.0F;
+    public static float SaltyWaterHydrate               = 10.0F;
+    public static float DirtyWaterHydrate               = 25.0F;
+    public static float CleanWaterHydrate               = 25.0F;
+    public static float CleanWarmWaterHydrate           = 25.0F;
+    public static float DirtyWarmWaterHydrate           = 25.0F;
+    public static float HotWaterHydrate             = 25.0F;
+
+    public static float FrostyWaterHydratePlastic       = 50.0F;
+    public static float DirtyColdWaterHydratePlastic    = 50.0F;
+    public static float CleanColdWaterHydratePlastic    = 50.0F;
+    public static float SaltyWaterHydratePlastic        = 30.0F;
+    public static float DirtyWaterHydratePlastic        = 50.0F;
+    public static float CleanWaterHydratePlastic        = 50.0F;
+    public static float CleanWarmWaterHydratePlastic    = 50.0F;
+    public static float DirtyWarmWaterHydratePlastic    = 50.0F;
+    public static float HotWaterHydratePlastic      = 50.0F;
+
+    public static float FrostyWaterHydrateWorld              = 10.0F;
+    public static float DirtyColdWaterHydrateWorld           = 10.0F;
+    public static float CleanColdWaterHydrateWorld           = 10.0F;
+    public static float SaltyWaterHydrateWorld               = 5.0F;
+    public static float DirtyWaterHydrateWorld               = 10.0F;
+    public static float CleanWaterHydrateWorld               = 10.0F;
+    public static float CleanWarmWaterHydrateWorld           = 10.0F;
+    public static float DirtyWarmWaterHydrateWorld           = 10.0F;
+    public static float HotWaterHydrateWorld             = 10.0F;
+
+    //EnviroDataTracker
+
+    public static float SanityDropHealth                      = 0.0F;
+    public static float SanityDropTemperatureHigh             = 41.0F;
+    public static float SanityDropTemperatureLow              = 30.0F;
+
+    public static float NTMSpaceAirQualityDecrease              = -10.0F;
+    public static float NTMSpaceAirVentAirQualityIncrease       = -10.0F;
+
+    public static float RealTemperatureConstant       = 12.0F;
+
+    public static float TimeBelow10AirAndTemperatureConstantAir                   = 10.0F;
+    public static float TimeBelow10AirAndTemperatureConstantBodyTemperature       = 35.0F;
+    public static float TimeBelow10BodyTemperatureConstant                        = 30.0F;
+
+
+    public static float BodyTemperatureHeatStartValue         = 39.0F;
+    public static float BodyTemperatureHeatInstantDeath       = 1000.0F;
+
+    public static float BodyTemperatureHeatstroke6       = 100.0F;
+    public static float BodyTemperatureHeatstroke5       = 80.0F;
+    public static float BodyTemperatureHeatstroke4       = 60.0F;
+    public static float BodyTemperatureHeatstroke3       = 43.0F;
+    public static float BodyTemperatureHeatstroke2       = 41.0F;
+
+    public static float BodyTemperatureCatchFireMin       = 45.0F;
+    public static float BodyTemperatureCatchFireMax       = 50.0F;
+    public static float BodyTemperatureCatchFireDuration  = 10.0F;
+
 
     public static boolean enableItemPropsDivideByTwo = true;
 

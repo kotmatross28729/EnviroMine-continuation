@@ -48,11 +48,9 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Objects;
 
 import static enviromine.core.EM_Settings.DeathFromHeartAttack;
 import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
-import static enviromine.core.EnviroMine.isHbmLoaded;
 
 
 public class EnviroDataTracker
@@ -153,8 +151,7 @@ public class EnviroDataTracker
 			}
 		}
 
-//TODO HARDCODED
-		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F || bodyTemp <= 30F) && enviroData[EM_StatusManager.SANITY_DELTA_INDEX] > (float)(-1F * EM_Settings.sanityMult))
+		if((trackedEntity.getHealth() <= EM_Settings.SanityDropHealth || bodyTemp >= EM_Settings.SanityDropTemperatureHigh || bodyTemp <= EM_Settings.SanityDropTemperatureLow) && enviroData[EM_StatusManager.SANITY_DELTA_INDEX] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[EM_StatusManager.SANITY_DELTA_INDEX] = (float)(-1F * EM_Settings.sanityMult);
 		}
@@ -240,13 +237,13 @@ public class EnviroDataTracker
         if(EnviroMine.isHbmSpaceLoaded()) {
             CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
             if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
-                airQuality -= 10; //TODO HARDCODED
+                airQuality += EM_Settings.NTMSpaceAirQualityDecrease;
             }
              ThreeInts pos = new ThreeInts(MathHelper.floor_double(trackedEntity.posX), MathHelper.floor_double(trackedEntity.posY + trackedEntity.getEyeHeight()), MathHelper.floor_double(trackedEntity.posZ));
              List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(trackedEntity.worldObj, pos.x, pos.y, pos.z);
              for (AtmosphereBlob blob : currentBlobs) {
                  if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
-                     airQuality += 10; //TODO HARDCODED
+                     airQuality += EM_Settings.NTMSpaceAirVentAirQualityIncrease;
                  }
              }
         }
@@ -257,7 +254,7 @@ public class EnviroDataTracker
 		float temperatureDropSpeed = enviroData[EM_StatusManager.BODY_TEMP_DROP_SPEED_INDEX];
 		float temperatureRiseSpeed = enviroData[EM_StatusManager.BODY_TEMP_RISE_SPEED_INDEX];
 
-		float relTemp = airTemp + 12F; //TODO HARDCODED
+		float relTemp = airTemp + EM_Settings.RealTemperatureConstant;
 
 		boolean isVampire = false;
 //		boolean isWerewolf = false;
@@ -480,7 +477,7 @@ public class EnviroDataTracker
 			}
 		} else if(enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == -1 && trackedEntity instanceof EntityAnimal)
 		{
-			hydrate(0.05F); //TODO HARDCODED
+			hydrate(0.05F);
 		} else if(hydration <= 0F)
 		{
 			hydration = 0;
@@ -604,7 +601,7 @@ public class EnviroDataTracker
 					tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, camelPackFill-1);
 					hydrate((float)EM_Settings.hydrationMult);
 
-					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F) //TODO HARDCODED
+					if(bodyTemp >= 36.6F + EM_Settings.tempMult/10F)
 					{
 						bodyTemp -= EM_Settings.tempMult/10F;
 					}
@@ -646,7 +643,7 @@ public class EnviroDataTracker
 //            sanity -= HbmLivingProps.getDigamma(trackedEntity);
 //        }
 
-		if(airTemp <= 10F && bodyTemp <= 35F || bodyTemp <= 30F) //TODO HARDCODED
+		if(airTemp <= EM_Settings.TimeBelow10AirAndTemperatureConstantAir && bodyTemp <= EM_Settings.TimeBelow10AirAndTemperatureConstantBodyTemperature || bodyTemp <= EM_Settings.TimeBelow10BodyTemperatureConstant)
 		{
 			timeBelow10 += 1;
 		} else
@@ -690,29 +687,29 @@ public class EnviroDataTracker
 				// Hot temp checks
 				if(!trackedEntity.isPotionActive(Potion.fireResistance))
 				{
-					if(bodyTemp >= 39F && enableHeat && EM_Settings.enableHeatstrokeGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
+					if(bodyTemp >= EM_Settings.BodyTemperatureHeatStartValue && enableHeat && EM_Settings.enableHeatstrokeGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
 					{//TODO HARDCODED
-                        if(bodyTemp >= 1000F)
+                        if(bodyTemp >= EM_Settings.BodyTemperatureHeatInstantDeath)
                         {
-                            trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 10));
+                            trackedEntity.attackEntityFrom(EnviroDamageSource.heatstroke, 1000F);
                         }
-                        if(bodyTemp >= 100F)
+                        if(bodyTemp >= EM_Settings.BodyTemperatureHeatstroke6)
                         {
                             trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 5));
                         }
-                        else if(bodyTemp >= 80F)
+                        else if(bodyTemp >= EM_Settings.BodyTemperatureHeatstroke5)
                         {
                             trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 4));
                         }
-                        else if(bodyTemp >= 60F)
+                        else if(bodyTemp >= EM_Settings.BodyTemperatureHeatstroke4)
                         {
                             trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 3));
                         }
-                        else if(bodyTemp >= 43F)
+                        else if(bodyTemp >= EM_Settings.BodyTemperatureHeatstroke3)
 						{
 							trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 2));
 						}
-						else if(bodyTemp >= 41F)
+						else if(bodyTemp >= EM_Settings.BodyTemperatureHeatstroke2)
 						{
 							trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 1));
 						}
@@ -726,30 +723,23 @@ public class EnviroDataTracker
 					trackedEntity.removePotionEffect(EnviroPotion.heatstroke.id);
 				}
 
-				if(EM_Settings.catchFireAtHighTemps && ((bodyTemp >= 45F && enviroData[EM_StatusManager.NEAR_LAVA_INDEX] == 1 )|| bodyTemp >= 50F))
+				if(EM_Settings.catchFireAtHighTemps && ((bodyTemp >= EM_Settings.BodyTemperatureCatchFireMin && enviroData[EM_StatusManager.NEAR_LAVA_INDEX] == 1 )|| bodyTemp >= EM_Settings.BodyTemperatureCatchFireMax))
 				{
-					trackedEntity.setFire(10);
+					trackedEntity.setFire((int)EM_Settings.BodyTemperatureCatchFireDuration);
 				}
 
 				// Cold temp checks
-				if(
-						bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? 32F : 35F)
-						&& enableFrostbite && EM_Settings.enableHypothermiaGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal))
-						)
+				if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? 32F : 35F)
+						&& enableFrostbite && EM_Settings.enableHypothermiaGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
 				{
-					if(
-							bodyTemp <= 30F //TODO HARDCODED
-							&& !(trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire)
-							)
-					{
+					if(bodyTemp <= 30F //TODO HARDCODED
+							&& !(trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire)) {
 						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, vampireDuration, 2));
 					}
-					else if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? 30F : 32F))
-					{
+					else if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? 30F : 32F)) {
 						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, vampireDuration, 1));
 					}
-					else
-					{
+					else {
 						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, vampireDuration, 0));
 					}
 

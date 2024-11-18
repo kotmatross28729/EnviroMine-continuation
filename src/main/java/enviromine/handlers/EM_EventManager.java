@@ -891,14 +891,19 @@ public class EM_EventManager
 						int werewolfDuration200 = MathHelper.clamp_int(200 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
 						int werewolfDuration600 = MathHelper.clamp_int(600 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
-                        //TODO HARDCODED
                         if(type == -3) // Hot
                         {
-                            if(tracker.bodyTemp >= 0F)
+                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue)
                             {
-                                tracker.bodyTemp += 0.5;
+                                tracker.bodyTemp += EM_Settings.HotWarmWaterTemperatureInfluence;
                             }
-                            tracker.hydrate(10F);
+                            if(EM_Settings.HotWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.HotWaterHydrateWorld);
+                            } else if(EM_Settings.HotWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.HotWaterHydrateWorld));
+                            }
                         } else if(type == -2) // Dirty warm
                         {
                             if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
@@ -912,25 +917,43 @@ public class EM_EventManager
                                     entityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, werewolfDuration200));
                                 }
                             }
-                            if(tracker.bodyTemp >= 0F)
+                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue)
                             {
-                                tracker.bodyTemp += 0.1;
+                                tracker.bodyTemp += EM_Settings.DirtyWarmWaterTemperatureInfluence;
                             }
-                            tracker.hydrate(10F);
+                            if(EM_Settings.DirtyWarmWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.DirtyWarmWaterHydrateWorld);
+                            } else if(EM_Settings.DirtyWarmWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.DirtyWarmWaterHydrateWorld));
+                            }
                         } else if(type == -1) // Warm
                         {
-                            if(tracker.bodyTemp >= 0F)
+                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue)
                             {
-                                tracker.bodyTemp += 0.1;
+                                tracker.bodyTemp += EM_Settings.CleanWarmWaterTemperatureInfluence;
                             }
-                            tracker.hydrate(10F);
+                            if(EM_Settings.CleanWarmWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.CleanWarmWaterHydrateWorld);
+                            } else if(EM_Settings.CleanWarmWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.CleanWarmWaterHydrateWorld));
+                            }
                         } else if(type == 0) // Clean
 						{
-							if(tracker.bodyTemp >= 37.05F)
+							if(tracker.bodyTemp >= EM_Settings.WaterReducesTemperatureStartingValue)
 							{
-								tracker.bodyTemp -= 0.05;
+								tracker.bodyTemp += EM_Settings.CleanWaterTemperatureInfluence;
 							}
-							tracker.hydrate(10F);
+                            if(EM_Settings.CleanWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.CleanWaterHydrateWorld);
+                            } else if(EM_Settings.CleanWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.CleanWaterHydrateWorld));
+                            }
 						} else if(type == 1) // Dirty
 						{
 							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
@@ -945,11 +968,17 @@ public class EM_EventManager
 								}
 							}
 
-							if(tracker.bodyTemp >= 37.05)
+							if(tracker.bodyTemp >= EM_Settings.WaterReducesTemperatureStartingValue)
 							{
-								tracker.bodyTemp -= 0.05;
+								tracker.bodyTemp += EM_Settings.DirtyWaterTemperatureInfluence;
 							}
-							tracker.hydrate(10F);
+                            if(EM_Settings.DirtyWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.DirtyWaterHydrateWorld);
+                            } else if(EM_Settings.DirtyWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.DirtyWaterHydrateWorld));
+                            }
 						} else if(type == 2) // Salty
 						{
 							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
@@ -963,18 +992,30 @@ public class EM_EventManager
                                 }
                             }
 
-							if(tracker.bodyTemp >= 37.05)
+							if(tracker.bodyTemp >= EM_Settings.WaterReducesTemperatureStartingValue)
 							{
-								tracker.bodyTemp -= 0.05;
+								tracker.bodyTemp += EM_Settings.SaltyWaterTemperatureInfluence;
 							}
-							tracker.hydrate(5F);
+                            if(EM_Settings.SaltyWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.SaltyWaterHydrateWorld);
+                            } else if(EM_Settings.SaltyWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.SaltyWaterHydrateWorld));
+                            }
 						} else if(type == 3) // Cold
 						{
-							if(tracker.bodyTemp >= 30.1)
+							if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
 							{
-								tracker.bodyTemp -= 0.1;
+								tracker.bodyTemp += EM_Settings.CleanColdWaterTemperatureInfluence;
 							}
-							tracker.hydrate(10F);
+                            if(EM_Settings.CleanColdWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.CleanColdWaterHydrateWorld);
+                            } else if(EM_Settings.CleanColdWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.CleanColdWaterHydrateWorld));
+                            }
 						} else if(type == 4) // Dirty cold
                         {
                             if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
@@ -987,18 +1028,30 @@ public class EM_EventManager
                                     entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
                                 }
                             }
-                            if(tracker.bodyTemp >= 30.1)
+                            if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
                             {
-                                tracker.bodyTemp -= 0.1;
+                                tracker.bodyTemp += EM_Settings.DirtyColdWaterTemperatureInfluence;
                             }
-                            tracker.hydrate(10F);
+                            if(EM_Settings.DirtyColdWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.DirtyColdWaterHydrateWorld);
+                            } else if(EM_Settings.DirtyColdWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.DirtyColdWaterHydrateWorld));
+                            }
                         } else if(type == 5) // Frosty
                         {
-                            if(tracker.bodyTemp >= 30.1)
+                            if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
                             {
-                                tracker.bodyTemp -= 0.5;
+                                tracker.bodyTemp += EM_Settings.FrostyWaterTemperatureInfluence;
                             }
-                            tracker.hydrate(10F);
+                            if(EM_Settings.FrostyWaterHydrateWorld > 0F)
+                            {
+                                tracker.hydrate(EM_Settings.FrostyWaterHydrateWorld);
+                            } else if(EM_Settings.FrostyWaterHydrateWorld < 0F)
+                            {
+                                tracker.dehydrate(Math.abs(EM_Settings.FrostyWaterHydrateWorld));
+                            }
                         }
 
 						if(isValidCauldron)

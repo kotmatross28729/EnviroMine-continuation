@@ -312,7 +312,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 				config.get(category, IPName[6], -0.1D).getDouble(-0.1D);
 				config.get(category, IPName[7], 0D).getDouble(0D);
 				config.get(category, IPName[8], 0D).getDouble(0D);
-				config.get(category, IPName[9], 25D).getDouble(25D);
+				config.get(category, IPName[9], EM_Settings.CleanWaterHydrate).getDouble(EM_Settings.CleanWaterHydrate);
 				config.get(category, IPName[10], 37D).getDouble(37D);
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
@@ -329,7 +329,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 				config.get(category, IPName[6], -0.1D).getDouble(-0.1D);
 				config.get(category, IPName[7], 0D).getDouble(0D);
 				config.get(category, IPName[8], 0D).getDouble(0D);
-				config.get(category, IPName[9], 25D).getDouble(25D);
+				config.get(category, IPName[9], EM_Settings.CleanWaterHydrate).getDouble(EM_Settings.CleanWaterHydrate);
 				config.get(category, IPName[10], 37D).getDouble(37D);
 				config.get(category, IPName[11], 25).getInt(25);
 				config.get(category, IPName[12], "minecraft:glass_bottle").getString();
