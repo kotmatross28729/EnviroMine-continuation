@@ -31,6 +31,7 @@
     + you can heat cold water to clean, and frosty to cold
 
 + Added texture for the extinguished torch
+  + also fixed a bug due to which vanilla torches were consumed even in creative
 
 # 1.3.143
 * Added support for Serene Seasons

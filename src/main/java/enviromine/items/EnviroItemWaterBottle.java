@@ -25,7 +25,7 @@ public class EnviroItemWaterBottle extends Item {
         CLEAN_COLD,
         SALTY,
         DIRTY,
-        //CLEAN, //Vanilla water bottle
+        CLEAN, //Vanilla water bottle
         CLEAN_WARM,
         DIRTY_WARM,
         HOT
@@ -45,6 +45,65 @@ public class EnviroItemWaterBottle extends Item {
         super();
         setTextureName("potion");
         this.waterType = waterType;
+    }
+
+    public WATER_TYPES getWaterType() {
+        return waterType;
+    }
+
+    public static WATER_TYPES heatUp(WATER_TYPES waterType) {
+        if(waterType == WATER_TYPES.FROSTY){
+            return WATER_TYPES.CLEAN_COLD;
+        }
+        else if (waterType == WATER_TYPES.CLEAN_COLD){
+            return WATER_TYPES.CLEAN;
+        } else if (waterType == WATER_TYPES.DIRTY_COLD){
+            return WATER_TYPES.DIRTY;
+        }
+        else if (waterType == WATER_TYPES.DIRTY) {
+            return WATER_TYPES.CLEAN;
+        }
+        else if (waterType == WATER_TYPES.CLEAN) {
+            return WATER_TYPES.CLEAN_WARM;
+        }
+        else if (waterType == WATER_TYPES.CLEAN_WARM) {
+            return WATER_TYPES.HOT;
+        }
+        else if (waterType == WATER_TYPES.DIRTY_WARM) {
+            return WATER_TYPES.HOT;
+        } else if (waterType == WATER_TYPES.HOT) {
+            return WATER_TYPES.HOT;
+        } else {
+            return WATER_TYPES.CLEAN;
+        }
+    }
+
+    public static WATER_TYPES coolDown(WATER_TYPES waterType) {
+        if (waterType == WATER_TYPES.FROSTY){
+            return WATER_TYPES.FROSTY;
+        }
+        else if (waterType == WATER_TYPES.CLEAN_COLD){
+            return WATER_TYPES.FROSTY;
+        } else if (waterType == WATER_TYPES.DIRTY_COLD){
+            return WATER_TYPES.FROSTY;
+        }
+        else if (waterType == WATER_TYPES.DIRTY) {
+            return WATER_TYPES.DIRTY_COLD;
+        }
+        else if (waterType == WATER_TYPES.CLEAN) {
+            return WATER_TYPES.CLEAN_COLD;
+        }
+        else if (waterType == WATER_TYPES.CLEAN_WARM) {
+            return WATER_TYPES.CLEAN;
+        }
+        else if (waterType == WATER_TYPES.DIRTY_WARM) {
+            return WATER_TYPES.DIRTY;
+        }
+        else if (waterType == WATER_TYPES.HOT) {
+            return WATER_TYPES.CLEAN_WARM;
+        } else {
+            return WATER_TYPES.CLEAN;
+        }
     }
 
     @Override

@@ -238,6 +238,30 @@ public class ObjectHandler
 		GameRegistry.registerTileEntity(TileEntityDavyLamp.class, "enviromine.tile.davy_lamp");
 	}
 
+    public static ItemStack getItemStackFromWaterType(EnviroItemWaterBottle.WATER_TYPES type) {
+        if(type == EnviroItemWaterBottle.WATER_TYPES.FROSTY) {
+            return new ItemStack(frostyWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.DIRTY_COLD) {
+            return new ItemStack(badColdWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.CLEAN_COLD) {
+            return new ItemStack(coldWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.SALTY) {
+            return new ItemStack(saltWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.DIRTY) {
+            return new ItemStack(badWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.CLEAN) {
+            return new ItemStack(Items.potionitem, 1, 0);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.CLEAN_WARM) {
+            return new ItemStack(warmWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.DIRTY_WARM) {
+            return new ItemStack(badWarmWaterBottle);
+        } else if(type == EnviroItemWaterBottle.WATER_TYPES.HOT) {
+            return new ItemStack(hotWaterBottle);
+        } else {
+            return new ItemStack(Items.potionitem, 1, 0);
+        }
+    }
+
 	public static void registerRecipes()
 	{
 		String oreKeyAuBrass = "ingotGoldBrass";
@@ -249,16 +273,41 @@ public class ObjectHandler
             }
 		}
 
+        ItemStack[] bottles = {
+            new ItemStack(frostyWaterBottle),
+            new ItemStack(badColdWaterBottle),
+            new ItemStack(coldWaterBottle),
+            new ItemStack(saltWaterBottle),
+            new ItemStack(badWaterBottle),
+            new ItemStack(Items.potionitem, 1, 0),
+            new ItemStack(warmWaterBottle),
+            new ItemStack(badWarmWaterBottle),
+            new ItemStack(hotWaterBottle),
+        };
 
-		GameRegistry.addSmelting(saltWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);
+        //HEATING
+        for(ItemStack bottle : bottles) {
+            if(bottle.getItem() != hotWaterBottle) { //How can you heat already hot water?
+                EnviroItemWaterBottle.WATER_TYPES localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
 
-        GameRegistry.addSmelting(warmWaterBottle, new ItemStack(hotWaterBottle, 1, 0), 0.0F);                                               //WARM     - HOT
-        GameRegistry.addSmelting(badWarmWaterBottle, new ItemStack(hotWaterBottle, 1, 0), 0.0F);                                            //BAD WARM - HOT
-        GameRegistry.addSmelting(new ItemStack(Items.potionitem, 1, 0), new ItemStack(warmWaterBottle, 1, 0), 0.0F);      //CLEAN    - WARM
-        GameRegistry.addSmelting(badWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                              //BAD      - CLEAN
-        GameRegistry.addSmelting(coldWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                             //COLD     - CLEAN
-        GameRegistry.addSmelting(badColdWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                          //BAD COLD - CLEAN
-        GameRegistry.addSmelting(frostyWaterBottle, new ItemStack(coldWaterBottle, 1, 0), 0.0F);                                            //FROSTY   - COLD
+                if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
+                    localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
+                } else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+                    localType = enviroItemWaterBottle.getWaterType();
+                }
+
+                GameRegistry.addSmelting(bottle, getItemStackFromWaterType(EnviroItemWaterBottle.heatUp(localType)), 0.0F);
+            }
+        }
+
+//        GameRegistry.addSmelting(saltWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);
+//        GameRegistry.addSmelting(warmWaterBottle, new ItemStack(hotWaterBottle, 1, 0), 0.0F);                                               //WARM     - HOT
+//        GameRegistry.addSmelting(badWarmWaterBottle, new ItemStack(hotWaterBottle, 1, 0), 0.0F);                                            //BAD WARM - HOT
+//        GameRegistry.addSmelting(new ItemStack(Items.potionitem, 1, 0), new ItemStack(warmWaterBottle, 1, 0), 0.0F);      //CLEAN    - WARM
+//        GameRegistry.addSmelting(badWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                              //BAD      - CLEAN
+//        GameRegistry.addSmelting(coldWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                             //COLD     - CLEAN
+//        GameRegistry.addSmelting(badColdWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                          //BAD COLD - CLEAN
+//        GameRegistry.addSmelting(frostyWaterBottle, new ItemStack(coldWaterBottle, 1, 0), 0.0F);                                            //FROSTY   - COLD
 
         GameRegistry.addShapelessRecipe(new ItemStack(frostyWaterBottle, 1, 0), new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1));
         GameRegistry.addShapelessRecipe(new ItemStack(frostyWaterBottle, 1, 0), new ItemStack(badColdWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1));
