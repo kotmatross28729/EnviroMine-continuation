@@ -160,7 +160,7 @@ public class EM_Settings
 
 
 
-
+    public static boolean enableItemPropsDivideByTwo = true;
 
 	public static boolean enablePhysics = false;
 	public static boolean enableLandslide = true;

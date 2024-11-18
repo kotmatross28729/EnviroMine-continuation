@@ -447,6 +447,11 @@ public class EM_ConfigHandler
 
         EM_Settings.CCGasTurbineHeatDivisor = config.getFloat("68_CCGasTurbineHeatDivisor",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CCGasTurbineHeatDivisor, 1, 65536,  "Divider value for temperature. The temperature itself depends on the specifics of the machine");
 
+        //MACHINES END
+
+
+        EM_Settings.enableItemPropsDivideByTwo = config.getBoolean("69_enableItemPropsDivideByTwo", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.EnableHBMMachinesHeat, "If true, then divides ItemProperties \"Effect n\" parameters by 2, since for some reason they are applied 2 times. If your values specified in \"Effect n\" are not applied as they are, but are 2 times smaller, then disable this option (you may have some kind of bugfix mod installed)");
+
 
         // --------------- //
         // --- General --- //

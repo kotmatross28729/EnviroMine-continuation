@@ -81,10 +81,18 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 		this.ambAir = ambAir;
 		this.ambSanity = ambSanity;
 
-		this.effTemp = effTemp;
-		this.effAir = effAir;
-		this.effSanity = effSanity;
-		this.effHydration = effHydration;
+        //Double consuming
+        if(EM_Settings.enableItemPropsDivideByTwo) {
+            this.effTemp = effTemp/2F;
+            this.effAir = effAir/2F;
+            this.effSanity = effSanity/2F;
+            this.effHydration = effHydration/2F;
+        }  else {
+            this.effTemp = effTemp;
+            this.effAir = effAir;
+            this.effSanity = effSanity;
+            this.effHydration = effHydration;
+        }
 
 		this.effTempCap = effTempCap;
 		this.camelFill = camelFill;
