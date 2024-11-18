@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroPotion;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
+import enviromine.utils.WaterUtils;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -19,20 +20,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class EnviroItemWaterBottle extends Item {
-    public enum WATER_TYPES {
-        FROSTY,
-        DIRTY_COLD,
-        CLEAN_COLD,
-        SALTY,
-        DIRTY,
-        CLEAN, //Vanilla water bottle
-        CLEAN_WARM,
-        DIRTY_WARM,
-        HOT
-    }
-
-    WATER_TYPES waterType;
-
+    WaterUtils.WATER_TYPES waterType;
     @SideOnly(Side.CLIENT)
     private IIcon field_94591_c;
     @SideOnly(Side.CLIENT)
@@ -40,70 +28,15 @@ public class EnviroItemWaterBottle extends Item {
     @SideOnly(Side.CLIENT)
     private IIcon field_94592_ct;
 
-    public EnviroItemWaterBottle(WATER_TYPES waterType)
+    public EnviroItemWaterBottle(WaterUtils.WATER_TYPES waterType)
     {
         super();
         setTextureName("potion");
         this.waterType = waterType;
     }
 
-    public WATER_TYPES getWaterType() {
+    public WaterUtils.WATER_TYPES getWaterType() {
         return waterType;
-    }
-
-    public static WATER_TYPES heatUp(WATER_TYPES waterType) {
-        if(waterType == WATER_TYPES.FROSTY){
-            return WATER_TYPES.CLEAN_COLD;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_COLD){
-            return WATER_TYPES.CLEAN;
-        } else if (waterType == WATER_TYPES.DIRTY_COLD){
-            return WATER_TYPES.DIRTY;
-        }
-        else if (waterType == WATER_TYPES.DIRTY) {
-            return WATER_TYPES.CLEAN;
-        }
-        else if (waterType == WATER_TYPES.CLEAN) {
-            return WATER_TYPES.CLEAN_WARM;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_WARM) {
-            return WATER_TYPES.HOT;
-        }
-        else if (waterType == WATER_TYPES.DIRTY_WARM) {
-            return WATER_TYPES.HOT;
-        } else if (waterType == WATER_TYPES.HOT) {
-            return WATER_TYPES.HOT;
-        } else {
-            return WATER_TYPES.CLEAN;
-        }
-    }
-
-    public static WATER_TYPES coolDown(WATER_TYPES waterType) {
-        if (waterType == WATER_TYPES.FROSTY){
-            return WATER_TYPES.FROSTY;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_COLD){
-            return WATER_TYPES.FROSTY;
-        } else if (waterType == WATER_TYPES.DIRTY_COLD){
-            return WATER_TYPES.FROSTY;
-        }
-        else if (waterType == WATER_TYPES.DIRTY) {
-            return WATER_TYPES.DIRTY_COLD;
-        }
-        else if (waterType == WATER_TYPES.CLEAN) {
-            return WATER_TYPES.CLEAN_COLD;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_WARM) {
-            return WATER_TYPES.CLEAN;
-        }
-        else if (waterType == WATER_TYPES.DIRTY_WARM) {
-            return WATER_TYPES.DIRTY;
-        }
-        else if (waterType == WATER_TYPES.HOT) {
-            return WATER_TYPES.CLEAN_WARM;
-        } else {
-            return WATER_TYPES.CLEAN;
-        }
     }
 
     @Override
@@ -123,23 +56,23 @@ public class EnviroItemWaterBottle extends Item {
 
                 if(tracker.bodyTemp >= 0)
                 {
-                    if(waterType == WATER_TYPES.FROSTY) {
+                    if(waterType == WaterUtils.WATER_TYPES.FROSTY) {
                         if (tracker.bodyTemp >= 30.1) {
                             tracker.bodyTemp -= 0.5F;
                         }
                         tracker.hydrate(25F);
-                    } else if (waterType == WATER_TYPES.DIRTY_COLD) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY_COLD) {
                         if (tracker.bodyTemp >= 30.1) {
                             tracker.bodyTemp -= 0.1F;
                         }
                         tracker.hydrate(25F);
-                    } else if (waterType == WATER_TYPES.CLEAN_COLD) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN_COLD) {
                         if(tracker.bodyTemp >= 30.1)
                         {
                             tracker.bodyTemp -= 0.1F;
                         }
                         tracker.hydrate(25F);
-                    } else if (waterType == WATER_TYPES.SALTY) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.SALTY) {
                         if(par3EntityPlayer.getRNG().nextInt(1) == 0)
                         {
                             if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0)
@@ -156,7 +89,7 @@ public class EnviroItemWaterBottle extends Item {
                                 tracker.bodyTemp -= 0.05F;
                             }
                             tracker.hydrate(10F);
-                    } else if (waterType == WATER_TYPES.DIRTY) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY) {
                         if(par3EntityPlayer.getRNG().nextInt(4) == 0)
                         {
                             par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
@@ -170,10 +103,10 @@ public class EnviroItemWaterBottle extends Item {
                             tracker.bodyTemp -= 0.05F;
                         }
                         tracker.hydrate(25F);
-                    } else if (waterType == WATER_TYPES.CLEAN_WARM) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN_WARM) {
                         tracker.bodyTemp += 0.1F;
                         tracker.hydrate(25F);
-                    } else if (waterType == WATER_TYPES.DIRTY_WARM) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY_WARM) {
                         if(par3EntityPlayer.getRNG().nextInt(4) == 0)
                         {
                             par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
@@ -187,7 +120,7 @@ public class EnviroItemWaterBottle extends Item {
                                 tracker.bodyTemp += 0.1F;
                                 tracker.hydrate(25F);
                             }
-                    } else if (waterType == WATER_TYPES.HOT) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.HOT) {
                         tracker.bodyTemp += 0.5F;
                         tracker.hydrate(25F);
                     }

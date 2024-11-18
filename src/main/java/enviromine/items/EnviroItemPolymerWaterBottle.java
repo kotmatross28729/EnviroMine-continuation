@@ -4,38 +4,49 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroPotion;
 import enviromine.handlers.EM_StatusManager;
+import enviromine.handlers.ObjectHandlerCompat;
 import enviromine.trackers.EnviroDataTracker;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import enviromine.utils.WaterUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class EnviroItemPolymerWaterBottle extends Item {
-    //TODO
+    WaterUtils.WATER_TYPES waterType;
 
-
-    EnviroItemWaterBottle.WATER_TYPES waterType;
-
-    @SideOnly(Side.CLIENT)
-    private IIcon field_94591_c;
-    @SideOnly(Side.CLIENT)
-    private IIcon field_94590_d;
-    @SideOnly(Side.CLIENT)
-    private IIcon field_94592_ct;
-
-    public EnviroItemPolymerWaterBottle(EnviroItemWaterBottle.WATER_TYPES waterType)
+    public EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES waterType)
     {
         super();
-        setTextureName("potion");
         this.waterType = waterType;
+
+        if(this.waterType == WaterUtils.WATER_TYPES.FROSTY) {
+            setTextureName("enviromine:bottle_frosty");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.DIRTY_COLD) {
+            setTextureName("enviromine:bottle_dirty_cold");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.CLEAN_COLD) {
+            setTextureName("enviromine:bottle_cold");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.SALTY) {
+            setTextureName("enviromine:bottle_salt");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.DIRTY) {
+            setTextureName("enviromine:bottle_dirty");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.CLEAN) {
+            setTextureName("enviromine:bottle_clean");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.CLEAN_WARM) {
+            setTextureName("enviromine:bottle_warm");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.DIRTY_WARM) {
+            setTextureName("enviromine:bottle_dirty_warm");
+        } else if (this.waterType == WaterUtils.WATER_TYPES.HOT) {
+            setTextureName("enviromine:bottle_hot");
+        }
+    }
+
+    public WaterUtils.WATER_TYPES getWaterType() {
+        return waterType;
     }
 
     @Override
@@ -52,26 +63,25 @@ public class EnviroItemPolymerWaterBottle extends Item {
 
             if(tracker != null)
             {
-
                 if(tracker.bodyTemp >= 0)
                 {
-                    if(waterType == EnviroItemWaterBottle.WATER_TYPES.FROSTY) {
+                    if(waterType == WaterUtils.WATER_TYPES.FROSTY) {
                         if (tracker.bodyTemp >= 30.1) {
                             tracker.bodyTemp -= 0.5F;
                         }
                         tracker.hydrate(50F);
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.DIRTY_COLD) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY_COLD) {
                         if (tracker.bodyTemp >= 30.1) {
                             tracker.bodyTemp -= 0.1F;
                         }
                         tracker.hydrate(50F);
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.CLEAN_COLD) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN_COLD) {
                         if(tracker.bodyTemp >= 30.1)
                         {
                             tracker.bodyTemp -= 0.1F;
                         }
                         tracker.hydrate(50F);
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.SALTY) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.SALTY) {
                         if(par3EntityPlayer.getRNG().nextInt(1) == 0)
                         {
                             if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0)
@@ -87,8 +97,8 @@ public class EnviroItemPolymerWaterBottle extends Item {
                         {
                             tracker.bodyTemp -= 0.05F;
                         }
-                        tracker.hydrate(25F);
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.DIRTY) {
+                        tracker.hydrate(30F);
+                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY) {
                         if(par3EntityPlayer.getRNG().nextInt(4) == 0)
                         {
                             par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
@@ -102,10 +112,16 @@ public class EnviroItemPolymerWaterBottle extends Item {
                             tracker.bodyTemp -= 0.05F;
                         }
                         tracker.hydrate(50F);
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.CLEAN_WARM) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN) {
+                        if(tracker.bodyTemp > 37.05F)
+                        {
+                            tracker.bodyTemp -= 0.05F;
+                        }
+                        tracker.hydrate(50F);
+                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN_WARM) {
                         tracker.bodyTemp += 0.1F;
-                        tracker.hydrate(25F);
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.DIRTY_WARM) {
+                        tracker.hydrate(50F);
+                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY_WARM) {
                         if(par3EntityPlayer.getRNG().nextInt(4) == 0)
                         {
                             par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
@@ -119,7 +135,7 @@ public class EnviroItemPolymerWaterBottle extends Item {
                             tracker.bodyTemp += 0.1F;
                             tracker.hydrate(50F);
                         }
-                    } else if (waterType == EnviroItemWaterBottle.WATER_TYPES.HOT) {
+                    } else if (waterType == WaterUtils.WATER_TYPES.HOT) {
                         tracker.bodyTemp += 0.5F;
                         tracker.hydrate(50F);
                     }
@@ -131,10 +147,10 @@ public class EnviroItemPolymerWaterBottle extends Item {
         {
             if(par1ItemStack.stackSize <= 0)
             {
-                return new ItemStack(Items.glass_bottle);
+                return new ItemStack(ObjectHandlerCompat.waterBottle_polymer);
             }
 
-            par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle));
+            par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(ObjectHandlerCompat.waterBottle_polymer));
         }
 
         return par1ItemStack;
@@ -149,17 +165,6 @@ public class EnviroItemPolymerWaterBottle extends Item {
     {
         return false;
     }
-
-    @SideOnly(Side.CLIENT)
-    /**
-     * Gets an icon index based on an item's damage value
-     */
-    @Override
-    public IIcon getIconFromDamage(int par1)
-    {
-        return this.field_94590_d;
-    }
-
     @SideOnly(Side.CLIENT)
     public int getColorFromDamage(int par1)
     {
@@ -206,30 +211,5 @@ public class EnviroItemPolymerWaterBottle extends Item {
     {
         par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
         return par1ItemStack;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister)
-    {
-        this.field_94590_d = par1IconRegister.registerIcon(this.getIconString() + "_" + "bottle_drinkable");
-        this.field_94591_c = par1IconRegister.registerIcon(this.getIconString() + "_" + "bottle_splash");
-        this.field_94592_ct = par1IconRegister.registerIcon(this.getIconString() + "_" + "overlay");
-    }
-
-    /**
-     * Gets an icon index based on an item's damage value and the given render pass
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int par1, int par2)
-    {
-        return par2 == 0 ? this.field_94592_ct : super.getIconFromDamageForRenderPass(par1, par2);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static IIcon func_94589_d(String par0Str)
-    {
-        return ItemPotion.func_94589_d(par0Str);
     }
 }

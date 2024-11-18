@@ -9,6 +9,17 @@ item.enviromine.badwarmwater.name=Dirty Warm Water Bottle
 item.enviromine.frostywater.name=Frosty Water Bottle
 item.enviromine.hotwater.name=Hot Water Bottle
 
+item.enviromine.water.polymer.name=Plastic Bottle
+item.enviromine.cleanwater.polymer.name=Water Plastic Bottle
+item.enviromine.badwater.polymer.name=Dirty Water Plastic Bottle
+item.enviromine.saltwater.polymer.name=Salt Water Plastic Bottle
+item.enviromine.coldwater.polymer.name=Cold Water Plastic Bottle
+item.enviromine.warmwater.polymer.name=Warm Water Plastic Bottle
+item.enviromine.badcoldwater.polymer.name=Dirty Cold Water Plastic Bottle
+item.enviromine.badwarmwater.polymer.name=Dirty Warm Water Plastic Bottle
+item.enviromine.frostywater.polymer.name=Frosty Water Plastic Bottle
+item.enviromine.hotwater.polymer.name=Hot Water Plastic Bottle
+
 item.enviromine.camelpack.name=Camel Pack
 item.enviromine.gasmask.name=Respirator
 item.enviromine.hardhat.name=Hard Hat

@@ -29,6 +29,7 @@ import enviromine.items.ItemDavyLamp;
 import enviromine.items.ItemElevator;
 import enviromine.items.ItemSpoiledMilk;
 import enviromine.items.RottenFood;
+import enviromine.utils.WaterUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -61,7 +62,6 @@ public class ObjectHandler
     public static Item warmWaterBottle;
     public static Item badWarmWaterBottle;
     public static Item hotWaterBottle;
-
 	public static Item airFilter;
 	public static Item davyLamp;
 	public static Item gasMeter;
@@ -96,14 +96,14 @@ public class ObjectHandler
 	public static void initItems()
 	{
 
-        frostyWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frostywater").setCreativeTab(EnviroMine.enviroTab);
-        coldWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.coldwater").setCreativeTab(EnviroMine.enviroTab);
-        badColdWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.badcoldwater").setCreativeTab(EnviroMine.enviroTab);
-        saltWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.saltwater").setCreativeTab(EnviroMine.enviroTab);
-        badWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.badwater").setCreativeTab(EnviroMine.enviroTab);
-        warmWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.warmwater").setCreativeTab(EnviroMine.enviroTab);
-        badWarmWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.badwarmwater").setCreativeTab(EnviroMine.enviroTab);
-        hotWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hotwater").setCreativeTab(EnviroMine.enviroTab);
+        frostyWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frostywater").setCreativeTab(EnviroMine.enviroTab);
+        coldWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.coldwater").setCreativeTab(EnviroMine.enviroTab);
+        badColdWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.badcoldwater").setCreativeTab(EnviroMine.enviroTab);
+        saltWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.saltwater").setCreativeTab(EnviroMine.enviroTab);
+        badWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.badwater").setCreativeTab(EnviroMine.enviroTab);
+        warmWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.warmwater").setCreativeTab(EnviroMine.enviroTab);
+        badWarmWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.badwarmwater").setCreativeTab(EnviroMine.enviroTab);
+        hotWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hotwater").setCreativeTab(EnviroMine.enviroTab);
 
         airFilter = new Item().setMaxStackSize(16).setUnlocalizedName("enviromine.airfilter").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:air_filter");
 		rottenFood = new RottenFood(1).setMaxStackSize(64).setUnlocalizedName("enviromine.rottenfood").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:rot");
@@ -238,24 +238,24 @@ public class ObjectHandler
 		GameRegistry.registerTileEntity(TileEntityDavyLamp.class, "enviromine.tile.davy_lamp");
 	}
 
-    public static ItemStack getItemStackFromWaterType(EnviroItemWaterBottle.WATER_TYPES type) {
-        if(type == EnviroItemWaterBottle.WATER_TYPES.FROSTY) {
+    public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
+        if(type == WaterUtils.WATER_TYPES.FROSTY) {
             return new ItemStack(frostyWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.DIRTY_COLD) {
+        } else if(type == WaterUtils.WATER_TYPES.DIRTY_COLD) {
             return new ItemStack(badColdWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.CLEAN_COLD) {
+        } else if(type == WaterUtils.WATER_TYPES.CLEAN_COLD) {
             return new ItemStack(coldWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.SALTY) {
+        } else if(type == WaterUtils.WATER_TYPES.SALTY) {
             return new ItemStack(saltWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.DIRTY) {
+        } else if(type == WaterUtils.WATER_TYPES.DIRTY) {
             return new ItemStack(badWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.CLEAN) {
+        } else if(type == WaterUtils.WATER_TYPES.CLEAN) {
             return new ItemStack(Items.potionitem, 1, 0);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.CLEAN_WARM) {
+        } else if(type == WaterUtils.WATER_TYPES.CLEAN_WARM) {
             return new ItemStack(warmWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.DIRTY_WARM) {
+        } else if(type == WaterUtils.WATER_TYPES.DIRTY_WARM) {
             return new ItemStack(badWarmWaterBottle);
-        } else if(type == EnviroItemWaterBottle.WATER_TYPES.HOT) {
+        } else if(type == WaterUtils.WATER_TYPES.HOT) {
             return new ItemStack(hotWaterBottle);
         } else {
             return new ItemStack(Items.potionitem, 1, 0);
@@ -288,30 +288,30 @@ public class ObjectHandler
         //HEATING
         for(ItemStack bottle : bottles) {
             if(bottle.getItem() != hotWaterBottle) { //How can you heat already hot water?
-                EnviroItemWaterBottle.WATER_TYPES localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
+                WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
 
                 if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
-                    localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
+                    localType = WaterUtils.WATER_TYPES.CLEAN;
                 } else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
                     localType = enviroItemWaterBottle.getWaterType();
                 }
 
-                GameRegistry.addSmelting(bottle, getItemStackFromWaterType(EnviroItemWaterBottle.heatUp(localType)), 0.0F);
+                GameRegistry.addSmelting(bottle, getItemStackFromWaterType(WaterUtils.heatUp(localType)), 0.0F);
             }
         }
 
         //COOLING
         for(ItemStack bottle : bottles) {
             if(bottle.getItem() != frostyWaterBottle) { //Same
-                EnviroItemWaterBottle.WATER_TYPES localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
+                WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
 
                 if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
-                    localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
+                    localType = WaterUtils.WATER_TYPES.CLEAN;
                 } else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
                     localType = enviroItemWaterBottle.getWaterType();
                 }
 
-                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(EnviroItemWaterBottle.coolDown(localType)), bottle, new ItemStack(Blocks.ice, 1));
+                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Blocks.ice, 1));
             }
         }
 

@@ -1,6 +1,7 @@
 package enviromine.core;
 
 import cpw.mods.fml.common.Loader;
+import enviromine.handlers.ObjectHandlerCompat;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -129,6 +130,11 @@ public class EnviroMine
 		ObjectHandler.initBlocks();
 		ObjectHandler.registerBlocks();
 
+        if(isHbmLoaded()) {
+            ObjectHandlerCompat.initItems();
+            ObjectHandlerCompat.registerItems();
+        }
+
 		// Load Configuration files And Custom files
 		EM_ConfigHandler.initConfig();
 
@@ -175,12 +181,18 @@ public class EnviroMine
 
 		proxy.registerTickHandlers();
 		proxy.registerEventHandlers();
+
+
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit(event);
+
+        if(isHbmLoaded())
+            ObjectHandlerCompat.registerRecipes();
+
 		EM_ConfigHandler.initConfig(); // Second pass for object initialized after pre-init
 	}
 

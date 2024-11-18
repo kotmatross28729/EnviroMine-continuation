@@ -8,6 +8,18 @@ item.enviromine.badcoldwater.name=Бутылка грязной холодной
 item.enviromine.badwarmwater.name=Бутылка грязной теплой воды
 item.enviromine.frostywater.name=Бутылка ледяной воды
 item.enviromine.hotwater.name=Бутылка горячей воды
+
+item.enviromine.water.polymer.name=Пластиковая бутылка
+item.enviromine.cleanwater.polymer.name=Пластиковая бутылка воды
+item.enviromine.badwater.polymer.name=Пластиковая бутылка грязной воды
+item.enviromine.saltwater.polymer.name=Пластиковая бутылка солёной воды
+item.enviromine.coldwater.polymer.name=Пластиковая бутылка холодной воды
+item.enviromine.warmwater.polymer.name=Пластиковая бутылка теплой воды
+item.enviromine.badcoldwater.polymer.name=Пластиковая бутылка грязной холодной воды
+item.enviromine.badwarmwater.polymer.name=Пластиковая бутылка грязной теплой воды
+item.enviromine.frostywater.polymer.name=Пластиковая бутылка ледяной воды
+item.enviromine.hotwater.polymer.name=Пластиковая бутылка горячей воды
+
 item.enviromine.camelpack.name=Бурдюк
 item.enviromine.gasmask.name=Противогаз
 item.enviromine.hardhat.name=Каска

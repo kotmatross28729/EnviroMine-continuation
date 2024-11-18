@@ -20,6 +20,7 @@
       + "Pyrophoric / Hot" items increase ambient temperature
       + "Coal dust" / "Asbestos" items decrease air quality
       + "Digamma Radiation" items decrease sanity
+    + Added plastic bottles, have 2 times more capacity than regular glass ones
 
 - Fixed several minor (and not so) bugs
 
@@ -52,7 +53,7 @@
   * Improved compatibility for armor with temperatures (canSeal from space fork)
 ---
 
-Excluded
+Excluded (broken for now)
 + If a player has a late stage of Mesothelioma/Black Lung, then his maximum airQuality = 50, 2 times less than normal (so he can spend less time in the cave without protection)
 + If the player has a high radiation dose, his temperature will rise (more radiation, higher the temperature, at very high doses player can even die from fever (and not from rad itself))
 

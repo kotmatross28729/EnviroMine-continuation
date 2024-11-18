@@ -3,6 +3,7 @@ language.name=German
 item.enviromine.badwater.name=Schmutzige Wasserflasche
 item.enviromine.saltwater.name=Salzwasserflasche
 item.enviromine.coldwater.name=Kalte Wasserflasche
+
 item.enviromine.camelpack.name=Trinkschlauchrucksack
 item.enviromine.gasmask.name=Atemschutzmaske
 item.enviromine.hardhat.name=Schutzhelm
