@@ -3,14 +3,35 @@ language.name=Chinese
 item.enviromine.badwater.name=脏水瓶
 item.enviromine.saltwater.name=咸水瓶
 item.enviromine.coldwater.name=冷水瓶
+item.enviromine.badcoldwater.name=冷脏水瓶
+item.enviromine.badwarmwater.name=温脏水瓶
+item.enviromine.frostywater.name=冰水瓶
+item.enviromine.hotwater.name=热水瓶
 item.enviromine.camelpack.name=储水包
 item.enviromine.gasmask.name=口罩
 item.enviromine.hardhat.name=安全帽
 item.enviromine.airfilter.name=空气过滤器
 item.enviromine.rottenfood.name=腐坏食物
+item.enviromine.spoiledmilk.name=馊牛奶
+
+potion.enviromine.frostbite=冻伤
+potion.enviromine.dehydration=脱水
+potion.enviromine.insanity=精神错乱
+potion.enviromine.heatstroke=中暑
+potion.enviromine.hypothermia=失温
 
 tile.enviromine.elevator_top.name=升降机顶
 tile.enviromine.elevator_bottom.name=升降机底
+tile.enviromine.esky.name=冷藏箱
+tile.enviromine.freezer.name=冰柜
+tile.enviromine.davy_lamp.name=戴维等
+tile.enviromine.gas.name=气体
+tile.enviromine.firegas.name=气体火灾
+tile.enviromine.burningcoal.name=燃烧中的煤炭
+tile.enviromine.nophysblock.name=反牛顿方块
+
+container.enviromine.esky=冷藏箱
+container.enviromine.freezer=冰柜
 
 itemGroup.enviromine.enviroTab=EnviroMine
 
