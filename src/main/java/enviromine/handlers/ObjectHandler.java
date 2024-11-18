@@ -300,26 +300,25 @@ public class ObjectHandler
             }
         }
 
-//        GameRegistry.addSmelting(saltWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);
-//        GameRegistry.addSmelting(warmWaterBottle, new ItemStack(hotWaterBottle, 1, 0), 0.0F);                                               //WARM     - HOT
-//        GameRegistry.addSmelting(badWarmWaterBottle, new ItemStack(hotWaterBottle, 1, 0), 0.0F);                                            //BAD WARM - HOT
-//        GameRegistry.addSmelting(new ItemStack(Items.potionitem, 1, 0), new ItemStack(warmWaterBottle, 1, 0), 0.0F);      //CLEAN    - WARM
-//        GameRegistry.addSmelting(badWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                              //BAD      - CLEAN
-//        GameRegistry.addSmelting(coldWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                             //COLD     - CLEAN
-//        GameRegistry.addSmelting(badColdWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);                                          //BAD COLD - CLEAN
-//        GameRegistry.addSmelting(frostyWaterBottle, new ItemStack(coldWaterBottle, 1, 0), 0.0F);                                            //FROSTY   - COLD
+        //COOLING
+        for(ItemStack bottle : bottles) {
+            if(bottle.getItem() != frostyWaterBottle) { //Same
+                EnviroItemWaterBottle.WATER_TYPES localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
 
-        GameRegistry.addShapelessRecipe(new ItemStack(frostyWaterBottle, 1, 0), new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(frostyWaterBottle, 1, 0), new ItemStack(badColdWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.ice, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(Items.potionitem, 1, 0), new ItemStack(warmWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(Items.potionitem, 1, 0), new ItemStack(hotWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1), new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1) , new ItemStack(Blocks.ice, 1));
+                if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
+                    localType = EnviroItemWaterBottle.WATER_TYPES.CLEAN;
+                } else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+                    localType = enviroItemWaterBottle.getWaterType();
+                }
 
-        GameRegistry.addShapelessRecipe(new ItemStack(badColdWaterBottle, 1, 0), new ItemStack(badWaterBottle, 1, 0), new ItemStack(Blocks.ice, 1));
+                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(EnviroItemWaterBottle.coolDown(localType)), bottle, new ItemStack(Blocks.ice, 1));
+            }
+        }
+
         GameRegistry.addShapelessRecipe(new ItemStack(badColdWaterBottle, 1, 0), new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Blocks.dirt, 1));
         GameRegistry.addShapelessRecipe(new ItemStack(badWarmWaterBottle, 1, 0), new ItemStack(warmWaterBottle, 1, 0), new ItemStack(Blocks.dirt, 1));
-
         GameRegistry.addShapelessRecipe(new ItemStack(badWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.dirt, 1));
+
 		GameRegistry.addShapelessRecipe(new ItemStack(saltWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.sand, 1));
 
 		GameRegistry.addRecipe(new ItemStack(Items.slime_ball, 4, 0), " r ", "rwr", " r ", 'w', new ItemStack(spoiledMilk, 1, 0), 'r', new ItemStack(rottenFood, 1));

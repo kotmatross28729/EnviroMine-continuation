@@ -1,3 +1,5 @@
+
+---
 # 1.3.144
 ### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG! (concerns biome and general config)
 
@@ -18,24 +20,24 @@
       + "Pyrophoric / Hot" items increase ambient temperature
       + "Coal dust" / "Asbestos" items decrease air quality
       + "Digamma Radiation" items decrease sanity
-    + If a player has a late stage of Mesothelioma/Black Lung, then his maximum airQuality = 50, 2 times less than normal (so he can spend less time in the cave without protection)
-    + If the player has a high radiation dose, his temperature will rise (more radiation, higher the temperature, at very high doses player can even die from fever (and not from rad itself))
-
 
 - Fixed several minor (and not so) bugs
 
 + Added more types of water, because I can
   + cold water can now be dirty
-  + you can cool cold/cold dirty water with x8 ice to frosty water
+  + you can cool cold/cold dirty water with ice to frosty water
   + you can heat clean water to warm, and warm/warm dirty to hot
     + you can heat cold water to clean, and frosty to cold
 
 + Added texture for the extinguished torch
   + also fixed a bug due to which vanilla torches were consumed even in creative
 
+---
 # 1.3.143
 * Added support for Serene Seasons
     * All relevant settings in the parameters of each biome
+---
+
 
 # 1.3.142
 
@@ -48,3 +50,9 @@
   * Air vent allows you to breathe and maintains a comfortable temperature in the immediate area
   * Change in temperature values if the planet was terraformed (transition to more comfortable temperatures)
   * Improved compatibility for armor with temperatures (canSeal from space fork)
+---
+
+Excluded
++ If a player has a late stage of Mesothelioma/Black Lung, then his maximum airQuality = 50, 2 times less than normal (so he can spend less time in the cave without protection)
++ If the player has a high radiation dose, his temperature will rise (more radiation, higher the temperature, at very high doses player can even die from fever (and not from rad itself))
+

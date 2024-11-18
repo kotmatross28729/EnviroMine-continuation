@@ -628,22 +628,23 @@ public class EnviroDataTracker
 		}
 
 		// Apply side effects
-
-        if(isHbmLoaded()) {
-            if(airQuality > 50 && (HbmLivingProps.getAsbestos(trackedEntity) > 43_200 || //60% //TODO HARDCODED
-                HbmLivingProps.getBlackLung(trackedEntity) > 115_200 //80% //TODO HARDCODED
-            )) {
-                airQuality -= 50; //TODO HARDCODED
-            }
-
-            float rad = HbmLivingProps.getRadiation(trackedEntity);
-            if(rad > 200) //TODO HARDCODED
-            {
-                bodyTemp += ((rad/10F) * 0.1F); //200=38.6, 500=41.6, 999=46.59 //TODO HARDCODED
-            }
-
-            sanity -= HbmLivingProps.getDigamma(trackedEntity);
-        }
+//        if(isHbmLoaded()) {
+            //TODO not working properly
+//            if(airQuality > 50 && (HbmLivingProps.getAsbestos(trackedEntity) > 43_200 || //60% //TODO HARDCODED
+//                HbmLivingProps.getBlackLung(trackedEntity) > 115_200 //80% //TODO HARDCODED
+//            )) {
+//                airQuality -= 50; //TODO HARDCODED
+//            }
+//
+//            float rad = HbmLivingProps.getRadiation(trackedEntity);
+//
+//            if(rad > 200) //TODO HARDCODED
+//            {
+//                bodyTemp += ((rad/10F) * 0.1F); //200=38.6, 500=41.6, 999=46.59 //TODO HARDCODED
+//            }
+//
+//            sanity -= HbmLivingProps.getDigamma(trackedEntity);
+//        }
 
 		if(airTemp <= 10F && bodyTemp <= 35F || bodyTemp <= 30F) //TODO HARDCODED
 		{
