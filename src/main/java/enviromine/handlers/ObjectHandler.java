@@ -1,16 +1,5 @@
 package enviromine.handlers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import enviromine.items.EnviroItemBadColdWaterBottle;
-import enviromine.items.EnviroItemBadWarmWaterBottle;
-import enviromine.items.EnviroItemFrostyWaterBottle;
-import enviromine.items.EnviroItemHotWaterBottle;
-import enviromine.items.EnviroItemWarmWaterBottle;
-import org.apache.logging.log4j.Level;
-
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import enviromine.EntityPhysicsBlock;
@@ -35,9 +24,7 @@ import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.items.EnviroArmor;
-import enviromine.items.EnviroItemBadWaterBottle;
-import enviromine.items.EnviroItemColdWaterBottle;
-import enviromine.items.EnviroItemSaltWaterBottle;
+import enviromine.items.EnviroItemWaterBottle;
 import enviromine.items.ItemDavyLamp;
 import enviromine.items.ItemElevator;
 import enviromine.items.ItemSpoiledMilk;
@@ -56,20 +43,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ObjectHandler
 {
 	public static HashMap<Block, ArrayList<Integer>> igniteList = new HashMap<Block, ArrayList<Integer>>();
 	public static ArmorMaterial camelPackMaterial;
 
-	public static Item badWaterBottle;
-	public static Item saltWaterBottle;
-	public static Item coldWaterBottle;
-
-    public static Item warmWaterBottle;
-    public static Item badColdWaterBottle;
-    public static Item badWarmWaterBottle;
     public static Item frostyWaterBottle;
+    public static Item coldWaterBottle;
+    public static Item badColdWaterBottle;
+    public static Item saltWaterBottle;
+    public static Item badWaterBottle;
+    public static Item warmWaterBottle;
+    public static Item badWarmWaterBottle;
     public static Item hotWaterBottle;
 
 	public static Item airFilter;
@@ -105,17 +95,15 @@ public class ObjectHandler
 
 	public static void initItems()
 	{
-		badWaterBottle = new EnviroItemBadWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.badwater").setCreativeTab(EnviroMine.enviroTab);
-		saltWaterBottle = new EnviroItemSaltWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.saltwater").setCreativeTab(EnviroMine.enviroTab);
 
-		coldWaterBottle = new EnviroItemColdWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.coldwater").setCreativeTab(EnviroMine.enviroTab);
-		warmWaterBottle = new EnviroItemWarmWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.warmwater").setCreativeTab(EnviroMine.enviroTab);
-
-        badColdWaterBottle = new EnviroItemBadColdWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.badcoldwater").setCreativeTab(EnviroMine.enviroTab);
-        badWarmWaterBottle = new EnviroItemBadWarmWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.badwarmwater").setCreativeTab(EnviroMine.enviroTab);
-
-        frostyWaterBottle = new EnviroItemFrostyWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.frostywater").setCreativeTab(EnviroMine.enviroTab);
-        hotWaterBottle = new EnviroItemHotWaterBottle().setMaxStackSize(1).setUnlocalizedName("enviromine.hotwater").setCreativeTab(EnviroMine.enviroTab);
+        frostyWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frostywater").setCreativeTab(EnviroMine.enviroTab);
+        coldWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.coldwater").setCreativeTab(EnviroMine.enviroTab);
+        badColdWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.badcoldwater").setCreativeTab(EnviroMine.enviroTab);
+        saltWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.saltwater").setCreativeTab(EnviroMine.enviroTab);
+        badWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.badwater").setCreativeTab(EnviroMine.enviroTab);
+        warmWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.warmwater").setCreativeTab(EnviroMine.enviroTab);
+        badWarmWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.badwarmwater").setCreativeTab(EnviroMine.enviroTab);
+        hotWaterBottle = new EnviroItemWaterBottle(EnviroItemWaterBottle.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hotwater").setCreativeTab(EnviroMine.enviroTab);
 
         airFilter = new Item().setMaxStackSize(16).setUnlocalizedName("enviromine.airfilter").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:air_filter");
 		rottenFood = new RottenFood(1).setMaxStackSize(64).setUnlocalizedName("enviromine.rottenfood").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:rot");
@@ -200,7 +188,7 @@ public class ObjectHandler
 		flammableCoal = new BlockFlammableCoal();
 		burningCoal = new BlockBurningCoal(Material.rock).setBlockName("enviromine.burningcoal").setCreativeTab(EnviroMine.enviroTab);
 		fireTorch = new BlockFireTorch(true).setTickRandomly(true).setBlockName("torch").setBlockTextureName("torch_on").setLightLevel(0.9375F).setCreativeTab(EnviroMine.enviroTab);
-		offTorch = new BlockFireTorch(false).setTickRandomly(false).setBlockName("torch").setBlockTextureName("torch_on").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
+		offTorch = new BlockFireTorch(false).setTickRandomly(false).setBlockName("torch").setBlockTextureName("enviromine:torch_off").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
 		esky = new BlockEsky(Material.iron).setBlockName("enviromine.esky").setCreativeTab(EnviroMine.enviroTab);
 		freezer = new BlockFreezer(Material.iron).setBlockName("enviromine.freezer").setCreativeTab(EnviroMine.enviroTab);
 

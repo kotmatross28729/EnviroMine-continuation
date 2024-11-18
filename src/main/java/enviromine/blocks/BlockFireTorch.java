@@ -26,13 +26,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BlockFireTorch extends BlockTorch
 {
 	boolean isLit = false;
-	
+
 	public BlockFireTorch(boolean lit)
 	{
 		super();
 		this.isLit = lit;
 	}
-	
+
 	@Override
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
     {
@@ -48,21 +48,22 @@ public class BlockFireTorch extends BlockTorch
         p_149726_1_.scheduleBlockUpdate(p_149726_2_, p_149726_3_, p_149726_4_, this, this.tickRate(p_149726_1_) + p_149726_1_.rand.nextInt(10));
         super.onBlockAdded(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
     }
-	
+
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9)
 	{
 		ItemStack stack = player.getEquipmentInSlot(0);
-		
+
 		if (stack != null && stack.getItem() == Items.flint_and_steel)
 		{
-			stack.damageItem(1, player);
+            if(!player.capabilities.isCreativeMode)
+			    stack.damageItem(1, player);
 			world.setBlock(i, j, k, ObjectHandler.fireTorch, world.getBlockMetadata(i, j, k), 3);
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand)
 	{
@@ -72,16 +73,16 @@ public class BlockFireTorch extends BlockTorch
 			world.setBlock(x, y, z, Blocks.torch, world.getBlockMetadata(x, y, z), 3);
 			return;
 		}
-		
+
 		if((world.rand.nextInt(10000) == 0 || (world.isRaining() && world.canBlockSeeTheSky(x, y, z))) && EM_Settings.torchesGoOut)
 		{
 			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 			world.setBlock(x, y, z, ObjectHandler.offTorch, world.getBlockMetadata(x, y, z), 3);
 			return;
 		}
-		
+
 		super.updateTick(world, x, y, z, rand);
-		
+
 		// Don't go any further unless this torch is allowed to burn stuff
 		if(!EM_Settings.torchesBurn || !isLit)
 		{
@@ -161,7 +162,7 @@ public class BlockFireTorch extends BlockTorch
     		super.randomDisplayTick(world, x, y, z, rand);
     	}
     }
-	
+
     private void tryCatchFire(World p_149841_1_, int p_149841_2_, int p_149841_3_, int p_149841_4_, int p_149841_5_, Random p_149841_6_, int p_149841_7_, ForgeDirection face)
     {
         int j1 = p_149841_1_.getBlock(p_149841_2_, p_149841_3_, p_149841_4_).getFlammability(p_149841_1_, p_149841_2_, p_149841_3_, p_149841_4_, face);
@@ -219,7 +220,7 @@ public class BlockFireTorch extends BlockTorch
 
     /**
      * Side sensitive version that calls the block function.
-     * 
+     *
      * @param world The current world
      * @param x X Position
      * @param y Y Position

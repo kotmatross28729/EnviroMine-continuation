@@ -30,6 +30,8 @@
   + you can heat clean water to warm, and warm/warm dirty to hot
     + you can heat cold water to clean, and frosty to cold
 
++ Added texture for the extinguished torch
+
 # 1.3.143
 * Added support for Serene Seasons
     * All relevant settings in the parameters of each biome

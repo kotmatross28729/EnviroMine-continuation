@@ -505,12 +505,14 @@ public class EM_EventManager
 					{
 						event.useItem = Result.DENY;
 						event.useBlock = Result.ALLOW;
-					}else
+					} else
 					{
 //						event.useItem = Result.DENY;
 						ItemBlock torchItem = (ItemBlock)Item.getItemFromBlock(ObjectHandler.fireTorch);
 						torchItem.onItemUse(item, event.entityPlayer, event.world, event.x, event.y, event.z, event.face, (float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
-						event.setCanceled(true);
+                        if (event.entityPlayer.capabilities.isCreativeMode)
+                            item.stackSize++; //dirty hack, in creative, when replacing torch, torch was wasted, here we immediately replenish the torch after it was placed
+                        event.setCanceled(true);
 					}
 					return;
 
