@@ -234,6 +234,26 @@ public class EM_Settings
     public static float BodyTemperatureCatchFireMax       = 50.0F;
     public static float BodyTemperatureCatchFireDuration  = 10.0F;
 
+    public static float BodyTemperatureColdStartValue           = 35.0F;
+    public static float BodyTemperatureColdStartValueVampire    = 32.0F;
+    public static float BodyTemperatureHypothermia3             = 30.0F;
+    public static float BodyTemperatureHypothermia2             = 32.0F;
+    public static float BodyTemperatureHypothermia2Vampire      = 30.0F;
+
+    public static float TimeBelow10StartValue                   = 120.0F;
+    public static float TimeBelow10Frostbite2                   = 240.0F;
+    public static float TimeBelow10FrostbitePermanent           = 360.0F;
+
+    public static float SanityStage0UpperBound           = 75.0F;
+    public static float SanityStage0LowerBound           = 50.0F;
+    public static float SanityStage1UpperBound           = 50.0F;
+    public static float SanityStage1LowerBound           = 25.0F;
+    public static float SanityStage2UpperBound           = 25.0F;
+    public static float SanityStage2LowerBound           = 5.0F;
+    public static float SanityStage3UpperBound           = 5.0F;
+    public static float SanityStage3LowerBound           = 0.0F;
+
+
 
     public static boolean enableItemPropsDivideByTwo = true;
 

@@ -688,7 +688,7 @@ public class EnviroDataTracker
 				if(!trackedEntity.isPotionActive(Potion.fireResistance))
 				{
 					if(bodyTemp >= EM_Settings.BodyTemperatureHeatStartValue && enableHeat && EM_Settings.enableHeatstrokeGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
-					{//TODO HARDCODED
+					{
                         if(bodyTemp >= EM_Settings.BodyTemperatureHeatInstantDeath)
                         {
                             trackedEntity.attackEntityFrom(EnviroDamageSource.heatstroke, 1000F);
@@ -729,14 +729,14 @@ public class EnviroDataTracker
 				}
 
 				// Cold temp checks
-				if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? 32F : 35F)
+				if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? EM_Settings.BodyTemperatureColdStartValueVampire : EM_Settings.BodyTemperatureColdStartValue)
 						&& enableFrostbite && EM_Settings.enableHypothermiaGlobal && (enviroData[EM_StatusManager.ANIMAL_HOSTILITY_INDEX] == 1 || !(trackedEntity instanceof EntityAnimal)))
 				{
-					if(bodyTemp <= 30F //TODO HARDCODED
+					if(bodyTemp <= EM_Settings.BodyTemperatureHypothermia3
 							&& !(trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire)) {
 						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, vampireDuration, 2));
 					}
-					else if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? 30F : 32F)) {
+					else if(bodyTemp <= ((trackedEntity instanceof EntityPlayer && EM_Settings.witcheryVampireImmunities && isVampire) ? EM_Settings.BodyTemperatureHypothermia2Vampire : EM_Settings.BodyTemperatureHypothermia2)) {
 						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, vampireDuration, 1));
 					}
 					else {
@@ -751,10 +751,10 @@ public class EnviroDataTracker
 				}
 
 				if(enableFrostbite
-						&& EM_Settings.enableFrostbiteGlobal && (timeBelow10 >= 120 + (EM_Settings.witcheryVampireImmunities && isVampire ? vampireLevel*24 : 0)
+						&& EM_Settings.enableFrostbiteGlobal && (timeBelow10 >= EM_Settings.TimeBelow10StartValue + (EM_Settings.witcheryVampireImmunities && isVampire ? vampireLevel*24 : 0)
 						|| (frostbiteLevel >= 1 && frostIrreversible)))
 				{
-					if(timeBelow10 >= 240 + (EM_Settings.witcheryVampireImmunities && isVampire ? vampireLevel*48 : 0) || frostbiteLevel >= 2)
+					if(timeBelow10 >= EM_Settings.TimeBelow10Frostbite2 + (EM_Settings.witcheryVampireImmunities && isVampire ? vampireLevel*48 : 0) || frostbiteLevel >= 2)
 					{
 						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.frostbite.id, vampireDuration, 1));
 
@@ -774,7 +774,7 @@ public class EnviroDataTracker
 					}
 
 					// If frostbite is treated before this time then you can save your limbs!
-					if(timeBelow10 > 360 + (EM_Settings.witcheryVampireImmunities && isVampire ? vampireLevel*72 : 0)
+					if(timeBelow10 > EM_Settings.TimeBelow10FrostbitePermanent + (EM_Settings.witcheryVampireImmunities && isVampire ? vampireLevel*72 : 0)
 							&& EM_Settings.frostbitePermanent && !frostIrreversible && EM_Settings.enableFrostbiteGlobal)
 					{
 						frostIrreversible = true;
@@ -801,10 +801,10 @@ public class EnviroDataTracker
 				if(hydration <= 0F && !(EM_Settings.witcheryVampireImmunities && isVampire))
 				{
 					trackedEntity.attackEntityFrom(EnviroDamageSource.dehydrate, 4.0F);
-				} //TODO HARDCODED
+				}
                 // Sanity checks
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
-                if(!isCreative && sanity <= 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
+                if(!isCreative && sanity <= EM_Settings.SanityStage3LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
                 {
                     if (DeathFromHeartAttack) {
                         heartattacktimer += 1;
@@ -825,7 +825,7 @@ public class EnviroDataTracker
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 2));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 3));
                 }
-                else if(!isCreative && sanity > 0F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
+                else if(!isCreative && sanity > EM_Settings.SanityStage3LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= EM_Settings.SanityStage3UpperBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
                     if (DeathFromHeartAttack) {
                         heartattacktimer += 1;
@@ -845,7 +845,7 @@ public class EnviroDataTracker
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 2));
                 }
-                else if(!isCreative && sanity > 5F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
+                else if(!isCreative && sanity > EM_Settings.SanityStage2LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= EM_Settings.SanityStage2UpperBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
                   heartattacktimer = 0;
                   trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 2));
@@ -853,14 +853,14 @@ public class EnviroDataTracker
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 1));
                 }
-                else if(!isCreative && sanity > 25F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0))
+                else if(!isCreative && sanity > EM_Settings.SanityStage1LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= EM_Settings.SanityStage1UpperBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0))
                 {
                   heartattacktimer = 0;
                   trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.weakness.id, werewolfDuration, 1));
                   trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, werewolfDuration, 0));
                 }
-				else if(!isCreative && sanity > 50F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= 75F - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0) )
+				else if(!isCreative && sanity > EM_Settings.SanityStage0LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= EM_Settings.SanityStage0UpperBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel*2 : 0) )
 				{
                   heartattacktimer = 0;
                   trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, werewolfDuration, 0));
@@ -907,7 +907,7 @@ public class EnviroDataTracker
 	@SideOnly(Side.CLIENT)
 	private void playSoundWithTimeCheck(int time, String sound, float volume, float pitch)
 	{
-		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000) //TODO HARDCODED
+		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000)
 		{
 			Minecraft.getMinecraft().thePlayer.playSound("enviromine:chill",  UI_Settings.breathVolume, 1.0F);
 			chillPrevTime = Minecraft.getSystemTime();
