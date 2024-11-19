@@ -544,6 +544,40 @@ public class EM_ConfigHandler
         EM_Settings.SanityStage3UpperBound              = config.getFloat("142_SanityStage3UpperBound",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SanityStage3UpperBound, 1, 65536,  "If current sanity <= this value, and > SanityStage3LowerBound, the player will receive the effect of insanity (4 lvl), and the countdown to a heart attack will begin");
         EM_Settings.SanityStage3LowerBound              = config.getFloat("143_SanityStage3LowerBound",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SanityStage3LowerBound, 1, 65536,  "See SanityStage2UpperBound");
 
+        //EM_StatusManager
+
+        EM_Settings.TrackerUpdateTimer              = config.getFloat("144_TrackerUpdateTimer",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.TrackerUpdateTimer, 1, 65536,  "How often should the tracker be updated (in ticks)");
+        EM_Settings.SanityRateDecreaseDark          = config.getFloat("145_SanityRateDecreaseDark",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SanityRateDecreaseDark, 1, 65536,  "Sanity Rate will decrease by this number if the player is in the dark");
+        EM_Settings.SanityBoostFlowers              = config.getFloat("146_SanityBoostFlowers",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SanityBoostFlowers, 1, 65536,  "Sanity Boost, which is given by flowers in the inventory");
+
+        EM_Settings.AirQualityIncreaseLight                 = config.getFloat("147_AirQualityIncreaseLight",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.AirQualityIncreaseLight, 1, 65536,  "Air quality will increase by this value if the player is in a lit area");
+        EM_Settings.SanityRateIncreaseLight                 = config.getFloat("148_SanityRateIncreaseLight",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SanityRateIncreaseLight, 1, 65536,  "Sanity Rate will increase by this value if the player is in a lit area");
+        EM_Settings.SanityRateDecreaseLight                 = config.getFloat("149_SanityRateDecreaseLight",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SanityRateDecreaseLight, 1, 65536,  "Sanity Rate will decrease by this value if the player is NOT in a lit area AND current Sanity Rate < 0");
+        EM_Settings.SurfaceYPositionMultiplier              = config.getFloat("150_SurfaceYPositionMultiplier",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SurfaceYPositionMultiplier, 1, 65536,  "The surface is defined as: sea level in dimension * this number = Y surface. For overworld it is 64*0.75=48");
+        EM_Settings.AirQualityIncreaseSurface               = config.getFloat("151_AirQualityIncreaseSurface",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.AirQualityIncreaseSurface, 1, 65536,  "Air quality will increase by this value if the player is on the surface");
+
+        EM_Settings.MaxHighAltitudeTemp                  = config.getFloat("152_MaxHighAltitudeTemp",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.MaxHighAltitudeTemp, 1, 65536,  "Temperature that will be at maximum altitude");
+        EM_Settings.MinLowAltitudeTemp                   = config.getFloat("153_MinLowAltitudeTemp",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.MinLowAltitudeTemp, 1, 65536,  "Temperature that will be at minimum altitude");
+        EM_Settings.SurfaceYPosition                     = config.getFloat("154_SurfaceYPosition",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SurfaceYPosition, 1, 65536,  "Y position, which will be considered as a surface, for calculating temperature from height");
+        EM_Settings.SkyYPositionLowerBound               = config.getFloat("155_SkyYPositionLowerBound",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SkyYPositionLowerBound, 1, 65536,  "Y position from which temperature reduction begins");
+        EM_Settings.SkyYPositionLowerBoundDivider        = config.getFloat("156_SkyYPositionLowerBoundDivider",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SkyYPositionLowerBoundDivider, 1, 65536,  "Divider for temperature calculations ( > SkyYPositionLowerBound, < SkyYPositionUpperBound) ");
+        EM_Settings.SkyYPositionUpperBound               = config.getFloat("157_SkyYPositionUpperBound",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SkyYPositionUpperBound, 1, 65536,  "Maximum altitude, at which the temperature will be equal to MaxHighAltitudeTemp (if the biome temperature is not lower)");
+        EM_Settings.NTMSpaceAirVentTemperatureConstant               = config.getFloat("158_NTMSpaceAirVentTemperatureConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NTMSpaceAirVentTemperatureConstant, 1, 65536,  "Temperature created in the air vent's air pocket ");
+        EM_Settings.AvgEntityTempDivider               = config.getFloat("159_AvgEntityTempDivider",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.AvgEntityTempDivider, 1, 65536,  "Divider for the ambient temperature of nearby mobs");
+
+        EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider = config.getFloat("160_AmbientTemperatureblockAndItemTempInfluenceDivider",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider, 1, 65536,  "The influence of blocks/items from the world/inventory will be divided by this number");
+        EM_Settings.AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant = config.getFloat("161_AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant, 1, 65536,  "If influence of blocks/items > biomeTemperature + this value, then riseSpeed = AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant");
+        EM_Settings.AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant = config.getFloat("162_AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant, 1, 65536,  "See AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant");
+
+        EM_Settings.HungerEffectDehydrateBonus               = config.getFloat("163_HungerEffectDehydrateBonus",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.HungerEffectDehydrateBonus, 1, 65536,  "Bonus to dehydration if the player is under hunger effect");
+        EM_Settings.NearLavaMinRiseSpeed                 = config.getFloat("164_NearLavaMinRiseSpeed",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NearLavaMinRiseSpeed, 1, 65536,  "Minimum riseSpeed if the player is near to lava");
+        EM_Settings.NearLavaDehydrateBonus               = config.getFloat("165_NearLavaDehydrateBonus",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NearLavaDehydrateBonus, 1, 65536,  "Bonus to dehydration if the player is near to lava");
+        EM_Settings.NoBiomeRainfallDayDehydrateBonus               = config.getFloat("166_NoBiomeRainfallDayDehydrateBonus",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.NoBiomeRainfallDayDehydrateBonus, 1, 65536,  "Bonus to dehydration if BiomeRainfall = 0 and it is daytime");
+
+        EM_Settings.SprintDehydrateBonus               = config.getFloat("167_SprintDehydrateBonus",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SprintDehydrateBonus, 1, 65536,  "Bonus to dehydration when the player is running");
+        EM_Settings.SprintMinRiseSpeed                 = config.getFloat("168_SprintMinRiseSpeed",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SprintMinRiseSpeed, 1, 65536,  "Minimum riseSpeed when the player is running");
+
+
         // --------------- //
         // --- General --- //
         // --------------- //

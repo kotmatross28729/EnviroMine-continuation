@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
@@ -83,7 +82,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -135,7 +133,7 @@ public class EM_StatusManager
 
 		tracker.updateTimer += 1;
 
-		if(tracker.updateTimer >= 30) //TODO HARDCODED
+		if(tracker.updateTimer >= EM_Settings.TrackerUpdateTimer)
 		{
 			tracker.updateData();
 
@@ -262,8 +260,8 @@ public class EM_StatusManager
 
         if (!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
             if (dimensionProp == null || !dimensionProp.override || dimensionProp.darkAffectSanity) {
-                sanityStartRate = -0.01F; //TODO HARDCODED
-                sanityRate = -0.01F;
+                sanityStartRate = EM_Settings.SanityRateDecreaseDark;
+                sanityRate = EM_Settings.SanityRateDecreaseDark;
             }
         }
 
@@ -346,8 +344,7 @@ public class EM_StatusManager
                                     //Coal - 1600/16 = 64℃ (expected 50) ✅
                                     //Bale - 32000/16 = 514℃ (expected 1000) - 500℃ hard-cap ✅
                                     //Works in space - ✅
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min((press.burnTime / EM_Settings.BurnerPressHeatDivisor), EM_Settings.BurnerPressHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min((press.burnTime / EM_Settings.BurnerPressHeatDivisor), EM_Settings.BurnerPressHeatHardCap*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if (tileentity instanceof TileEntityHeaterFirebox firebox) {
@@ -377,8 +374,7 @@ public class EM_StatusManager
                                 if (heaterElectric.isOn && heaterElectric.heatEnergy > 0) {
                                     //Max (no) - 10_000/20 = 244(249)℃ (expected 250) - 250℃ hard-cap ✅
                                     //Works in space - ✅
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min(heaterElectric.heatEnergy / EM_Settings.HeaterElectricHeatDivisor, (EM_Settings.HeaterElectricHeatHardCap*2)) , dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(heaterElectric.heatEnergy / EM_Settings.HeaterElectricHeatDivisor, (EM_Settings.HeaterElectricHeatHardCap*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider)) , dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if (tileentity instanceof TileEntityFurnaceIron furnaceIron) {
@@ -386,8 +382,7 @@ public class EM_StatusManager
                                     //Coal - 2000/2 = 458℃ (expected 500) ✅
                                     //Bale - 64000/2 = 15343℃ (expected 16000) - 1000℃ hard-cap ✅
                                     //Works in space - ❌
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min(furnaceIron.burnTime / EM_Settings.IronFurnaceHeatDivisor, (EM_Settings.IronFurnaceHeatHardCap*2)), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min(furnaceIron.burnTime / EM_Settings.IronFurnaceHeatDivisor, (EM_Settings.IronFurnaceHeatHardCap*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider)), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if (tileentity instanceof TileEntityFurnaceSteel furnaceSteel) {
@@ -449,8 +444,7 @@ public class EM_StatusManager
                                     //Coal - 1600/16  = 58℃ (expected 50) ✅
                                     //Bale - 32000/16 = 475℃ (expected 1000) - 500℃ hard-cap ✅
                                     //Works in space - ❌
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff(Math.min((furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff(Math.min((furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor), EM_Settings.FurnaceBrickHeatHardCap*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityDiFurnace diFurnace) {
@@ -480,8 +474,7 @@ public class EM_StatusManager
                                 //this shouldn't really be a constant, but I don't give a fuck
                                 if(rtgFurnace.isProcessing()){
                                     //Works in space - ✅
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineWoodBurner woodBurner) {
@@ -501,22 +494,19 @@ public class EM_StatusManager
                             else if(tileentity instanceof TileEntityMachineDiesel diesel) {
                                 if(diesel.tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(diesel.tank.getTankType()) > 0L) {
                                     //Works in space - ❌
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.DieselGenHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.DieselGenHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineCombustionEngine combustionEngine) {
                                 if(combustionEngine.wasOn) {
                                     //Works in space - ❌
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.ICEHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.ICEHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineCyclotron cyclotron) {
                                 if(cyclotron.progress > 0) {
                                     //Works in space - ✅
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.CyclotronHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.CyclotronHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineHephaestus hephaestus) { //GeoThermal
@@ -536,8 +526,7 @@ public class EM_StatusManager
                             else if(tileentity instanceof TileEntityMachineArcFurnaceLarge arcFurnaceLarge) {
                                 if(arcFurnaceLarge.isProgressing) {
                                     //Works in space - ✅
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.ArcFurnaceHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.ArcFurnaceHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineGasFlare gasFlare) {
@@ -549,8 +538,7 @@ public class EM_StatusManager
                                 } catch (NoSuchFieldException | IllegalAccessException ignored) {}
                                 if(gasFlare.doesBurn && powerGen > 0) {
                                     //Works in space - ✅ (why?)
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.FlareStackHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.FlareStackHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineCoker coker) {
@@ -563,8 +551,7 @@ public class EM_StatusManager
                             else if(tileentity instanceof TileEntityMachineTurbofan turbofan) {
                                 if(turbofan.wasOn) {
                                     //Works in space - ❌
-                                    //TODO CONSTANT ALERT
-                                    blockAndItemTempInfluence += getTempFalloff((turbofan.afterburner > 0 ? EM_Settings.TurbofanAfterburnerHeatConstant*2 : EM_Settings.TurbofanHeatConstant*2), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+                                    blockAndItemTempInfluence += getTempFalloff((turbofan.afterburner > 0 ? EM_Settings.TurbofanAfterburnerHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider : EM_Settings.TurbofanHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
                             else if(tileentity instanceof TileEntityMachineTurbineGas turbineGas) {
@@ -693,42 +680,39 @@ public class EM_StatusManager
                 } else if (stack.getItem() instanceof ItemBlock itemBlock) {
                     if (itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.worldObj.provider.hasNoSky) && sanityBoost <= 0.1F) {
                         if (((BlockFlower) itemBlock.field_150939_a).getPlantType(entityLiving.worldObj, i, j, k) == EnumPlantType.Plains) {
-                            sanityBoost += 0.1F; //TODO HARDCODED
+                            sanityBoost += EM_Settings.SanityBoostFlowers;
                         }
                     }
                 }
             }
         }
 
-        //TODO HARDCODED
         if (lightLev > 1 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality += 2F;
-            sanityRate += 0.5F;
+            quality += EM_Settings.AirQualityIncreaseLight;
+            sanityRate += EM_Settings.SanityRateIncreaseLight;
         } else if (sanityRate <= sanityStartRate && sanityRate > -0.1F && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null) {
-            sanityRate -= 0.1F;
+            sanityRate += EM_Settings.SanityRateDecreaseLight;
         }
 
-        if (dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky) {
-            quality += 2F;
+        if (dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * EM_Settings.SurfaceYPositionMultiplier && !entityLiving.worldObj.provider.hasNoSky) {
+            quality += EM_Settings.AirQualityIncreaseSurface;
         }
 
 
         float biomeTemperature = (surroundingBiomeTempSamplesSum / surroundingBiomeTempSamplesCount);
-        float maxHighAltitudeTemp = -30F; // Max temp at high altitude
-        float minLowAltitudeTemp = 30F; // Min temp at low altitude (Geothermal Heating)
-
-        //TODO CHANGE FUCKING HARDCODE
+        float maxHighAltitudeTemp = EM_Settings.MaxHighAltitudeTemp; // Max temp at high altitude
+        float minLowAltitudeTemp = EM_Settings.MinLowAltitudeTemp; // Min temp at low altitude (Geothermal Heating)
 
         if (!entityLiving.worldObj.provider.hasNoSky) {
-            if (entityLiving.posY < 48) {
+            if (entityLiving.posY < EM_Settings.SurfaceYPosition) {
                 if (minLowAltitudeTemp - biomeTemperature > 0) {
-                    biomeTemperature += (minLowAltitudeTemp - biomeTemperature) * (1F - (entityLiving.posY / 48F));
+                    biomeTemperature += (minLowAltitudeTemp - biomeTemperature) * (1F - (entityLiving.posY / EM_Settings.SurfaceYPosition));
                 }
-            } else if (entityLiving.posY > 90 && entityLiving.posY < 256) {
+            } else if (entityLiving.posY > EM_Settings.SkyYPositionLowerBound && entityLiving.posY < EM_Settings.SkyYPositionUpperBound) {
                 if (maxHighAltitudeTemp - biomeTemperature < 0) {
-                    biomeTemperature -= MathHelper.abs(maxHighAltitudeTemp - biomeTemperature) * ((entityLiving.posY - 90F) / 166F);
+                    biomeTemperature -= MathHelper.abs(maxHighAltitudeTemp - biomeTemperature) * ((entityLiving.posY - EM_Settings.SkyYPositionLowerBound) / EM_Settings.SkyYPositionLowerBoundDivider);
                 }
-            } else if (entityLiving.posY >= 256) {
+            } else if (entityLiving.posY >= EM_Settings.SkyYPositionUpperBound) {
                 biomeTemperature = Math.min(biomeTemperature, maxHighAltitudeTemp);
             }
         }
@@ -768,14 +752,14 @@ public class EM_StatusManager
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
-                    dropSpeed = 0.01F;
+                    dropSpeed = 0.01F; //TODO HARDCODED, biome props
                 }
             } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && biomeTemperatureThunderBool) {
                 biomeTemperature -= biomeTemperatureThunder;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
-                    dropSpeed = 0.01F; //TODO HARDCODED
+                    dropSpeed = 0.01F; //TODO HARDCODED, biome props
                 }
             }
 
@@ -917,7 +901,7 @@ public class EM_StatusManager
                 List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(entityLiving.worldObj, pos.x, pos.y, pos.z);
                     for (AtmosphereBlob blob : currentBlobs) {
                         if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
-                            biomeTemperature = 24.6F; //TODO HARDCODED
+                            biomeTemperature = EM_Settings.NTMSpaceAirVentTemperatureConstant;
                             airVentConst = true;
                         }
                     }
@@ -979,17 +963,17 @@ public class EM_StatusManager
                     if (villager.getProfession() == 2) // Priest
                     {
                         if (sanityBoost < 5F) {
-                            sanityBoost = 5F; //TODO HARDCODED
+                            sanityBoost = 5F;
                         }
 
                         ((EntityPlayer) entityLiving).addStat(EnviroAchievements.tradingFavours, 1);
                     } else if (villager.getProfession() == 0 && isDay) // Farmer
                     {
                         if (tracker.hydration < 50F) {
-                            tracker.hydration = 100F; //TODO HARDCODED
+                            tracker.hydration = 100F;
 
                             if (tracker.bodyTemp >= 38F) {
-                                tracker.bodyTemp -= 1F; //TODO HARDCODED
+                                tracker.bodyTemp -= 1F;
                             }
                             entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.drink", 1.0F, 1.0F);
                             villager.playSound("mob.villager.yes", 1.0F, 1.0F);
@@ -1000,7 +984,7 @@ public class EM_StatusManager
                     } else if (villager.getProfession() == 4 && isDay) // Butcher
                     {
                         FoodStats food = ((EntityPlayer) entityLiving).getFoodStats();
-                        if (food.getFoodLevel() <= 10) { //TODO HARDCODED
+                        if (food.getFoodLevel() <= 10) {
                             food.setFoodLevel(20);
                             entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.burp", 0.5F, entityLiving.worldObj.rand.nextFloat() * 0.1F + 0.9F);
                             villager.playSound("mob.villager.yes", 1.0F, 1.0F);
@@ -1059,8 +1043,8 @@ public class EM_StatusManager
         if (validEntities > 0) {
             avgEntityTemp /= validEntities;
 
-            if (biomeTemperature < avgEntityTemp - 12F) { //TODO HARDCODED
-                biomeTemperature = (biomeTemperature + (avgEntityTemp - 12F)) / 2;
+            if (biomeTemperature < avgEntityTemp - EM_Settings.RealTemperatureConstant) {
+                biomeTemperature = (biomeTemperature + (avgEntityTemp - EM_Settings.RealTemperatureConstant)) / EM_Settings.AvgEntityTempDivider;
             }
         }
 
@@ -1249,7 +1233,7 @@ public class EM_StatusManager
             fireProt = 1F - fireProt / 18F;
         }
 
-        //TODO HARDCODED
+        //TODO HARDCODED, biome props
         if (entityLiving.isInWater()) {
             if (biomeTemperature > 25F) {
                 if (biomeTemperature > 50F) {
@@ -1264,23 +1248,23 @@ public class EM_StatusManager
         float ambientTemperature = 0F;
 
         if (blockAndItemTempInfluence > biomeTemperature) {
-            ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / 2; //TODO HARDCODED, CONSTANT ALERT
-            if (blockAndItemTempInfluence > (biomeTemperature + 5F)) {
-                riseSpeed = 0.005F; //TODO HARDCODED
+            ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider;
+            if (blockAndItemTempInfluence > (biomeTemperature + EM_Settings.AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant)) {
+                riseSpeed = EM_Settings.AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant;
             }
         } else {
             ambientTemperature = biomeTemperature;
         }
 
         if (entityLiving.getActivePotionEffect(Potion.hunger) != null) {
-            dehydrateBonus += 0.1F; //TODO HARDCODED
+            dehydrateBonus += EM_Settings.HungerEffectDehydrateBonus;
         }
 
         if (nearLava) {
-            if (riseSpeed <= 0.005F) { //TODO HARDCODED
-                riseSpeed = 0.005F;
+            if (riseSpeed <= EM_Settings.NearLavaMinRiseSpeed) {
+                riseSpeed = EM_Settings.NearLavaMinRiseSpeed;
             }
-            dehydrateBonus += 0.05F;
+            dehydrateBonus += EM_Settings.NearLavaDehydrateBonus;
             if (animalHostility == 0) {
                 animalHostility = 1;
             }
@@ -1328,7 +1312,7 @@ public class EM_StatusManager
         }
 
         if (biome.getIntRainfall() == 0 && isDay) {
-            dehydrateBonus += 0.05F; //TODO HARDCODED
+            dehydrateBonus += EM_Settings.NoBiomeRainfallDayDehydrateBonus;
             if (animalHostility == 0) {
                 animalHostility = 1;
             }
@@ -1431,11 +1415,10 @@ public class EM_StatusManager
 
 		if(entityLiving.isSprinting())
 		{
-//TODO HARDCODED
-			dehydrateBonus += 0.05F;
-			if(riseSpeed < 0.01F)
+			dehydrateBonus += EM_Settings.SprintDehydrateBonus;
+			if(riseSpeed < EM_Settings.SprintMinRiseSpeed)
 			{
-				riseSpeed = 0.01F;
+				riseSpeed = EM_Settings.SprintMinRiseSpeed;
 			}
 			ambientTemperature += EM_Settings.SprintambientTemperature;
 		}

@@ -220,7 +220,6 @@ public class EM_Settings
     public static float TimeBelow10AirAndTemperatureConstantBodyTemperature       = 35.0F;
     public static float TimeBelow10BodyTemperatureConstant                        = 30.0F;
 
-
     public static float BodyTemperatureHeatStartValue         = 39.0F;
     public static float BodyTemperatureHeatInstantDeath       = 1000.0F;
 
@@ -253,7 +252,43 @@ public class EM_Settings
     public static float SanityStage3UpperBound           = 5.0F;
     public static float SanityStage3LowerBound           = 0.0F;
 
+    //EM_StatusManager
 
+    public static float TrackerUpdateTimer           = 30.0F;
+    public static float SanityRateDecreaseDark       = -0.01F;
+    public static float SanityBoostFlowers               = 0.1F;
+    public static float AirQualityIncreaseLight          = 2.0F;
+    public static float SanityRateIncreaseLight          = 0.5F;
+    public static float SanityRateDecreaseLight          = -0.1F;
+    public static float SurfaceYPositionMultiplier       = 0.75F;
+    public static float AirQualityIncreaseSurface        = 2.0F;
+
+    public static float MaxHighAltitudeTemp        = -30.0F;
+    public static float MinLowAltitudeTemp         = 30.0F;
+    public static float SurfaceYPosition           = 48.0F;
+    public static float SkyYPositionLowerBound     = 90.0F;
+
+    public static float SkyYPositionLowerBoundDivider  = 166.0F;
+    public static float SkyYPositionUpperBound     = 256.0F;
+    public static float NTMSpaceAirVentTemperatureConstant     = 24.6F;
+
+    public static float AvgEntityTempDivider  = 2.0F;
+
+    public static float AmbientTemperatureblockAndItemTempInfluenceDivider  = 2.0F;
+
+    public static float AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant  = 5.0F;
+
+    public static float AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant  = 0.005F;
+
+    public static float HungerEffectDehydrateBonus  = 0.1F;
+
+    public static float NearLavaMinRiseSpeed  = 0.005F;
+    public static float NearLavaDehydrateBonus  = 0.05F;
+
+    public static float NoBiomeRainfallDayDehydrateBonus  = 0.05F;
+
+    public static float SprintDehydrateBonus  = 0.05F;
+    public static float SprintMinRiseSpeed  = 0.01F;
 
     public static boolean enableItemPropsDivideByTwo = true;
 
