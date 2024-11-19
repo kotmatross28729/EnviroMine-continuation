@@ -1,6 +1,9 @@
 package enviromine.handlers;
 
+import com.hbm.inventory.FluidContainer;
+import com.hbm.inventory.FluidContainerRegistry;
 import com.hbm.inventory.OreDictManager;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.main.CraftingManager;
 import cpw.mods.fml.common.registry.GameRegistry;
 import enviromine.core.EnviroMine;
@@ -118,6 +121,8 @@ public class ObjectHandlerCompat {
 
 
         CraftingManager.addRecipeAuto(new ItemStack(waterBottle_polymer), "p p", " p ", 'p', OreDictManager.ANY_PLASTIC.ingot());
+
+        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(cleanWaterBottle_polymer), new ItemStack(waterBottle_polymer), Fluids.WATER, 500));
     }
 
 }

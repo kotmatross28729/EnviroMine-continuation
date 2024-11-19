@@ -40,6 +40,8 @@
 
 - **13)** **Added compat with Serene Seasons**
 
+- **14)** **Added the ability to change a huge number of hardcoded values**
+
 
 ## Current TODO:
 - **1)** **Ability to change parameters for mobs from other mods.**
@@ -47,11 +49,6 @@
 
 - **2)** **Сode refactoring.**
    + The name speaks for itself
-
-- **3)** **UNHARDCODE ALL HARDCODED VALUES.**
-   + There are a lot of values in enviromine that could be changed in some situations. This is the last thing I plan to do
-
-
 
 # Credits:
 

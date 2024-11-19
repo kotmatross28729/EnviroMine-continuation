@@ -1,9 +1,5 @@
 package enviromine.trackers.properties;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-
 import com.hbm.dim.Ike.BiomeGenIke;
 import com.hbm.dim.dres.biome.BiomeGenBaseDres;
 import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
@@ -15,8 +11,6 @@ import com.hbm.dim.minmus.biome.BiomeGenBaseMinmus;
 import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
 import com.hbm.dim.moon.BiomeGenMoon;
 import com.hbm.dim.orbit.BiomeGenOrbit;
-import org.apache.logging.log4j.Level;
-
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
@@ -30,8 +24,11 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Level;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.DRY;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class BiomeProperties implements SerialisableProperty, PropertyBase
 {
@@ -83,8 +80,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
     public float tempRate_DAY;
     public float tempRate_DUSK;
     public float tempRate_NIGHT;
-
     public boolean tempRate_HARD;
+
+    public float TemperatureWaterDecrease;
+    public float dropSpeedWater;
+
+    public float dropSpeedRain;
+    public float dropSpeedThunder;
 
 	public BiomeProperties(NBTTagCompound tags)
 	{
@@ -146,7 +148,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         float tempRate_DAY,
         float tempRate_DUSK,
         float tempRate_NIGHT,
-        boolean tempRate_HARD
+        boolean tempRate_HARD,
+        float TemperatureWaterDecrease,
+        float dropSpeedWater,
+        float dropSpeedRain,
+        float dropSpeedThunder
     ) {
 		this.id = id;
 		this.biomeOveride = biomeOveride;
@@ -196,6 +202,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.tempRate_NIGHT  = tempRate_NIGHT;
 
         this.tempRate_HARD = tempRate_HARD;
+
+        this.TemperatureWaterDecrease = TemperatureWaterDecrease;
+        this.dropSpeedWater = dropSpeedWater;
+
+        this.dropSpeedRain = dropSpeedRain;
+        this.dropSpeedThunder = dropSpeedThunder;
 	}
 	/**
 	 * <b>hasProperty(BiomeGenBase biome)</b><bR><br>
@@ -295,6 +307,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
         tags.setBoolean("tempRate_HARD", this.tempRate_HARD);
 
+        tags.setFloat("TemperatureWaterDecrease", this.TemperatureWaterDecrease);
+        tags.setFloat("dropSpeedWater", this.dropSpeedWater);
+
+        tags.setFloat("dropSpeedRain", this.dropSpeedRain);
+        tags.setFloat("dropSpeedThunder", this.dropSpeedThunder);
+
 		return tags;
 	}
 
@@ -348,6 +366,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         this.tempRate_NIGHT = tags.getFloat("tempRate_NIGHT");
 
         this.tempRate_HARD = tags.getBoolean("tempRate_HARD");
+
+        this.TemperatureWaterDecrease = tags.getFloat("TemperatureWaterDecrease");
+        this.dropSpeedWater = tags.getFloat("dropSpeedWater");
+
+        this.dropSpeedRain = tags.getFloat("dropSpeedRain");
+        this.dropSpeedThunder = tags.getFloat("dropSpeedThunder");
 	}
 
 	@Override
@@ -416,6 +440,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
         boolean tempRate_HARD = config.get(category, BOName[40], false).getBoolean(false);
 
+        float TemperatureWaterDecrease = (float)config.get(category, BOName[41], 10.0).getDouble(10.0);
+        float dropSpeedWater = (float)config.get(category, BOName[42], 0.01).getDouble(0.01);
+
+        float dropSpeedRain = (float)config.get(category, BOName[43], 0.01).getDouble(0.01);
+        float dropSpeedThunder = (float)config.get(category, BOName[44], 0.01).getDouble(0.01);
+
 		BiomeProperties entry = new BiomeProperties (
             id,
             biomeOveride,
@@ -458,7 +488,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
             tempRate_DAY,
             tempRate_DUSK,
             tempRate_NIGHT,
-            tempRate_HARD
+            tempRate_HARD,
+            TemperatureWaterDecrease,
+            dropSpeedWater,
+            dropSpeedRain,
+            dropSpeedThunder
         );
 
 		if(EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename))
@@ -512,12 +546,18 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(category, BOName[34], this.LATE_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late winter").getDouble(this.LATE_WINTER_TEMPERATURE_DECREASE);
         config.get(category, BOName[35], this.LATE_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late autumn").getDouble(this.LATE_AUTUMN_TEMPERATURE_DECREASE);
 
-        config.get(category, BOName[36], this.tempRate_DAWN).getDouble(this.tempRate_DAWN);
-        config.get(category, BOName[37], this.tempRate_DAY).getDouble(this.tempRate_DAY);
-        config.get(category, BOName[38], this.tempRate_DUSK).getDouble(this.tempRate_DUSK);
-        config.get(category, BOName[39], this.tempRate_NIGHT).getDouble(this.tempRate_NIGHT);
+        config.get(category, BOName[36], this.tempRate_DAWN, "Biome temperature rate will be this number at dawn").getDouble(this.tempRate_DAWN);
+        config.get(category, BOName[37], this.tempRate_DAY, "Biome temperature rate will be this number at day").getDouble(this.tempRate_DAY);
+        config.get(category, BOName[38], this.tempRate_DUSK, "Biome temperature rate will be this number at dusk").getDouble(this.tempRate_DUSK);
+        config.get(category, BOName[39], this.tempRate_NIGHT, "Biome temperature rate will be this number at midnight").getDouble(this.tempRate_NIGHT);
 
-        config.get(category, BOName[40], this.tempRate_HARD).getBoolean(this.tempRate_HARD);
+        config.get(category, BOName[40], this.tempRate_HARD, "The temperature of the biome is so strong that weak suits like MITTY/HEV cannot protect against it").getBoolean(this.tempRate_HARD);
+
+        config.get(category, BOName[41], this.TemperatureWaterDecrease,"Biome temperature decreases by this amount if the player is in water").getDouble(this.TemperatureWaterDecrease);
+        config.get(category, BOName[42], this.dropSpeedWater,"Biome drop speed will be this number if the player is in water").getDouble(this.dropSpeedWater);
+
+        config.get(category, BOName[43], this.dropSpeedRain,"Biome drop speed will be this number if it rains").getDouble(this.dropSpeedRain);
+        config.get(category, BOName[44], this.dropSpeedThunder,"Biome drop speed will be this number if there is a thunderstorm").getDouble(this.dropSpeedThunder);
     }
 
 	@Override
@@ -610,6 +650,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         double tempRate_NIGHT = temp;
 
         boolean tempRate_HARD = false;
+
+        float TemperatureWaterDecrease = 10.0F;
+        float dropSpeedWater = 0.01F;
+
+        float dropSpeedRain = 0.01F;
+        float dropSpeedThunder = 0.01F;
 
         double EARLY_SPRING_TEMPERATURE_DECREASE =
             (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -3.0 : //DESERT              (-8 (DEFAULT+8))
@@ -985,6 +1031,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(catName, BOName[39], tempRate_NIGHT).getDouble(tempRate_NIGHT);
 
         config.get(catName, BOName[40], tempRate_HARD).getBoolean(tempRate_HARD);
+
+        config.get(catName, BOName[41], TemperatureWaterDecrease).getDouble(TemperatureWaterDecrease);
+        config.get(catName, BOName[42], dropSpeedWater).getDouble(dropSpeedWater);
+
+        config.get(catName, BOName[43], dropSpeedRain).getDouble(dropSpeedRain);
+        config.get(catName, BOName[44], dropSpeedThunder).getDouble(dropSpeedThunder);
     }
 
 	@Override
@@ -1000,7 +1052,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BOName = new String[41];
+		BOName = new String[45];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
@@ -1042,5 +1094,9 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         BOName[38] = "39.Dusk Biome Temperature Rate";
         BOName[39] = "40.Night Biome Temperature Rate";
         BOName[40] = "41.[HBM] Hard Biome Temperature Rate";
+        BOName[41] = "42.Ambient Temperature Decrease Water";
+        BOName[42] = "43.Drop Speed Water";
+        BOName[43] = "44.Drop Speed Rain";
+        BOName[44] = "45.Drop Speed Thunder";
 	}
 }

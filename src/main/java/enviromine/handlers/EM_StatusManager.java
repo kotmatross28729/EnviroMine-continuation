@@ -728,10 +728,12 @@ public class EM_StatusManager
         if(dimensionProp == null || !dimensionProp.override || dimensionProp.weatherAffectsTemp) {
             float biomeTemperatureRain = 6F;
             float biomeTemperatureThunder = 8F;
-            //float biomeTemperatureShade = 2.5F; //the FUCK is that
 
             boolean biomeTemperatureRainBool = false;
             boolean biomeTemperatureThunderBool = false;
+
+            float dropSpeedRain = 0.01F;
+            float dropSpeedThunder = 0.01F;
 
             if (biome != null) {
                 BiomeProperties biomeOverride = null;
@@ -743,7 +745,9 @@ public class EM_StatusManager
                     biomeTemperatureThunder = biomeOverride.TemperatureThunderDecrease;
                     biomeTemperatureRainBool = biomeOverride.TemperatureRainBool;
                     biomeTemperatureThunderBool = biomeOverride.TemperatureThunderBool;
-                    //biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //Uh what
+
+                    dropSpeedRain = biomeOverride.dropSpeedRain;
+                    dropSpeedThunder = biomeOverride.dropSpeedThunder;
                 }
             }
 
@@ -752,31 +756,32 @@ public class EM_StatusManager
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
-                    dropSpeed = 0.01F; //TODO HARDCODED, biome props
+                    dropSpeed = dropSpeedRain;
+
                 }
             } else if (entityLiving.worldObj.isThundering() && biome.rainfall != 0.0F && biomeTemperatureThunderBool) {
                 biomeTemperature -= biomeTemperatureThunder;
                 animalHostility = -1;
 
                 if (entityLiving.worldObj.canBlockSeeTheSky(i, j, k)) {
-                    dropSpeed = 0.01F; //TODO HARDCODED, biome props
+                    dropSpeed = dropSpeedThunder;
                 }
             }
 
         } // Dimension Overrides End
 
-        float biomeTemperatureShade = 2.5F; //who the fuck writing that code? (-grammar)
+        float biomeTemperatureShade = 2.5F;
         if (biome != null) {
             BiomeProperties biomeOverride = null;
             if (BiomeProperties.base.hasProperty(biome)) {
                 biomeOverride = BiomeProperties.base.getProperty(biome);
             } if (biomeOverride != null && biomeOverride.biomeOveride) {
-                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease; //A, it was me
+                biomeTemperatureShade = biomeOverride.TemperatureShadeDecrease;
             }
         }
         // 	Shade
         if (!entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.worldObj.isRaining()) {
-            biomeTemperature -= biomeTemperatureShade; //WHA-
+            biomeTemperature -= biomeTemperatureShade;
         }
 
         if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
@@ -1233,16 +1238,21 @@ public class EM_StatusManager
             fireProt = 1F - fireProt / 18F;
         }
 
-        //TODO HARDCODED, biome props
-        if (entityLiving.isInWater()) {
-            if (biomeTemperature > 25F) {
-                if (biomeTemperature > 50F) {
-                    biomeTemperature -= 50F;
-                } else {
-                    biomeTemperature = 25F;
+        float TemperatureWaterDecrease = 10.0F;
+        float dropSpeedWater = 0.01F;
+
+        BiomeProperties biomeProps;
+        if (BiomeProperties.base.hasProperty(biome)) {
+            biomeProps = BiomeProperties.base.getProperty(biome);
+            if (biomeProps != null && biomeProps.biomeOveride) {
+                    TemperatureWaterDecrease = biomeProps.TemperatureWaterDecrease;
+                    dropSpeedWater = biomeProps.dropSpeedWater;
                 }
-            }
-            dropSpeed = 0.01F;
+        }
+
+        if (entityLiving.isInWater()) {
+            biomeTemperature -= TemperatureWaterDecrease;
+            dropSpeed = dropSpeedWater;
         }
 
         float ambientTemperature = 0F;
@@ -1270,7 +1280,7 @@ public class EM_StatusManager
             }
         }
 
-        BiomeProperties biomeProp = null;
+        BiomeProperties biomeProp;
         if (BiomeProperties.base.hasProperty(biome)) {
             biomeProp = BiomeProperties.base.getProperty(biome);
 
@@ -1303,9 +1313,6 @@ public class EM_StatusManager
                         dropSpeed -= temperatureRate; //INVERTED LOGIC, AND MULTIPLIED BY 10,  FU-
                     }
                 }
-
-
-
                 sanityRate += biomeProp.sanityRate;
             }
 

@@ -21,6 +21,7 @@
       + "Coal dust" / "Asbestos" items decrease air quality
       + "Digamma Radiation" items decrease sanity
     + Added plastic bottles, have 2 times more capacity than regular glass ones
+      + bottles work with the hbm's liquid system, so you can draw it from the barrels
 
 - Fixed several minor (and not so) bugs
 
@@ -32,6 +33,9 @@
 
 + Added texture for the extinguished torch
   + also fixed a bug due to which vanilla torches were consumed even in creative
+
++ Added the ability to change a huge number of hardcoded values
+  + config now has 150+ options
 
 ---
 # 1.3.143
