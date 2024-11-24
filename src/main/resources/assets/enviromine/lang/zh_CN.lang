@@ -1,12 +1,25 @@
 language.name=Chinese
 
 item.enviromine.badwater.name=脏水瓶
-item.enviromine.saltwater.name=咸水瓶
+item.enviromine.saltwater.name=盐水瓶
 item.enviromine.coldwater.name=冷水瓶
+item.enviromine.warmwater.name=温水瓶
 item.enviromine.badcoldwater.name=冷脏水瓶
 item.enviromine.badwarmwater.name=温脏水瓶
 item.enviromine.frostywater.name=冰水瓶
 item.enviromine.hotwater.name=热水瓶
+
+item.enviromine.water.polymer.name=塑料瓶
+item.enviromine.cleanwater.polymer.name=塑料瓶装水
+item.enviromine.badwater.polymer.name=塑料瓶装水
+item.enviromine.saltwater.polymer.name=塑料瓶装盐水
+item.enviromine.coldwater.polymer.name=塑料瓶装冷水
+item.enviromine.warmwater.polymer.name=塑料瓶装温水
+item.enviromine.badcoldwater.polymer.name=不干净的塑料水瓶装冷水
+item.enviromine.badwarmwater.polymer.name=不干净的塑料瓶装温水
+item.enviromine.frostywater.polymer.name=塑料瓶装冰水
+item.enviromine.hotwater.polymer.name=塑料瓶装热水
+
 
 item.enviromine.camelpack.name=储水包
 item.enviromine.gasmask.name=口罩
