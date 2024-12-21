@@ -52,6 +52,7 @@ import enviromine.trackers.properties.BlockProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.trackers.properties.ItemProperties;
+import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -1324,78 +1325,13 @@ public class EM_StatusManager
                 animalHostility = 1;
             }
         }
-        if(isHbmLoaded()) {
-            ItemStack helmet = entityLiving.getEquipmentInSlot(4);
-            ItemStack plate0 = entityLiving.getEquipmentInSlot(3);
-            ItemStack legs = entityLiving.getEquipmentInSlot(2);
-            ItemStack boots = entityLiving.getEquipmentInSlot(1);
-            ArmorProperties helmetprops = null;
-            ArmorProperties plateprops = null;
-            ArmorProperties legsprops = null;
-            ArmorProperties bootsprops = null;
-            boolean ImmunityBurning = false;
-            boolean ImmunityFull = false;
-            if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
-            if(plate0 != null) {if (ArmorProperties.base.hasProperty(plate0)) {plateprops = ArmorProperties.base.getProperty(plate0);}}
-            if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
-            if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
-            if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
-                if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                    ImmunityBurning = true; // All armor isTemperatureResistance ? ImmunityBurning = true
-                    ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-                    // All armor isTemperatureSealed ? ImmunityFull = true
-                } else {
-                    ImmunityBurning = false; // All armor NOT isTemperatureResistance ? ImmunityBurning = false
-                }
-            }
 
-            if (entityLiving instanceof EntityPlayer player && ArmorFSB.hasFSBArmor(player)) {
-                ItemStack plate = player.inventory.armorInventory[2];
-                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-                if (!entityLiving.isPotionActive(Potion.fireResistance) && !(chestplate.fireproof)) {
-                    if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityFull) {
-                        ambientTemperature += EM_Settings.LavaBlockAmbientTemperature;
-                        riseSpeed += EM_Settings.RiseSpeedLava;
-                    } else if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && (chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityFull) {
-                        ambientTemperature += EM_Settings.BurningambientTemperature;
-                        riseSpeed += EM_Settings.RiseSpeedLavaDecr;
-                    }
-                    else if (entityLiving.isBurning() && !(chestplate == ModItems.hev_plate || chestplate == ModItems.envsuit_plate) && !ImmunityBurning) {
-                        if (ambientTemperature <= EM_Settings.BurningambientTemperature) {
-                            ambientTemperature += EM_Settings.BurningambientTemperature;
-                        }
-                        if (riseSpeed < EM_Settings.RiseSpeedMin) {
-                            riseSpeed = EM_Settings.RiseSpeedMin;
-                        }
-                    }
-                }
-            }
-        }
-        if (!entityLiving.isPotionActive(Potion.fireResistance)) {
-            ItemStack helmet = entityLiving.getEquipmentInSlot(4);
-            ItemStack plate = entityLiving.getEquipmentInSlot(3);
-            ItemStack legs = entityLiving.getEquipmentInSlot(2);
-            ItemStack boots = entityLiving.getEquipmentInSlot(1);
-            ArmorProperties helmetprops = null;
-            ArmorProperties plateprops = null;
-            ArmorProperties legsprops = null;
-            ArmorProperties bootsprops = null;
-            boolean ImmunityBurning = false;
-            boolean ImmunityFull = false;
-            if(helmet != null) {if (ArmorProperties.base.hasProperty(helmet)) {helmetprops = ArmorProperties.base.getProperty(helmet);}}
-            if(plate != null) {if (ArmorProperties.base.hasProperty(plate)) {plateprops = ArmorProperties.base.getProperty(plate);}}
-            if(legs != null) {if (ArmorProperties.base.hasProperty(legs)) {legsprops = ArmorProperties.base.getProperty(legs);}}
-            if(boots != null) {if (ArmorProperties.base.hasProperty(boots)) {bootsprops = ArmorProperties.base.getProperty(boots);}}
-            if(helmetprops != null && plateprops != null && legsprops != null && bootsprops != null) {
-                if(helmetprops.isTemperatureResistance && plateprops.isTemperatureResistance && legsprops.isTemperatureResistance && bootsprops.isTemperatureResistance) {
-                    ImmunityBurning = true;
-                    ImmunityFull = helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-                } else {
-                    ImmunityBurning = false;
-                }
-            }
-            if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava && !ImmunityFull) {
-                if(ImmunityBurning) {
+        boolean ImmunityBurning = ArmorTempUtils.getTempResistance(entityLiving);
+        boolean ImmunityFull = ArmorTempUtils.getTempSealing(entityLiving);
+
+        if(!ImmunityFull && !entityLiving.isPotionActive(Potion.fireResistance)) {
+            if (entityLiving.worldObj.getBlock(i, j, k).getMaterial() == Material.lava) {
+                if (ImmunityBurning) {
                     ambientTemperature += EM_Settings.BurningambientTemperature;
                     riseSpeed = EM_Settings.RiseSpeedLavaDecr;
                 } else {
@@ -1411,6 +1347,7 @@ public class EM_StatusManager
                 }
             }
         }
+
 
 		quality += (leaves * 0.1F);
 		sanityRate += sanityBoost;
