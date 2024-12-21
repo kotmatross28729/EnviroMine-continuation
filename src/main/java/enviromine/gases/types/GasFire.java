@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
+import enviromine.utils.ArmorTempUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,25 +26,8 @@ public class GasFire extends EnviroGas
 	public void applyEffects(EntityLivingBase entityLiving, int amplifier)
 	{
 		super.applyEffects(entityLiving, amplifier);
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityLiving;
-            if (ArmorFSB.hasFSBArmor(player)) {
-                ItemStack plate = player.inventory.armorInventory[2];
-                ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-                if (chestplate != null) {
-                    if ((!chestplate.fireproof)) {
-                        player.attackEntityFrom(DamageSource.onFire, 3F);
-                        player.setFire(10);
-                    }
-                } else {
-                    player.attackEntityFrom(DamageSource.onFire, 3F);
-                    player.setFire(10);
-                }
-            } else {
-                player.attackEntityFrom(DamageSource.onFire, 3F);
-                player.setFire(10);
-            }
-        } else {
+        boolean ImmunityBurning = ArmorTempUtils.getTempResistance(entityLiving);
+        if (!ImmunityBurning) {
             entityLiving.attackEntityFrom(DamageSource.onFire, 3F);
             entityLiving.setFire(10);
         }

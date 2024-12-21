@@ -1,5 +1,6 @@
 package enviromine.handlers;
 
+import com.hbm.blocks.ModBlocks;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -78,12 +79,12 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -98,6 +99,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
@@ -106,15 +108,12 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
-
-import static net.minecraftforge.common.BiomeDictionary.Type.SAVANNA;
-import static net.minecraftforge.common.BiomeDictionary.Type.WET;
 
 public class EM_EventManager
 {
@@ -430,6 +429,25 @@ public class EM_EventManager
 			}
 		}
 	}
+
+    //TODO temp, gas rework
+    @SubscribeEvent
+    public void onBlockBreak(BlockEvent.BreakEvent event) {
+        if(EnviroMine.isHbmLoaded()) {
+            if (event.block == ObjectHandler.flammableCoal || event.block == ObjectHandler.burningCoal) {
+
+                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+
+                    int x = event.x + dir.offsetX;
+                    int y = event.y + dir.offsetY;
+                    int z = event.z + dir.offsetZ;
+
+                    if (event.world.rand.nextInt(2) == 0 && event.world.getBlock(x, y, z) == Blocks.air)
+                        event.world.setBlock(x, y, z, ModBlocks.gas_coal);
+                }
+            }
+        }
+    }
 
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
