@@ -5,7 +5,12 @@
       "gasmask"
     ]
   },
- 
+  "breathing": {
+    "category": "player",
+    "sounds": [
+      "breathing"
+    ]
+  },
   "thingkill": {
     "category": "player",
     "sounds": [

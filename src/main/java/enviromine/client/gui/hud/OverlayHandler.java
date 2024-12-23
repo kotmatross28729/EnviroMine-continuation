@@ -99,7 +99,7 @@ public class OverlayHandler
 	    {
 	        int alpha;
 
-	        alpha = (int)(Math.sin( Math.toRadians(overlay.phase) ) *  overlay.amplitude );
+	        alpha = (int)(Math.sin(Math.toRadians(overlay.phase)) * overlay.amplitude);
 	        alpha = (255 / overlay.amplitude) * alpha;
 	        
 	        if(alpha >= 254) alpha = 254;

@@ -1,3 +1,14 @@
+# 1.3.146
+
+### Fixed
+* Crash with new version of Hbm's NTM
+* Bug with playing gas mask breathing sound for some players (Requires Hbm's NTM loaded)
+
+
+### Added
+* When mining enviromine coal, Hbm's NTM coal dust will be released.
+
+
 
 ---
 # 1.3.144

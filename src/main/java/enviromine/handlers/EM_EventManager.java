@@ -1,6 +1,8 @@
 package enviromine.handlers;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -12,6 +14,9 @@ import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
 import enviromine.blocks.tiles.TileEntityGas;
+import enviromine.client.gui.UI_Settings;
+import enviromine.client.gui.hud.OverlayHandler;
+import enviromine.client.gui.hud.items.GasMaskHud;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
@@ -1300,7 +1305,9 @@ public class EM_EventManager
 			tracker.frostbiteLevel = 0;
 		}
 	}
-
+	
+	private AudioWrapper audioBreathing;
+	
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event)
 	{
@@ -1339,10 +1346,37 @@ public class EM_EventManager
 			}
 			return;
 		}
-
+		
 		if(event.entityLiving instanceof EntityPlayer)
 		{
 			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
+			
+			//GASMASK SOUND
+			if(EnviroMine.isHbmLoaded() && UI_Settings.breathSound) {
+				ItemStack mask = invo.armorItemInSlot(3);
+				if (mask != null && mask.getItem() != null && mask.getItem() == ObjectHandler.gasMask) {
+					
+					if(mask.hasTagCompound() && mask.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
+						if ((audioBreathing == null || !audioBreathing.isPlaying())) {
+							audioBreathing = MainRegistry.proxy.getLoopedSound("enviromine:breathing", (float) event.entityLiving.posX, (float) event.entityLiving.posY, (float) event.entityLiving.posZ, 0.1F, 5.0F, 1.0F, 5);
+							audioBreathing.startSound();
+						}
+						audioBreathing.updatePosition((float) event.entityLiving.posX, (float) event.entityLiving.posY, (float) event.entityLiving.posZ);
+						audioBreathing.keepAlive();
+					} else {
+						if(audioBreathing != null) {
+							audioBreathing.stopSound();
+							audioBreathing = null;
+						}
+					}
+					
+				} else if(audioBreathing != null) {
+						audioBreathing.stopSound();
+						audioBreathing = null;
+					}
+
+			}
+			
 			AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(event.entityLiving.posX - 0.5D, event.entityLiving.posY - 0.5D, event.entityLiving.posZ - 0.5D, event.entityLiving.posX + 0.5D, event.entityLiving.posY + 0.5D, event.entityLiving.posZ + 0.5D).expand(2D, 2D, 2D);
 			if(event.entityLiving.worldObj.getEntitiesWithinAABB(TileEntityGas.class, boundingBox).size() <= 0)
 			{
