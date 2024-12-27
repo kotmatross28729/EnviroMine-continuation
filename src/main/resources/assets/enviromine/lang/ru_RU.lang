@@ -171,6 +171,9 @@ misc.enviromine.tooltip.filter=Фильтры: %s (%s/%s)
 misc.enviromine.tooltip.water=Вода: %s (%s/%s)
 misc.enviromine.tooltip.rot=Испорчено: %s (Day %s/%s)
 
+enviromine.tooltip.armor.resistance=Эта броня устойчива к средним температурам
+enviromine.tooltip.armor.sealed=Эта броня устойчива к экстремальным температурам
+
 commands.enviromine.envirostat.add=добавить
 commands.enviromine.envirostat.set=установить
 commands.enviromine.envirostat.temp=температура

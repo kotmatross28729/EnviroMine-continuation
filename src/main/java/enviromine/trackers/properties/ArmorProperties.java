@@ -329,6 +329,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 					config.get(catName, APName[8], 0.0D).getDouble(0.0D);
 					
 					config.get(catName, APName[10], true).getBoolean(true);
+					config.get(catName, APName[11], true).getBoolean(true);
 				}
 				else if(armor == ModItems.envsuit_helmet || armor == ModItems.envsuit_plate || armor == ModItems.envsuit_legs || armor == ModItems.envsuit_boots) {
 					config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();

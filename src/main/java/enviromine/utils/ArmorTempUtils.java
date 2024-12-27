@@ -31,7 +31,19 @@ public class ArmorTempUtils {
         }
         return false;
     }
-
+    
+    public static boolean checkArmorPropertyItemStack(ItemStack stack, boolean Resistance) {
+        ArmorProperties props = getArmorProperties(stack);
+        if (props != null) {
+            if(Resistance) {
+                return props.isTemperatureResistance;
+            } else {
+                return props.isTemperatureSealed;
+            }
+        }
+        return false;
+    }
+    
     private static ArmorProperties getArmorProperties(EntityLivingBase entityLiving, int slot) {
         ItemStack armor = entityLiving.getEquipmentInSlot(slot);
         if (armor != null && ArmorProperties.base.hasProperty(armor)) {
@@ -39,5 +51,10 @@ public class ArmorTempUtils {
         }
         return null;
     }
-
+    private static ArmorProperties getArmorProperties(ItemStack stack) {
+        if (stack != null && ArmorProperties.base.hasProperty(stack)) {
+            return ArmorProperties.base.getProperty(stack);
+        }
+        return null;
+    }
 }

@@ -181,6 +181,9 @@ misc.enviromine.tooltip.filter=Filters: %s (%s/%s)
 misc.enviromine.tooltip.water=Water: %s (%s/%s)
 misc.enviromine.tooltip.rot=Rotten: %s (Day %s/%s)
 
+enviromine.tooltip.armor.resistance=This armor is resistant to average temperatures
+enviromine.tooltip.armor.sealed=This armor is resistant to extreme temperatures
+
 commands.enviromine.envirostat.add=add
 commands.enviromine.envirostat.set=set
 commands.enviromine.envirostat.temp=temp

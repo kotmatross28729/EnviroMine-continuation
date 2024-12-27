@@ -32,6 +32,7 @@ import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.trackers.properties.ItemProperties;
 import enviromine.trackers.properties.RotProperties;
+import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
 import enviromine.world.Earthquake;
 import enviromine.world.features.mineshaft.MineshaftBuilder;
@@ -42,6 +43,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -1947,9 +1949,17 @@ public class EM_EventManager
 	@SideOnly(Side.CLIENT)
 	public void onItemTooltip(ItemTooltipEvent event)
 	{
-		if(event.itemStack != null && event.itemStack.hasTagCompound())
-		{
-			if (event.itemStack.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY)) {
+		if (event.itemStack != null) {
+			
+			if(ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, false)){
+				event.toolTip.add(EnumChatFormatting.GOLD + "[" + I18n.format("enviromine.tooltip.armor.sealed") + "]");
+			} else if(ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, true)) {
+				event.toolTip.add(EnumChatFormatting.YELLOW + "[" + I18n.format("enviromine.tooltip.armor.resistance") + "]");
+			}
+			
+			if(event.itemStack.hasTagCompound()) 
+			{
+				if (event.itemStack.getTagCompound().hasKey(EM_Settings.CAMEL_PACK_FILL_TAG_KEY)) {
 				int fill = event.itemStack.getTagCompound().getInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY);
 				int max = event.itemStack.getTagCompound().getInteger(EM_Settings.CAMEL_PACK_MAX_TAG_KEY);
 				if (fill > max) {
@@ -1978,14 +1988,13 @@ public class EM_EventManager
 					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", MathHelper.floor_double((curTime - rotDate)/rotTime * 100D) + "%", MathHelper.floor_double((curTime - rotDate)/24000L), MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
 					//event.toolTip.add("Use-By: Day " + MathHelper.floor_double((rotDate + rotTime)/24000L));
 				}
-			}
-
-			if(event.itemStack.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY))
-			{
-				int i = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY);
-				int max = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY);
-				int disp = (i <= 0 ? 0 : i > max ? 100 : (int)(i/(max/100F)));
-				event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.filter", disp + "%", i, max).getUnformattedText());
+			} 
+				if(event.itemStack.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
+					int i = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY);
+					int max = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY);
+					int disp = (i <= 0 ? 0 : i > max ? 100 : (int)(i/(max/100F)));
+					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.filter", disp + "%", i, max).getUnformattedText());
+				}
 			}
 		}
 	}

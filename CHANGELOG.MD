@@ -3,10 +3,14 @@
 ### Fixed
 * Crash with new version of Hbm's NTM
 * Bug with playing gas mask breathing sound for some players (Requires Hbm's NTM loaded)
-
+* Even more bugs with temperature-armor calculations
 
 ### Added
 * When mining enviromine coal, Hbm's NTM coal dust will be released.
+* More parameters related to temperature-armor calculations
+* Added tooltips to armor according to its temperature protection
+  * `Is Temperature Resistance` = `"This armor is resistant to average temperatures"` = protects against fire / normal NTM Space planets | doesn't protect against lava / extremely hot/cold NTM Space planets 
+  * `Is Temperature Sealed` = `"This armor is resistant to extreme temperatures"` = protects against any temperatures
 
 
 
