@@ -254,7 +254,7 @@ public class EnviroDataTracker
 		airTemp = enviroData[EM_StatusManager.AMBIENT_TEMP_INDEX];
 		float temperatureDropSpeed = enviroData[EM_StatusManager.BODY_TEMP_DROP_SPEED_INDEX];
 		float temperatureRiseSpeed = enviroData[EM_StatusManager.BODY_TEMP_RISE_SPEED_INDEX];
-
+		
 		float relTemp = airTemp + EM_Settings.RealTemperatureConstant;
 
 		boolean isVampire = false;
@@ -294,41 +294,58 @@ public class EnviroDataTracker
 
         boolean ImmunityBurning = ArmorTempUtils.getTempResistance(trackedEntity);
         boolean ImmunityFull = ArmorTempUtils.getTempSealing(trackedEntity);
+		
+		float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
+		
+		float DropSpeedModI = temperatureDropSpeed * temperatureSpeedAmplification;
+		float RiseSpeedModI = temperatureRiseSpeed * temperatureSpeedAmplification;
+		
+		//UP
+		//BURNING 	  -  0.7890625
+		//FIRE 	  	  -  1.010117
+		//LAVA 	  	  - 28.777624
+		//LAVA MAX 	  - 32.416348
+				      //38.700382
+					  //41.755875
+		
+		//DOWN
+		//-400 AMB = 0.07343319
+		//DRES = 0.05
 
         if(ImmunityFull) {
-            if(bodyTemp >= 36.6F && bodyTemp <= EM_Settings.StrongArmorMaxTemp) {
-                bodyTemp = 36.6F;
-                CANCELEXTERNALINFLUENCE = true;
-            } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.StrongArmorMinTemp) {
-                bodyTemp = 36.6F;
-                CANCELEXTERNALINFLUENCE = true;
-            }
+			boolean isNormal = 
+					(RiseSpeedModI <= EM_Settings.StrongArmorMaxTempRise && DropSpeedModI <= EM_Settings.StrongArmorMinTempDrop) 
+				 && (bodyTemp <= EM_Settings.StrongArmorMaxTemp && bodyTemp >= EM_Settings.StrongArmorMinTemp);
+			
+			if(isNormal) {
+				bodyTemp = 36.6F;
+				CANCELEXTERNALINFLUENCE = true;
+			}
         } else if (ImmunityBurning) {
-            if (bodyTemp >= 36.6F && bodyTemp <= EM_Settings.LightArmorMaxTemp && !temperatureRateHARD){
-                bodyTemp = 36.6F;
-                CANCELEXTERNALINFLUENCE = true;
-            } else if (bodyTemp <= 36.6F && bodyTemp >= EM_Settings.LightArmorMinTemp && !temperatureRateHARD) {
-                bodyTemp = 36.6F;
-                CANCELEXTERNALINFLUENCE = true;
-            }
+			boolean isNormal = 
+					(RiseSpeedModI <= EM_Settings.LightArmorMaxTempRise && DropSpeedModI <= EM_Settings.LightArmorMinTempDrop) 
+				 && (bodyTemp <= EM_Settings.LightArmorMaxTemp && bodyTemp >= EM_Settings.LightArmorMinTemp);
+			
+			if(isNormal && !temperatureRateHARD) {
+				bodyTemp = 36.6F;
+				CANCELEXTERNALINFLUENCE = true;
+			}
         }
 
         if(bodyTemp - relTemp > 0 && !CANCELEXTERNALINFLUENCE) // Cold
 		{
-			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
-			if(bodyTemp - relTemp >= temperatureDropSpeed * temperatureSpeedAmplification)
+			if(bodyTemp - relTemp >= DropSpeedModI)
 			{
-				bodyTemp -= temperatureDropSpeed * temperatureSpeedAmplification * (((EM_Settings.witcheryVampireImmunities & isVampire) | (EM_Settings.witcheryWerewolfImmunities & (isCurrentlyWerewolf | isCurrentlyWolf))) & bodyTemp <= 36.6F ? 0.5F : 1F);
+				bodyTemp -= DropSpeedModI * (((EM_Settings.witcheryVampireImmunities & isVampire) | (EM_Settings.witcheryWerewolfImmunities & (isCurrentlyWerewolf | isCurrentlyWolf))) & bodyTemp <= 36.6F ? 0.5F : 1F);
 			} else
 			{
 				bodyTemp = relTemp;
 			}
 		} else if(bodyTemp - relTemp < 0 && !CANCELEXTERNALINFLUENCE) // Hot
 		{
-			float temperatureSpeedAmplification = Math.abs(bodyTemp - relTemp) > 10F? Math.abs(bodyTemp - relTemp)/10F : 1F;
-			if(bodyTemp - relTemp <= -temperatureRiseSpeed * temperatureSpeedAmplification)
+			if(bodyTemp - relTemp <= -RiseSpeedModI)
 			{
-				bodyTemp += temperatureRiseSpeed * temperatureSpeedAmplification;
+				bodyTemp += RiseSpeedModI;
 			} else
 			{
 				bodyTemp = relTemp;

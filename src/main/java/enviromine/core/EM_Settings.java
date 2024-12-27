@@ -67,10 +67,16 @@ public class EM_Settings
 
     //EnviroDataTracker
     public static float StrongArmorMaxTemp = 100.0F;
-    public static float LightArmorMaxTemp = 37.7F;
-
-    public static float StrongArmorMinTemp = 30.0F;
-    public static float LightArmorMinTemp = 35.5F;
+	public static float StrongArmorMaxTempRise = 40.0F;
+	public static float StrongArmorMinTemp = 28.0F;
+	public static float StrongArmorMinTempDrop = 1.0F;
+	
+    public static float LightArmorMaxTemp = 38.0F;
+	public static float LightArmorMaxTempRise = 4.0F;
+    public static float LightArmorMinTemp = 35.0F;
+	public static float LightArmorMinTempDrop = 0.02F;
+	
+	
     public static float BodyTempSleep = 10F;
 
     public static boolean DeathFromHeartAttack = true;
