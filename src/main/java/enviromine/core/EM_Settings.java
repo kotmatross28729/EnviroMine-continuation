@@ -436,9 +436,6 @@ public class EM_Settings
 	public static int foodRotTime = 7;
 
 	/** Whether or not this overridden with server settings */
-	public static boolean isOverridden = false;
-	public static boolean enableConfigOverride = false;
-	public static boolean profileOverride = false;
 	public static String profileSelected = "default";
 
 	public static boolean enableQuakes = true;

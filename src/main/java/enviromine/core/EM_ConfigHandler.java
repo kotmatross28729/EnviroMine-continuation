@@ -637,10 +637,7 @@ public class EM_ConfigHandler
 
 		//Default Profile Override
 		EM_Settings.profileSelected = config.get(CATEGORY_CONFIG, "Profile", EM_Settings.profileSelected).getString();
-		EM_Settings.profileOverride = config.get(CATEGORY_CONFIG, "Override Profile", EM_Settings.profileOverride,  "Override Profile. It Can be used for servers to force profiles on servers or modpack. This Overrides any world loaded up. Name is Case Sensitive!").getBoolean(false);
-		EM_Settings.enableConfigOverride = config.get(CATEGORY_CONFIG, "Client Config Override (SMP)", EM_Settings.enableConfigOverride, "[DISABLED][WIP] Temporarily overrides client configurations with the server's (NETWORK INTESIVE!)").getBoolean(EM_Settings.enableConfigOverride);
-
-
+		
 		// ------------- //
 		// --- Gases --- //
 		// ------------- //
@@ -742,9 +739,7 @@ public class EM_ConfigHandler
 			EM_Settings.genDefaults = genDefault.getBoolean(true);
 		}
 		genDefault.set(false);
-
-		EM_Settings.enableConfigOverride = config.get(CATEGORY_CONFIG, "Client Config Override (SMP)", EM_Settings.enableConfigOverride, "[DISABLED][WIP] Temporarily overrides client configurations with the server's (NETWORK INTESIVE!)").getBoolean(EM_Settings.enableConfigOverride);
-
+		
 		// Earthquake
 		EM_Settings.enableQuakes = config.get(CATEGORY_EARTHQUAKES, "Enable Earthquakes", EM_Settings.enableQuakes).getBoolean(EM_Settings.enableQuakes);
 		EM_Settings.quakePhysics = config.get(CATEGORY_EARTHQUAKES, "Triggers Physics", EM_Settings.quakePhysics, "Can cause major lag at times (Requires main physics to be enabled)").getBoolean(EM_Settings.quakePhysics);

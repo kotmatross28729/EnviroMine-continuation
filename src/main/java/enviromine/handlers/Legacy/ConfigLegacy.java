@@ -197,10 +197,7 @@ public class ConfigLegacy extends LegacyHandler
 
 		// Config Options
 		String ConSetCat = "Config";
-
-
-		EM_Settings.enableConfigOverride = config.get(ConSetCat, "Client Config Override (SMP)", false, "[DISABLED][WIP] Temporarily overrides client configurations with the server's (NETWORK INTESIVE!)").getBoolean(false);
-
+		
 		// Earthquake
 		String cat_earthquake = "Earthquakes";
 		EM_Settings.enableQuakes = config.get(cat_earthquake, "Enable Earthquakes", true).getBoolean(true);

@@ -155,9 +155,7 @@ public class PacketServerOverride implements IMessage
 					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "An error occurred while syncing setting " + f.getName(), e);
 				}
 			}
-
-			EM_Settings.isOverridden = true;
-
+			
 			return null; //Reply
 		}
 
