@@ -292,7 +292,7 @@ public class EM_StatusManager
                             }
 
                             if (biomeOverride != null && biomeOverride.biomeOveride) {
-                                if(EnviroMine.isHbmSpaceLoaded()) {
+                                if(EnviroMine.isHbmSpaceLoaded) {
                                     CBT_Atmosphere atmosphere = entityLiving.worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(entityLiving.worldObj, CBT_Atmosphere.class);
                                     if(atmosphere != null) {
                                         if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
@@ -327,7 +327,7 @@ public class EM_StatusManager
 
                     block = entityLiving.worldObj.getBlock(i + x, j + y, k + z);
 
-                    if(isHbmLoaded() && EM_Settings.EnableHBMMachinesHeat) {
+                    if(isHbmLoaded && EM_Settings.EnableHBMMachinesHeat) {
                         TileEntity tileentity = entityLiving.worldObj.getTileEntity(i + x, j + y, k + z);
 
                         if (tileentity != null) {
@@ -852,7 +852,7 @@ public class EM_StatusManager
 
             float temperatureChange;
 
-            if(EnviroMine.isHbmSpaceLoaded()) {
+            if(EnviroMine.isHbmSpaceLoaded) {
                 CelestialBody body = CelestialBody.getBody(entityLiving.worldObj);
                 float fullCycle = Math.round((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()))));
                 float phasePeriod = fullCycle/4F;
@@ -877,7 +877,7 @@ public class EM_StatusManager
                 biomeTemperature -= temperatureChange;
             }
 
-            if(EnviroMine.isSereneSeasonsLoaded()) {
+            if(EnviroMine.isSereneSeasonsLoaded) {
                 Season.SubSeason currentSubSeason = SeasonHelper.getSeasonState(entityLiving.worldObj).getSubSeason();
                 if(currentSubSeason != null) {
                     switch (currentSubSeason) {
@@ -900,7 +900,7 @@ public class EM_StatusManager
                 }
             }
 
-            if(EnviroMine.isHbmSpaceLoaded()) {
+            if(EnviroMine.isHbmSpaceLoaded) {
                 //How stupid am I, that I simply forgot that `(int)` does crazy things with negative numbers?
                 ThreeInts pos = new ThreeInts(MathHelper.floor_double(entityLiving.posX), MathHelper.floor_double(entityLiving.posY + entityLiving.getEyeHeight()), MathHelper.floor_double(entityLiving.posZ));
 
@@ -1297,7 +1297,7 @@ public class EM_StatusManager
                 float temperatureRate = 0;
                 if(biomeProp.tempRate_DAWN != 0 || biomeProp.tempRate_DAY != 0 || biomeProp.tempRate_DUSK != 0 || biomeProp.tempRate_NIGHT != 0) {
                     float currentTime = entityLiving.worldObj.getWorldTime();
-                    if(EnviroMine.isHbmSpaceLoaded()) {
+                    if(EnviroMine.isHbmSpaceLoaded) {
                         CelestialBody body = CelestialBody.getBody(entityLiving.worldObj);
                         float phasePeriod = Math.round((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()))) / 4F);
                         temperatureRate = calculateTemperatureChangeSpace(currentTime, phasePeriod, biomeProp.tempRate_DAWN, biomeProp.tempRate_DAY, biomeProp.tempRate_DUSK, biomeProp.tempRate_NIGHT);

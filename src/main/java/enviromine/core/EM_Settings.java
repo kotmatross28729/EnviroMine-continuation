@@ -438,7 +438,7 @@ public class EM_Settings
 	/** Whether or not this overridden with server settings */
 	public static String profileSelected = "default";
 
-	public static boolean enableQuakes = true;
+	public static boolean enableQuakes = false;
 	public static boolean quakePhysics = true;
 	public static int quakeRarity = 100;
 

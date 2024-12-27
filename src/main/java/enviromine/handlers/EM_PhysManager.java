@@ -388,7 +388,7 @@ public class EM_PhysManager
 			{
 				dropType = -1;
 			}
-            else if(isTCLoaded()){
+            else if(isTCLoaded){
                 if(block instanceof BlockMagicalLeaves)
                 {
                     dropType = -1;

@@ -9,6 +9,7 @@ import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.client.gui.menu.config.ProfileMenu;
 //import enviromine.client.gui.menu.update.NewsPage;
 import enviromine.core.EM_ConfigHandler;
+import enviromine.core.EnviroMine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -55,9 +56,12 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 /*    	if(!EM_Settings.voxelMenuExists) this.buttonList.add(new EM_Button(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, StatCollector.translateToLocal("options.enviromine.newsPage"), newPost));
     	else this.buttonList.add(new GuiButtonExt(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, StatCollector.translateToLocal("options.enviromine.newsPage")+" " +newPost));*/
     	//this.buttonList.add(new GuiButtonExt(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, StatCollector.translateToLocal("options.enviromine.newsPage")));
-    	
-		this.buttonList.add(new GuiButtonExt(102, this.width / 2 - 90, this.height / 6 + 12, 180, 20, StatCollector.translateToLocal("options.enviromine.guiSounds")));
-    	this.buttonList.add(new GuiButtonExt(101, this.width / 2 - 90, this.height / 6 + 34, 180, 20, StatCollector.translateToLocal("options.enviromine.guiOptions")));
+		
+		if(!EnviroMine.isHbmLoaded) {
+			this.buttonList.add(new GuiButtonExt(102, this.width / 2 - 90, this.height / 6 + 12, 180, 20, StatCollector.translateToLocal("options.enviromine.guiSounds")));
+		}
+		
+		this.buttonList.add(new GuiButtonExt(101, this.width / 2 - 90, this.height / 6 + 34, 180, 20, StatCollector.translateToLocal("options.enviromine.guiOptions")));
 //		this.buttonList.add(serverSettings);
 		this.buttonList.add(customEditor);
 		this.buttonList.add(new GuiButtonExt(200, this.width / 2 - 100, this.height / 6 + 160, StatCollector.translateToLocal("gui.done")));

@@ -35,7 +35,7 @@ public class GasMaskHud
 			if(itemstack.getItem() == ObjectHandler.gasMask)
 			{
 				//Not sync with sound, because sound on server, not client
-				if(!EnviroMine.isHbmLoaded()) {
+				if(!EnviroMine.isHbmLoaded) {
 					Renderbreath(scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), mc, itemstack);
 				}
 				

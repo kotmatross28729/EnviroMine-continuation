@@ -274,7 +274,7 @@ public class EnviroUtils
 		} else if(block instanceof BlockGlowstone)
 		{
 			type = EM_Settings.stabilityTypes.get("glowstone");
-		} else if(isTCLoaded() && block instanceof BlockMagicalLeaves ){
+		} else if(isTCLoaded && block instanceof BlockMagicalLeaves ){
 
             type = EM_Settings.stabilityTypes.get("average");
         } else if(block instanceof BlockFalling)

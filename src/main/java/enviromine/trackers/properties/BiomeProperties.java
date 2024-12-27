@@ -742,7 +742,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                             10.0;                                                   // DEFAULT             (0)
 
 
-        if(EnviroMine.isHbmSpaceLoaded()) {
+        if(EnviroMine.isHbmSpaceLoaded) {
             if (biome instanceof BiomeGenBaseMoho) {
                 DAWN_TEMPERATURE =  75D;
                 DAY_TEMPERATURE =  0D;

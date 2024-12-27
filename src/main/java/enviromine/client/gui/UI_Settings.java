@@ -14,7 +14,7 @@ public class UI_Settings {
 	public static boolean sweatParticals = true;
 	public static boolean insaneParticals = true;
 	public static boolean useFarenheit = false;
-	public static boolean ShowText = false;
+	public static boolean ShowText = true;
 	public static boolean ShowDebug = false;
 	public static boolean breathSound = true;
 	public static int breathPause = 300;

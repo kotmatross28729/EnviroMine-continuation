@@ -2,6 +2,7 @@ package enviromine.core;
 
 import cpw.mods.fml.common.Loader;
 import enviromine.handlers.ObjectHandlerCompat;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -59,24 +60,11 @@ public class EnviroMine
 
 	public SimpleNetworkWrapper network;
 
-    public static boolean isHbmLoaded() {
-        return Loader.isModLoaded("hbm");
-    }
-    public static boolean isHbmSpaceLoaded() {
-        try {
-            Class.forName("com.hbm.dim.SolarSystem"); //idk why this, but why not?
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-    public static boolean isTCLoaded() {
-        return Loader.isModLoaded("Thaumcraft");
-    }
-
-    public static boolean isSereneSeasonsLoaded() {
-        return Loader.isModLoaded("sereneseasons");
-    }
+    public static boolean isHbmLoaded;
+    public static boolean isHbmSpaceLoaded;
+    public static boolean isTCLoaded;
+    public static boolean isSereneSeasonsLoaded;
+	public static boolean isEtFuturumLoaded;
 
     //public static EM_WorldData theWorldEM;
 
@@ -118,6 +106,22 @@ public class EnviroMine
 
 		logger = event.getModLog();
 
+		
+		//COMPAT
+		if(Loader.isModLoaded("hbm")){
+			isHbmLoaded = true;
+			try {
+				Class.forName("com.hbm.dim.SolarSystem");
+				isHbmSpaceLoaded = true;
+			} catch (ClassNotFoundException ignored) {}
+		}
+		if(Loader.isModLoaded("Thaumcraft"))
+			isTCLoaded = true;
+		if(Loader.isModLoaded("sereneseasons"))
+			isSereneSeasonsLoaded = true;
+		if(Loader.isModLoaded("etfuturum"))
+			isEtFuturumLoaded = true;
+		
 		enviroTab = new EnviroTab("enviromine.enviroTab");
 
 		LegacyHandler.preInit();
@@ -130,7 +134,7 @@ public class EnviroMine
 		ObjectHandler.initBlocks();
 		ObjectHandler.registerBlocks();
 
-        if(isHbmLoaded()) {
+        if(isHbmLoaded) {
             ObjectHandlerCompat.initItems();
             ObjectHandlerCompat.registerItems();
         }
@@ -141,7 +145,7 @@ public class EnviroMine
 		ObjectHandler.registerGases();
 		ObjectHandler.registerEntities();
 
-		if(EM_Settings.shaftGen == true)
+		if(EM_Settings.shaftGen)
 		{
 			VillagerRegistry.instance().registerVillageCreationHandler(new EnviroShaftCreationHandler());
 			MapGenStructureIO.func_143031_a(EM_VillageMineshaft.class, "ViMS");
@@ -190,7 +194,7 @@ public class EnviroMine
 	{
 		proxy.postInit(event);
 
-        if(isHbmLoaded())
+        if(isHbmLoaded)
             ObjectHandlerCompat.registerRecipes();
 
 		EM_ConfigHandler.initConfig(); // Second pass for object initialized after pre-init

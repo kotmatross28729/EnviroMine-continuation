@@ -201,7 +201,7 @@ public class EnviroDataTracker
 			}
 		}
 
-        if (EnviroMine.isHbmLoaded()) {
+        if (EnviroMine.isHbmLoaded) {
             if (helmet != null && !isCreative) {
                 if (helmet.getItem() instanceof IGasMask mask) {
                     ItemStack filter = mask.getFilter(helmet, trackedEntity);
@@ -235,7 +235,7 @@ public class EnviroDataTracker
             }
         }
 
-        if(EnviroMine.isHbmSpaceLoaded()) {
+        if(EnviroMine.isHbmSpaceLoaded) {
             CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
             if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
                 airQuality += EM_Settings.NTMSpaceAirQualityDecrease;

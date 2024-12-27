@@ -380,7 +380,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(isTCLoaded() && block instanceof BlockMagicalLeaves) {
+			} else if(isTCLoaded && block instanceof BlockMagicalLeaves) {
                 config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
                 config.get(category, BPName[1], -1).getInt(-1);
                 config.get(category, BPName[2], block == Blocks.grass ? Block.blockRegistry.getNameForObject(Blocks.dirt) : "").getString();

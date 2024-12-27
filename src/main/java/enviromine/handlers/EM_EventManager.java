@@ -438,7 +438,7 @@ public class EM_EventManager
     //TODO temp, gas rework
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
-        if(EnviroMine.isHbmLoaded()) {
+        if(EnviroMine.isHbmLoaded) {
             if (event.block == ObjectHandler.flammableCoal || event.block == ObjectHandler.burningCoal) {
 
                 for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
@@ -1352,7 +1352,7 @@ public class EM_EventManager
 			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
 			
 			//GASMASK SOUND
-			if(EnviroMine.isHbmLoaded() && UI_Settings.breathSound) {
+			if(EnviroMine.isHbmLoaded && UI_Settings.breathSound) {
 				ItemStack mask = invo.armorItemInSlot(3);
 				if (mask != null && mask.getItem() != null && mask.getItem() == ObjectHandler.gasMask) {
 					

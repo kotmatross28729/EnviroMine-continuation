@@ -57,7 +57,7 @@ public class GasHydrogenSulfide extends EnviroGas
         }
 
         ItemStack helmet = entityLiving.getEquipmentInSlot(4);
-        if (helmet != null && !isCreative && isHbmLoaded()) {
+        if (helmet != null && !isCreative && isHbmLoaded) {
             if (helmet.getItem() instanceof IGasMask mask) {  // Check if the helmet is a mask
                 ItemStack filter = mask.getFilter(helmet, entityLiving);  // Get the filter of the mask
                 if (filter != null) {
