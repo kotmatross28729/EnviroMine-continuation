@@ -1,3 +1,12 @@
+# 1.3.147
+### Fixed
+* Crash on a server with Hbm's NTM installed
+
+### Added
+
+* Compatibility between davy lamp / NTM gases
+  * especially for NTM gases: the distance at which the davy lamp will react can be adjusted (`a-169_DavyLampGasDetectRange`)
+
 # 1.3.146
 
 ### Fixed

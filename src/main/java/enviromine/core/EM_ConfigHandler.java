@@ -455,8 +455,7 @@ public class EM_ConfigHandler
 
 
         EM_Settings.enableItemPropsDivideByTwo = config.getBoolean("69_enableItemPropsDivideByTwo", CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.EnableHBMMachinesHeat, "If true, then divides ItemProperties \"Effect n\" parameters by 2, since for some reason they are applied 2 times. If your values specified in \"Effect n\" are not applied as they are, but are 2 times smaller, then disable this option (you may have some kind of bugfix mod installed)");
-
-
+		
         EM_Settings.FrostyWaterTemperatureInfluence = config.getFloat("70_FrostyWaterTemperatureInfluence",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.FrostyWaterTemperatureInfluence, -65536, 65536,  "When the player drinks this type of water, their temperature changes by this value");
         EM_Settings.DirtyColdWaterTemperatureInfluence = config.getFloat("71_DirtyColdWaterTemperatureInfluence",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DirtyColdWaterTemperatureInfluence, -65536, 65536,  "When the player drinks this type of water, their temperature changes by this value");
         EM_Settings.CleanColdWaterTemperatureInfluence = config.getFloat("72_CleanColdWaterTemperatureInfluence",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.CleanColdWaterTemperatureInfluence, -65536, 65536,  "When the player drinks this type of water, their temperature changes by this value");
@@ -580,7 +579,8 @@ public class EM_ConfigHandler
 
         EM_Settings.SprintDehydrateBonus               = config.getFloat("a-167_SprintDehydrateBonus",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SprintDehydrateBonus, -65536, 65536,  "Bonus to dehydration when the player is running");
         EM_Settings.SprintMinRiseSpeed                 = config.getFloat("a-168_SprintMinRiseSpeed",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.SprintMinRiseSpeed, -65536, 65536,  "Minimum riseSpeed when the player is running");
-
+		
+		EM_Settings.DavyLampGasDetectRange                 = config.getFloat("a-169_DavyLampGasDetectRange",CATEGORY_KOTMATROSS_FORK_CHANGES, EM_Settings.DavyLampGasDetectRange, -65536, 65536,  "Distance from the player at which the davy lamp reacts to gases");
 
         // --------------- //
         // --- General --- //

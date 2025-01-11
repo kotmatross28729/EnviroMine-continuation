@@ -1,6 +1,12 @@
 package enviromine.handlers;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.gas.BlockGasExplosive;
+import com.hbm.blocks.gas.BlockGasFlammable;
+import com.hbm.blocks.gas.BlockGasMonoxide;
+import com.hbm.blocks.gas.BlockGasRadonDense;
+import com.hbm.blocks.gas.BlockGasRadonTomb;
+import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
@@ -14,9 +20,6 @@ import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
 import enviromine.blocks.tiles.TileEntityGas;
-import enviromine.client.gui.UI_Settings;
-import enviromine.client.gui.hud.OverlayHandler;
-import enviromine.client.gui.hud.items.GasMaskHud;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
@@ -1354,10 +1357,9 @@ public class EM_EventManager
 			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
 			
 			//GASMASK SOUND
-			if(EnviroMine.isHbmLoaded && UI_Settings.breathSound) {
+			if(EnviroMine.isHbmLoaded) {
 				ItemStack mask = invo.armorItemInSlot(3);
 				if (mask != null && mask.getItem() != null && mask.getItem() == ObjectHandler.gasMask) {
-					
 					if(mask.hasTagCompound() && mask.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
 						if ((audioBreathing == null || !audioBreathing.isPlaying())) {
 							audioBreathing = MainRegistry.proxy.getLoopedSound("enviromine:breathing", (float) event.entityLiving.posX, (float) event.entityLiving.posY, (float) event.entityLiving.posZ, 0.1F, 5.0F, 1.0F, 5);
@@ -1371,20 +1373,33 @@ public class EM_EventManager
 							audioBreathing = null;
 						}
 					}
-					
 				} else if(audioBreathing != null) {
 						audioBreathing.stopSound();
 						audioBreathing = null;
 					}
-
 			}
 			
-			AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(event.entityLiving.posX - 0.5D, event.entityLiving.posY - 0.5D, event.entityLiving.posZ - 0.5D, event.entityLiving.posX + 0.5D, event.entityLiving.posY + 0.5D, event.entityLiving.posZ + 0.5D).expand(2D, 2D, 2D);
+			AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(event.entityLiving.posX - EM_Settings.DavyLampGasDetectRange, event.entityLiving.posY - EM_Settings.DavyLampGasDetectRange, event.entityLiving.posZ - EM_Settings.DavyLampGasDetectRange, event.entityLiving.posX + EM_Settings.DavyLampGasDetectRange, event.entityLiving.posY + EM_Settings.DavyLampGasDetectRange, event.entityLiving.posZ + EM_Settings.DavyLampGasDetectRange).expand(2D, 2D, 2D);
 			if(event.entityLiving.worldObj.getEntitiesWithinAABB(TileEntityGas.class, boundingBox).size() <= 0)
 			{
 				ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1);
 			}
-
+			
+			if(EnviroMine.isHbmLoaded) {
+				if(getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasFlammable.class)){
+					//Fire -> Blue fire
+					ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2);
+				} else if (
+						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasMonoxide.class) ||
+						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonDense.class) ||
+						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonTomb.class) ||
+						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockVacuum.class))
+				{
+					//Fire -> No fire
+					ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 0);
+				}
+			}
+			
 			if(EM_Settings.foodSpoiling)
 			{
 				RotHandler.rotInvo(event.entityLiving.worldObj, invo);
@@ -1682,6 +1697,29 @@ public class EM_EventManager
 		}
 	}
 
+	
+	public boolean getBlockWithinAABB(AxisAlignedBB boundingBox, World world, Class<? extends Block> blockz){
+		int minX = MathHelper.floor_double(boundingBox.minX);
+		int minY = MathHelper.floor_double(boundingBox.minY);
+		int minZ = MathHelper.floor_double(boundingBox.minZ);
+		int maxX = MathHelper.floor_double(boundingBox.maxX);
+		int maxY = MathHelper.floor_double(boundingBox.maxY);
+		int maxZ = MathHelper.floor_double(boundingBox.maxZ);
+		
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				for (int z = minZ; z <= maxZ; z++) {
+					Block block = world.getBlock(x, y, z);
+					if (blockz.isInstance(block)) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public void ReplaceInvoItems(IInventory invo, Item fItem, int fDamage, Item rItem, int rDamage)
 	{
 		for(int i = 0; i < invo.getSizeInventory(); i++)
