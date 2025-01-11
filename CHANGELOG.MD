@@ -6,6 +6,7 @@
 
 * Compatibility between davy lamp / NTM gases
   * especially for NTM gases: the distance at which the davy lamp will react can be adjusted (`a-169_DavyLampGasDetectRange`)
+* Compatibility with Mekanism's gas mask
 
 # 1.3.146
 
