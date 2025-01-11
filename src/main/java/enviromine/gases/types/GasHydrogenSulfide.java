@@ -6,9 +6,12 @@ import api.hbm.item.IGasMask;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import enviromine.core.EM_Settings;
+import enviromine.core.EnviroMine;
 import enviromine.gases.EnviroGas;
 import enviromine.handlers.ObjectHandler;
 import enviromine.utils.EnviroUtils;
+import mekanism.common.item.ItemGasMask;
+import mekanism.common.item.ItemScubaTank;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,6 +27,7 @@ import static enviromine.trackers.EnviroDataTracker.logger;
 
 public class GasHydrogenSulfide extends EnviroGas
 {
+	//TODO SHIT CODE
     boolean isCreative = false;
     boolean hasGasMask = false;
 
@@ -117,12 +121,29 @@ public class GasHydrogenSulfide extends EnviroGas
         } else if (!isHbmMask) {
             hasGasMask = false;
         }
+		
+		if(!hasGasMask && helmet != null && !isCreative && EnviroMine.isMCELoaded) {
+			if(helmet.getItem() instanceof ItemGasMask) {
+				if(entityLiving.getEquipmentInSlot(3) != null && entityLiving.getEquipmentInSlot(3).getItem() instanceof ItemScubaTank tank)
+				{
+					hasGasMask = tank.getFlowing(entityLiving.getEquipmentInSlot(3)) && tank.getGas(entityLiving.getEquipmentInSlot(3)) != null;
+				} else {
+					hasGasMask = false;
+				}
+			} else {
+				hasGasMask = false;
+			}
+		}
+		
+		
         if(HydrogenSulfideGasDebugLogger) {
             logger.warn("HydrogenSulfide: amplifier:  " + amplifier);
             logger.warn("HydrogenSulfide: hasGasMask:  " + hasGasMask);
             logger.warn("HydrogenSulfide: isCreative:  " + isCreative);
             logger.warn("HydrogenSulfide: entityLiving.getRNG().nextInt(HydrogenSulfidePoisoningChance) == 0?:  " + (entityLiving.getRNG().nextInt(HydrogenSulfidePoisoningChance) == 0));
         }
+		
+		
 		if(!hasGasMask && !isCreative &&
 				amplifier >= HydrogenSulfidePoisoningAmplifier + ((EM_Settings.witcheryVampireImmunities && entityLiving instanceof EntityPlayer) ? EnviroUtils.getWitcheryVampireLevel(entityLiving) : 0)
 				&& entityLiving.getRNG().nextInt(HydrogenSulfidePoisoningChance) == 0) //100

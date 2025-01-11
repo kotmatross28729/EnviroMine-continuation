@@ -26,6 +26,8 @@ import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
+import mekanism.common.item.ItemGasMask;
+import mekanism.common.item.ItemScubaTank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -234,6 +236,20 @@ public class EnviroDataTracker
                      }
             }
         }
+		
+		if(helmet != null && !isCreative && EnviroMine.isMCELoaded) {
+			if(helmet.getItem() instanceof ItemGasMask) {
+				if(trackedEntity.getEquipmentInSlot(3) != null && trackedEntity.getEquipmentInSlot(3).getItem() instanceof ItemScubaTank tank)
+				{
+					 if(tank.getFlowing(trackedEntity.getEquipmentInSlot(3)) && tank.getGas(trackedEntity.getEquipmentInSlot(3)) != null) {
+						 float airToFill = 100F - airQuality;
+						 if (airToFill > 0F) {
+							 airQuality += airToFill;
+						 }
+					 }
+				}
+			}
+		}
 
         if(EnviroMine.isHbmSpaceLoaded) {
             CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);

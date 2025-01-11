@@ -6,9 +6,12 @@ import api.hbm.item.IGasMask;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import enviromine.core.EM_Settings;
+import enviromine.core.EnviroMine;
 import enviromine.gases.EnviroGas;
 import enviromine.handlers.ObjectHandler;
 import enviromine.utils.EnviroUtils;
+import mekanism.common.item.ItemGasMask;
+import mekanism.common.item.ItemScubaTank;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,13 +26,12 @@ import static enviromine.trackers.EnviroDataTracker.logger;
 
 public class GasSulfurDioxide extends EnviroGas
 {
+	//TODO SHIT CODE
     boolean isCreative = false;
     boolean hasGasMask = false;
 
     boolean isHbmMask = false;
-
-
-
+	
 	public GasSulfurDioxide(String name, int ID)
 	{
 		super(name, ID);
@@ -93,8 +95,7 @@ public class GasSulfurDioxide extends EnviroGas
             hasGasMask = false;
             isHbmMask = false;
         }
-
-
+		
         if (helmet != null && !isCreative && !isHbmMask) {
             if (entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask ) {  // Check if the helmet is a mask
                 if (helmet.hasTagCompound() && helmet.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
@@ -119,6 +120,20 @@ public class GasSulfurDioxide extends EnviroGas
         } else if (!isHbmMask) {
             hasGasMask = false;
         }
+		
+		if(!hasGasMask && helmet != null && !isCreative && EnviroMine.isMCELoaded) {
+			if(helmet.getItem() instanceof ItemGasMask) {
+				if(entityLiving.getEquipmentInSlot(3) != null && entityLiving.getEquipmentInSlot(3).getItem() instanceof ItemScubaTank tank)
+				{
+					hasGasMask = tank.getFlowing(entityLiving.getEquipmentInSlot(3)) && tank.getGas(entityLiving.getEquipmentInSlot(3)) != null;
+				} else {
+					hasGasMask = false;
+				}
+			} else {
+				hasGasMask = false;
+			}
+		}
+		
        if(SulfurDioxideGasDebugLogger) {
            logger.warn("SulfurDioxide: amplifier:  " + amplifier);
            logger.warn("SulfurDioxide: hasGasMask:  " + hasGasMask);

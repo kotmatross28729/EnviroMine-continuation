@@ -6,10 +6,13 @@ import api.hbm.item.IGasMask;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import enviromine.core.EM_Settings;
+import enviromine.core.EnviroMine;
 import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
 import enviromine.handlers.ObjectHandler;
 import enviromine.utils.EnviroUtils;
+import mekanism.common.item.ItemGasMask;
+import mekanism.common.item.ItemScubaTank;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,6 +28,7 @@ import static enviromine.trackers.EnviroDataTracker.logger;
 
 public class GasCarbonMonoxide extends EnviroGas
 {
+    //TODO SHIT CODE
     boolean isCreative = false;
 
     boolean hasGasMask = false;
@@ -103,7 +107,7 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
 
 
     if (helmet != null && !isCreative && !isHbmMask) {
-        if (entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask ) {  // Check if the helmet is a mask
+        if (entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask) {  // Check if the helmet is a mask
             if (helmet.hasTagCompound() && helmet.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
                 NBTTagCompound tag = helmet.getTagCompound();
                 int maskFill = tag.getInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY);
@@ -126,6 +130,20 @@ public void applyEffects(EntityLivingBase entityLiving, int amplifier) {
     } else if (!isHbmMask) {
         hasGasMask = false;
     }
+    
+    if(!hasGasMask && helmet != null && !isCreative && EnviroMine.isMCELoaded) {
+        if(helmet.getItem() instanceof ItemGasMask) {
+            if(entityLiving.getEquipmentInSlot(3) != null && entityLiving.getEquipmentInSlot(3).getItem() instanceof ItemScubaTank tank)
+            {
+                hasGasMask = tank.getFlowing(entityLiving.getEquipmentInSlot(3)) && tank.getGas(entityLiving.getEquipmentInSlot(3)) != null;
+            } else {
+                hasGasMask = false;
+            }
+        } else {
+            hasGasMask = false;
+        }
+    }
+    
     if(CarbonMonoxideGasDebugLogger) {
         logger.warn("CarbonMonoxide: amplifier:  " + amplifier);
         logger.warn("CarbonMonoxide: hasGasMask:  " + hasGasMask);
