@@ -12,8 +12,6 @@
 
 ## Differences from the Galaxy Odyssey version:
 
-
-
 - **1)** more sanity debuffs (due to the fact that sanity in the original enviromine does almost nothing dangerous (+, from 1.3.134 version, if your sanity is less than or equal to 5 (but greater than 0) you will die from a heart attack after 1 minute, but if your sanity is 0, then you will die after 30 seconds, and, if more than 30 seconds have passed and your sanity has JUST dropped to 0, you will die instantly(configurable + you can disable death, but instead, some debuffs will become of a higher level))
 
 - **2)** **Compatibility with Hbm's Nuclear Tech filters/masks/protective helmets**
@@ -42,6 +40,7 @@
 
 - **14)** **Added the ability to change a huge number of hardcoded values**
 
+- **15)** **Compatibility with Mekanism's gas mask**
 
 ## Current TODO:
 - **1)** **Ability to change parameters for mobs from other mods.**
