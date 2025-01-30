@@ -65,8 +65,8 @@ public class EnviroMine
     public static boolean isTCLoaded;
     public static boolean isSereneSeasonsLoaded;
 	public static boolean isEtFuturumLoaded;
-	
 	public static boolean isMCELoaded;
+	public static boolean isLOTRLoaded;
 
     //public static EM_WorldData theWorldEM;
 
@@ -125,6 +125,9 @@ public class EnviroMine
 			isEtFuturumLoaded = true;
 		if(Loader.isModLoaded("Mekanism")){
 			isMCELoaded = true;
+		}
+		if(Loader.isModLoaded("lotr")){
+			isLOTRLoaded = true;
 		}
 		
 		enviroTab = new EnviroTab("enviromine.enviroTab");

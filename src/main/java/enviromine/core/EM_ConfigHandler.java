@@ -1039,9 +1039,7 @@ public class EM_ConfigHandler
 
 	public static String SaveMyCustom(Object obj, Object type)
 	{
-
 		String ModID = ModIdentification.idFromObject(obj);
-
 
 		// Check to make sure this is a Data File Before Editing
 		File configFile = new File(loadedProfile+ customPath + ModID +".cfg");

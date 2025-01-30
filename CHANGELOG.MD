@@ -1,3 +1,9 @@
+# 1.3.148
+-  **[NTM Space compat]**
+   * Rebalanced temperature values for planets to be more in line with reality
+
+
+
 # 1.3.147
 ### Fixed
 * Crash on a server with Hbm's NTM installed

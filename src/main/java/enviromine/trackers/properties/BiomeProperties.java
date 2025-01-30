@@ -743,12 +743,12 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 
         if(EnviroMine.isHbmSpaceLoaded) {
-            if (biome instanceof BiomeGenBaseMoho) {
-                DAWN_TEMPERATURE =  75D;
-                DAY_TEMPERATURE =  0D;
-                DUSK_TEMPERATURE = 75D;
-                NIGHT_TEMPERATURE = 100D;
-                biomeTemp = 300D;
+            if (biome instanceof BiomeGenBaseMoho) { //Mercury
+                DAWN_TEMPERATURE =  520D; //-90
+                DAY_TEMPERATURE =  0D;    //430
+                DUSK_TEMPERATURE = 520D;  //-90
+                NIGHT_TEMPERATURE = 610D; //-180
+                biomeTemp = 430D;
 
                 isDesertBiome = false;
                 DesertBiomeTemperatureMultiplier = 1;
@@ -757,21 +757,20 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 DAY_TEMPERATURE_TERRAFORMED =  0D;
                 DUSK_TEMPERATURE_TERRAFORMED = 10D;
                 NIGHT_TEMPERATURE_TERRAFORMED = 25D;
-                ambientTemp_TERRAFORMED = 60D;
-
-                //Fun fact: this value was calculated using my calculations regarding heating a pizza in a 250-degree oven for 420 seconds, from 20 to 120 degrees
+                ambientTemp_TERRAFORMED = 35D;
+				
                 tempRate_DAWN = 0.0294D;
                 tempRate_DAY = 0.1272D;
                 tempRate_DUSK = 0.0294D;
                 tempRate_NIGHT = 0.0169D;
                 tempRate_HARD = true;
             }
-            else if (biome instanceof BiomeGenBaseEve) {
-                DAWN_TEMPERATURE =  71.85D;
-                DAY_TEMPERATURE =  0D;
-                DUSK_TEMPERATURE = 71.85D;
-                NIGHT_TEMPERATURE = 259.98D;
-                biomeTemp = 146.85D;
+            else if (biome instanceof BiomeGenBaseEve) { //Venus
+                DAWN_TEMPERATURE =  1D; //466
+                DAY_TEMPERATURE =  0D;  //467
+                DUSK_TEMPERATURE = 2D;  //465
+                NIGHT_TEMPERATURE = 3D; //464
+                biomeTemp = 467;
 
                 isDesertBiome = false;
                 DesertBiomeTemperatureMultiplier = 1;
@@ -788,8 +787,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 tempRate_NIGHT = -0.0154D;
                 tempRate_HARD = true;
             }
-            else if (biome instanceof BiomeGenMoon) {
-                DAWN_TEMPERATURE =  177D;
+            else if (biome instanceof BiomeGenMoon) { //Moon
+                DAWN_TEMPERATURE =  177D; //
                 DAY_TEMPERATURE =  0D;
                 DUSK_TEMPERATURE = 177D;
                 NIGHT_TEMPERATURE = 300D;
@@ -808,7 +807,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 tempRate_DAY = 0.01D;
                 tempRate_DUSK = -0.0129D;
                 tempRate_NIGHT = -0.0654D;
-            } else if (biome instanceof BiomeGenBaseMinmus) {
+            } else if (biome instanceof BiomeGenBaseMinmus) { //?
                 DAWN_TEMPERATURE =  64D;
                 DAY_TEMPERATURE =  0D;
                 DUSK_TEMPERATURE = 64D;
@@ -830,7 +829,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 tempRate_NIGHT = -0.0454D;
                 biomeWater = "cold";
             }
-            else if(biome instanceof BiomeGenBaseDuna) {
+            else if(biome instanceof BiomeGenBaseDuna) { //Mars
                 if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
                     DAWN_TEMPERATURE =  98D;
                     DAY_TEMPERATURE =  0D;
@@ -858,8 +857,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     DAWN_TEMPERATURE = 69D;
                     DAY_TEMPERATURE = 0D;
                     DUSK_TEMPERATURE = 69D;
-                    NIGHT_TEMPERATURE = 98D;
-                    biomeTemp = 35D;
+                    NIGHT_TEMPERATURE = 160D;
+                    biomeTemp = 20D;
 
                     isDesertBiome = false;
                     DesertBiomeTemperatureMultiplier = 1;
@@ -875,11 +874,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     tempRate_DUSK = -0.01D;
                     tempRate_NIGHT = -0.02D;
                 }
-            } else if (biome instanceof BiomeGenIke) { //From phobos
-                DAWN_TEMPERATURE =  88D;
-                DAY_TEMPERATURE =  0D;
-                DUSK_TEMPERATURE = 88D;
-                NIGHT_TEMPERATURE = 150D;
+            } else if (biome instanceof BiomeGenIke) { //Phobos
+                DAWN_TEMPERATURE =  107D;
+                DAY_TEMPERATURE =  67D;
+                DUSK_TEMPERATURE = 107D;
+                NIGHT_TEMPERATURE = 147D;
                 biomeTemp = 27D;
 
                 isDesertBiome = false;
@@ -895,7 +894,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 tempRate_DAY = 0.0D;
                 tempRate_DUSK = -0.01D;
                 tempRate_NIGHT = -0.02D;
-            } else if (biome instanceof BiomeGenBaseDres) { //From Ceres
+            } else if (biome instanceof BiomeGenBaseDres) { //Ceres
                 DAWN_TEMPERATURE =  34D;
                 DAY_TEMPERATURE =  0D;
                 DUSK_TEMPERATURE = 34D;
@@ -916,7 +915,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 tempRate_DUSK = -0.014D;
                 tempRate_NIGHT = -0.0584D;
                 tempRate_HARD = true;
-            } else if (biome instanceof BiomeGenBaseLaythe) {
+            } else if (biome instanceof BiomeGenBaseLaythe) { //?
                 DAWN_TEMPERATURE =  7D;
                 DAY_TEMPERATURE =  0D;
                 DUSK_TEMPERATURE = 7D;
@@ -933,7 +932,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 ambientTemp_TERRAFORMED = 28D;
 
                 biomeWater = "clean";
-            } else if (biome instanceof BiomeGenOrbit) {
+            } else if (biome instanceof BiomeGenOrbit) { //Space
                 DAWN_TEMPERATURE =  50D;
                 DAY_TEMPERATURE =  0D;
                 DUSK_TEMPERATURE = 50D;
