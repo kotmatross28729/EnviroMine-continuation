@@ -43,10 +43,8 @@
 - **15)** **Compatibility with Mekanism's gas mask**
 
 ## Current TODO:
-- **1)** **Ability to change parameters for mobs from other mods.**
-   + Mobs that aren't registered in the vanilla tab aren't displayed in the enviromine configuration. I plan to fix this (if I can)
 
-- **2)** **Сode refactoring.**
+- **1)** **Сode refactoring.**
    + The name speaks for itself
 
 # Credits:

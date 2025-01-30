@@ -19,12 +19,15 @@ import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.ModIdentification;
+import lotr.common.LOTRDimension;
+import lotr.common.world.biome.LOTRBiome;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -560,38 +563,70 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         config.get(category, BOName[44], this.dropSpeedThunder,"Biome drop speed will be this number if there is a thunderstorm").getDouble(this.dropSpeedThunder);
     }
 
+	public void GenDefaultsProperty(BiomeGenBase[] biomeArray) {
+		for (BiomeGenBase biome : biomeArray) {
+			if (biome == null) {
+				continue;
+			}
+			
+			String modID = ModIdentification.idFromObject(biome);
+			
+			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
+			
+			if (!file.exists()) {
+				try {
+					file.createNewFile();
+				} catch (Exception e) {
+					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
+						EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + biome.biomeName + "'", e);
+					continue;
+				}
+			}
+			
+			Configuration config = new Configuration(file, true);
+			
+			config.load();
+			
+			generateEmpty(config, biome);
+			
+			config.save();
+		}
+	}
+	
 	@Override
-	public void GenDefaults()
-	{
+	public void GenDefaults() {
 		BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
-
-        for (BiomeGenBase biome : biomeArray) {
-            if (biome == null) {
-                continue;
-            }
-
-            String modID = ModIdentification.idFromObject(biome);
-
-            File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
-
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (Exception e) {
-                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
-                        EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + biome.biomeName + "'", e);
-                    continue;
-                }
-            }
-
-            Configuration config = new Configuration(file, true);
-
-            config.load();
-
-            generateEmpty(config, biome);
-
-            config.save();
-        }
+		GenDefaultsProperty(biomeArray);
+		if(EnviroMine.isLOTRLoaded) {		//!HACKY COMPAT
+			LOTRBiome[] middleEarthBL = LOTRDimension.MIDDLE_EARTH.biomeList;
+			LOTRBiome[] utumnoBL = LOTRDimension.UTUMNO.biomeList;
+			GenDefaultsPropertyLOTR(middleEarthBL);
+			GenDefaultsPropertyLOTR(utumnoBL);
+		}
+	}
+	
+	
+	public void GenDefaultsPropertyLOTR(LOTRBiome[] LOTRBiomeArray) {
+		for (LOTRBiome LOTRBiome : LOTRBiomeArray) {
+			if (LOTRBiome == null) {
+				continue;
+			}
+			String modID = ModIdentification.idFromObject(LOTRBiome);
+			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
+			if (!file.exists()) {
+				try {
+					file.createNewFile();
+				} catch (Exception e) {
+					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
+						EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + LOTRBiome.biomeName + "'", e);
+					continue;
+				}
+			}
+			Configuration config = new Configuration(file, true);
+			config.load();
+			generateEmpty(config, LOTRBiome);
+			config.save();
+		}
 	}
 
 	@Override
