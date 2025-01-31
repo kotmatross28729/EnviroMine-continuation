@@ -5,7 +5,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 public class ArmorTempUtils {
-
     public static boolean getTempResistance(EntityLivingBase entityLiving) {
         return checkArmorProperty(entityLiving, true);
     }

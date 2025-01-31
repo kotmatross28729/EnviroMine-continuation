@@ -2,14 +2,11 @@ package enviromine.handlers;
 
 import com.google.common.base.Stopwatch;
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.Fluids;
-import com.hbm.items.ModItems;
-import com.hbm.items.armor.ArmorFSB;
 import com.hbm.tileentity.machine.TileEntityCrucible;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityDiFurnaceRTG;
@@ -53,6 +50,7 @@ import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.trackers.properties.ItemProperties;
 import enviromine.utils.ArmorTempUtils;
+import enviromine.utils.CompatUtils;
 import enviromine.utils.EnviroUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -292,20 +290,19 @@ public class EM_StatusManager
                             }
 
                             if (biomeOverride != null && biomeOverride.biomeOveride) {
+                                
                                 if(EnviroMine.isHbmSpaceLoaded) {
-                                    CBT_Atmosphere atmosphere = entityLiving.worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(entityLiving.worldObj, CBT_Atmosphere.class);
-                                    if(atmosphere != null) {
-                                        if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
-                                            surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp_TERRAFORMED;
-                                        } else {
-                                            surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
-                                        }
+                                    CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(entityLiving.worldObj);
+                                    
+                                    if(CompatUtils.isTerraformed(atmosphere)) {
+                                        surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp_TERRAFORMED;
                                     } else {
                                         surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
                                     }
                                 } else {
                                     surroundingBiomeTempSamplesSum += biomeOverride.ambientTemp;
                                 }
+                                
                             } else {
                                 //surBiomeTemps += EnviroUtils.getBiomeTemp(checkBiome);
                                 surroundingBiomeTempSamplesSum += EnviroUtils.getBiomeTemp((i + x), (j + y), (k + z), checkBiome);
@@ -463,6 +460,7 @@ public class EM_StatusManager
                                     blockAndItemTempInfluence += getTempFalloff((diFurnaceRTG.getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
+                            //!!!!!!!!!!!!!!!!!!
                             else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
                                 if(nukeFurnace.isProcessing()) {
                                     //Operations (max) = 200/0.2 = 114℃ (expected 500) ❌
@@ -471,6 +469,7 @@ public class EM_StatusManager
                                     blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
+                            //!!!!!!!!!!!!!!!!!!
                             else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
                                 //this shouldn't really be a constant, but I don't give a fuck
                                 if(rtgFurnace.isProcessing()){
@@ -538,7 +537,7 @@ public class EM_StatusManager
                                     powerGen = (int) output.get(gasFlare);
                                 } catch (NoSuchFieldException | IllegalAccessException ignored) {}
                                 if(gasFlare.doesBurn && powerGen > 0) {
-                                    //Works in space - ✅ (why?)
+                                    //Works in space - ❌
                                     blockAndItemTempInfluence += getTempFalloff((EM_Settings.FlareStackHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
@@ -851,19 +850,17 @@ public class EM_StatusManager
             float currentTime = entityLiving.worldObj.getWorldTime();
 
             float temperatureChange;
-
+            
             if(EnviroMine.isHbmSpaceLoaded) {
                 CelestialBody body = CelestialBody.getBody(entityLiving.worldObj);
                 float fullCycle = Math.round((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()))));
-                float phasePeriod = fullCycle/4F;
-                CBT_Atmosphere atmosphere = entityLiving.worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(entityLiving.worldObj, CBT_Atmosphere.class);
-                if(atmosphere != null) {
-                    if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
-                        temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE_TERRAFORMED, biome_DAY_TEMPERATURE_TERRAFORMED, biome_DUSK_TEMPERATURE_TERRAFORMED, biome_NIGHT_TEMPERATURE_TERRAFORMED);
-                        airVentConst = true;
-                    } else {
-                        temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
-                    }
+                float phasePeriod = fullCycle / 4F;
+    
+                CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(entityLiving.worldObj);
+    
+                if (CompatUtils.isTerraformed(atmosphere)) {
+                    temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE_TERRAFORMED, biome_DAY_TEMPERATURE_TERRAFORMED, biome_DUSK_TEMPERATURE_TERRAFORMED, biome_NIGHT_TEMPERATURE_TERRAFORMED);
+                    airVentConst = true;
                 } else {
                     temperatureChange = calculateTemperatureChangeSpace(currentTime % fullCycle, phasePeriod, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
                 }

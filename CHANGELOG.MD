@@ -1,7 +1,14 @@
 # 1.3.148
--  **[NTM Space compat]**
-   * Rebalanced temperature values for planets to be more in line with reality
 
+### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG!
+
+-  **[NTM Space compat]**
+   * Rebalanced temperature values for planets to be more in line with ~~reality~~ common sense
+     * The terraformed values are made up of nothing, of course, changing the composition of the atmosphere is half of a work, there is also mass, radius, and a bunch of parameters related to the orbit, rotation period, solar day, etc. But let's not forget that this is just a game made of cubes, okay?
+        * If NTM Space changes the way of terraforming, it will be a disaster for this compatibility
+   * Fixed "Hard temperatures" working even when the planet was terraformed
+
+* Fixed configs not appearing for LOTR biomes
 
 
 # 1.3.147

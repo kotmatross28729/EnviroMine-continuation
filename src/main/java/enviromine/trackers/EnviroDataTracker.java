@@ -25,6 +25,7 @@ import enviromine.trackers.properties.BiomeProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.ArmorTempUtils;
+import enviromine.utils.CompatUtils;
 import enviromine.utils.EnviroUtils;
 import mekanism.common.item.ItemGasMask;
 import mekanism.common.item.ItemScubaTank;
@@ -303,7 +304,14 @@ public class EnviroDataTracker
             if (BiomeProperties.base.hasProperty(biome)) {
                 biomeProp = BiomeProperties.base.getProperty(biome);
                 if (biomeProp != null && biomeProp.biomeOveride) {
-                    temperatureRateHARD = biomeProp.tempRate_HARD;
+					if(EnviroMine.isHbmSpaceLoaded) {
+						CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(trackedEntity.worldObj);
+						if(!CompatUtils.isTerraformed(atmosphere)) {
+							temperatureRateHARD = biomeProp.tempRate_HARD;
+						}
+					} else {
+						temperatureRateHARD = biomeProp.tempRate_HARD;
+					}
                 }
             }
         }
