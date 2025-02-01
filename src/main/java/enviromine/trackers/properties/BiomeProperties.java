@@ -795,10 +795,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 isDesertBiome = false;
                 DesertBiomeTemperatureMultiplier = 1;
 
-                DAWN_TEMPERATURE_TERRAFORMED  =   20D;	//  0℃
-                DAY_TEMPERATURE_TERRAFORMED   =  -10D;	// 30℃
+                DAWN_TEMPERATURE_TERRAFORMED  =   -4D;	// 24℃
+                DAY_TEMPERATURE_TERRAFORMED   =  -15D;	// 35℃
                 DUSK_TEMPERATURE_TERRAFORMED  =   -5D;	// 25℃
-                NIGHT_TEMPERATURE_TERRAFORMED =   30D;	//-10℃
+                NIGHT_TEMPERATURE_TERRAFORMED =    5D;	// 15℃
                 ambientTemp_TERRAFORMED = 20D;
 				
                 tempRate_DAWN  =  -0.07783D;   //-4.67℃/m
@@ -819,10 +819,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 isDesertBiome = false;
                 DesertBiomeTemperatureMultiplier = 1;
 
-                DAWN_TEMPERATURE_TERRAFORMED  =  0D;	// 20℃
-                DAY_TEMPERATURE_TERRAFORMED   = -5D;	// 25℃
-                DUSK_TEMPERATURE_TERRAFORMED  = -2D;	// 22℃
-                NIGHT_TEMPERATURE_TERRAFORMED = 13D;	//  7℃
+                DAWN_TEMPERATURE_TERRAFORMED  =  -3D;	// 23℃
+                DAY_TEMPERATURE_TERRAFORMED   = -12D;	// 32℃
+                DUSK_TEMPERATURE_TERRAFORMED  =  -2D;	// 22℃
+                NIGHT_TEMPERATURE_TERRAFORMED =   8D;	// 12℃
                 ambientTemp_TERRAFORMED = 20D;
 
                 tempRate_DAWN  =   0.262D;	// 15.72℃/m
@@ -915,7 +915,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     DAWN_TEMPERATURE_TERRAFORMED  =   0D;	//20℃
                     DAY_TEMPERATURE_TERRAFORMED   =  -7D;	//27℃
                     DUSK_TEMPERATURE_TERRAFORMED  =   0D;	//20℃
-                    NIGHT_TEMPERATURE_TERRAFORMED =  16D;	// 4℃
+                    NIGHT_TEMPERATURE_TERRAFORMED =  13D;	// 7℃
                     ambientTemp_TERRAFORMED = 20D;
 
 //                    tempRate_DAWN = -0.01D;
@@ -925,21 +925,21 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	
 					biomeWater = "cold";
                 }
-            } else if (biome instanceof BiomeGenIke) { //Phobos ❌
-                DAWN_TEMPERATURE  = 107D; // -80℃
-                DAY_TEMPERATURE   =  67D; // -40℃
-                DUSK_TEMPERATURE  = 107D; // -80℃
-                NIGHT_TEMPERATURE = 147D; //-120℃
-                biomeTemp = 27D;
+            } else if (biome instanceof BiomeGenIke) { //Phobos? (Pluto-Charon) ✅
+                DAWN_TEMPERATURE  =  54D;  //-58℃
+                DAY_TEMPERATURE   =   0D;  // -4℃
+                DUSK_TEMPERATURE  =  54D;  //-58℃
+                NIGHT_TEMPERATURE = 108D; //-112℃
+                biomeTemp = -4D;
 
                 isDesertBiome = false;
                 DesertBiomeTemperatureMultiplier = 1;
 
-                DAWN_TEMPERATURE_TERRAFORMED  =  6D;	// ℃
-                DAY_TEMPERATURE_TERRAFORMED   =  0D;	// ℃
-                DUSK_TEMPERATURE_TERRAFORMED  =  6D;	// ℃
-                NIGHT_TEMPERATURE_TERRAFORMED = 10D;	// ℃
-                ambientTemp_TERRAFORMED = 25D;
+                DAWN_TEMPERATURE_TERRAFORMED  =   6D;	// -6℃
+                DAY_TEMPERATURE_TERRAFORMED   = -13D;	// 13℃
+                DUSK_TEMPERATURE_TERRAFORMED  =   7D;	// -7℃
+                NIGHT_TEMPERATURE_TERRAFORMED =  14D;	// -14℃
+                ambientTemp_TERRAFORMED = 0D;
 
 //                tempRate_DAWN  = -0.01D;
 //                tempRate_DAY   =   0.0D;
@@ -966,38 +966,38 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                 tempRate_DUSK  =  -0.014D;
                 tempRate_NIGHT = -0.0584D;
                 tempRate_HARD = true;
-            } else if (biome instanceof BiomeGenBaseLaythe) { //?, values from KSP wiki ❌
+            } else if (biome instanceof BiomeGenBaseLaythe) { //?, values from KSP wiki ✅
 				if(biome instanceof BiomeGenLaythePolar){
-					DAWN_TEMPERATURE   =  7D;	// ℃
-					DAY_TEMPERATURE    =  0D;	// ℃
-					DUSK_TEMPERATURE   =  7D;	// ℃
-					NIGHT_TEMPERATURE  = 10D;	// ℃
-					biomeTemp = 28D;
+					DAWN_TEMPERATURE   = 25D;	// -25℃
+					DAY_TEMPERATURE    = 24D;	// -24℃
+					DUSK_TEMPERATURE   = 25D;	// -25℃
+					NIGHT_TEMPERATURE  = 26D;	// -26℃
+					biomeTemp = 0D;
 					
 					isDesertBiome = false;
 					DesertBiomeTemperatureMultiplier = 1;
 					
-					DAWN_TEMPERATURE_TERRAFORMED  =  7D;	// ℃
-					DAY_TEMPERATURE_TERRAFORMED   =  0D;	// ℃
-					DUSK_TEMPERATURE_TERRAFORMED  =  7D;	// ℃
-					NIGHT_TEMPERATURE_TERRAFORMED = 10D;	// ℃
-					ambientTemp_TERRAFORMED = 28D;
+					DAWN_TEMPERATURE_TERRAFORMED  = 25D;	// -25℃
+					DAY_TEMPERATURE_TERRAFORMED   = 24D;	// -24℃
+					DUSK_TEMPERATURE_TERRAFORMED  = 25D;	// -25℃
+					NIGHT_TEMPERATURE_TERRAFORMED = 26D;	// -26℃
+					ambientTemp_TERRAFORMED = 0D;
 					
 					biomeWater = "frosty";
 				} else {
-					DAWN_TEMPERATURE  =  7D;	// ℃
-					DAY_TEMPERATURE   =  0D;	// ℃
-					DUSK_TEMPERATURE  =  7D;	// ℃
-					NIGHT_TEMPERATURE = 10D;	// ℃
-					biomeTemp = 28D;
+					DAWN_TEMPERATURE  =  8D;	// 12℃
+					DAY_TEMPERATURE   =  5D;	// 15℃
+					DUSK_TEMPERATURE  =  8D;	// 12℃
+					NIGHT_TEMPERATURE = 11D;	//  9℃
+					biomeTemp = 20D;
 					
 					isDesertBiome = false;
 					DesertBiomeTemperatureMultiplier = 1;
 					
-					DAWN_TEMPERATURE_TERRAFORMED  =  7D;	// ℃
-					DAY_TEMPERATURE_TERRAFORMED   =  0D;	// ℃
-					DUSK_TEMPERATURE_TERRAFORMED  =  7D;	// ℃
-					NIGHT_TEMPERATURE_TERRAFORMED = 10D;	// ℃
+					DAWN_TEMPERATURE_TERRAFORMED  =  8D;	// 12℃
+					DAY_TEMPERATURE_TERRAFORMED   =  5D;	// 15℃
+					DUSK_TEMPERATURE_TERRAFORMED  =  8D;	// 12℃
+					NIGHT_TEMPERATURE_TERRAFORMED = 11D;	//  9℃
 					ambientTemp_TERRAFORMED = 28D;
 					
 					biomeWater = "clean";
