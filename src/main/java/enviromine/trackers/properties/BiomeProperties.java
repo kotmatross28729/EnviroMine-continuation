@@ -877,7 +877,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 //                tempRate_NIGHT = ;
                 biomeWater = "cold";
             }
-            else if(biome instanceof BiomeGenBaseDuna) { //Mars ❌
+            else if(biome instanceof BiomeGenBaseDuna) { //Mars ✅
                 if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
                     DAWN_TEMPERATURE  =  43D; // -93℃
                     DAY_TEMPERATURE   =   0D; // -50℃
@@ -887,24 +887,17 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
                     isDesertBiome = false;
                     DesertBiomeTemperatureMultiplier = 1;
-	
-					//TODO
-					DAWN_TEMPERATURE_TERRAFORMED =  4D;
-					DAY_TEMPERATURE_TERRAFORMED  =  0D;
-					DUSK_TEMPERATURE_TERRAFORMED  = 4D;
-					NIGHT_TEMPERATURE_TERRAFORMED = 8D;
-					ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
-//                    DAWN_TEMPERATURE_TERRAFORMED  = D;
-//                    DAY_TEMPERATURE_TERRAFORMED   = D;
-//                    DUSK_TEMPERATURE_TERRAFORMED  = D;
-//                    NIGHT_TEMPERATURE_TERRAFORMED = D;
-//                    ambientTemp_TERRAFORMED = D;
-
-					//TODO
-//                    tempRate_DAWN  = ;
-//                    tempRate_DAY   = ;
-//                    tempRate_DUSK  = ;
-//                    tempRate_NIGHT = ;
+					
+                    DAWN_TEMPERATURE_TERRAFORMED  =  0D;	//-15℃
+                    DAY_TEMPERATURE_TERRAFORMED   = -7D;	// -8℃
+                    DUSK_TEMPERATURE_TERRAFORMED  =  0D;	//-15℃
+                    NIGHT_TEMPERATURE_TERRAFORMED =  8D;	//-23℃
+                    ambientTemp_TERRAFORMED = -15D;
+					
+                    tempRate_DAWN  =  -0.043;		//-2.6°C/m℃
+                    tempRate_DAY   =   -0.02;		//-1.2°C/m℃
+                    tempRate_DUSK  =  -0.043;		//-2.6°C/m℃
+                    tempRate_NIGHT = -0.0616;		//-3.7°C/m℃
 					
                     biomeWater = "frosty";
 
@@ -919,11 +912,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                     isDesertBiome = false;
                     DesertBiomeTemperatureMultiplier = 1;
 
-                    DAWN_TEMPERATURE_TERRAFORMED  =  5D;	// ℃
-                    DAY_TEMPERATURE_TERRAFORMED   =  0D;	// ℃
-                    DUSK_TEMPERATURE_TERRAFORMED  =  5D;	// ℃
-                    NIGHT_TEMPERATURE_TERRAFORMED = 10D;	// ℃
-                    ambientTemp_TERRAFORMED = 27D;
+                    DAWN_TEMPERATURE_TERRAFORMED  =   0D;	//20℃
+                    DAY_TEMPERATURE_TERRAFORMED   =  -7D;	//27℃
+                    DUSK_TEMPERATURE_TERRAFORMED  =   0D;	//20℃
+                    NIGHT_TEMPERATURE_TERRAFORMED =  16D;	// 4℃
+                    ambientTemp_TERRAFORMED = 20D;
 
 //                    tempRate_DAWN = -0.01D;
 //                    tempRate_DAY = 0.0D;
@@ -1010,7 +1003,6 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 					biomeWater = "clean";
 				}
             } else if (biome instanceof BiomeGenOrbit) { //Space ✅
-				//TODO: check how this will work
                 DAWN_TEMPERATURE  =  50D;	// -150℃
                 DAY_TEMPERATURE   =   0D;	// -100℃
                 DUSK_TEMPERATURE  =  50D;	// -150℃
