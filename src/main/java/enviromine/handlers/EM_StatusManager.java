@@ -81,6 +81,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.EnumPlantType;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -856,6 +857,23 @@ public class EM_StatusManager
                 float fullCycle = Math.round((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()))));
                 float phasePeriod = fullCycle / 4F;
     
+                ///---DEBUG---
+                
+                String currentDayTime = "";
+                float currentTimeZ = currentTime % fullCycle;
+                if (currentTimeZ >= 0 && currentTimeZ < phasePeriod) {currentDayTime = "DAWN";}
+                else if (currentTimeZ >= phasePeriod && currentTimeZ < phasePeriod*2) {currentDayTime = "DAY";}
+                else if (currentTimeZ >= phasePeriod*2 && currentTimeZ < phasePeriod*3) {currentDayTime = "DUSK";}
+                else if (currentTimeZ >= phasePeriod*3 && currentTimeZ < phasePeriod*4) {currentDayTime = "NIGHT";}
+                
+                //TODO: debug
+                LogManager.getLogger().fatal("body         : " + body.name);
+                LogManager.getLogger().fatal("fullCycle    : " + fullCycle);
+                LogManager.getLogger().fatal("phasePeriod  : " + phasePeriod);
+                LogManager.getLogger().fatal("current time : " + currentDayTime);
+    
+                ///---DEBUG---
+    
                 CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(entityLiving.worldObj);
     
                 if (CompatUtils.isTerraformed(atmosphere)) {
@@ -877,6 +895,12 @@ public class EM_StatusManager
             if(EnviroMine.isSereneSeasonsLoaded) {
                 Season.SubSeason currentSubSeason = SeasonHelper.getSeasonState(entityLiving.worldObj).getSubSeason();
                 if(currentSubSeason != null) {
+    
+                    ///---DEBUG---
+                    //TODO: debug
+                    LogManager.getLogger().fatal("current season : " + currentSubSeason.name());
+                    ///---DEBUG---
+                    
                     switch (currentSubSeason) {
                         case EARLY_SPRING -> biomeTemperature -= biome_EARLY_SPRING_TEMPERATURE_DECREASE;
                         case MID_SPRING -> biomeTemperature -= biome_MID_SPRING_TEMPERATURE_DECREASE;
