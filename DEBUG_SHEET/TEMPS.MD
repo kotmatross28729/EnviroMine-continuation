@@ -8,7 +8,7 @@
 | Minmus       | 0°C/s              | 0°C/s             | 0°C/s              | 0°C/s               |
 | Duna/Polar   | 0°C/s / -0.043°C/s | 0°C/s / -0.02°C/s | 0°C/s / -0.043°C/s | 0°C/s / -0.0616°C/s |
 | Ike          | 0°C/s              | 0°C/s             | 0°C/s              | 0°C/s               |
-| Dres         | ?°C/s              | ?°C/s             | ?°C/s              | ?°C/s               |
+| Dres         | -0.046°C/s         | -0.016°C/s        | -0.046°C/s         | -0.066°C/s          |
 | Laythe/Polar | 0°C/s / 0°C/s      | 0°C/s / 0°C/s     | 0°C/s / 0°C/s      | 0°C/s / 0°C/s       |
 | Orbit        | 0°C/s              | 0°C/s             | 0°C/s              | 0°C/s               |
 | Tekto        | ?°C/s              | ?°C/s             | ?°C/s              | ?°C/s               |   
@@ -24,7 +24,7 @@
 | Minmus       | 0°C/m            | 0°C/m            | 0°C/m            | 0°C/m            |
 | Duna/Polar   | 0°C/m / -2.6°C/m | 0°C/m / -1.2°C/m | 0°C/m / -2.6°C/m | 0°C/m / -3.7°C/m |
 | Ike          | 0°C/m            | 0°C/m            | 0°C/m            | 0°C/m            |
-| Dres         | ?°C/m            | ?°C/m            | ?°C/m            | ?°C/m            |
+| Dres         | -2.8°C/m         | -1°C/m           | -2.8°C/m         | -4°C/m           |
 | Laythe/Polar | 0°C/m / 0°C/m    | 0°C/m / 0°C/m    | 0°C/m / 0°C/m    | 0°C/m / 0°C/m    |
 | Orbit        | 0°C/m            | 0°C/m            | 0°C/m            | 0°C/m            |
 | Tekto        | ?°C/m            | ?°C/m            | ?°C/m            | ?°C/m            |     
@@ -40,7 +40,7 @@
 | Minmus       | -50°C       | 14°C       | -50°C       | -107°C        |
 | Duna/Polar   | -49°C/-93°C | 20°C/-50°C | -49°C/-93°C | -140°C/-150°C |
 | Ike          | -58°C       | -4°C       | -58°C       | -112°C        |   
-| Dres         | ?°C         | ?°C        | ?°C         | ?°C           |   
+| Dres         | -106°C      | -38°C      | -106°C      | -163°C        |   
 | Laythe/Polar | 12°C/-25°C  | 15°C/-24°C | 12°C/-25°C  | 9°C/-26°C     |
 | Orbit        | -150°C      | -100°C     | -150°C      | -200°C        |
 | Tekto        | ?°C         | ?°C        | ?°C         | ?°C           |     
@@ -57,7 +57,7 @@
 | Minmus       | 14°C       | 20°C       | 15°C       | 6°C       |
 | Duna/Polar   | 20°C/-15°C | 27°C/-8°C  | 20°C/-15°C | 7°C/-23°C |      
 | Ike          | -6°C       | 13°C       | -7°C       | -14°C     |
-| Dres         | ?°C        | ?°C        | ?°C        | ?°C       |
+| Dres         | -31°C      | -17°C      | -31°C      | -52°C     |
 | Laythe/Polar | 12°C/-25°C | 15°C/-24°C | 12°C/-25°C | 9°C/-26°C |   
 | Orbit        | -150°C     | -100°C     | -150°C     | -200°C    |
 | Tekto        | ?°C        | ?°C        | ?°C        | ?°C       |     

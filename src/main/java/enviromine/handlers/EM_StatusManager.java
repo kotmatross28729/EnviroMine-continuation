@@ -857,22 +857,23 @@ public class EM_StatusManager
                 float fullCycle = Math.round((float) (body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()))));
                 float phasePeriod = fullCycle / 4F;
     
-                ///---DEBUG---
-                
-                String currentDayTime = "";
-                float currentTimeZ = currentTime % fullCycle;
-                if (currentTimeZ >= 0 && currentTimeZ < phasePeriod) {currentDayTime = "DAWN";}
-                else if (currentTimeZ >= phasePeriod && currentTimeZ < phasePeriod*2) {currentDayTime = "DAY";}
-                else if (currentTimeZ >= phasePeriod*2 && currentTimeZ < phasePeriod*3) {currentDayTime = "DUSK";}
-                else if (currentTimeZ >= phasePeriod*3 && currentTimeZ < phasePeriod*4) {currentDayTime = "NIGHT";}
-                
-                //TODO: debug
-                LogManager.getLogger().fatal("body         : " + body.name);
-                LogManager.getLogger().fatal("fullCycle    : " + fullCycle);
-                LogManager.getLogger().fatal("phasePeriod  : " + phasePeriod);
-                LogManager.getLogger().fatal("current time : " + currentDayTime);
-    
-                ///---DEBUG---
+//                ///---DEBUG---
+//                
+//                String currentDayTime = "";
+//                float currentTimeZ = currentTime % fullCycle;
+//                if (currentTimeZ >= 0 && currentTimeZ < phasePeriod) {currentDayTime = "DAWN";}
+//                else if (currentTimeZ >= phasePeriod && currentTimeZ < phasePeriod*2) {currentDayTime = "DAY";}
+//                else if (currentTimeZ >= phasePeriod*2 && currentTimeZ < phasePeriod*3) {currentDayTime = "DUSK";}
+//                else if (currentTimeZ >= phasePeriod*3 && currentTimeZ < phasePeriod*4) {currentDayTime = "NIGHT";}
+//                
+//                //TODO: debug
+//                LogManager.getLogger().fatal("body               : " + body.name);
+//                LogManager.getLogger().fatal("fullCycle          : " + fullCycle);
+//                LogManager.getLogger().fatal("phasePeriod        : " + phasePeriod);
+//                LogManager.getLogger().fatal("current time       : " + currentTime);
+//                LogManager.getLogger().fatal("current Day Period : " + currentDayTime);
+//    
+//                ///---DEBUG---
     
                 CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(entityLiving.worldObj);
     
@@ -896,10 +897,10 @@ public class EM_StatusManager
                 Season.SubSeason currentSubSeason = SeasonHelper.getSeasonState(entityLiving.worldObj).getSubSeason();
                 if(currentSubSeason != null) {
     
-                    ///---DEBUG---
-                    //TODO: debug
-                    LogManager.getLogger().fatal("current season : " + currentSubSeason.name());
-                    ///---DEBUG---
+//                    ///---DEBUG---
+//                    //TODO: debug
+//                    LogManager.getLogger().fatal("current season : " + currentSubSeason.name());
+//                    ///---DEBUG---
                     
                     switch (currentSubSeason) {
                         case EARLY_SPRING -> biomeTemperature -= biome_EARLY_SPRING_TEMPERATURE_DECREASE;

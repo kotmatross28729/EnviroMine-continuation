@@ -12,7 +12,12 @@ public class CompatUtils {
 	}
 	public static boolean isTerraformed(CBT_Atmosphere atmosphere) {
 		if(atmosphere != null) {
-			return atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09);
+			//TODO: Make it use common sense. 
+			// In its current state, you can pump 0.21 bar of air into Eve's atmosphere and the temperature will magically drop from 460 to 30
+			// Maybe `CBT_Atmosphere.getPressure()` ?
+			
+			
+			return atmosphere.hasFluid(Fluids.AIR, 0.21) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09);
 		}
 		return false;
 	}
