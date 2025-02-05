@@ -311,7 +311,7 @@ public class ObjectHandler
                     localType = enviroItemWaterBottle.getWaterType();
                 }
 
-                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Blocks.ice, 1));
+                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Items.snowball, 1));
             }
         }
 

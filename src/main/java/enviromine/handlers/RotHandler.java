@@ -18,7 +18,6 @@ public class RotHandler
 {
 	public static ItemStack doRot(World world, ItemStack item)
 	{
-		//System.out.println("Rotting: " + item.getDisplayName());
 		RotProperties rotProps = null;
 		long rotTime = (long)(EM_Settings.foodRotTime * 24000L);
 		
@@ -56,7 +55,7 @@ public class RotHandler
 			
 			if(UBD == 0)
 			{
-				UBD = (world.getTotalWorldTime()/24000L) * 24000L;
+				UBD = (world.getTotalWorldTime()/24000L) * 24000L; //TODO config
 				UBD = UBD <= 0L? 1L : UBD;
 				item.getTagCompound().setLong("EM_ROT_DATE", UBD);
 				item.getTagCompound().setLong("EM_ROT_TIME", rotTime);
@@ -70,9 +69,9 @@ public class RotHandler
 				{
 					return Item.itemRegistry.getObject(rotProps.rotID) == null? null : new ItemStack((Item)Item.itemRegistry.getObject(rotProps.rotID), item.stackSize, rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
 				}
-			} else
-			{
+			} else {
 				item.getTagCompound().setLong("EM_ROT_TIME", rotTime);
+				
 				return item;
 			}
 		}
@@ -95,13 +94,12 @@ public class RotHandler
 				
 				if(slotItem != null)
 				{
-					ItemStack rotItem = doRot(world, slotItem);
-					
-					if(rotItem == null || rotItem.getItem() != slotItem.getItem())
-					{
-						inventory.setInventorySlotContents(i, rotItem);
-						flag = true;
-					}
+						ItemStack rotItem = doRot(world, slotItem);
+						
+						if (rotItem == null || rotItem.getItem() != slotItem.getItem()) {
+							inventory.setInventorySlotContents(i, rotItem);
+							flag = true;
+						}
 				}
 			}
 			

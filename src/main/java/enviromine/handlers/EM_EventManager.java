@@ -1,7 +1,6 @@
 package enviromine.handlers;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.gas.BlockGasExplosive;
 import com.hbm.blocks.gas.BlockGasFlammable;
 import com.hbm.blocks.gas.BlockGasMonoxide;
 import com.hbm.blocks.gas.BlockGasRadonDense;
@@ -9,6 +8,7 @@ import com.hbm.blocks.gas.BlockGasRadonTomb;
 import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
+import com.mrcrayfish.furniture.tileentity.TileEntityFridge;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -19,6 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
+import enviromine.blocks.tiles.TileEntityFreezer;
 import enviromine.blocks.tiles.TileEntityGas;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.core.EM_ConfigHandler;
@@ -39,6 +40,7 @@ import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
 import enviromine.world.Earthquake;
 import enviromine.world.features.mineshaft.MineshaftBuilder;
+import net.blay09.mods.cookingforblockheads.tile.TileFridge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockJukebox.TileEntityJukebox;
 import net.minecraft.block.material.Material;
@@ -116,6 +118,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -154,7 +157,7 @@ public class EM_EventManager
 		{
 			if(event.entity instanceof EntityItem item)
 			{
-                ItemStack rotStack = RotHandler.doRot(event.world, item.getEntityItem());
+                ItemStack rotStack = RotHandler.doRot(event.world, item.getEntityItem()); 
 
 				if(item.getEntityItem() != rotStack)
 				{
@@ -163,10 +166,10 @@ public class EM_EventManager
 			} else if(event.entity instanceof EntityPlayer)
 			{
 				IInventory invo = ((EntityPlayer)event.entity).inventory;
-				RotHandler.rotInvo(event.world, invo);
+				RotHandler.rotInvo(event.world, invo);	//For player	
 			} else if(event.entity instanceof IInventory invo)
 			{
-                RotHandler.rotInvo(event.world, invo);
+                RotHandler.rotInvo(event.world, invo);	//For non-player entities 
 			}
 		}
 
@@ -458,22 +461,42 @@ public class EM_EventManager
             }
         }
     }
-
+	
 	@SubscribeEvent
-	public void onPlayerInteract(PlayerInteractEvent event)
-	{
+	public void onPlayerInteract(PlayerInteractEvent event) {
 		ItemStack item = event.entityPlayer.getCurrentEquippedItem();
 
 		if(event.action == Action.RIGHT_CLICK_BLOCK && EM_Settings.foodSpoiling)
 		{
 			TileEntity tile = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
 
-			if(tile != null & tile instanceof IInventory)
-			{
-				RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory)tile);
+			if(tile != null & tile instanceof IInventory) {
+				//TODO: mixins
+//				boolean blocked = false;
+//				
+//				if(EnviroMine.isCFBHLoaded) {
+//					if(tile instanceof TileFridge frigde) {
+//						blocked = true;
+//						LogManager.getLogger().fatal("FRIDGE : " + frigde);
+//					}
+//				}
+//				
+//				if(EnviroMine.isCFMLoaded) {
+//					if(tile instanceof TileEntityFreezer Freezer) {
+//						blocked = true;
+//						LogManager.getLogger().fatal("Freezer : " + Freezer);
+//					}
+//					if(tile instanceof TileEntityFridge frigde) {
+//						blocked = true;
+//						LogManager.getLogger().fatal("Fridge : " + frigde);
+//					}
+//				}
+				
+	//			if(!blocked)
+					RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory) tile);    //For every tileentity with inventory
 			}
 		}
-
+		
 //		if(!event.entityPlayer.worldObj.isRemote)
 //		{
 //			EnviroMine.logger.info("CreatureType: " + EnviroUtils.getWitcheryCreatureType(event.entityPlayer));
@@ -612,7 +635,7 @@ public class EM_EventManager
 
 		if(event.target instanceof IInventory chest && EM_Settings.foodSpoiling)
 		{
-            RotHandler.rotInvo(event.entityPlayer.worldObj, chest);
+            RotHandler.rotInvo(event.entityPlayer.worldObj, chest);	//For every entity that is... inventory? (like chest mobs?)
 		}
 	}
 
@@ -1402,7 +1425,7 @@ public class EM_EventManager
 			
 			if(EM_Settings.foodSpoiling)
 			{
-				RotHandler.rotInvo(event.entityLiving.worldObj, invo);
+				RotHandler.rotInvo(event.entityLiving.worldObj, invo);	//For player's inventory //TODO config?
 			}
 
 			if(event.entityLiving.getEntityData().hasKey("EM_SAFETY"))
@@ -2009,24 +2032,20 @@ public class EM_EventManager
 				event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
 				//event.toolTip.add("Water: " + disp + "% ("+fill+"/"+max+")");
 			}
-
-			if(event.itemStack.getTagCompound().getLong("EM_ROT_DATE") > 0 && EM_Settings.foodSpoiling)
-			{
-				double rotDate = event.itemStack.getTagCompound().getLong("EM_ROT_DATE");
-				double rotTime = event.itemStack.getTagCompound().getLong("EM_ROT_TIME");
-				double curTime = event.entity.worldObj.getTotalWorldTime();
-
-				if(curTime - rotDate <= 0)
-				{
-					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", "0%" , MathHelper.floor_double((curTime - rotDate)/24000L) , MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
-					//event.toolTip.add("Rotten: 0% (Day " + MathHelper.floor_double((curTime - rotDate)/24000L) + "/" + MathHelper.floor_double(rotTime/24000L) + ")");
-					//event.toolTip.add("Use-By: Day " + MathHelper.floor_double((rotDate + rotTime)/24000L));
-				} else
-				{
-					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", MathHelper.floor_double((curTime - rotDate)/rotTime * 100D) + "%", MathHelper.floor_double((curTime - rotDate)/24000L), MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
-					//event.toolTip.add("Use-By: Day " + MathHelper.floor_double((rotDate + rotTime)/24000L));
-				}
-			} 
+				
+				if(event.itemStack.getTagCompound().getLong("EM_ROT_DATE") > 0 && EM_Settings.foodSpoiling) {
+					double rotDate = event.itemStack.getTagCompound().getLong("EM_ROT_DATE");
+					double rotTime = event.itemStack.getTagCompound().getLong("EM_ROT_TIME");
+					double curTime = event.entity.worldObj.getTotalWorldTime();
+	
+					if(curTime - rotDate <= 0) {
+						event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", "0%" , MathHelper.floor_double((curTime - rotDate)/24000L) , MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
+					} else {
+						event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", MathHelper.floor_double((curTime - rotDate)/rotTime * 100D) + "%", MathHelper.floor_double((curTime - rotDate)/24000L), MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
+					}
+	
+				} 
+			
 				if(event.itemStack.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
 					int i = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY);
 					int max = event.itemStack.getTagCompound().getInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY);

@@ -11,6 +11,7 @@ import enviromine.items.EnviroItemPolymerWaterBottle;
 import enviromine.items.EnviroItemWaterBottle;
 import enviromine.utils.WaterUtils;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -110,7 +111,7 @@ public class ObjectHandlerCompat {
                 if (bottle.getItem() instanceof EnviroItemPolymerWaterBottle enviroItemPolymerWaterBottle) {
                     localType = enviroItemPolymerWaterBottle.getWaterType();
                 }
-                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Blocks.ice, 1));
+                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Items.snowball, 1));
             }
         }
 

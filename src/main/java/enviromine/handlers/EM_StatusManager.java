@@ -52,6 +52,10 @@ import enviromine.trackers.properties.ItemProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.CompatUtils;
 import enviromine.utils.EnviroUtils;
+import lotr.common.world.LOTRWorldChunkManager;
+import lotr.common.world.LOTRWorldProvider;
+import lotr.common.world.biome.LOTRBiome;
+import lotr.common.world.biome.variant.LOTRBiomeVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
@@ -223,8 +227,20 @@ public class EM_StatusManager
         if (chunk == null) {
             return data;
         }
-
-        BiomeGenBase biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, entityLiving.worldObj.getWorldChunkManager());
+        
+        BiomeGenBase biome;
+        
+        if(EnviroMine.isLOTRLoaded) {
+            //TODO TEST
+            if(entityLiving.worldObj.getWorldChunkManager() instanceof LOTRWorldChunkManager chunkManagerLOTR) {
+                biome = (LOTRBiome) entityLiving.worldObj.getBiomeGenForCoords(i, k);
+            } else {
+                biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, entityLiving.worldObj.getWorldChunkManager());
+            }
+        } else {
+            biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, entityLiving.worldObj.getWorldChunkManager());
+        }
+        
 
         if (biome == null) {
             return data;
@@ -461,23 +477,22 @@ public class EM_StatusManager
                                     blockAndItemTempInfluence += getTempFalloff((diFurnaceRTG.getPower() / EM_Settings.DiFurnaceRTGHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
                                 }
                             }
-                            //!!!!!!!!!!!!!!!!!!
-                            else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
-                                if(nukeFurnace.isProcessing()) {
-                                    //Operations (max) = 200/0.2 = 114℃ (expected 500) ❌
-                                    //Operations (min) =   5/0.2 = not enough to see℃ (expected 12,5) ❔
-                                    //Works in space - ✅
-                                    blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
-                                }
-                            }
-                            //!!!!!!!!!!!!!!!!!!
-                            else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
-                                //this shouldn't really be a constant, but I don't give a fuck
-                                if(rtgFurnace.isProcessing()){
-                                    //Works in space - ✅
-                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
-                                }
-                            }
+                            //!"The nuclear and RTG furnaces will be retired, their recipes have been removed but they remain operational for now"
+//                            else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
+//                                if(nukeFurnace.isProcessing()) {
+//                                    //Operations (max) = 200/0.2 = 114℃ (expected 500) ❌
+//                                    //Operations (min) =   5/0.2 = not enough to see℃ (expected 12,5) ❔
+//                                    //Works in space - ✅
+//                                    blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+//                                }
+//                            }
+//                            else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
+//                                //this shouldn't really be a constant, but I don't give a fuck
+//                                if(rtgFurnace.isProcessing()){
+//                                    //Works in space - ✅
+//                                    blockAndItemTempInfluence += getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider), dist, cubeRadius, EM_Settings.blockTempDropoffPower);
+//                                }
+//                            }
                             else if(tileentity instanceof TileEntityMachineWoodBurner woodBurner) {
                                 int powerGen = 0;
                                 try {

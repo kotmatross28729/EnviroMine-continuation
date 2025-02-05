@@ -25,12 +25,10 @@ public class TileEntityFreezer extends TileEntity implements IInventory
     public int numPlayersUsing;
     private int field_145974_k;
 	
-	public TileEntityFreezer()
-	{
-	}
+	public TileEntityFreezer() {}
 	
 	/**
-	 * Automatically adjust the use-by date on food items stored within the chest so they rot at half speed
+	 * Automatically adjust the use-by date on food items stored within the chest, so they don't rot
 	 */
 	@Override
 	public void updateEntity()
@@ -325,8 +323,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
         if(tags.hasKey("RotCheck"))
         {
         	this.lastCheck = tags.getLong("RotCheck");
-        } else
-        {
+        } else {
         	this.lastCheck = -1;
         }
         

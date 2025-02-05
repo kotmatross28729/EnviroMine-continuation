@@ -238,14 +238,12 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 
 			String catName = this.categoryName() + "." + EnviroUtils.replaceULN(armor.getUnlocalizedName() +"_"+ regName[1]);
 
-			//TODO netherite
+			//TODO netherite //!!!
 //			if(EnviroMine.isEtFuturumLoaded) {
 //				if(armor ==  || armor ==  || armor ==  || armor == ) {
 //					
 //				}
 //			}
-			
-			
 			
 			if (EnviroMine.isHbmLoaded) {
 				if(armor == ModItems.steamsuit_helmet || armor == ModItems.steamsuit_plate || armor == ModItems.steamsuit_legs || armor == ModItems.steamsuit_boots) {

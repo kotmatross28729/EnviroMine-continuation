@@ -6,10 +6,18 @@
    * Rebalanced temperature values for planets to be more in line with ~~reality~~ common sense
      * The terraformed values are made up of nothing, of course, changing the composition of the atmosphere is half of a work, there is also mass, radius, and a bunch of parameters related to the orbit, rotation period, solar day, etc. But let's not forget that this is just a game made of cubes, okay?
         * If NTM Space changes the way of terraforming, it will be a disaster for this compatibility
+     * **You can see the values [here](https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/DEBUG_SHEET/TEMPS.MD)**
    * Fixed "Hard temperatures" working even when the planet was terraformed
 
 * Fixed configs not appearing for LOTR biomes
-
+  * Also fixed LOTR biome identification
+* Fixed Freezer Z-fighting on model
+* Now cooling water uses snowball instead of ice (in favor of survival mode) [**Suggested by iamsoNewBee**]
+* Golden apple/carrot no longer rot [**Suggested by iamsoNewBee**]
+  * Minor food hydration balance changes [**Suggested by iamsoNewBee**]
+* Hbm's NTM drinks now restore hydration **[TODO]**
+* Hbm's NTM canned food no longer rot    **[TODO]**
+* Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
 
 # 1.3.147
 ### Fixed

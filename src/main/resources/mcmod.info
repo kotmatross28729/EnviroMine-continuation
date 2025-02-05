@@ -5,10 +5,10 @@
   "description": "Adds more realism to Minecraft with environmental effects, physics, gases and a cave dimension.",
   "version": "",
   "mcversion": "",
-  "url": "https://www.curseforge.com/minecraft/mc-mods/enviromine-for-galaxy-odyssey",
+  "url": "https://legacy.curseforge.com/minecraft/mc-mods/enviromine-continuation",
   "updateUrl": "",
   "authorList": ["Funwayguy", "TimbuckTato", "GenDeathrow", "thislooksfun", "AstroTibs", "Kotmatross"],
-  "credits": "",
+  "credits": "IronArmy and EpicNation - all the hard work debugging this mod,  iamsoNewBee - Chinese localization, nice suggestions",
   "logoFile": "",
   "screenshots": [],
   "dependencies": ["mod_MinecraftForge"]

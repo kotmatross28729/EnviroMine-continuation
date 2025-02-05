@@ -1,5 +1,10 @@
 package enviromine.core;
 
+import com.hbm.inventory.FluidStack;
+import com.hbm.inventory.RecipesCommon;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.recipes.LiquefactionRecipes;
+import com.hbm.tileentity.machine.TileEntityMachineWoodBurner;
 import cpw.mods.fml.common.Loader;
 import enviromine.handlers.ObjectHandlerCompat;
 import org.apache.logging.log4j.LogManager;
@@ -45,6 +50,9 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+
 @Mod(modid = EM_Settings.MOD_ID, name = EM_Settings.MOD_NAME, version = EM_Settings.VERSION, guiFactory = EM_Settings.GUI_FACTORY)
 public class EnviroMine
 {
@@ -59,6 +67,8 @@ public class EnviroMine
 	public static EM_CommonProxy proxy;
 
 	public SimpleNetworkWrapper network;
+	
+	//I mean, it's NTM, not Hbm, but it's even in its mod ID.
 
     public static boolean isHbmLoaded;
     public static boolean isHbmSpaceLoaded;
@@ -67,6 +77,8 @@ public class EnviroMine
 	public static boolean isEtFuturumLoaded;
 	public static boolean isMCELoaded;
 	public static boolean isLOTRLoaded;
+	public static boolean isCFBHLoaded;
+	public static boolean isCFMLoaded;
 
     //public static EM_WorldData theWorldEM;
 
@@ -85,15 +97,21 @@ public class EnviroMine
         event.getModMetadata().version = 		// version
         		EnumChatFormatting.DARK_AQUA +
         		EM_Settings.VERSION;
-
+		
+		//Big thanks to the IronArmy and EpicNation for all the hard work debugging this mod
+		//Big thanks to the iamsoNewBee for Chinese localization and nice suggestions
         event.getModMetadata().credits = 		// credits
         		EnumChatFormatting.AQUA +
-        		"Big thanks to the IronArmy and EpicNation for all the hard work debugging this mod.";
+        		"IronArmy & EpicNation - all the hard work debugging this mod. " +
+				"iamsoNewBee - Chinese localization & nice suggestions."
+		;
+		
 
         event.getModMetadata().authorList.clear();
         event.getModMetadata().authorList.add(  // authorList - added as a list
         		EnumChatFormatting.BLUE +
-        		"Funwayguy, TimbuckTato, GenDeathrow, thislooksfun, AstroTibs"
+        		"Funwayguy, TimbuckTato, GenDeathrow, thislooksfun, AstroTibs, " +
+				EnumChatFormatting.AQUA + "Kot" + EnumChatFormatting.GOLD + "matross"
         		);
 
         event.getModMetadata().url = EnumChatFormatting.GRAY +
@@ -103,7 +121,7 @@ public class EnviroMine
 	       		EnumChatFormatting.GREEN +
 	       		"Adds more realism to Minecraft with environmental effects, physics, gases and a cave dimension.";
 
-        event.getModMetadata().logoFile = "title.png";
+        event.getModMetadata().logoFile = "title_new.png";
 
 
 		logger = event.getModLog();
@@ -128,6 +146,12 @@ public class EnviroMine
 		}
 		if(Loader.isModLoaded("lotr")){
 			isLOTRLoaded = true;
+		}
+		if(Loader.isModLoaded("cookingforblockheads")){
+			isCFBHLoaded = true;
+		}
+		if(Loader.isModLoaded("cfm")){
+			isCFMLoaded = true;
 		}
 		
 		enviroTab = new EnviroTab("enviromine.enviroTab");
@@ -193,8 +217,6 @@ public class EnviroMine
 
 		proxy.registerTickHandlers();
 		proxy.registerEventHandlers();
-
-
 	}
 
 	@EventHandler
@@ -202,8 +224,29 @@ public class EnviroMine
 	{
 		proxy.postInit(event);
 
-        if(isHbmLoaded)
-            ObjectHandlerCompat.registerRecipes();
+        if(isHbmLoaded) {
+	
+//			try {
+//				Class<?> clazz = LiquefactionRecipes.class;
+//				Field recipesField = clazz.getDeclaredField("recipes");
+//				recipesField.setAccessible(true);
+//				HashMap<Object, FluidStack> recipes = (HashMap<Object, FluidStack>) recipesField.get(LiquefactionRecipes.class);
+//				recipes.put(new RecipesCommon.ComparableStack(ObjectHandler.rottenFood), new FluidStack(50, Fluids.SALIENT));
+//			} catch (NoSuchFieldException | IllegalAccessException ignored) {}
+			
+			//TODO: mixins boyz
+			// 1) @Shadow recipes
+			// 2) Inject into registerDefaults()
+			// 3) Profit
+			// OR
+			// 1) Inject into getOutput(ItemStack stack)
+			// 2) Profit
+			//                                              This ↓↓↓
+			// recipes.put(new RecipesCommon.ComparableStack(ObjectHandler.rottenFood), new FluidStack(50, Fluids.SALIENT));
+			
+			ObjectHandlerCompat.registerRecipes();
+		}
+		
 
 		EM_ConfigHandler.initConfig(); // Second pass for object initialized after pre-init
 	}

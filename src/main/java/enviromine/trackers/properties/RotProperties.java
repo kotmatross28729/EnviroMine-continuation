@@ -3,6 +3,7 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.Iterator;
 
+import com.hbm.items.ModItems;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -177,7 +178,24 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 			
 			config.load();
 			
-			if(item == Items.rotten_flesh || item == ObjectHandler.rottenFood)
+			if(EnviroMine.isHbmLoaded) {
+				if(item == ModItems.bio_wafer) {
+					config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+					config.get(category, RPName[1], -1).getInt(-1);
+					config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
+					config.get(category, RPName[3], 0).getInt(0);
+					config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item").getInt(-1);
+				}
+			}
+			
+			if(item == Items.golden_apple || item == Items.golden_carrot)
+			{
+				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[1], -1).getInt(-1);
+				config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
+				config.get(category, RPName[3], 0).getInt(0);
+				config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item").getInt(-1);
+			} else if(item == Items.rotten_flesh || item == ObjectHandler.rottenFood)
 			{
 				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
@@ -205,8 +223,13 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(Items.rotten_flesh), "Set blank to rot into nothing").getString();
 				config.get(category, RPName[3], 0).getInt(0);
 				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(item instanceof ItemFood && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
-			{
+			} else if(item instanceof ItemFood && (regName[0].equals("minecraft"))) {
+				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[1], -1).getInt(-1);
+				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
+				config.get(category, RPName[3], 0).getInt(0);
+				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
+			} else if(EM_Settings.genConfigs) {
 				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
 				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
