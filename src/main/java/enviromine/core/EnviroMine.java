@@ -1,16 +1,6 @@
 package enviromine.core;
 
-import com.hbm.inventory.FluidStack;
-import com.hbm.inventory.RecipesCommon;
-import com.hbm.inventory.fluid.Fluids;
-import com.hbm.inventory.recipes.LiquefactionRecipes;
-import com.hbm.tileentity.machine.TileEntityMachineWoodBurner;
 import cpw.mods.fml.common.Loader;
-import enviromine.handlers.ObjectHandlerCompat;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -31,8 +21,9 @@ import enviromine.core.commands.QuakeCommand;
 import enviromine.core.proxies.EM_CommonProxy;
 import enviromine.handlers.EnviroAchievements;
 import enviromine.handlers.EnviroShaftCreationHandler;
-import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.Legacy.LegacyHandler;
+import enviromine.handlers.ObjectHandler;
+import enviromine.handlers.ObjectHandlerCompat;
 import enviromine.network.packet.PacketAutoOverride;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.network.packet.PacketServerOverride;
@@ -49,9 +40,7 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
-
-import java.lang.reflect.Field;
-import java.util.HashMap;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = EM_Settings.MOD_ID, name = EM_Settings.MOD_NAME, version = EM_Settings.VERSION, guiFactory = EM_Settings.GUI_FACTORY)
 public class EnviroMine
@@ -128,7 +117,7 @@ public class EnviroMine
 
 		
 		//COMPAT
-		if(Loader.isModLoaded("hbm")){
+		if(Loader.isModLoaded("hbm")) {
 			isHbmLoaded = true;
 			try {
 				Class.forName("com.hbm.dim.SolarSystem");
@@ -141,18 +130,15 @@ public class EnviroMine
 			isSereneSeasonsLoaded = true;
 		if(Loader.isModLoaded("etfuturum"))
 			isEtFuturumLoaded = true;
-		if(Loader.isModLoaded("Mekanism")){
+		if(Loader.isModLoaded("Mekanism"))
 			isMCELoaded = true;
-		}
-		if(Loader.isModLoaded("lotr")){
+		if(Loader.isModLoaded("lotr"))
 			isLOTRLoaded = true;
-		}
-		if(Loader.isModLoaded("cookingforblockheads")){
+		if(Loader.isModLoaded("cookingforblockheads"))
 			isCFBHLoaded = true;
-		}
-		if(Loader.isModLoaded("cfm")){
+		if(Loader.isModLoaded("cfm"))
 			isCFMLoaded = true;
-		}
+		
 		
 		enviroTab = new EnviroTab("enviromine.enviroTab");
 

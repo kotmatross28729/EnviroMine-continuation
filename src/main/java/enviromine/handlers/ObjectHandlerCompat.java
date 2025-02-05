@@ -57,26 +57,16 @@ public class ObjectHandlerCompat {
     }
 
     public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
-        if(type == WaterUtils.WATER_TYPES.FROSTY) {
-            return new ItemStack(frostyWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.DIRTY_COLD) {
-            return new ItemStack(badColdWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.CLEAN_COLD) {
-            return new ItemStack(coldWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.SALTY) {
-            return new ItemStack(saltWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.DIRTY) {
-            return new ItemStack(badWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.CLEAN) {
-            return new ItemStack(cleanWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.CLEAN_WARM) {
-            return new ItemStack(warmWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.DIRTY_WARM) {
-            return new ItemStack(badWarmWaterBottle_polymer);
-        } else if(type == WaterUtils.WATER_TYPES.HOT) {
-            return new ItemStack(hotWaterBottle_polymer);
-        } else {
-            return new ItemStack(cleanWaterBottle_polymer);
+        switch (type) {
+            case FROSTY -> {return new ItemStack(frostyWaterBottle_polymer);}
+            case DIRTY_COLD -> {return new ItemStack(badColdWaterBottle_polymer);}
+            case CLEAN_COLD -> {return new ItemStack(coldWaterBottle_polymer);}
+            case SALTY -> {return new ItemStack(saltWaterBottle_polymer);}
+            case DIRTY -> {return new ItemStack(badWaterBottle_polymer);}
+            case CLEAN_WARM -> {return new ItemStack(warmWaterBottle_polymer);}
+            case DIRTY_WARM -> {return new ItemStack(badWarmWaterBottle_polymer);}
+            case HOT -> {return new ItemStack(hotWaterBottle_polymer);}
+            default -> {return new ItemStack(cleanWaterBottle_polymer);}
         }
     }
     public static void registerRecipes() {

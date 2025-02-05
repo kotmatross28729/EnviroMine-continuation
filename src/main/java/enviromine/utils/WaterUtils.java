@@ -14,57 +14,23 @@ public class WaterUtils {
         HOT //-3
     }
     public static WATER_TYPES heatUp(WATER_TYPES waterType) {
-        if(waterType == WATER_TYPES.FROSTY) {
-            return WATER_TYPES.CLEAN_COLD;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_COLD) {
-            return WATER_TYPES.CLEAN;
-        } else if (waterType == WATER_TYPES.DIRTY_COLD) {
-            return WATER_TYPES.DIRTY;
-        }
-        else if (waterType == WATER_TYPES.DIRTY) {
-            return WATER_TYPES.CLEAN;
-        }
-        else if (waterType == WATER_TYPES.CLEAN) {
-            return WATER_TYPES.CLEAN_WARM;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_WARM) {
-            return WATER_TYPES.HOT;
-        }
-        else if (waterType == WATER_TYPES.DIRTY_WARM) {
-            return WATER_TYPES.HOT;
-        } else if (waterType == WATER_TYPES.HOT) {
-            return WATER_TYPES.HOT;
-        } else {
-            return WATER_TYPES.CLEAN;
+        switch (waterType) {
+            case FROSTY -> {return WATER_TYPES.CLEAN_COLD;}
+            case DIRTY_COLD -> {return WATER_TYPES.DIRTY;}
+            case CLEAN -> {return WATER_TYPES.CLEAN_WARM;}
+            case CLEAN_WARM, DIRTY_WARM, HOT -> {return WATER_TYPES.HOT;}
+            default -> {return WATER_TYPES.CLEAN;}
         }
     }
 
     public static WATER_TYPES coolDown(WATER_TYPES waterType) {
-        if (waterType == WATER_TYPES.FROSTY) {
-            return WATER_TYPES.FROSTY;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_COLD) {
-            return WATER_TYPES.FROSTY;
-        } else if (waterType == WATER_TYPES.DIRTY_COLD) {
-            return WATER_TYPES.FROSTY;
-        }
-        else if (waterType == WATER_TYPES.DIRTY) {
-            return WATER_TYPES.DIRTY_COLD;
-        }
-        else if (waterType == WATER_TYPES.CLEAN) {
-            return WATER_TYPES.CLEAN_COLD;
-        }
-        else if (waterType == WATER_TYPES.CLEAN_WARM) {
-            return WATER_TYPES.CLEAN;
-        }
-        else if (waterType == WATER_TYPES.DIRTY_WARM) {
-            return WATER_TYPES.DIRTY;
-        }
-        else if (waterType == WATER_TYPES.HOT) {
-            return WATER_TYPES.CLEAN_WARM;
-        } else {
-            return WATER_TYPES.CLEAN;
+        switch (waterType) {
+            case FROSTY, CLEAN_COLD, DIRTY_COLD -> {return WATER_TYPES.FROSTY;}
+            case DIRTY -> {return WATER_TYPES.DIRTY_COLD;}
+            case CLEAN -> {return WATER_TYPES.CLEAN_COLD;}
+            case DIRTY_WARM -> {return WATER_TYPES.DIRTY;}
+            case HOT -> {return WATER_TYPES.CLEAN_WARM;}
+            default -> {return WATER_TYPES.CLEAN;}
         }
     }
 

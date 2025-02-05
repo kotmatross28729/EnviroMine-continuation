@@ -10,6 +10,7 @@ import enviromine.core.EnviroMine;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
+import enviromine.utils.misc.CompatDanger;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFlower;
@@ -29,6 +30,7 @@ import java.util.Iterator;
 
 import static enviromine.core.EnviroMine.isHbmLoaded;
 
+@CompatDanger
 public class ItemProperties implements SerialisableProperty, PropertyBase {
 
     public static final ItemProperties base = new ItemProperties();

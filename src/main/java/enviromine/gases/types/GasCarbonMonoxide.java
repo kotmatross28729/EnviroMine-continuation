@@ -11,6 +11,7 @@ import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
 import enviromine.handlers.ObjectHandler;
 import enviromine.utils.EnviroUtils;
+import enviromine.utils.misc.CompatDanger;
 import mekanism.common.item.ItemGasMask;
 import mekanism.common.item.ItemScubaTank;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +27,7 @@ import static enviromine.core.EM_Settings.*;
 import static enviromine.core.EnviroMine.isHbmLoaded;
 import static enviromine.trackers.EnviroDataTracker.logger;
 
+@CompatDanger
 public class GasCarbonMonoxide extends EnviroGas
 {
     //TODO SHIT CODE

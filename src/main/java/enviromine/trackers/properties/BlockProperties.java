@@ -3,6 +3,7 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.Iterator;
 
+import enviromine.utils.misc.CompatDanger;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.config.Configuration;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
 import static enviromine.core.EnviroMine.isTCLoaded;
 
+@CompatDanger
 public class BlockProperties implements SerialisableProperty, PropertyBase
 {
 	public static final BlockProperties base = new BlockProperties();

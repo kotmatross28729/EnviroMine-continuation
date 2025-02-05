@@ -239,27 +239,18 @@ public class ObjectHandler
 	}
 
     public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
-        if(type == WaterUtils.WATER_TYPES.FROSTY) {
-            return new ItemStack(frostyWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.DIRTY_COLD) {
-            return new ItemStack(badColdWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.CLEAN_COLD) {
-            return new ItemStack(coldWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.SALTY) {
-            return new ItemStack(saltWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.DIRTY) {
-            return new ItemStack(badWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.CLEAN) {
-            return new ItemStack(Items.potionitem, 1, 0);
-        } else if(type == WaterUtils.WATER_TYPES.CLEAN_WARM) {
-            return new ItemStack(warmWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.DIRTY_WARM) {
-            return new ItemStack(badWarmWaterBottle);
-        } else if(type == WaterUtils.WATER_TYPES.HOT) {
-            return new ItemStack(hotWaterBottle);
-        } else {
-            return new ItemStack(Items.potionitem, 1, 0);
-        }
+		
+		switch (type) {
+			case FROSTY -> {return new ItemStack(frostyWaterBottle);}
+			case DIRTY_COLD -> {return new ItemStack(badColdWaterBottle);}
+			case CLEAN_COLD -> {return new ItemStack(coldWaterBottle);}
+			case SALTY -> {return new ItemStack(saltWaterBottle);}
+			case DIRTY -> {return new ItemStack(badWaterBottle);}
+			case CLEAN_WARM -> {return new ItemStack(warmWaterBottle);}
+			case DIRTY_WARM -> {return new ItemStack(badWarmWaterBottle);}
+			case HOT -> {return new ItemStack(hotWaterBottle);}
+			default -> {return new ItemStack(Items.potionitem, 1, 0);}
+		}
     }
 
 	public static void registerRecipes()

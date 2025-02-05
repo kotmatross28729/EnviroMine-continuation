@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Iterator;
 
 import com.hbm.items.ModItems;
+import enviromine.utils.misc.CompatDanger;
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 
+@CompatDanger
 public class RotProperties implements SerialisableProperty, PropertyBase
 {
 	public static final RotProperties base = new RotProperties();

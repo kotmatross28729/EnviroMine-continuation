@@ -20,6 +20,7 @@ import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.ModIdentification;
+import enviromine.utils.misc.CompatDanger;
 import lotr.common.LOTRDimension;
 import lotr.common.world.biome.LOTRBiome;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,12 +29,12 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@CompatDanger
 public class BiomeProperties implements SerialisableProperty, PropertyBase
 {
 	public static final BiomeProperties base = new BiomeProperties();

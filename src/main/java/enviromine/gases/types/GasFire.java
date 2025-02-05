@@ -1,16 +1,13 @@
 package enviromine.gases.types;
 
-import java.awt.Color;
-
 import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
 import enviromine.utils.ArmorTempUtils;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import com.hbm.items.armor.ArmorFSB;
+
+import java.awt.Color;
 
 public class GasFire extends EnviroGas
 {

@@ -2,13 +2,10 @@ package enviromine.trackers;
 
 import api.hbm.item.IGasMask;
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.ThreeInts;
 import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.Fluids;
-import com.hbm.items.ModItems;
-import com.hbm.items.armor.ArmorFSB;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -20,15 +17,14 @@ import enviromine.client.gui.UI_Settings;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.EM_StatusManager;
-import enviromine.trackers.properties.ArmorProperties;
+import enviromine.trackers.compat.EnviroDataTracker_MCE;
 import enviromine.trackers.properties.BiomeProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.CompatUtils;
 import enviromine.utils.EnviroUtils;
-import mekanism.common.item.ItemGasMask;
-import mekanism.common.item.ItemScubaTank;
+import enviromine.utils.misc.CompatDanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -53,10 +49,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-import static enviromine.core.EM_Settings.DeathFromHeartAttack;
-import static enviromine.core.EM_Settings.HeartAttackTimeToDie;
-
-
+@CompatDanger
 public class EnviroDataTracker
 {
     public static final Logger logger = LogManager.getLogger("ENVIROMINE_DEBUG_LOGGER");
@@ -204,6 +197,7 @@ public class EnviroDataTracker
 			}
 		}
 
+		//TODO: class
         if (EnviroMine.isHbmLoaded) {
             if (helmet != null && !isCreative) {
                 if (helmet.getItem() instanceof IGasMask mask) {
@@ -239,19 +233,10 @@ public class EnviroDataTracker
         }
 		
 		if(helmet != null && !isCreative && EnviroMine.isMCELoaded) {
-			if(helmet.getItem() instanceof ItemGasMask) {
-				if(trackedEntity.getEquipmentInSlot(3) != null && trackedEntity.getEquipmentInSlot(3).getItem() instanceof ItemScubaTank tank)
-				{
-					 if(tank.getFlowing(trackedEntity.getEquipmentInSlot(3)) && tank.getGas(trackedEntity.getEquipmentInSlot(3)) != null) {
-						 float airToFill = 100F - airQuality;
-						 if (airToFill > 0F) {
-							 airQuality += airToFill;
-						 }
-					 }
-				}
-			}
+			airQuality += EnviroDataTracker_MCE.checkMask(helmet, trackedEntity, airQuality);
 		}
 
+		//TODO: class
         if(EnviroMine.isHbmSpaceLoaded) {
             CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
             if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
@@ -304,6 +289,7 @@ public class EnviroDataTracker
             if (BiomeProperties.base.hasProperty(biome)) {
                 biomeProp = BiomeProperties.base.getProperty(biome);
                 if (biomeProp != null && biomeProp.biomeOveride) {
+					//TODO: class
 					if(EnviroMine.isHbmSpaceLoaded) {
 						CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(trackedEntity.worldObj);
 						if(!CompatUtils.isTerraformed(atmosphere)) {
@@ -731,9 +717,9 @@ public class EnviroDataTracker
 				int werewolfDuration = MathHelper.clamp_int(600 - (trackedEntity instanceof EntityPlayer && EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
                 if(!isCreative && sanity <= EM_Settings.SanityStage3LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0 ))
                 {
-                    if (DeathFromHeartAttack) {
+                    if (EM_Settings.DeathFromHeartAttack) {
                         heartattacktimer += 1;
-                        if (heartattacktimer >= HeartAttackTimeToDie/2){
+                        if (heartattacktimer >= EM_Settings.HeartAttackTimeToDie/2){
                             trackedEntity.attackEntityFrom(EnviroDamageSource.heartattack, 25000.0F);
                             heartattacktimer = 0;
                         }
@@ -752,9 +738,9 @@ public class EnviroDataTracker
                 }
                 else if(!isCreative && sanity > EM_Settings.SanityStage3LowerBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) && sanity <= EM_Settings.SanityStage3UpperBound - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0) )
                 {
-                    if (DeathFromHeartAttack) {
+                    if (EM_Settings.DeathFromHeartAttack) {
                         heartattacktimer += 1;
-                        if (heartattacktimer >= HeartAttackTimeToDie) {
+                        if (heartattacktimer >= EM_Settings.HeartAttackTimeToDie) {
                             trackedEntity.attackEntityFrom(EnviroDamageSource.heartattack, 25000.0F);
                             heartattacktimer = 0;
                         }

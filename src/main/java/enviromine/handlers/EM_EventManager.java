@@ -8,7 +8,6 @@ import com.hbm.blocks.gas.BlockGasRadonTomb;
 import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
-import com.mrcrayfish.furniture.tileentity.TileEntityFridge;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -19,7 +18,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
-import enviromine.blocks.tiles.TileEntityFreezer;
 import enviromine.blocks.tiles.TileEntityGas;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.core.EM_ConfigHandler;
@@ -38,9 +36,9 @@ import enviromine.trackers.properties.ItemProperties;
 import enviromine.trackers.properties.RotProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
+import enviromine.utils.misc.CompatDanger;
 import enviromine.world.Earthquake;
 import enviromine.world.features.mineshaft.MineshaftBuilder;
-import net.blay09.mods.cookingforblockheads.tile.TileFridge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockJukebox.TileEntityJukebox;
 import net.minecraft.block.material.Material;
@@ -118,7 +116,6 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -128,6 +125,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
+@CompatDanger
 public class EM_EventManager
 {
 	private static final String BLOOD_BLOCK_BOP = "BiomesOPlenty:hell_blood";
@@ -446,6 +444,7 @@ public class EM_EventManager
     //TODO temp, gas rework
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
+		//TODO: class
         if(EnviroMine.isHbmLoaded) {
             if (event.block == ObjectHandler.flammableCoal || event.block == ObjectHandler.burningCoal) {
 
@@ -1380,6 +1379,7 @@ public class EM_EventManager
 			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
 			
 			//GASMASK SOUND
+			//TODO: class
 			if(EnviroMine.isHbmLoaded) {
 				ItemStack mask = invo.armorItemInSlot(3);
 				if (mask != null && mask.getItem() != null && mask.getItem() == ObjectHandler.gasMask) {
@@ -1408,6 +1408,7 @@ public class EM_EventManager
 				ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1);
 			}
 			
+			//TODO: class
 			if(EnviroMine.isHbmLoaded) {
 				if(getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasFlammable.class)){
 					//Fire -> Blue fire
