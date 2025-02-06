@@ -9,6 +9,7 @@
      * **You can see the values [here](https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/DEBUG_SHEET/TEMPS.MD)**
    * Fixed "Hard temperatures" working even when the planet was terraformed
 
+* Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed
 * Fixed configs not appearing for LOTR biomes
   * Also fixed LOTR biome identification
 * Fixed Freezer Z-fighting on model
