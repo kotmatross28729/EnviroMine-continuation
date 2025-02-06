@@ -1,13 +1,5 @@
 package enviromine.handlers;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.gas.BlockGasFlammable;
-import com.hbm.blocks.gas.BlockGasMonoxide;
-import com.hbm.blocks.gas.BlockGasRadonDense;
-import com.hbm.blocks.gas.BlockGasRadonTomb;
-import com.hbm.blocks.gas.BlockVacuum;
-import com.hbm.main.MainRegistry;
-import com.hbm.sound.AudioWrapper;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -25,6 +17,7 @@ import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.gases.GasBuffer;
+import enviromine.handlers.compat.EM_EventManager_NTM;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.trackers.EnviroDataTracker;
 import enviromine.trackers.Hallucination;
@@ -36,7 +29,7 @@ import enviromine.trackers.properties.ItemProperties;
 import enviromine.trackers.properties.RotProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
-import enviromine.utils.misc.CompatDanger;
+import enviromine.utils.misc.CompatSafe;
 import enviromine.world.Earthquake;
 import enviromine.world.features.mineshaft.MineshaftBuilder;
 import net.minecraft.block.Block;
@@ -94,7 +87,6 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -125,7 +117,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
-@CompatDanger
+@CompatSafe
 public class EM_EventManager
 {
 	private static final String BLOOD_BLOCK_BOP = "BiomesOPlenty:hell_blood";
@@ -440,24 +432,11 @@ public class EM_EventManager
 			}
 		}
 	}
-
-    //TODO temp, gas rework
+	
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
-		//TODO: class
         if(EnviroMine.isHbmLoaded) {
-            if (event.block == ObjectHandler.flammableCoal || event.block == ObjectHandler.burningCoal) {
-
-                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-
-                    int x = event.x + dir.offsetX;
-                    int y = event.y + dir.offsetY;
-                    int z = event.z + dir.offsetZ;
-
-                    if (event.world.rand.nextInt(2) == 0 && event.world.getBlock(x, y, z) == Blocks.air)
-                        event.world.setBlock(x, y, z, ModBlocks.gas_coal);
-                }
-            }
+			EM_EventManager_NTM.handleOnBlockBreakCoal(event);
         }
     }
 	
@@ -1333,8 +1312,6 @@ public class EM_EventManager
 		}
 	}
 	
-	private AudioWrapper audioBreathing;
-	
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event)
 	{
@@ -1379,27 +1356,8 @@ public class EM_EventManager
 			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
 			
 			//GASMASK SOUND
-			//TODO: class
 			if(EnviroMine.isHbmLoaded) {
-				ItemStack mask = invo.armorItemInSlot(3);
-				if (mask != null && mask.getItem() != null && mask.getItem() == ObjectHandler.gasMask) {
-					if(mask.hasTagCompound() && mask.getTagCompound().hasKey(EM_Settings.GAS_MASK_FILL_TAG_KEY)) {
-						if ((audioBreathing == null || !audioBreathing.isPlaying())) {
-							audioBreathing = MainRegistry.proxy.getLoopedSound("enviromine:breathing", (float) event.entityLiving.posX, (float) event.entityLiving.posY, (float) event.entityLiving.posZ, 0.1F, 5.0F, 1.0F, 5);
-							audioBreathing.startSound();
-						}
-						audioBreathing.updatePosition((float) event.entityLiving.posX, (float) event.entityLiving.posY, (float) event.entityLiving.posZ);
-						audioBreathing.keepAlive();
-					} else {
-						if(audioBreathing != null) {
-							audioBreathing.stopSound();
-							audioBreathing = null;
-						}
-					}
-				} else if(audioBreathing != null) {
-						audioBreathing.stopSound();
-						audioBreathing = null;
-					}
+				EM_EventManager_NTM.handleGasMaskSound(event, invo);
 			}
 			
 			AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(event.entityLiving.posX - EM_Settings.DavyLampGasDetectRange, event.entityLiving.posY - EM_Settings.DavyLampGasDetectRange, event.entityLiving.posZ - EM_Settings.DavyLampGasDetectRange, event.entityLiving.posX + EM_Settings.DavyLampGasDetectRange, event.entityLiving.posY + EM_Settings.DavyLampGasDetectRange, event.entityLiving.posZ + EM_Settings.DavyLampGasDetectRange).expand(2D, 2D, 2D);
@@ -1408,25 +1366,13 @@ public class EM_EventManager
 				ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1);
 			}
 			
-			//TODO: class
 			if(EnviroMine.isHbmLoaded) {
-				if(getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasFlammable.class)){
-					//Fire -> Blue fire
-					ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2);
-				} else if (
-						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasMonoxide.class) ||
-						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonDense.class) ||
-						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonTomb.class) ||
-						getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockVacuum.class))
-				{
-					//Fire -> No fire
-					ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 0);
-				}
+				EM_EventManager_NTM.handleNTMGas(event, boundingBox, invo);
 			}
 			
 			if(EM_Settings.foodSpoiling)
 			{
-				RotHandler.rotInvo(event.entityLiving.worldObj, invo);	//For player's inventory //TODO config?
+				RotHandler.rotInvo(event.entityLiving.worldObj, invo);	//For player's inventory
 			}
 
 			if(event.entityLiving.getEntityData().hasKey("EM_SAFETY"))
@@ -1722,7 +1668,7 @@ public class EM_EventManager
 	}
 
 	
-	public boolean getBlockWithinAABB(AxisAlignedBB boundingBox, World world, Class<? extends Block> blockz){
+	public static boolean getBlockWithinAABB(AxisAlignedBB boundingBox, World world, Class<? extends Block> blockz){
 		int minX = MathHelper.floor_double(boundingBox.minX);
 		int minY = MathHelper.floor_double(boundingBox.minY);
 		int minZ = MathHelper.floor_double(boundingBox.minZ);
@@ -1744,7 +1690,7 @@ public class EM_EventManager
 		return false;
 	}
 	
-	public void ReplaceInvoItems(IInventory invo, Item fItem, int fDamage, Item rItem, int rDamage)
+	public static void ReplaceInvoItems(IInventory invo, Item fItem, int fDamage, Item rItem, int rDamage)
 	{
 		for(int i = 0; i < invo.getSizeInventory(); i++)
 		{

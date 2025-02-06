@@ -92,7 +92,7 @@ public class EM_StatusManager_NTM_SPACE {
 		);
 		List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(entityLiving.worldObj, pos.x, pos.y, pos.z);
 		for (AtmosphereBlob blob : currentBlobs) {
-			if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
+			if (blob.hasFluid(Fluids.AIR, 0.21) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
 				return true;
 			}
 		}

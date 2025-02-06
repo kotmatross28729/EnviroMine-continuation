@@ -6,11 +6,12 @@ import enviromine.client.gui.hud.items.Debug_Info;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
+import enviromine.handlers.compat.EM_PhysManager_TC;
 import enviromine.trackers.properties.BlockProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.StabilityType;
 import enviromine.utils.EnviroUtils;
-import enviromine.utils.misc.CompatDanger;
+import enviromine.utils.misc.CompatSafe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockLeavesBase;
@@ -28,13 +29,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.Level;
-import thaumcraft.common.blocks.BlockMagicalLeaves;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-@CompatDanger
+@CompatSafe
 public class EM_PhysManager
 {
 	public static ArrayList<String> usedSlidePositions = new ArrayList<String>();
@@ -389,9 +389,7 @@ public class EM_PhysManager
 				dropType = -1;
 			}
             else if(EnviroMine.isTCLoaded){
-				//TODO: class
-                if(block instanceof BlockMagicalLeaves)
-                {
+                if(EM_PhysManager_TC.checkLeaves(block)) {
                     dropType = -1;
                 }
             }

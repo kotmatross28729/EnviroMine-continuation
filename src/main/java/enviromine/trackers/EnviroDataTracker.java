@@ -1,13 +1,5 @@
 package enviromine.trackers;
 
-import api.hbm.item.IGasMask;
-import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.handler.ThreeInts;
-import com.hbm.handler.atmosphere.AtmosphereBlob;
-import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
-import com.hbm.inventory.fluid.Fluids;
-import com.hbm.util.ArmorRegistry;
-import com.hbm.util.ArmorUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,13 +10,14 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.compat.EnviroDataTracker_MCE;
+import enviromine.trackers.compat.EnviroDataTracker_NTM;
+import enviromine.trackers.compat.EnviroDataTracker_NTM_SPACE;
 import enviromine.trackers.properties.BiomeProperties;
 import enviromine.trackers.properties.DimensionProperties;
 import enviromine.trackers.properties.EntityProperties;
 import enviromine.utils.ArmorTempUtils;
-import enviromine.utils.CompatUtils;
 import enviromine.utils.EnviroUtils;
-import enviromine.utils.misc.CompatDanger;
+import enviromine.utils.misc.CompatSafe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,9 +40,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 
-@CompatDanger
+@CompatSafe
 public class EnviroDataTracker
 {
     public static final Logger logger = LogManager.getLogger("ENVIROMINE_DEBUG_LOGGER");
@@ -196,59 +188,17 @@ public class EnviroDataTracker
 				}
 			}
 		}
-
-		//TODO: class
+		
         if (EnviroMine.isHbmLoaded) {
-            if (helmet != null && !isCreative) {
-                if (helmet.getItem() instanceof IGasMask mask) {
-                    ItemStack filter = mask.getFilter(helmet, trackedEntity);
-                    if (filter != null) {
-                        if (EM_Settings.airMult > 0F && (100F - airQuality) >= EM_Settings.airMult)
-                        {
-                            float airToFill = 100F - airQuality;
-
-                            airToFill *= EM_Settings.gasMaskUpdateRestoreFraction;
-
-                            if (airToFill > 0F) {
-                                if (ArmorRegistry.hasProtection(trackedEntity, 3, ArmorRegistry.HazardClass.PARTICLE_COARSE)) {
-                                    airQuality += airToFill;
-                                        ArmorUtil.damageGasMaskFilter(trackedEntity, MathHelper.floor_float(airToFill*EM_Settings.HbmGasMaskBreakMultiplier));
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (ArmorRegistry.hasProtection(trackedEntity, 3, ArmorRegistry.HazardClass.PARTICLE_COARSE)) {
-                        if (EM_Settings.airMult > 0F && (100F - airQuality) >= EM_Settings.airMult)
-                        {
-                            float airToFill = 100F - airQuality;
-                            airToFill *= EM_Settings.gasMaskUpdateRestoreFraction;
-                            if (airToFill > 0F) {
-                                airQuality += airToFill;
-                                    ArmorUtil.damageGasMaskFilter(trackedEntity, MathHelper.floor_float(airToFill*EM_Settings.HbmGasMaskBreakMultiplier));
-                            }
-                        }
-                     }
-            }
+			airQuality += EnviroDataTracker_NTM.handleGasMaskNTM(helmet, isCreative, trackedEntity, airQuality);
         }
 		
 		if(helmet != null && !isCreative && EnviroMine.isMCELoaded) {
 			airQuality += EnviroDataTracker_MCE.checkMask(helmet, trackedEntity, airQuality);
 		}
-
-		//TODO: class
+		
         if(EnviroMine.isHbmSpaceLoaded) {
-            CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
-            if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
-                airQuality += EM_Settings.NTMSpaceAirQualityDecrease;
-            }
-             ThreeInts pos = new ThreeInts(MathHelper.floor_double(trackedEntity.posX), MathHelper.floor_double(trackedEntity.posY + trackedEntity.getEyeHeight()), MathHelper.floor_double(trackedEntity.posZ));
-             List<AtmosphereBlob> currentBlobs = ChunkAtmosphereManager.proxy.getBlobs(trackedEntity.worldObj, pos.x, pos.y, pos.z);
-             for (AtmosphereBlob blob : currentBlobs) {
-                 if (blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
-                     airQuality += EM_Settings.NTMSpaceAirVentAirQualityIncrease;
-                 }
-             }
+			airQuality += EnviroDataTracker_NTM_SPACE.handleAirVent(trackedEntity, airQuality);
         }
 		airQuality = MathHelper.clamp_float(airQuality, 0F, 100F);
 
@@ -289,10 +239,8 @@ public class EnviroDataTracker
             if (BiomeProperties.base.hasProperty(biome)) {
                 biomeProp = BiomeProperties.base.getProperty(biome);
                 if (biomeProp != null && biomeProp.biomeOveride) {
-					//TODO: class
 					if(EnviroMine.isHbmSpaceLoaded) {
-						CBT_Atmosphere atmosphere = CompatUtils.getAtmosphere(trackedEntity.worldObj);
-						if(!CompatUtils.isTerraformed(atmosphere)) {
+						if(EnviroDataTracker_NTM_SPACE.getHardTempTerra(trackedEntity)){
 							temperatureRateHARD = biomeProp.tempRate_HARD;
 						}
 					} else {
