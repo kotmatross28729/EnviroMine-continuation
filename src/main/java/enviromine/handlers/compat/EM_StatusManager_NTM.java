@@ -36,7 +36,9 @@ public class EM_StatusManager_NTM {
 	
 	// All compatibility with NTM from the EM_StatusManager class goes here
 	
-	public static float machinesTempInfluence(TileEntity tileentity, float blockAndItemTempInfluence, float dist, int cubeRadius){
+	public static float machinesTempInfluence(TileEntity tileentity, float dist, int cubeRadius){
+		float blockAndItemTempInfluence = 0;
+		
 		float FireboxMax = TileEntityHeaterFirebox.maxHeatEnergy;
 		float HeaterOvenMax = TileEntityHeaterOven.maxHeatEnergy;
 		

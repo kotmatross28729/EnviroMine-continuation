@@ -38,7 +38,7 @@ public class EnviroDataTracker_NTM {
 				}
 			}
 		}
-		return airQuality;
+		return 0;
 	}
 	
 	

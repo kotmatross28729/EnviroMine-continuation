@@ -14,7 +14,7 @@ import net.minecraft.util.MathHelper;
 import java.util.List;
 
 public class EnviroDataTracker_NTM_SPACE {
-	public static float handleAirVent(EntityLivingBase trackedEntity, float airQuality) {
+	public static float handleAirVent(EntityLivingBase trackedEntity) {
 		CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(trackedEntity);
 		if (!ArmorUtil.checkForOxy(trackedEntity, atmosphere)) {
 			return EM_Settings.NTMSpaceAirQualityDecrease;
@@ -26,7 +26,7 @@ public class EnviroDataTracker_NTM_SPACE {
 				return EM_Settings.NTMSpaceAirVentAirQualityIncrease;
 			}
 		}
-		return airQuality;
+		return 0;
 	}
 	
 	public static boolean getHardTempTerra(EntityLivingBase trackedEntity) {

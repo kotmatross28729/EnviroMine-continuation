@@ -300,7 +300,7 @@ public class EM_StatusManager {
                     if(EnviroMine.isHbmLoaded && EM_Settings.EnableHBMMachinesHeat) {
                         TileEntity tileentity = entityLiving.worldObj.getTileEntity(i + x, j + y, k + z);
                         if (tileentity != null) {
-                            blockAndItemTempInfluence += EM_StatusManager_NTM.machinesTempInfluence(tileentity, blockAndItemTempInfluence, dist, cubeRadius);
+                            blockAndItemTempInfluence += EM_StatusManager_NTM.machinesTempInfluence(tileentity, dist, cubeRadius);
                         }
                     }
 

@@ -17,6 +17,6 @@ public class EnviroDataTracker_MCE {
 				}
 			}
 		}
-		return airQuality;
+		return 0;
 	}
 }
