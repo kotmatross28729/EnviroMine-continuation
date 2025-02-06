@@ -253,7 +253,14 @@ public class EM_StatusManager {
                 for (int z = -radiusAtXSlice_floored; z <= radiusAtXSlice_floored; z++) {
                     if (y == 0) {
                         Chunk testChunk = entityLiving.worldObj.getChunkFromBlockCoords((i + x), (k + z));
-                        BiomeGenBase checkBiome = testChunk.getBiomeGenForWorldCoords((i + x) & 15, (k + z) & 15, entityLiving.worldObj.getWorldChunkManager());
+    
+                        BiomeGenBase checkBiome;
+                        
+                        if(EnviroMine.isLOTRLoaded) {
+                            checkBiome = EM_StatusManager_LOTR.findLOTRBiome(entityLiving, i + x, k + z);
+                        } else {
+                            checkBiome = testChunk.getBiomeGenForWorldCoords((i + x) & 15, (k + z) & 15, entityLiving.worldObj.getWorldChunkManager());
+                        }
 
                         if (checkBiome != null) {
                             BiomeProperties biomeOverride = null;
