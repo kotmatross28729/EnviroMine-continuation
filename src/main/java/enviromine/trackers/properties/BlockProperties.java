@@ -343,7 +343,6 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		config.get(category, BPName[13], false).getBoolean(false);
 		config.get(category, BPName[14], 10000).getInt(10000);
 		config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch)).getString();
-		config.get(category, BPName[16], -1).getInt(-1);
 	}
 
 	@Override
@@ -440,7 +439,6 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[13], true).getBoolean(true);
 				config.get(category, BPName[14], 10000).getInt(10000);
 				config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch)).getString();
-				config.get(category, BPName[16], -1).getInt(-1);
 			} else if(block == Blocks.lit_furnace) {
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
