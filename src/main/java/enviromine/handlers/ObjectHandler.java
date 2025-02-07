@@ -7,11 +7,11 @@ import enviromine.blocks.BlockBurningCoal;
 import enviromine.blocks.BlockDavyLamp;
 import enviromine.blocks.BlockElevator;
 import enviromine.blocks.BlockEsky;
-import enviromine.blocks.BlockFireTorch;
 import enviromine.blocks.BlockFlammableCoal;
 import enviromine.blocks.BlockFreezer;
 import enviromine.blocks.BlockGas;
 import enviromine.blocks.BlockNoPhysics;
+import enviromine.blocks.BlockOffTorch;
 import enviromine.blocks.materials.MaterialElevator;
 import enviromine.blocks.materials.MaterialGas;
 import enviromine.blocks.tiles.TileEntityBurningCoal;
@@ -79,7 +79,6 @@ public class ObjectHandler
 
 	public static Block flammableCoal;
 	public static Block burningCoal;
-	public static Block fireTorch;
 	public static Block offTorch;
 
 	public static Block esky;
@@ -187,8 +186,7 @@ public class ObjectHandler
 
 		flammableCoal = new BlockFlammableCoal();
 		burningCoal = new BlockBurningCoal(Material.rock).setBlockName("enviromine.burningcoal").setCreativeTab(EnviroMine.enviroTab);
-		fireTorch = new BlockFireTorch(true).setTickRandomly(true).setBlockName("torch").setBlockTextureName("torch_on").setLightLevel(0.9375F).setCreativeTab(EnviroMine.enviroTab);
-		offTorch = new BlockFireTorch(false).setTickRandomly(false).setBlockName("torch").setBlockTextureName("enviromine:torch_off").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
+		offTorch = new BlockOffTorch().setTickRandomly(false).setBlockName("torch").setBlockTextureName("enviromine:torch_off").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
 		esky = new BlockEsky(Material.iron).setBlockName("enviromine.esky").setCreativeTab(EnviroMine.enviroTab);
 		freezer = new BlockFreezer(Material.iron).setBlockName("enviromine.freezer").setCreativeTab(EnviroMine.enviroTab);
 
@@ -203,7 +201,6 @@ public class ObjectHandler
 		GameRegistry.registerBlock(fireGasBlock, "firegas");
 		GameRegistry.registerBlock(elevator, ItemElevator.class, "elevator");
 		GameRegistry.registerBlock(davyLampBlock, ItemDavyLamp.class, "davy_lamp");
-		GameRegistry.registerBlock(fireTorch, "firetorch");
 		GameRegistry.registerBlock(offTorch, "offtorch");
 		GameRegistry.registerBlock(burningCoal, "burningcoal");
 		GameRegistry.registerBlock(flammableCoal, "flammablecoal");
@@ -337,8 +334,7 @@ public class ObjectHandler
 
 		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(Items.flint_and_steel, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(Blocks.torch));
-		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(fireTorch));
-
+		
 		GameRegistry.addRecipe(new ItemStack(esky), "xxx", "yzy", "yyy", 'x', new ItemStack(Blocks.snow), 'y', new ItemStack(Items.dye, 1, 4), 'z', new ItemStack(Blocks.chest));
 		GameRegistry.addRecipe(new ItemStack(freezer), "xyx", "yzy", "xyx", 'x', new ItemStack(Blocks.iron_block), 'y', new ItemStack(Blocks.ice), 'z', new ItemStack(esky));
 		GameRegistry.addRecipe(new ItemStack(freezer), "xyx", "yzy", "xyx", 'x', new ItemStack(Blocks.iron_block), 'y', new ItemStack(Blocks.packed_ice), 'z', new ItemStack(esky));
@@ -368,7 +364,6 @@ public class ObjectHandler
 				"minecraft:lit_pumpkin",
 				"minecraft:lava_bucket",
 				"enviromine:firegas",
-				"enviromine:firetorch",
 				"enviromine:burningcoal",
 				"campfirebackport:campfire",
 				"campfirebackport:soul_campfire",

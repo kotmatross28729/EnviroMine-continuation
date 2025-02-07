@@ -524,29 +524,6 @@ public class EM_EventManager
 			if(item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote)
 			{
 				int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
-
-				if(item.getItem() == Item.getItemFromBlock(Blocks.torch) && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) // Redirect torch placement to our own
-				{
-					Vec3 lookVec = event.entityPlayer.getLookVec();
-
-		            Block block = event.world.getBlock(event.x, event.y, event.z);
-					if(block.onBlockActivated(event.world, event.x, event.y, event.y, event.entityPlayer, event.face, 0F, 0F, 0F))
-					{
-						event.useItem = Result.DENY;
-						event.useBlock = Result.ALLOW;
-					} else
-					{
-//						event.useItem = Result.DENY;
-						ItemBlock torchItem = (ItemBlock)Item.getItemFromBlock(ObjectHandler.fireTorch);
-						torchItem.onItemUse(item, event.entityPlayer, event.world, event.x, event.y, event.z, event.face, (float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
-                        if (event.entityPlayer.capabilities.isCreativeMode)
-                            item.stackSize++; //dirty hack, in creative, when replacing torch, torch was wasted, here we immediately replenish the torch after it was placed
-                        event.setCanceled(true);
-					}
-					return;
-
-				}
-
 				EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, adjCoords[0], adjCoords[1], adjCoords[2], true, "Normal");
 			} else if( (item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer) && !event.entityPlayer.worldObj.isRemote)
 			{
@@ -558,8 +535,6 @@ public class EM_EventManager
 			{
 				RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
 			}
-
-
 		} else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item == null)
 		{
 			if(!event.entityPlayer.worldObj.isRemote)

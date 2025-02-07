@@ -18,7 +18,7 @@ import java.util.Set;
 public class EnviroMineEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoader {
 		@Override
 		public String getMixinConfig() {
-			return "mixins.shadersfixer.early.json";
+			return "mixins.enviromine.early.json";
 		}
 		
 		@Override
@@ -27,7 +27,7 @@ public class EnviroMineEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoad
 
 			List<String> mixins = new ArrayList<>();
 			
-			//mixins.add("");
+			mixins.add("MixinBlockTorch");
 			
 			
 			return mixins;

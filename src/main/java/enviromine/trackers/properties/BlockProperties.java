@@ -326,7 +326,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.fire || block == ObjectHandler.burningCoal || block == ObjectHandler.fireTorch || (EM_Settings.genConfigs && block.getMaterial() == Material.fire))
+			} else if(block == Blocks.fire || block == ObjectHandler.burningCoal || (EM_Settings.genConfigs && block.getMaterial() == Material.fire))
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
@@ -340,7 +340,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.torch || block == Blocks.lit_furnace || block == ObjectHandler.fireTorch)
+			} else if(block == Blocks.torch || block == Blocks.lit_furnace)
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
