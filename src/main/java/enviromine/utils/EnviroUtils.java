@@ -1,32 +1,45 @@
 package enviromine.utils;
 
-import java.awt.Color;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
-import net.minecraft.block.*;
-import org.apache.logging.log4j.Level;
-
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.ObjectHandler;
 import enviromine.trackers.properties.StabilityType;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAnvil;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockEndPortal;
+import net.minecraft.block.BlockEndPortalFrame;
+import net.minecraft.block.BlockFalling;
+import net.minecraft.block.BlockGlowstone;
+import net.minecraft.block.BlockGravel;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.BlockMobSpawner;
+import net.minecraft.block.BlockObsidian;
+import net.minecraft.block.BlockPortal;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockWeb;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.logging.log4j.Level;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
+
+import java.awt.Color;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static enviromine.core.EnviroMine.isTCLoaded;
 

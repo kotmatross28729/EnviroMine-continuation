@@ -41,6 +41,7 @@ dependencies {
     compileOnly name: 'LOTRMod v36.14'
     compileOnly name: 'CookingForBlockheads-1.4.0-GTNH-dev'
     compileOnly name: 'MrCrayfishFurnitureModv3.4.7(1.7.10)'
+    compileOnly name: '+unimixins-all-1.7.10-0.1.19-dev'
     
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     compileOnly fileTree(dir: 'libs', include: '*.zip')
