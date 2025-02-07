@@ -3,6 +3,7 @@ package enviromine.trackers.properties;
 import java.io.File;
 import java.util.Iterator;
 
+import enviromine.trackers.properties.compat.BlockProperties_Netherlicious;
 import enviromine.utils.misc.CompatDanger;
 import org.apache.logging.log4j.Level;
 
@@ -56,8 +57,12 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	public boolean slides;
 	public boolean canHang;
 	public boolean wetSlide;
-
 	public String loadedFrom;
+	
+	public boolean goOut;
+	public boolean goOutRain;
+	public int goOutChance;
+	public String goOutName;
 
 	public BlockProperties(NBTTagCompound tags)
 	{
@@ -74,7 +79,31 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		}
 	}
 
-	public BlockProperties(String name, int meta, boolean hasPhys, int minFall, int maxFall, int supportDist, String dropName, int dropMeta, int dropNum, boolean enableTemp, float temp, float air, float sanity, boolean holdOther, boolean slides, boolean canHang, boolean wetSlide, String stability, String fileName)
+	public BlockProperties(
+			String name,
+			int meta,
+			boolean hasPhys,
+			int minFall,
+			int maxFall,
+			int supportDist,
+			String dropName,
+			int dropMeta,
+			int dropNum,
+			boolean enableTemp,
+			float temp,
+			float air,
+			float sanity,
+			boolean holdOther,
+			boolean slides,
+			boolean canHang,
+			boolean wetSlide,
+			String stability,
+			String fileName,
+			boolean goOut,
+			boolean goOutRain,
+			int goOutChance,
+			String goOutName
+			)
 	{
 		this.name = name;
 		this.meta = meta;
@@ -95,6 +124,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		this.wetSlide = wetSlide;
 		this.stability = stability;
 		this.loadedFrom = fileName;
+		this.goOut       = goOut;
+		this.goOutRain   = goOutRain;
+		this.goOutChance = goOutChance;
+		this.goOutName   = goOutName;
+		
 	}
 
 	/**
@@ -148,6 +182,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		tags.setBoolean("slides", this.slides);
 		tags.setBoolean("canHang", this.canHang);
 		tags.setBoolean("wetSlide", this.wetSlide);
+		tags.setBoolean("goOut", this.goOut);
+		tags.setBoolean("goOutRain", this.goOutRain);
+		tags.setInteger("goOutChance", this.goOutChance);
+		tags.setString("goOutName", this.goOutName);
+		
 		return tags;
 	}
 
@@ -167,6 +206,10 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		this.slides = tags.getBoolean("slides");
 		this.canHang = tags.getBoolean("canHang");
 		this.wetSlide = tags.getBoolean("wetSlide");
+		this.goOut = tags.getBoolean("goOut");
+		this.goOutRain = tags.getBoolean("goOutRain");
+		this.goOutChance = tags.getInteger("goOutChance");
+		this.goOutName = tags.getString("goOutName");
 	}
 
 	@Override
@@ -197,7 +240,13 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		String stability = config.get(category, BPName[9], EM_Settings.defaultStability).getString();
 		boolean slides = config.get(category, BPName[10], false).getBoolean(false);
 		boolean wetSlides = config.get(category, BPName[11], false).getBoolean(false);
+		
 		String filename = config.getConfigFile().getName();
+		
+		boolean goOut     = config.get(category, BPName[12], false).getBoolean(false);
+		boolean goOutRain = config.get(category, BPName[13], false).getBoolean(false);
+		int goOutChance   = config.get(category, BPName[14], 10000).getInt(10000);
+		String goOutName  = config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch)).getString();
 
 		// 	Get Stability Options
 		int minFall = 99;
@@ -228,7 +277,31 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 			canHang = true;
 		}
 
-		BlockProperties entry = new BlockProperties(name, metaData, hasPhys, minFall, maxFall, supportDist, dropName, dropMeta, dropNum, enableTemp, temperature, airQuality, sanity, holdOther, slides, canHang, wetSlides, stability, filename);
+		BlockProperties entry = new BlockProperties(
+				name,
+				metaData,
+				hasPhys,
+				minFall,
+				maxFall,
+				supportDist,
+				dropName,
+				dropMeta,
+				dropNum,
+				enableTemp,
+				temperature,
+				airQuality,
+				sanity,
+				holdOther,
+				slides,
+				canHang,
+				wetSlides,
+				stability,
+				filename,
+				goOut,
+				goOutRain,
+				goOutChance,
+				goOutName
+		);
 
 		if(metaData < 0)
 		{
@@ -266,6 +339,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		config.get(category, BPName[9], stability).getString();
 		config.get(category, BPName[10], slides).getBoolean(false);
 		config.get(category, BPName[11], wetSlide).getBoolean(false);
+		config.get(category, BPName[12], false).getBoolean(false);
+		config.get(category, BPName[13], false).getBoolean(false);
+		config.get(category, BPName[14], 10000).getInt(10000);
+		config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch)).getString();
+		config.get(category, BPName[16], -1).getInt(-1);
 	}
 
 	@Override
@@ -311,7 +389,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 
 			String category = this.categoryName() + "." + EnviroUtils.replaceULN(block.getUnlocalizedName() +"_"+ regName[1]);
 			StabilityType defStability = EnviroUtils.getDefaultStabilityType(block);
-
+			
+			if(EnviroMine.isNetherliciousLoaded){
+				BlockProperties_Netherlicious.registerNetherliciousTorches(config,category,BPName,block,defStability);
+			}
+			
 			if(block == Blocks.lava || block == Blocks.flowing_lava || block == ObjectHandler.fireGasBlock || (EM_Settings.genConfigs && block.getMaterial() == Material.lava))
 			{
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
@@ -340,8 +422,26 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.torch || block == Blocks.lit_furnace)
-			{
+			} else if(block == Blocks.torch) {
+				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[1], -1).getInt(-1);
+				config.get(category, BPName[2], "").getString();
+				config.get(category, BPName[3], -1).getInt(-1);
+				config.get(category, BPName[4], -1).getInt(-1);
+				config.get(category, BPName[5], true).getBoolean(true);
+				config.get(category, BPName[6], 75.0D).getDouble(75.0D);
+				config.get(category, BPName[7], -0.25D).getDouble(-0.25D);
+				config.get(category, BPName[8], 0.0D).getDouble(0.0D);
+				config.get(category, BPName[9], defStability.name).getString();
+				config.get(category, BPName[10], false).getBoolean(false);
+				config.get(category, BPName[11], false).getBoolean(false);
+				
+				config.get(category, BPName[12], true).getBoolean(true);
+				config.get(category, BPName[13], true).getBoolean(true);
+				config.get(category, BPName[14], 10000).getInt(10000);
+				config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch)).getString();
+				config.get(category, BPName[16], -1).getInt(-1);
+			} else if(block == Blocks.lit_furnace) {
 				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
@@ -554,7 +654,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BPName = new String[12];
+		BPName = new String[17];
 		BPName[0] = "01.Name";
 		BPName[1] = "02.MetaID";
 		BPName[2] = "03.DropName";
@@ -567,6 +667,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		BPName[9] = "10.Stability";
 		BPName[10] = "11.Slides";
 		BPName[11] = "12.Slides When Wet";
+		
+		BPName[12] = "13.[Torch] Does it go out?";
+		BPName[13] = "14.[Torch] Does it go out in the rain?";
+		BPName[14] = "15.[Torch] Go out chance";
+		BPName[15] = "16.[Torch] Go out Name (block)";
 	}
 
 }

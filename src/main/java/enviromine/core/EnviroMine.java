@@ -24,6 +24,7 @@ import enviromine.handlers.EnviroShaftCreationHandler;
 import enviromine.handlers.Legacy.LegacyHandler;
 import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.ObjectHandlerCompat;
+import enviromine.handlers.compat.ObjectHandler_Netherlicious;
 import enviromine.network.packet.PacketAutoOverride;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.network.packet.PacketServerOverride;
@@ -68,6 +69,8 @@ public class EnviroMine
 	public static boolean isLOTRLoaded;
 	public static boolean isCFBHLoaded;
 	public static boolean isCFMLoaded;
+	
+	public static boolean isNetherliciousLoaded;
 
     //public static EM_WorldData theWorldEM;
 
@@ -138,6 +141,8 @@ public class EnviroMine
 			isCFBHLoaded = true;
 		if(Loader.isModLoaded("cfm"))
 			isCFMLoaded = true;
+		if(Loader.isModLoaded("netherlicious"))
+			isNetherliciousLoaded = true;
 		
 		
 		enviroTab = new EnviroTab("enviromine.enviroTab");
@@ -156,6 +161,10 @@ public class EnviroMine
             ObjectHandlerCompat.initItems();
             ObjectHandlerCompat.registerItems();
         }
+		if(isNetherliciousLoaded){
+			ObjectHandler_Netherlicious.initBlocks();
+			ObjectHandler_Netherlicious.registerBlocks();
+		}
 
 		// Load Configuration files And Custom files
 		EM_ConfigHandler.initConfig();

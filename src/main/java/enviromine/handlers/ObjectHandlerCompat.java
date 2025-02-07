@@ -8,7 +8,6 @@ import com.hbm.main.CraftingManager;
 import cpw.mods.fml.common.registry.GameRegistry;
 import enviromine.core.EnviroMine;
 import enviromine.items.EnviroItemPolymerWaterBottle;
-import enviromine.items.EnviroItemWaterBottle;
 import enviromine.utils.WaterUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -16,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ObjectHandlerCompat {
-
+    //FOR HBM'S NTM
     public static Item waterBottle_polymer;
     public static Item cleanWaterBottle_polymer;
     public static Item frostyWaterBottle_polymer;

@@ -42,7 +42,8 @@ dependencies {
     compileOnly name: 'CookingForBlockheads-1.4.0-GTNH-dev'
     compileOnly name: 'MrCrayfishFurnitureModv3.4.7(1.7.10)'
     compileOnly name: '+unimixins-all-1.7.10-0.1.19-dev'
-    
+    compileOnly name: 'netherlicious-3.2.8'
+
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     compileOnly fileTree(dir: 'libs', include: '*.zip')
 }

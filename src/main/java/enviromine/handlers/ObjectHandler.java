@@ -49,8 +49,7 @@ import org.apache.logging.log4j.Level;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ObjectHandler
-{
+public class ObjectHandler {
 	public static HashMap<Block, ArrayList<Integer>> igniteList = new HashMap<Block, ArrayList<Integer>>();
 	public static ArmorMaterial camelPackMaterial;
 

@@ -16,7 +16,12 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
 	@Override
 	public List<String> getMixins(Set<String> loadedMods) {
 		List<String> mixins = new ArrayList<>();
-		//mixins.add("");
+		
+		if(loadedMods.contains("netherlicious")) {
+			mixins.add("netherlicious.MixinTorchSoul");
+			mixins.add("netherlicious.MixinTorchFoxfire");
+			mixins.add("netherlicious.MixinTorchShadow");
+		}
 		
 		return mixins;
 	}

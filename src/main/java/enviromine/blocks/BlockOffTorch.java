@@ -2,6 +2,9 @@ package enviromine.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import enviromine.blocks.compat.BlockOffTorch_Bone_Netherlicious;
+import enviromine.core.EnviroMine;
+import enviromine.utils.misc.CompatSafe;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -12,6 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+@CompatSafe
 public class BlockOffTorch extends BlockTorch {
 	public BlockOffTorch() {
 		super();
@@ -38,20 +42,25 @@ public class BlockOffTorch extends BlockTorch {
 	{
 		ItemStack stack = player.getEquipmentInSlot(0);
 
-		//TODO list
-		if (stack != null && stack.getItem() == Items.flint_and_steel) {
-            if(!player.capabilities.isCreativeMode)
-			    stack.damageItem(1, player);
-			//TODO netherlicious compat?
-			world.setBlock(i, j, k, Blocks.torch, world.getBlockMetadata(i, j, k), 3);
+
+		if (stack != null && stack.getItem() != null) {
+			if(EnviroMine.isNetherliciousLoaded) {
+				world.setBlock(i, j, k, BlockOffTorch_Bone_Netherlicious.getTorchNetherlicious(stack, player), world.getBlockMetadata(i, j, k), 3);
+			}
+			
+			//TODO list
+			else if (stack.getItem() == Items.flint_and_steel) {
+				if(!player.capabilities.isCreativeMode)
+					stack.damageItem(1, player);
+				world.setBlock(i, j, k, Blocks.torch, world.getBlockMetadata(i, j, k), 3);
+			}
 		}
 
 		return true;
 	}
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
+
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		//No particles
     }
 }

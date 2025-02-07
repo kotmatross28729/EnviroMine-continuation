@@ -2,6 +2,8 @@ package enviromine.mixins.early;
 
 import enviromine.core.EM_Settings;
 import enviromine.handlers.ObjectHandler;
+import enviromine.handlers.compat.ObjectHandler_Netherlicious;
+import enviromine.trackers.properties.BlockProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
@@ -38,18 +40,34 @@ public abstract class MixinBlockTorch extends Block {
 	
 	@Inject(method = "updateTick", at = @At(value = "HEAD"))
 	protected void updateTick(World world, int x, int y, int z, Random rand, CallbackInfo ci) {
-		if(EM_Settings.torchesGoOut && (world.rand.nextInt(10000) == 0 || (world.isRaining() && world.canBlockSeeTheSky(x, y, z)))) {
-			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			world.setBlock(x, y, z, ObjectHandler.offTorch, world.getBlockMetadata(x, y, z), 3);
+		if(EM_Settings.torchesGoOut) {
+			Block block = world.getBlock(x, y, z);
+			int meta = world.getBlockMetadata(x, y, z);
+			if (BlockProperties.base.hasProperty(block, meta)) {
+				BlockProperties blockProps = BlockProperties.base.getProperty(block, meta);
+				if(blockProps != null) {
+					if(Block.getBlockFromName(blockProps.goOutName) != null) {
+						Block blockOut = Block.getBlockFromName(blockProps.goOutName);
+						if (Block.blockRegistry.getNameForObject(blockOut).equals(blockProps.goOutName)) {
+							if (blockProps.goOut) {
+								if (world.rand.nextInt(blockProps.goOutChance) == 0 || (blockProps.goOutRain && world.isRaining() && world.canBlockSeeTheSky(x, y, z))) {
+									world.playSoundEffect((double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+									world.setBlock(x, y, z, blockOut, meta, 3);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
-
+	
 	@Inject(method = "updateTick",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/block/Block;updateTick(Lnet/minecraft/world/World;IIILjava/util/Random;)V", shift = At.Shift.AFTER))
 	protected void updateTick2(World world, int x, int y, int z, Random rand, CallbackInfo ci) {
 		// Don't go any further unless this torch is allowed to burn stuff
-		if(EM_Settings.torchesBurn) {
+		if(EM_Settings.torchesBurn && (this != ObjectHandler.offTorch && this != ObjectHandler_Netherlicious.offTorchBone)) {
 			world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world) + rand.nextInt(10));
 
 			int l = world.getBlockMetadata(x, y, z);
