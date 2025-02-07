@@ -24,7 +24,6 @@ public class BlockProperties_Netherlicious {
 			config.get(category, BPName[9], defStability.name).getString();
 			config.get(category, BPName[10], false).getBoolean(false);
 			config.get(category, BPName[11], false).getBoolean(false);
-			
 			config.get(category, BPName[12], true).getBoolean(true);
 			config.get(category, BPName[13], true).getBoolean(true);
 			config.get(category, BPName[14], 10000).getInt(10000);
@@ -42,7 +41,6 @@ public class BlockProperties_Netherlicious {
 			config.get(category, BPName[9], defStability.name).getString();
 			config.get(category, BPName[10], false).getBoolean(false);
 			config.get(category, BPName[11], false).getBoolean(false);
-			
 			config.get(category, BPName[12], true).getBoolean(true);
 			config.get(category, BPName[13], true).getBoolean(true);
 			config.get(category, BPName[14], 10000).getInt(10000);

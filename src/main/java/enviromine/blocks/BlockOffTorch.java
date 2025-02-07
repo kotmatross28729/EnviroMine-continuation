@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.blocks.compat.BlockOffTorch_Bone_Netherlicious;
 import enviromine.core.EnviroMine;
 import enviromine.utils.misc.CompatSafe;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -45,10 +46,11 @@ public class BlockOffTorch extends BlockTorch {
 
 		if (stack != null && stack.getItem() != null) {
 			if(EnviroMine.isNetherliciousLoaded) {
-				world.setBlock(i, j, k, BlockOffTorch_Bone_Netherlicious.getTorchNetherlicious(stack, player), world.getBlockMetadata(i, j, k), 3);
-			}
-			
-			//TODO list
+				Block block = BlockOffTorch_Bone_Netherlicious.getTorchNetherlicious(stack, player);
+				if(block != null) {
+					world.setBlock(i, j, k, block, world.getBlockMetadata(i, j, k), 3);
+				}
+			} 
 			else if (stack.getItem() == Items.flint_and_steel) {
 				if(!player.capabilities.isCreativeMode)
 					stack.damageItem(1, player);

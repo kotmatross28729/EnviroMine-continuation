@@ -1,28 +1,16 @@
 package enviromine.trackers.properties;
 
-import com.hbm.dim.Ike.BiomeGenIke;
-import com.hbm.dim.dres.biome.BiomeGenBaseDres;
-import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
-import com.hbm.dim.duna.biome.BiomeGenDunaPolar;
-import com.hbm.dim.duna.biome.BiomeGenDunaPolarHills;
-import com.hbm.dim.eve.biome.BiomeGenBaseEve;
-import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
-import com.hbm.dim.laythe.biome.BiomeGenLaythePolar;
-import com.hbm.dim.minmus.biome.BiomeGenBaseMinmus;
-import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
-import com.hbm.dim.moon.BiomeGenMoon;
-import com.hbm.dim.orbit.BiomeGenOrbit;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
+import enviromine.trackers.properties.compat.BiomeProperties_LOTR;
+import enviromine.trackers.properties.compat.BiomeProperties_NTM_SPACE;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.ModIdentification;
-import enviromine.utils.misc.CompatDanger;
-import lotr.common.LOTRDimension;
-import lotr.common.world.biome.LOTRBiome;
+import enviromine.utils.misc.CompatSafe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -34,7 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@CompatDanger
+@CompatSafe
 public class BiomeProperties implements SerialisableProperty, PropertyBase
 {
 	public static final BiomeProperties base = new BiomeProperties();
@@ -599,37 +587,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public void GenDefaults() {
 		BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
 		GenDefaultsProperty(biomeArray);
-		if(EnviroMine.isLOTRLoaded) {		//!HACKY COMPAT
-			LOTRBiome[] middleEarthBL = LOTRDimension.MIDDLE_EARTH.biomeList;
-			LOTRBiome[] utumnoBL = LOTRDimension.UTUMNO.biomeList;
-			GenDefaultsPropertyLOTR(middleEarthBL);
-			GenDefaultsPropertyLOTR(utumnoBL);
+		if(EnviroMine.isLOTRLoaded) {
+			BiomeProperties_LOTR.handleLOTRStuff(BOName);
 		}
 	}
 	
-	public void GenDefaultsPropertyLOTR(LOTRBiome[] LOTRBiomeArray) {
-		for (LOTRBiome LOTRBiome : LOTRBiomeArray) {
-			if (LOTRBiome == null) {
-				continue;
-			}
-			String modID = ModIdentification.idFromObject(LOTRBiome);
-			File file = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(modID) + ".cfg");
-			if (!file.exists()) {
-				try {
-					file.createNewFile();
-				} catch (Exception e) {
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
-						EnviroMine.logger.log(Level.ERROR, "Failed to create file for biome '" + LOTRBiome.biomeName + "'", e);
-					continue;
-				}
-			}
-			Configuration config = new Configuration(file, true);
-			config.load();
-			generateEmpty(config, LOTRBiome);
-			config.save();
-		}
-	}
-
 	@Override
 	public File GetDefaultFile()
 	{
@@ -649,6 +611,9 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
         Collections.addAll(typeList, typeArray);
 
+		//TODO: REMOVE
+		long startTime = System.currentTimeMillis();
+		
 		double air = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double water = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.05D : 0D;
@@ -668,17 +633,17 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
         String biomeWater = EnviroUtils.getBiomeWater(biome);
 
-        double biomeTemp;
-        double DAWN_TEMPERATURE;
-        double DAY_TEMPERATURE;
-        double DUSK_TEMPERATURE;
-        double NIGHT_TEMPERATURE;
+        double biomeTemp         = EnviroUtils.getBiomeTemp(biome);
+        double DAWN_TEMPERATURE  = 4D;
+        double DAY_TEMPERATURE   = 0D;
+        double DUSK_TEMPERATURE  = 4D;
+        double NIGHT_TEMPERATURE = 8D;
 
-        double ambientTemp_TERRAFORMED;
-        double DAWN_TEMPERATURE_TERRAFORMED;
-        double DAY_TEMPERATURE_TERRAFORMED;
-        double DUSK_TEMPERATURE_TERRAFORMED;
-        double NIGHT_TEMPERATURE_TERRAFORMED;
+        double ambientTemp_TERRAFORMED 			= EnviroUtils.getBiomeTemp(biome);
+        double DAWN_TEMPERATURE_TERRAFORMED		= 4F;
+        double DAY_TEMPERATURE_TERRAFORMED		= 0F;
+        double DUSK_TEMPERATURE_TERRAFORMED		= 4F;
+        double NIGHT_TEMPERATURE_TERRAFORMED	= 8F;
 
         double tempRate_DAWN  = temp;
         double tempRate_DAY   = temp;
@@ -784,257 +749,62 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		
 		//^^^ Look what 1 hour of "La Realismé" did to bro
 		
+		//If anyone is interested in which version is faster: external or integrated, then here it is:
+		//integrated : 21:04:27 - 21:05:33 = 1 minute, 6 seconds
+		//external   : 21:08:41 - 21:09:42 = 1 minute, 1 second
+		
+		//So it's NORMAL ↓↓↓
         if(EnviroMine.isHbmSpaceLoaded) {
-            if (biome instanceof BiomeGenBaseMoho) { //Mercury ✅
-
-                DAWN_TEMPERATURE  =  610D;   //-180℃
-                DAY_TEMPERATURE   =   0D;    // 430℃
-                DUSK_TEMPERATURE  =  10D;    // 420℃
-                NIGHT_TEMPERATURE = 620D;    //-190℃
-                biomeTemp = 430D;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-                DAWN_TEMPERATURE_TERRAFORMED  =   -4D;	// 24℃
-                DAY_TEMPERATURE_TERRAFORMED   =  -15D;	// 35℃
-                DUSK_TEMPERATURE_TERRAFORMED  =   -5D;	// 25℃
-                NIGHT_TEMPERATURE_TERRAFORMED =    5D;	// 15℃
-                ambientTemp_TERRAFORMED = 20D;
-				
-                tempRate_DAWN  =  -0.07783D;   //-4.67℃/m
-                tempRate_DAY   =    0.2126D;   //12.76℃/m
-                tempRate_DUSK  =   0.21116D;   //12.67℃/m
-                tempRate_NIGHT =   -0.0793D;   //-4.76℃/m
-                tempRate_HARD = true;
-				
-				biomeWater = "dirty warm";
-            }
-            else if (biome instanceof BiomeGenBaseEve) { //Venus ✅
-                DAWN_TEMPERATURE  = 1D;  //466℃
-                DAY_TEMPERATURE   = 0D;  //467℃
-                DUSK_TEMPERATURE  = 2D;  //465℃
-                NIGHT_TEMPERATURE = 3D;  //464℃
-                biomeTemp = 467;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-                DAWN_TEMPERATURE_TERRAFORMED  =  -3D;	// 23℃
-                DAY_TEMPERATURE_TERRAFORMED   = -12D;	// 32℃
-                DUSK_TEMPERATURE_TERRAFORMED  =  -2D;	// 22℃
-                NIGHT_TEMPERATURE_TERRAFORMED =   8D;	// 12℃
-                ambientTemp_TERRAFORMED = 20D;
-
-                tempRate_DAWN  =   0.262D;	// 15.72℃/m
-                tempRate_DAY   =  0.2626D;	// 15.76℃/m
-                tempRate_DUSK  =  0.2616D;	//  15.7℃/m
-                tempRate_NIGHT = 0.26083D;	// 15.65℃/m
-                tempRate_HARD = true;
-	
-				biomeWater = "hot";
-            }
-            else if (biome instanceof BiomeGenMoon) { //Moon ✅
-                DAWN_TEMPERATURE  = 177D; // -50℃
-                DAY_TEMPERATURE   =   0D; // 127℃
-                DUSK_TEMPERATURE  = 177D; // -50℃
-                NIGHT_TEMPERATURE = 300D; //-173℃
-                biomeTemp = 127D;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-                DAWN_TEMPERATURE_TERRAFORMED  =  3D;	// 17℃
-                DAY_TEMPERATURE_TERRAFORMED   = -3D;	// 23℃
-                DUSK_TEMPERATURE_TERRAFORMED  =  2D;	// 18℃
-                NIGHT_TEMPERATURE_TERRAFORMED =  6D;	// 14℃
-                ambientTemp_TERRAFORMED = 20D;
-				
-				biomeWater = "cold";
-            } 
-			else if (biome instanceof BiomeGenBaseMinmus) { //? ✅
-                DAWN_TEMPERATURE  =  64D; // -50℃
-                DAY_TEMPERATURE    =  0D; //  14℃
-                DUSK_TEMPERATURE   = 64D; // -50℃
-                NIGHT_TEMPERATURE = 121D; //-107℃
-                biomeTemp = 14D;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-                DAWN_TEMPERATURE_TERRAFORMED  =   6D;	// 14℃
-                DAY_TEMPERATURE_TERRAFORMED   =   0D;	// 20℃
-                DUSK_TEMPERATURE_TERRAFORMED  =   5D;	// 15℃
-                NIGHT_TEMPERATURE_TERRAFORMED =  14D;	//  6℃
-                ambientTemp_TERRAFORMED = 20D;
-				
-                biomeWater = "cold";
-            }
-            else if(biome instanceof BiomeGenBaseDuna) { //Mars ✅
-                if(biome instanceof BiomeGenDunaPolar || biome instanceof BiomeGenDunaPolarHills) {
-                    DAWN_TEMPERATURE  =  43D; // -93℃
-                    DAY_TEMPERATURE   =   0D; // -50℃
-                    DUSK_TEMPERATURE  =  43D; // -93℃
-                    NIGHT_TEMPERATURE = 100D; //-150℃
-                    biomeTemp = -50D;
-
-                    isDesertBiome = false;
-                    DesertBiomeTemperatureMultiplier = 1;
-					
-                    DAWN_TEMPERATURE_TERRAFORMED  =  0D;	//-15℃
-                    DAY_TEMPERATURE_TERRAFORMED   = -7D;	// -8℃
-                    DUSK_TEMPERATURE_TERRAFORMED  =  0D;	//-15℃
-                    NIGHT_TEMPERATURE_TERRAFORMED =  8D;	//-23℃
-                    ambientTemp_TERRAFORMED = -15D;
-					
-                    tempRate_DAWN  =  -0.043D;		//-2.6℃/m
-                    tempRate_DAY   =   -0.02D;		//-1.2℃/m
-                    tempRate_DUSK  =  -0.043D;		//-2.6℃/m
-                    tempRate_NIGHT = -0.0616D;		//-3.7℃/m
-					
-                    biomeWater = "frosty";
-
-                    tempRate_HARD = true;
-                } else {
-                    DAWN_TEMPERATURE  =  69D; // -49℃
-                    DAY_TEMPERATURE   =   0D; //  20℃
-                    DUSK_TEMPERATURE  =  69D; // -49℃
-                    NIGHT_TEMPERATURE = 160D; //-140℃
-                    biomeTemp = 20D;
-
-                    isDesertBiome = false;
-                    DesertBiomeTemperatureMultiplier = 1;
-
-                    DAWN_TEMPERATURE_TERRAFORMED  =   0D;	//20℃
-                    DAY_TEMPERATURE_TERRAFORMED   =  -7D;	//27℃
-                    DUSK_TEMPERATURE_TERRAFORMED  =   0D;	//20℃
-                    NIGHT_TEMPERATURE_TERRAFORMED =  13D;	// 7℃
-                    ambientTemp_TERRAFORMED = 20D;
-					
-					biomeWater = "cold";
-                }
-            } 
-			else if (biome instanceof BiomeGenIke) { //Phobos? (Pluto-Charon) ✅
-                DAWN_TEMPERATURE  =  54D;  //-58℃
-                DAY_TEMPERATURE   =   0D;  // -4℃
-                DUSK_TEMPERATURE  =  54D;  //-58℃
-                NIGHT_TEMPERATURE = 108D; //-112℃
-                biomeTemp = -4D;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-                DAWN_TEMPERATURE_TERRAFORMED  =   6D;	//  -6℃
-                DAY_TEMPERATURE_TERRAFORMED   = -13D;	//  13℃
-                DUSK_TEMPERATURE_TERRAFORMED  =   7D;	//  -7℃
-                NIGHT_TEMPERATURE_TERRAFORMED =  14D;	// -14℃
-                ambientTemp_TERRAFORMED = 0D;
-            } 
-			else if (biome instanceof BiomeGenBaseDres) { //Ceres ✅
-                DAWN_TEMPERATURE  =  106D; // -106℃
-                DAY_TEMPERATURE   =   38D; // -38℃
-                DUSK_TEMPERATURE  =  106D; // -106℃
-                NIGHT_TEMPERATURE =  163D; // -163℃
-                biomeTemp = 0D;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-                DAWN_TEMPERATURE_TERRAFORMED  = 31D;	// -31℃
-                DAY_TEMPERATURE_TERRAFORMED   = 17D;	// -17℃
-                DUSK_TEMPERATURE_TERRAFORMED  = 31D;	// -31℃
-                NIGHT_TEMPERATURE_TERRAFORMED = 52D;	// -52℃
-                ambientTemp_TERRAFORMED = 0D;
-
-                tempRate_DAWN  = -0.046D;		//	-2.8℃/m
-                tempRate_DAY   = -0.016D;		//	-1.0℃/m
-                tempRate_DUSK  = -0.046D;		//	-2.8℃/m
-                tempRate_NIGHT = -0.066D;		//	-4.0℃/m
-                tempRate_HARD = true;
-            }
-			else if (biome instanceof BiomeGenBaseLaythe) { //?, values from KSP wiki ✅
-				if(biome instanceof BiomeGenLaythePolar){
-					DAWN_TEMPERATURE   = 25D;	// -25℃
-					DAY_TEMPERATURE    = 24D;	// -24℃
-					DUSK_TEMPERATURE   = 25D;	// -25℃
-					NIGHT_TEMPERATURE  = 26D;	// -26℃
-					biomeTemp = 0D;
-					
-					isDesertBiome = false;
-					DesertBiomeTemperatureMultiplier = 1;
-					
-					DAWN_TEMPERATURE_TERRAFORMED  = 25D;	// -25℃
-					DAY_TEMPERATURE_TERRAFORMED   = 24D;	// -24℃
-					DUSK_TEMPERATURE_TERRAFORMED  = 25D;	// -25℃
-					NIGHT_TEMPERATURE_TERRAFORMED = 26D;	// -26℃
-					ambientTemp_TERRAFORMED = 0D;
-					
-					biomeWater = "frosty";
-				} else {
-					DAWN_TEMPERATURE  =  8D;	// 12℃
-					DAY_TEMPERATURE   =  5D;	// 15℃
-					DUSK_TEMPERATURE  =  8D;	// 12℃
-					NIGHT_TEMPERATURE = 11D;	//  9℃
-					biomeTemp = 20D;
-					
-					isDesertBiome = false;
-					DesertBiomeTemperatureMultiplier = 1;
-					
-					DAWN_TEMPERATURE_TERRAFORMED  =  8D;	// 12℃
-					DAY_TEMPERATURE_TERRAFORMED   =  5D;	// 15℃
-					DUSK_TEMPERATURE_TERRAFORMED  =  8D;	// 12℃
-					NIGHT_TEMPERATURE_TERRAFORMED = 11D;	//  9℃
-					ambientTemp_TERRAFORMED = 28D;
-					
-					biomeWater = "clean";
-				}
-            }
-			else if (biome instanceof BiomeGenOrbit) { //Space ✅
-                DAWN_TEMPERATURE  =  50D;	// -150℃
-                DAY_TEMPERATURE   =   0D;	// -100℃
-                DUSK_TEMPERATURE  =  50D;	// -150℃
-                NIGHT_TEMPERATURE = 100D;	// -200℃
-                biomeTemp = -100D;
-
-                isDesertBiome = false;
-                DesertBiomeTemperatureMultiplier = 1;
-
-				//Literally impossible
-                DAWN_TEMPERATURE_TERRAFORMED  =   50D;	// -150℃
-                DAY_TEMPERATURE_TERRAFORMED   =    0D;	// -100℃
-                DUSK_TEMPERATURE_TERRAFORMED  =   50D;	// -150℃
-                NIGHT_TEMPERATURE_TERRAFORMED =  100D;	// -200℃
-                ambientTemp_TERRAFORMED = -100D;
-				
-            } else {
-                DAWN_TEMPERATURE = 4D;
-                DAY_TEMPERATURE = 0D;
-                DUSK_TEMPERATURE = 4D;
-                NIGHT_TEMPERATURE = 8D;
-                biomeTemp = EnviroUtils.getBiomeTemp(biome);
-
-                DAWN_TEMPERATURE_TERRAFORMED =  4D;
-                DAY_TEMPERATURE_TERRAFORMED  =  0D;
-                DUSK_TEMPERATURE_TERRAFORMED  = 4D;
-                NIGHT_TEMPERATURE_TERRAFORMED = 8D;
-                ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
-            }
+			BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
+					config,
+					biome,
+					BOName,
+					biomeWater,
+					biomeTemp,
+					temp,
+					sanity,
+					water,
+					air,
+			 		isDesertBiome,
+			 		DesertBiomeTemperatureMultiplier,
+					DAWN_TEMPERATURE,
+					DAY_TEMPERATURE,
+					DUSK_TEMPERATURE,
+					NIGHT_TEMPERATURE,
+					TemperatureRainDecrease,
+					TemperatureThunderDecrease,
+					TemperatureRainBool,
+					TemperatureThunderBool,
+					TemperatureShadeDecrease,
+					ambientTemp_TERRAFORMED,
+					DAWN_TEMPERATURE_TERRAFORMED,
+					DAY_TEMPERATURE_TERRAFORMED,
+					DUSK_TEMPERATURE_TERRAFORMED,
+					NIGHT_TEMPERATURE_TERRAFORMED,
+					EARLY_SPRING_TEMPERATURE_DECREASE,
+					EARLY_SUMMER_TEMPERATURE_DECREASE,
+					EARLY_WINTER_TEMPERATURE_DECREASE,
+					EARLY_AUTUMN_TEMPERATURE_DECREASE,
+					MID_SPRING_TEMPERATURE_DECREASE,
+					MID_SUMMER_TEMPERATURE_DECREASE,
+					MID_WINTER_TEMPERATURE_DECREASE,
+					MID_AUTUMN_TEMPERATURE_DECREASE,
+					LATE_SPRING_TEMPERATURE_DECREASE,
+					LATE_SUMMER_TEMPERATURE_DECREASE,
+					LATE_WINTER_TEMPERATURE_DECREASE,
+					LATE_AUTUMN_TEMPERATURE_DECREASE,
+					tempRate_DAWN,
+					tempRate_DAY,
+					tempRate_DUSK,
+					tempRate_NIGHT,
+					tempRate_HARD,
+					TemperatureWaterDecrease,
+					dropSpeedWater,
+					dropSpeedRain,
+					dropSpeedThunder
+			);
         }
-        else {
-            DAWN_TEMPERATURE = 4D;
-            DAY_TEMPERATURE = 0D;
-            DUSK_TEMPERATURE = 4D;
-            NIGHT_TEMPERATURE = 8D;
-
-            biomeTemp = EnviroUtils.getBiomeTemp(biome);
-
-            DAWN_TEMPERATURE_TERRAFORMED =  4D;
-            DAY_TEMPERATURE_TERRAFORMED =  0D;
-            DUSK_TEMPERATURE_TERRAFORMED = 4D;
-            NIGHT_TEMPERATURE_TERRAFORMED = 8D;
-            ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
-        }
-
+		
 		String catName = this.categoryName() + "." + biome.biomeName;
 
 		config.get(catName, BOName[0], biome.biomeID).getInt(biome.biomeID);
@@ -1090,6 +860,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
         config.get(catName, BOName[43], dropSpeedRain).getDouble(dropSpeedRain);
         config.get(catName, BOName[44], dropSpeedThunder).getDouble(dropSpeedThunder);
+		
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime; 
+		System.out.println("Execution time: " + duration + " ms");
     }
 
 	@Override

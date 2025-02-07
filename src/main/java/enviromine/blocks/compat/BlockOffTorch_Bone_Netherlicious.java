@@ -43,7 +43,10 @@ public class BlockOffTorch_Bone_Netherlicious extends BlockTorch {
 		ItemStack stack = player.getEquipmentInSlot(0);
 		
 		if (stack != null && stack.getItem() != null) {
-			world.setBlock(i, j, k, BlockOffTorch_Bone_Netherlicious.getBoneTorchNetherlicious(stack, player), world.getBlockMetadata(i, j, k), 3);
+			Block block = BlockOffTorch_Bone_Netherlicious.getBoneTorchNetherlicious(stack, player);
+			if(block != null) {
+				world.setBlock(i, j, k, block, world.getBlockMetadata(i, j, k), 3);
+			}
 		}
 		
 		return true;
@@ -69,11 +72,13 @@ public class BlockOffTorch_Bone_Netherlicious extends BlockTorch {
 			if(!player.capabilities.isCreativeMode)
 				lighter.damageItem(1, player);
 			return ModBlocks.ShadowTorchBone;
-		} else {
+		} 
+		else if(lighter.getItem() == Items.flint_and_steel) {
 			if(!player.capabilities.isCreativeMode)
 				lighter.damageItem(1, player);
 			return ModBlocks.TorchBone;
 		}
+		return null;
 	}
 	public static Block getTorchNetherlicious(ItemStack lighter, EntityPlayer player) {
 		if(lighter.getItem() == ModItems.FlintAndSteelSoul) {
@@ -90,11 +95,14 @@ public class BlockOffTorch_Bone_Netherlicious extends BlockTorch {
 			if(!player.capabilities.isCreativeMode)
 				lighter.damageItem(1, player);
 			return ModBlocks.ShadowTorch;
-		} else {
+		} 
+		else if(lighter.getItem() == Items.flint_and_steel) {
 			if(!player.capabilities.isCreativeMode)
 				lighter.damageItem(1, player);
 			return Blocks.torch;
 		}
+		
+		return null;
 	}
 	
 }
