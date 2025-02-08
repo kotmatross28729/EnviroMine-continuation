@@ -24,7 +24,7 @@ import static enviromine.handlers.EM_EventManager.getBlockWithinAABB;
 
 public class EM_EventManager_NTM {
 	public static void handleOnBlockBreakCoal(BlockEvent.BreakEvent event) {
-		if (event.block == ObjectHandler.flammableCoal || event.block == ObjectHandler.burningCoal) {
+		if (event.block == ObjectHandler.burningCoal) {
 			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 				
 				int x = event.x + dir.offsetX;

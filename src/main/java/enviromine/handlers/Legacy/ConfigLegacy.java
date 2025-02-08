@@ -144,7 +144,7 @@ public class ConfigLegacy extends LegacyHandler
 		EM_Settings.noNausea = config.get(Configuration.CATEGORY_GENERAL, "Blindness instead of Nausea", false).getBoolean(false);
 		EM_Settings.keepStatus = config.get(Configuration.CATEGORY_GENERAL, "Keep statuses on death", false).getBoolean(false);
 		EM_Settings.renderGear = config.get(Configuration.CATEGORY_GENERAL, "Render Gear", false ,"Render 3d gear worn on player. Must reload game to take effect").getBoolean(false);
-		EM_Settings.genFlammableCoal = config.get(Configuration.CATEGORY_GENERAL, "Generate Combustable Coal Ore", true, "On worldgen, replace coal ore blocks with the flammable EM variant. Turning this off does not revert previous generation.").getBoolean(true); // Added from request -- AstroTibs
+		EM_Settings.flammableCoal = config.get(Configuration.CATEGORY_GENERAL, "Combustable Coal Ore", true, "If true, then coal can be ignited by fire sources").getBoolean(true); // Added from request -- AstroTibs
 
 		// Physics Settings
 		String cat_physics = "Physics";

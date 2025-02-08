@@ -70,58 +70,14 @@ public class WorldFeatureGenerator implements IWorldGenerator
 			}
 		}
 		
-		
-		if (EM_Settings.genFlammableCoal) {ReplaceCoal(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);}
-		
 		if(EM_Settings.gasGen && !EM_Settings.noGases)
 		{
 			for(int i = 4; i >= 0; i--)
 			{
+				//TODO: gas rework
 				GenGasPocket(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 			}
 		}
-	}
-	
-	public void ReplaceCoal(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
-	{
-		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
-		int xOff = chunkX * 16;
-		int zOff = chunkZ * 16;
-		
-		for(int i = 0; i < 16; i++)
-		{
-			for(int j = 0; j < (dProps != null? (float)dProps.sealevel : 64F) * 0.75F; j++)
-			{
-				for(int k = 0; k < 16; k++)
-				{
-					Item item = Item.getItemFromBlock(world.getBlock(i + xOff, j, k + zOff));
-					
-					if(world.getBlock(i + xOff, j, k + zOff) == Blocks.coal_ore || (item != null && SameOre(new ItemStack(item), "oreCoal")))
-					{
-						world.setBlock(i + xOff, j, k + zOff, ObjectHandler.flammableCoal);
-					}
-				}
-			}
-		}
-	}
-	
-	public boolean SameOre(ItemStack item, String oreName)
-	{
-		int[] oreIds = OreDictionary.getOreIDs(item);
-		int findId = OreDictionary.getOreID(oreName);
-		
-		for(int id : oreIds)
-		{
-			if(id == findId)
-			{
-				return true;
-			} else
-			{
-				continue;
-			}
-		}
-		
-		return false;
 	}
 	
 	public void GenGasPocket(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
@@ -194,13 +150,5 @@ public class WorldFeatureGenerator implements IWorldGenerator
 				}
 			}
 		}
-	}
-	
-	public void SavePendingMines()
-	{
-	}
-	
-	public void LoadPendingMines()
-	{
 	}
 }

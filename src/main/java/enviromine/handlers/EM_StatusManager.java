@@ -361,34 +361,7 @@ public class EM_StatusManager {
                 if (stack.stackSize > 1) {
                     stackMult = (stack.stackSize - 1F) / 63F + 1F;
                 }
-//TODO dynamic hazards
-
-//                float HotlevelCelc = (HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.HOT)) * 100F;
-//                float Asbestoslevel = -(HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.ASBESTOS));
-//                float Coallevel = -((HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.COAL)) / 2);
-//                float Digammalevel = -((HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.DIGAMMA)) * 5);
-//
-//                if(HotlevelCelc > 0) {
-//                    if (blockAndItemTempInfluence <= HotlevelCelc * stackMult && HotlevelCelc > 0F) {
-//                        blockAndItemTempInfluence += HotlevelCelc * stackMult;
-//                    }
-//                }
-//                if(Asbestoslevel > 0) {
-//                    if (quality >= Asbestoslevel * stackMult && Asbestoslevel < 0 && quality <= 0) {
-//                        quality += Asbestoslevel * stackMult;
-//                    }
-//                }
-//                if(Coallevel > 0) {
-//                    if (quality >= Coallevel * stackMult && Coallevel < 0 && quality <= 0) {
-//                        quality += Coallevel * stackMult;
-//                    }
-//                }
-//                if(Digammalevel > 0) {
-//                    if (sanityRate >= Digammalevel * stackMult && Digammalevel < 0 && sanityRate <= 0) {
-//                        sanityRate += Digammalevel * stackMult;
-//                    }
-//                }
-
+                
                 if (ItemProperties.base.hasProperty(stack)) {
                     ItemProperties itemProps = ItemProperties.base.getProperty(stack);
 

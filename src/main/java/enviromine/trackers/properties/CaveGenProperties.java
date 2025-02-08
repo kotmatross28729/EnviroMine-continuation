@@ -123,11 +123,10 @@ public class CaveGenProperties implements PropertyBase
 			return;
 		}
 		
-		if(!config.hasCategory(this.categoryName() + ".Coal"))
-		{
+		if(!config.hasCategory(this.categoryName() + ".Coal")) {
 			String catName = this.categoryName() + ".Coal";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(ObjectHandler.flammableCoal));
+			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.coal_ore));
 			config.get(catName, CGPNames[1], 0);
 			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
 			config.get(catName, CGPNames[3], 0);

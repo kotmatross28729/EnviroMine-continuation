@@ -58,9 +58,7 @@ public class EM_Gui_SoundSettings extends GuiScreen
 			}
 		}
 	}
-
-	//TODO Needs to be better.. and not called every tick
-    //Nu da
+	
 	@Override
 	public void mouseClickMove(int p_146273_1_, int p_146273_2_, int lastbutton, long time)
 	{

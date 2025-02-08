@@ -693,7 +693,7 @@ public class EM_ConfigHandler
 		EM_Settings.foodRotTime = config.get(Configuration.CATEGORY_GENERAL, "Default spoil time (days)", EM_Settings.foodRotTime).getInt(EM_Settings.foodRotTime);
 		EM_Settings.torchesBurn = config.get(Configuration.CATEGORY_GENERAL, "Torches burn", EM_Settings.torchesBurn).getBoolean(EM_Settings.torchesBurn);
 		EM_Settings.torchesGoOut = config.get(Configuration.CATEGORY_GENERAL, "Torches go out", EM_Settings.torchesGoOut).getBoolean(EM_Settings.torchesGoOut);
-		EM_Settings.genFlammableCoal = config.get(Configuration.CATEGORY_GENERAL, "Generate Combustable Coal Ore", EM_Settings.genFlammableCoal, "On worldgen, replace coal ore blocks with the flammable EM variant. Turning this off does not revert previous generation.").getBoolean(EM_Settings.genFlammableCoal); // Added from request -- AstroTibs
+		EM_Settings.flammableCoal = config.get(Configuration.CATEGORY_GENERAL, "Combustable Coal Ore", EM_Settings.flammableCoal, "If true, then coal can be ignited by fire sources").getBoolean(EM_Settings.flammableCoal); // Added from request -- AstroTibs
 		EM_Settings.randomizeInsanityPitch = config.get(Configuration.CATEGORY_GENERAL, "Randomize Insanity Pitch", EM_Settings.randomizeInsanityPitch, "Sounds you hear when under the influence of insanity have a randomized pitch").getBoolean(EM_Settings.randomizeInsanityPitch);
 		EM_Settings.catchFireAtHighTemps = config.get(Configuration.CATEGORY_GENERAL, "Catch fire at high temperatures", EM_Settings.catchFireAtHighTemps, "Spontaneously combust when your body temperature gets high enough").getBoolean(EM_Settings.catchFireAtHighTemps);
 

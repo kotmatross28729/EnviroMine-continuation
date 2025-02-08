@@ -7,7 +7,6 @@ import enviromine.blocks.BlockBurningCoal;
 import enviromine.blocks.BlockDavyLamp;
 import enviromine.blocks.BlockElevator;
 import enviromine.blocks.BlockEsky;
-import enviromine.blocks.BlockFlammableCoal;
 import enviromine.blocks.BlockFreezer;
 import enviromine.blocks.BlockGas;
 import enviromine.blocks.BlockNoPhysics;
@@ -75,8 +74,6 @@ public class ObjectHandler {
 	public static Block elevator;
 	public static Block gasBlock;
 	public static Block fireGasBlock;
-
-	public static Block flammableCoal;
 	public static Block burningCoal;
 	public static Block offTorch;
 
@@ -182,8 +179,7 @@ public class ObjectHandler {
 
 		davyLampBlock = new BlockDavyLamp(Material.redstoneLight).setLightLevel(1.0F).setBlockName("enviromine.davy_lamp").setCreativeTab(EnviroMine.enviroTab);
 		davyLamp = new ItemDavyLamp(davyLampBlock).setUnlocalizedName("enviromine.davylamp").setCreativeTab(EnviroMine.enviroTab);
-
-		flammableCoal = new BlockFlammableCoal();
+		
 		burningCoal = new BlockBurningCoal(Material.rock).setBlockName("enviromine.burningcoal").setCreativeTab(EnviroMine.enviroTab);
 		offTorch = new BlockOffTorch().setTickRandomly(false).setBlockName("torch").setBlockTextureName("enviromine:torch_off").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
 		esky = new BlockEsky(Material.iron).setBlockName("enviromine.esky").setCreativeTab(EnviroMine.enviroTab);
@@ -202,16 +198,9 @@ public class ObjectHandler {
 		GameRegistry.registerBlock(davyLampBlock, ItemDavyLamp.class, "davy_lamp");
 		GameRegistry.registerBlock(offTorch, "offtorch");
 		GameRegistry.registerBlock(burningCoal, "burningcoal");
-		GameRegistry.registerBlock(flammableCoal, "flammablecoal");
 		GameRegistry.registerBlock(esky, "esky");
 		GameRegistry.registerBlock(freezer, "freezer");
 		GameRegistry.registerBlock(noPhysBlock, "no_phys_block");
-
-		// Must be done after registration
-		Blocks.fire.setFireInfo(flammableCoal, 60, 100);
-
-		// Ore Dictionary Stuffs
-		OreDictionary.registerOre("oreCoal", flammableCoal);
 	}
 
 	public static void registerGases()

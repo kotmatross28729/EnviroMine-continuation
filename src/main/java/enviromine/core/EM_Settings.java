@@ -420,7 +420,7 @@ public class EM_Settings
 	public static boolean allowTinting = true;
 	public static boolean torchesBurn = true;
 	public static boolean torchesGoOut = true;
-	public static boolean genFlammableCoal = true; // In case you don't want burny-coal
+	public static boolean flammableCoal = true; // In case you don't want burny-coal
 	public static boolean randomizeInsanityPitch = true;
 	public static boolean catchFireAtHighTemps = true;
 
