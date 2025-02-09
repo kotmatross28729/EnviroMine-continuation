@@ -7,7 +7,6 @@ import enviromine.handlers.EM_PhysManager;
 import enviromine.handlers.ObjectHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -66,6 +65,4 @@ public class MixinBlockOre extends Block {
 			}
 		}
 	}
-	
-	
 }

@@ -144,8 +144,7 @@ public class TileEntityEsky extends TileEntity implements IInventory
 							stack.getTagCompound().removeTag("EM_ROT_TIME");
 						}
 					}
-				} else
-				{
+				} else {
 					if(stack.getTagCompound() == null)
 					{
 						stack.setTagCompound(new NBTTagCompound());
@@ -161,8 +160,7 @@ public class TileEntityEsky extends TileEntity implements IInventory
 			}
 			
 			this.markDirty();
-		} else
-		{
+		} else {
 			tick++;
 		}
 	}
@@ -366,5 +364,4 @@ public class TileEntityEsky extends TileEntity implements IInventory
         tags.setTag("Items", nbttaglist);
         tags.setLong("RotCheck", this.lastCheck);
 	}
-	
 }

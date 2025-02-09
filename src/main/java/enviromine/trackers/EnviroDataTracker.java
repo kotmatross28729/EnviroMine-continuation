@@ -484,24 +484,6 @@ public class EnviroDataTracker
 		}
 
 		// Apply side effects
-//        if(isHbmLoaded()) {
-            //TODO not working properly
-//            if(airQuality > 50 && (HbmLivingProps.getAsbestos(trackedEntity) > 43_200 || //60% //TODO HARDCODED
-//                HbmLivingProps.getBlackLung(trackedEntity) > 115_200 //80% //TODO HARDCODED
-//            )) {
-//                airQuality -= 50; //TODO HARDCODED
-//            }
-//
-//            float rad = HbmLivingProps.getRadiation(trackedEntity);
-//
-//            if(rad > 200) //TODO HARDCODED
-//            {
-//                bodyTemp += ((rad/10F) * 0.1F); //200=38.6, 500=41.6, 999=46.59 //TODO HARDCODED
-//            }
-//
-//            sanity -= HbmLivingProps.getDigamma(trackedEntity);
-//        }
-
 		if(airTemp <= EM_Settings.TimeBelow10AirAndTemperatureConstantAir && bodyTemp <= EM_Settings.TimeBelow10AirAndTemperatureConstantBodyTemperature || bodyTemp <= EM_Settings.TimeBelow10BodyTemperatureConstant)
 		{
 			timeBelow10 += 1;
@@ -512,7 +494,7 @@ public class EnviroDataTracker
 
 		if(curAttackTime >= attackDelay)
 		{
-			// Prevent a whole bunch of stuff if you're an android
+			// Prevent a bunch of stuff if you're an android
 			if(!(EM_Settings.matterOverdriveAndroidImmunities && trackedEntity instanceof EntityPlayer && isCurrentlyAndroid))
 			{
 				// Air Check

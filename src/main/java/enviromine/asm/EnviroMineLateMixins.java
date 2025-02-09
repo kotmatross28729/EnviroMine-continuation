@@ -23,6 +23,11 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
 			mixins.add("netherlicious.MixinTorchShadow");
 		}
 		
+		if(loadedMods.contains("cfm")) {
+			mixins.add("MrCrayfishFurnitureMod.MixinTileEntityFridge");
+			mixins.add("MrCrayfishFurnitureMod.MixinTileEntityFreezer");
+		}
+		
 		return mixins;
 	}
 		

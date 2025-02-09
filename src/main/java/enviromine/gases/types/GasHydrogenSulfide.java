@@ -29,7 +29,6 @@ import static enviromine.trackers.EnviroDataTracker.logger;
 @CompatDanger
 public class GasHydrogenSulfide extends EnviroGas
 {
-	//TODO SHIT CODE
     boolean isCreative = false;
     boolean hasGasMask = false;
 
