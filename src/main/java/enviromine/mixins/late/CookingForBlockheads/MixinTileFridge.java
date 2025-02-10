@@ -1,59 +1,34 @@
-package enviromine.mixins.late.MrCrayfishFurnitureMod;
+package enviromine.mixins.late.CookingForBlockheads;
 
-import com.mrcrayfish.furniture.MrCrayfishFurnitureMod;
-import com.mrcrayfish.furniture.tileentity.TileEntityFreezer;
 import enviromine.core.EM_Settings;
 import enviromine.trackers.properties.RotProperties;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.ISidedInventory;
+import net.blay09.mods.cookingforblockheads.tile.BaseKitchenTileWithInventory;
+import net.blay09.mods.cookingforblockheads.tile.TileFridge;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = TileEntityFreezer.class, priority = 1003)
-public abstract class MixinTileEntityFreezer extends TileEntity implements ISidedInventory {
+@Mixin(value = TileFridge.class, priority = 1003)
+public class MixinTileFridge extends BaseKitchenTileWithInventory {
+	
+	public MixinTileFridge(String inventoryName) {
+		super(inventoryName);
+	}
 	@Unique
 	int enviroMine$tick = 0;
 	@Unique
 	int enviroMine$interval = 30;
 	@Unique
 	long enviroMine$lastCheck = -1;
-	
-	@Shadow
-	public int freezerFreezeTime = 0; //-- on update
-	@Shadow
-	public int currentItemCoolTime = 0; //2500
-	@Shadow
-	public int freezerCoolTime = 0; //progress
-	@Shadow
-	private ItemStack[] freezerItemStacks = new ItemStack[3];
-	
-	@Shadow
-	private static int getItemFreezeTime(ItemStack itemstack) {
-		if (itemstack == null) {
-			return 0;
-		} else {
-			Item i = itemstack.getItem();
-			if (i == MrCrayfishFurnitureMod.itemCoolPack) {
-				return 2500;
-			} else {
-				return i == (new ItemStack(Blocks.ice)).getItem() ? 5000 : 0;
-			}
-		}
-	}
-	
-	@Inject(method = "func_145845_h", at = @At(value = "HEAD"), remap = false)
-	public void updateEntity(CallbackInfo ci) {
-		super.updateEntity();
 
+	@Inject(method = "updateEntity", at = @At(value = "HEAD"))
+	public void updateEntity(CallbackInfo ci) {
 		// Freezer Code
 		if(this.getWorldObj() == null) {
 			return;
@@ -100,26 +75,14 @@ public abstract class MixinTileEntityFreezer extends TileEntity implements ISide
 						}
 					}
 				} else {
-					if (this.freezerFreezeTime == 0) {
-						this.currentItemCoolTime = this.freezerFreezeTime = getItemFreezeTime(this.freezerItemStacks[1]);
-						if (this.freezerFreezeTime > 0) {
-							if (this.freezerItemStacks[1] != null) {
-								--this.freezerItemStacks[1].stackSize;
-								if (this.freezerItemStacks[1].stackSize == 0) {
-									this.freezerItemStacks[1] = null;
-								}
-							}
-						}
-					} else {
-						if (stack.getTagCompound() == null) {
-							stack.setTagCompound(new NBTTagCompound());
-						}
-						NBTTagCompound tags = stack.getTagCompound();
-						
-						if (tags.hasKey("EM_ROT_DATE")) {
-							tags.setLong("EM_ROT_DATE", tags.getLong("EM_ROT_DATE") + time);
-							tags.setLong("EM_ROT_TIME", tags.getLong("EM_ROT_TIME") + time);
-						}
+					if (stack.getTagCompound() == null) {
+						stack.setTagCompound(new NBTTagCompound());
+					}
+					NBTTagCompound tags = stack.getTagCompound();
+					
+					if (tags.hasKey("EM_ROT_DATE")) {
+						tags.setLong("EM_ROT_DATE", tags.getLong("EM_ROT_DATE") + time);
+						tags.setLong("EM_ROT_TIME", tags.getLong("EM_ROT_TIME") + time);
 					}
 				}
 			}
@@ -129,9 +92,9 @@ public abstract class MixinTileEntityFreezer extends TileEntity implements ISide
 		}
 	}
 	
-	@Inject(method = "func_145839_a", 
+	@Inject(method = "func_145839_a",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;readFromNBT(Lnet/minecraft/nbt/NBTTagCompound;)V",
-					shift = At.Shift.AFTER), remap = false)
+					shift = At.Shift.AFTER))
 	public void readFromNBT(NBTTagCompound tags, CallbackInfo ci) {
 		if(tags.hasKey("RotCheck")) {
 			this.enviroMine$lastCheck = tags.getLong("RotCheck");
@@ -139,8 +102,8 @@ public abstract class MixinTileEntityFreezer extends TileEntity implements ISide
 			this.enviroMine$lastCheck = -1;
 		}
 	}
-
-	@Inject(method = "func_145841_b", at = @At(value = "TAIL"), remap = false)
+	
+	@Inject(method = "func_145841_b", at = @At(value = "TAIL"))
 	public void writeToNBT(NBTTagCompound tags, CallbackInfo ci) {
 		tags.setLong("RotCheck", this.enviroMine$lastCheck);
 	}

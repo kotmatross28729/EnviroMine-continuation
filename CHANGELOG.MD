@@ -1,5 +1,7 @@
 # 1.3.148
 
+## NOW REQUIRES [UNIMIXINS](https://github.com/LegacyModdingMC/UniMixins/releases)
+
 ### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG!
 
 -  **[NTM Space compat]**
@@ -9,15 +11,20 @@
      * **You can see the values [here](https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/DEBUG_SHEET/TEMPS.MD)**
    * Fixed "Hard temperatures" working even when the planet was terraformed
 
+* All logic for the Enviromine torch/coal has been moved to mixins (instead of completely replacing them with their own variants)
+  * [Torch] Added compatibility with netherlicious torches/lighters
+  * [Coal] Fixed fixes VERY old (and rare) bugs, like `NullPointerException` when Enviromine tried to replace vanilla coal with its own
 * Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed
 * Fixed configs not appearing for LOTR biomes
   * Also fixed LOTR biome identification
 * Fixed Freezer Z-fighting on model
+* Added compatibility for MrCrayfish's Furniture Mod / Cooking For Blockheads fridges
+  * [Cooking For Blockheads] Requires [GTNH version](https://github.com/GTNewHorizons/CookingForBlockheads/releases)!
 * Now cooling water uses snowball instead of ice (in favor of survival mode) [**Suggested by iamsoNewBee**]
 * Golden apple/carrot no longer rot [**Suggested by iamsoNewBee**]
   * Minor food hydration balance changes [**Suggested by iamsoNewBee**]
-* Hbm's NTM drinks now restore hydration **[TODO]**
-* Hbm's NTM canned food no longer rot    **[TODO]**
+* Hbm's NTM canned food no longer rot    [**Suggested by iamsoNewBee**]
+* Hbm's NTM drinks now restore hydration (And some also reduce the temperature (except for vodka, it increases))
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
 
 # 1.3.147

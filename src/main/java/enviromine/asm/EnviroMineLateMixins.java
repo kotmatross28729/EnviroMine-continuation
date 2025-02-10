@@ -28,6 +28,12 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
 			mixins.add("MrCrayfishFurnitureMod.MixinTileEntityFreezer");
 		}
 		
+		if(loadedMods.contains("cookingforblockheads")) {	//GTNH ONLY
+			mixins.add("CookingForBlockheads.MixinTileFridge");
+		}
+		
+		
+		
 		return mixins;
 	}
 		

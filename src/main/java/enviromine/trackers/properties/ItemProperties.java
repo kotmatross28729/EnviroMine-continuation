@@ -1,16 +1,14 @@
 package enviromine.trackers.properties;
 
-import com.hbm.hazard.HazardRegistry;
-import com.hbm.hazard.HazardSystem;
-import com.hbm.items.ModItems;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
+import enviromine.trackers.properties.compat.ItemProperties_NTM;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
-import enviromine.utils.misc.CompatDanger;
+import enviromine.utils.misc.CompatSafe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFlower;
@@ -28,9 +26,7 @@ import org.apache.logging.log4j.Level;
 import java.io.File;
 import java.util.Iterator;
 
-import static enviromine.core.EnviroMine.isHbmLoaded;
-
-@CompatDanger
+@CompatSafe
 public class ItemProperties implements SerialisableProperty, PropertyBase {
 
     public static final ItemProperties base = new ItemProperties();
@@ -285,63 +281,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 
 			config.load();
 
-			if(isHbmLoaded) {
-				ItemStack HazardStack = new ItemStack(item);
-				float HotlevelCelc = (HazardSystem.getHazardLevelFromStack(HazardStack, HazardRegistry.HOT)) * 100F;
-				float Asbestoslevel = -(HazardSystem.getHazardLevelFromStack(HazardStack, HazardRegistry.ASBESTOS));
-				float Coallevel = -((HazardSystem.getHazardLevelFromStack(HazardStack, HazardRegistry.COAL)) / 2);
-				float Digammalevel = -((HazardSystem.getHazardLevelFromStack(HazardStack, HazardRegistry.DIGAMMA)) * 5);
-				
-				//TODO drineks
-				
-				if(item == ModItems.crackpipe || item == ModItems.cigarette) {
-					config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-					config.get(category, IPName[1], -1).getInt(-1);
-					config.get(category, IPName[2], false).getBoolean(false);
-					config.get(category, IPName[3], 0D).getDouble(0D);
-					config.get(category, IPName[4], 0D).getDouble(0D);
-					config.get(category, IPName[5], 0D).getDouble(0D);
-					config.get(category, IPName[6], 0D).getDouble(0D);
-					config.get(category, IPName[7], item == ModItems.crackpipe ? -1D : -10D).getDouble(item == ModItems.crackpipe ? -1D : -10D);
-					config.get(category, IPName[8], item == ModItems.crackpipe ? 40D : 30D).getDouble(item == ModItems.crackpipe ? 40D : 30D);
-					config.get(category, IPName[9], 5D).getDouble(5D);
-					config.get(category, IPName[10], 37D).getDouble(37D);
-					config.get(category, IPName[11], 0).getInt(0);
-					config.get(category, IPName[12], "").getString();
-					config.get(category, IPName[13], 0).getInt(0);
-				} else if(item == ModItems.xanax || item == ModItems.fmn || item == ModItems.five_htp) {
-					config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-					config.get(category, IPName[1], -1).getInt(-1);
-					config.get(category, IPName[2], false).getBoolean(false);
-					config.get(category, IPName[3], 0D).getDouble(0D);
-					config.get(category, IPName[4], 0D).getDouble(0D);
-					config.get(category, IPName[5], 0D).getDouble(0D);
-					config.get(category, IPName[6], 0D).getDouble(0D);
-					config.get(category, IPName[7], 0D).getDouble(0D);
-					config.get(category, IPName[8], item == ModItems.xanax ? 10D : item == ModItems.fmn ? 50D : 100D).getDouble(item == ModItems.xanax ? 10D : item == ModItems.fmn ? 50D : 100D);
-					config.get(category, IPName[9], 5D).getDouble(5D);
-					config.get(category, IPName[10], 37D).getDouble(37D);
-					config.get(category, IPName[11], 0).getInt(0);
-					config.get(category, IPName[12], "").getString();
-					config.get(category, IPName[13], 0).getInt(0);
-				} else if(HotlevelCelc != 0 || Asbestoslevel != 0 || Coallevel != 0 || Digammalevel != 0) {
-					config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-					config.get(category, IPName[1], -1).getInt(-1);
-					config.get(category, IPName[2], HotlevelCelc > 0).getBoolean(HotlevelCelc > 0);
-					config.get(category, IPName[3], HotlevelCelc > 0 ? HotlevelCelc : 37D).getDouble(HotlevelCelc > 0 ? HotlevelCelc : 37D);
-					double aDefault = Asbestoslevel < 0 ? Asbestoslevel : Coallevel < 0 ? Coallevel : 0D;
-					config.get(category, IPName[4], aDefault).getDouble(aDefault);
-					config.get(category, IPName[5], Digammalevel < 0 ? Digammalevel : 0D).getDouble(Digammalevel < 0 ? Digammalevel : 0D);
-					config.get(category, IPName[6], 0D).getDouble(0D);
-					config.get(category, IPName[7], 0D).getDouble(0D);
-					config.get(category, IPName[8], 0D).getDouble(0D);
-					config.get(category, IPName[9], 0D).getDouble(0D);
-					config.get(category, IPName[10], 37D).getDouble(37D);
-					config.get(category, IPName[11], 0).getInt(0);
-					config.get(category, IPName[12], "").getString();
-					config.get(category, IPName[13], 0).getInt(0);
-				}
-		}
+			if(EnviroMine.isHbmLoaded) {
+				ItemProperties_NTM.registerItemsNTM(config,category,IPName,item);
+			}
 			
             if(item == Items.glass_bottle) {
 				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();

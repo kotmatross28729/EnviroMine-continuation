@@ -1,25 +1,24 @@
 package enviromine.trackers.properties;
 
-import java.io.File;
-import java.util.Iterator;
-
-import com.hbm.items.ModItems;
-import enviromine.utils.misc.CompatDanger;
-import org.apache.logging.log4j.Level;
-
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.ObjectHandler;
+import enviromine.trackers.properties.compat.RotProperties_NTM;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
+import enviromine.utils.misc.CompatDanger;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
+import java.util.Iterator;
 
 @CompatDanger
 public class RotProperties implements SerialisableProperty, PropertyBase
@@ -181,13 +180,7 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 			config.load();
 			
 			if(EnviroMine.isHbmLoaded) {
-				if(item == ModItems.bio_wafer) {
-					config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-					config.get(category, RPName[1], -1).getInt(-1);
-					config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
-					config.get(category, RPName[3], 0).getInt(0);
-					config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item").getInt(-1);
-				}
+				RotProperties_NTM.registerFoodNTM(config,category,RPName,item);
 			}
 			
 			if(item == Items.golden_apple || item == Items.golden_carrot)
