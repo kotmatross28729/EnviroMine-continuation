@@ -46,7 +46,6 @@ public class EnviroDataTracker
 {
     public static final Logger logger = LogManager.getLogger("ENVIROMINE_DEBUG_LOGGER");
 	public EntityLivingBase trackedEntity;
-
 	public float prevBodyTemp = 36.6F;
 	public float prevHydration = 100F;
 	public float prevAirQuality = 100;
@@ -67,16 +66,9 @@ public class EnviroDataTracker
 
 	public int frostbiteLevel = 0;
 	public boolean frostIrreversible = false;
-
-	public boolean brokenLeg = false;
-	public boolean brokenArm = false;
-	public boolean bleedingOut = false;
-
 	public String sleepState = "Awake";
 	public int lastSleepTime = 0;
-
 	public int timeBelow10 = 0;
-
     public int heartattacktimer = 0;
 	public int updateTimer = 0;
     private Side side = FMLCommonHandler.instance().getSide();

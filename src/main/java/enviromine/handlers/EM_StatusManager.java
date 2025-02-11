@@ -58,7 +58,6 @@ import java.util.Iterator;
 import java.util.List;
 
 @CompatSafe
-
 public class EM_StatusManager {
 	public static final int AIR_QUALITY_DELTA_INDEX = 0;
 	public static final int AMBIENT_TEMP_INDEX = 1;
@@ -1189,8 +1188,7 @@ public class EM_StatusManager {
 		tags.setFloat("ENVIRO_TMP", tracker.bodyTemp);
 		tags.setFloat("ENVIRO_SAN", tracker.sanity);
 	}
-
-    //Pizdec prosto
+    
 	public static void removeAllTrackers()
 	{
         for (EnviroDataTracker tracker : trackerList.values()) {
@@ -1198,8 +1196,7 @@ public class EM_StatusManager {
         }
 		trackerList.clear();
 	}
-
-    //EBANIY BLYAT'
+    
 	public static void saveAndDeleteAllTrackers()
 	{
         for (EnviroDataTracker tracker : trackerList.values()) {

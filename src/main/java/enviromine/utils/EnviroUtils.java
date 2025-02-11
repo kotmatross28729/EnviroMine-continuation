@@ -57,66 +57,7 @@ public class EnviroUtils
 	private static final String IEEP_PLAYER_MO_ANDROID = "AndroidPlayer";
 	private static final String IEEP_PLAYER_MO_ISANDROID = "isAndroid";
 
-	public static void extendPotionList()
-	{
-		int maxID = 32;
-
-		if(EM_Settings.heatstrokePotionID >= maxID)
-		{
-			maxID = EM_Settings.heatstrokePotionID + 1;
-		}
-
-		if(EM_Settings.hypothermiaPotionID >= maxID)
-		{
-			maxID = EM_Settings.hypothermiaPotionID + 1;
-		}
-
-		if(EM_Settings.frostBitePotionID >= maxID)
-		{
-			maxID = EM_Settings.frostBitePotionID + 1;
-		}
-
-		if(EM_Settings.dehydratePotionID >= maxID)
-		{
-			maxID = EM_Settings.dehydratePotionID + 1;
-		}
-
-		if(EM_Settings.insanityPotionID >= maxID)
-		{
-			maxID = EM_Settings.insanityPotionID + 1;
-		}
-
-		if(Potion.potionTypes.length >= maxID)
-		{
-			return;
-		}
-
-		Potion[] potionTypes = null;
-
-		for(Field f : Potion.class.getDeclaredFields())
-		{
-			f.setAccessible(true);
-
-			try
-			{
-				if(f.getName().equals("potionTypes") || f.getName().equals("field_76425_a"))
-				{
-					Field modfield = Field.class.getDeclaredField("modifiers");
-					modfield.setAccessible(true);
-					modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-
-					potionTypes = (Potion[])f.get(null);
-					final Potion[] newPotionTypes = new Potion[maxID];
-					System.arraycopy(potionTypes, 0, newPotionTypes, 0, potionTypes.length);
-					f.set(null, newPotionTypes);
-				}
-			} catch(Exception e)
-			{
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to extend potion list for EnviroMine!", e);
-			}
-		}
-	}
-
+	
 	public static int[] getAdjacentBlockCoordsFromSide(int x, int y, int z, int side)
 	{
 		int[] coords = new int[3];

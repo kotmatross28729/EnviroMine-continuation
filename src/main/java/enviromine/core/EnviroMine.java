@@ -201,12 +201,13 @@ public class EnviroMine
 
 		ObjectHandler.registerRecipes();
 
-		EnviroUtils.extendPotionList();
+		//EnviroUtils.extendPotionList();
 
 		EnviroPotion.RegisterPotions();
 
 		EnviroAchievements.InitAchievements();
 
+		//TODO config
 		caves = (BiomeGenCaves)(new BiomeGenCaves(EM_Settings.caveBiomeID).setColor(0).setBiomeName("Caves").setDisableRain().setTemperatureRainfall(1.0F, 0.0F));
 		//GameRegistry.addBiome(caves);
 		BiomeDictionary.registerBiomeType(caves, Type.WASTELAND);
