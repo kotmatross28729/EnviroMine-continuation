@@ -7,14 +7,13 @@
 -  **[NTM Space compat]**
    * Rebalanced temperature values for planets to be more in line with ~~reality~~ common sense
      * The terraformed values are made up of nothing, of course, changing the composition of the atmosphere is half of a work, there is also mass, radius, and a bunch of parameters related to the orbit, rotation period, solar day, etc. But let's not forget that this is just a game made of cubes, okay?
-        * If NTM Space changes the way of terraforming, it will be a disaster for this compatibility
      * **You can see the values [here](https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/DEBUG_SHEET/TEMPS.MD)**
    * Fixed "Hard temperatures" working even when the planet was terraformed
 
-* All logic for the Enviromine torch/coal has been moved to mixins (instead of completely replacing them with their own variants)
+* **All logic for the Enviromine torch/coal has been moved to mixins (instead of completely replacing them with their Enviromine variants)**
   * [Torch] Added compatibility with netherlicious torches/lighters
   * [Coal] Fixed fixes VERY old (and rare) bugs, like `NullPointerException` when Enviromine tried to replace vanilla coal with its own
-* Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed
+* **Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed**
 * Fixed configs not appearing for LOTR biomes
   * Also fixed LOTR biome identification
 * Fixed Freezer Z-fighting on model
@@ -26,6 +25,7 @@
 * Hbm's NTM canned food no longer rot    [**Suggested by iamsoNewBee**]
 * Hbm's NTM drinks now restore hydration (And some also reduce the temperature (except for vodka, it increases))
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
+* Minor code optimizations
 
 # 1.3.147
 ### Fixed

@@ -69,8 +69,10 @@ public class EnviroMine
 	public static boolean isLOTRLoaded;
 	public static boolean isCFBHLoaded;
 	public static boolean isCFMLoaded;
-	
 	public static boolean isNetherliciousLoaded;
+	
+	public static boolean isHarvestCraftLoaded;
+	public static boolean isJAFFALoaded;
 
     //public static EM_WorldData theWorldEM;
 
@@ -143,6 +145,10 @@ public class EnviroMine
 			isCFMLoaded = true;
 		if(Loader.isModLoaded("netherlicious"))
 			isNetherliciousLoaded = true;
+		if(Loader.isModLoaded("harvestcraft"))
+			isHarvestCraftLoaded = true;
+		if(Loader.isModLoaded("jaffa"))
+			isJAFFALoaded = true;
 		
 		
 		enviroTab = new EnviroTab("enviromine.enviroTab");

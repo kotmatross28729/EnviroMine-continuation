@@ -25,7 +25,7 @@ public class ItemProperties_NTM {
 				config.get(category, IPName[6], 0.3D).getDouble(0.3D);	//It's 40/60, so
 				config.get(category, IPName[7], 0D).getDouble(0D);
 				config.get(category, IPName[8], 30D).getDouble(30D); //guh
-				config.get(category, IPName[9], 5D).getDouble(5D);
+				config.get(category, IPName[9], 20D).getDouble(20D);
 				config.get(category, IPName[10], 38.0D).getDouble(38.0D);
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
@@ -65,7 +65,7 @@ public class ItemProperties_NTM {
 				config.get(category, IPName[6], -0.15D).getDouble(-0.15D);
 				config.get(category, IPName[7], 0D).getDouble(0D);
 				config.get(category, IPName[8], 20D).getDouble(20D); //beer sanity boost
-				config.get(category, IPName[9], 20D).getDouble(20D);
+				config.get(category, IPName[9], 22D).getDouble(22D);
 				config.get(category, IPName[10], 36.6D).getDouble(36.6D);
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();

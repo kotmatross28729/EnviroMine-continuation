@@ -9,7 +9,7 @@ import enviromine.trackers.properties.compat.RotProperties_NTM;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
-import enviromine.utils.misc.CompatDanger;
+import enviromine.utils.misc.CompatSafe;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Level;
 import java.io.File;
 import java.util.Iterator;
 
-@CompatDanger
+@CompatSafe
 public class RotProperties implements SerialisableProperty, PropertyBase
 {
 	public static final RotProperties base = new RotProperties();
