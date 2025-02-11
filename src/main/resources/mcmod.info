@@ -8,7 +8,7 @@
   "url": "https://legacy.curseforge.com/minecraft/mc-mods/enviromine-continuation",
   "updateUrl": "",
   "authorList": ["Funwayguy", "TimbuckTato", "GenDeathrow", "thislooksfun", "AstroTibs", "Kotmatross"],
-  "credits": "IronArmy and EpicNation - all the hard work debugging this mod,  iamsoNewBee - Chinese localization, nice suggestions",
+  "credits": "See Acknowledgments.txt",
   "logoFile": "",
   "screenshots": [],
   "dependencies": ["mod_MinecraftForge"]

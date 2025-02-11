@@ -35,6 +35,7 @@ import enviromine.world.features.WorldFeatureGenerator;
 import enviromine.world.features.mineshaft.EM_VillageMineshaft;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -42,6 +43,8 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 @Mod(modid = EM_Settings.MOD_ID, name = EM_Settings.MOD_NAME, version = EM_Settings.VERSION, guiFactory = EM_Settings.GUI_FACTORY)
 public class EnviroMine
@@ -92,12 +95,9 @@ public class EnviroMine
         		EnumChatFormatting.DARK_AQUA +
         		EM_Settings.VERSION;
 		
-		//Big thanks to the IronArmy and EpicNation for all the hard work debugging this mod
-		//Big thanks to the iamsoNewBee for Chinese localization and nice suggestions
         event.getModMetadata().credits = 		// credits
         		EnumChatFormatting.AQUA +
-        		"IronArmy & EpicNation - all the hard work debugging this mod. " +
-				"iamsoNewBee - Chinese localization & nice suggestions."
+        		"See Acknowledgments.txt"
 		;
 		
 
@@ -124,10 +124,13 @@ public class EnviroMine
 		//COMPAT
 		if(Loader.isModLoaded("hbm")) {
 			isHbmLoaded = true;
+			
+			//TODO: test
 			try {
-				Class.forName("com.hbm.dim.SolarSystem");
-				isHbmSpaceLoaded = true;
-			} catch (ClassNotFoundException ignored) {}
+				if(Launch.classLoader.getClassBytes("com.hbm.dim.SolarSystem") != null) {
+					isHbmSpaceLoaded = true;
+				}
+			} catch (IOException ignored) {}
 		}
 		if(Loader.isModLoaded("Thaumcraft"))
 			isTCLoaded = true;

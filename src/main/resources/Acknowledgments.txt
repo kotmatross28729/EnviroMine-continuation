@@ -1,0 +1,15 @@
+# Enviromine
+    Big thanks to the Funwayguy, GenDeathrow and thislooksfun for developing original Enviromine
+    Big thanks to the IronArmy and EpicNation for all the hard work debugging this mod
+
+# EnviroMine for Galaxy Odyssey
+    Big thanks to the AstroTibs for developing EnviroMine for Galaxy Odyssey
+
+# EnviroMine continuation
+    Big thanks to the iamsoNewBee for Chinese localization and nice suggestions
+    Big thanks to the xronin01 for nice suggestions
+    
+# Honorable mentions [EnviroMine continuation]
+    HbmMods - motivation for creating EnviroMine continuation (Hbm's Nuclear Tech Mod)
+    MellowArpeggiation - tips for developing compatibility for NTM:Space
+    
