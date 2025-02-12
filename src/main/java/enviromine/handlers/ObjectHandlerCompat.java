@@ -17,102 +17,155 @@ import net.minecraft.item.ItemStack;
 public class ObjectHandlerCompat {
     //FOR HBM'S NTM
     public static Item waterBottle_polymer;
-    public static Item cleanWaterBottle_polymer;
-    public static Item frostyWaterBottle_polymer;
-    public static Item coldWaterBottle_polymer;
-    public static Item badColdWaterBottle_polymer;
-    public static Item saltWaterBottle_polymer;
-    public static Item badWaterBottle_polymer;
-    public static Item warmWaterBottle_polymer;
-    public static Item badWarmWaterBottle_polymer;
-    public static Item hotWaterBottle_polymer;
-
+    
+    public static Item radioactive_frosty_WaterBottle_polymer;
+    public static Item frosty_WaterBottle_polymer;
+    
+    public static Item radioactive_cold_WaterBottle_polymer;
+    public static Item dirty_cold_WaterBottle_polymer;
+    public static Item salty_cold_WaterBottle_polymer;
+    public static Item clean_cold_WaterBottle_polymer;
+    
+    public static Item radioactive_WaterBottle_polymer;
+    public static Item dirty_WaterBottle_polymer;
+    public static Item salty_WaterBottle_polymer;
+    public static Item clean_WaterBottle_polymer;
+    
+    public static Item radioactive_warm_WaterBottle_polymer;
+    public static Item dirty_warm_WaterBottle_polymer;
+    public static Item salty_warm_WaterBottle_polymer;
+    public static Item clean_warm_WaterBottle_polymer;
+    
+    public static Item radioactive_hot_WaterBottle_polymer;
+    public static Item hot_WaterBottle_polymer;
+    
     public static void initItems() {
         waterBottle_polymer = new Item().setMaxStackSize(64).setUnlocalizedName("enviromine.water.polymer").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bottle");
-
-        cleanWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.CLEAN).setMaxStackSize(1).setUnlocalizedName("enviromine.cleanwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        frostyWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frostywater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        coldWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.coldwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        badColdWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.badcoldwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        saltWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.saltwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        badWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.badwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        warmWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.warmwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        badWarmWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.badwarmwater.polymer").setCreativeTab(EnviroMine.enviroTab);
-        hotWaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hotwater.polymer").setCreativeTab(EnviroMine.enviroTab);
+    
+        //NAMES
+        //[trait]_[temp]_WaterBottle_polymer
+    
+        radioactive_frosty_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        frosty_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+    
+        radioactive_cold_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        dirty_cold_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        salty_cold_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.SALTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        clean_cold_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+    
+        radioactive_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        dirty_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        salty_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        clean_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.CLEAN).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+    
+        radioactive_warm_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        dirty_warm_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        salty_warm_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.SALTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        clean_warm_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+    
+        radioactive_hot_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_HOT).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
+        hot_WaterBottle_polymer = new EnviroItemPolymerWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine..polymer").setCreativeTab(EnviroMine.enviroTab);
     }
 
     public static void registerItems() {
         GameRegistry.registerItem(waterBottle_polymer, "waterPolymerBottle");
-        GameRegistry.registerItem(cleanWaterBottle_polymer, "cleanWaterPolymerBottle");
-
-        GameRegistry.registerItem(frostyWaterBottle_polymer, "frostyWaterPolymerBottle");
-        GameRegistry.registerItem(coldWaterBottle_polymer, "coldWaterPolymerBottle");
-        GameRegistry.registerItem(badColdWaterBottle_polymer, "badColdWaterPolymerBottle");
-        GameRegistry.registerItem(saltWaterBottle_polymer, "saltWaterPolymerBottle");
-        GameRegistry.registerItem(badWaterBottle_polymer, "badWaterPolymerBottle");
-        GameRegistry.registerItem(warmWaterBottle_polymer, "warmWaterPolymerBottle");
-        GameRegistry.registerItem(badWarmWaterBottle_polymer, "badWarmWaterPolymerBottle");
-        GameRegistry.registerItem(hotWaterBottle_polymer, "hotWaterPolymerBottle");
     }
 
     public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
         switch (type) {
-            case FROSTY -> {return new ItemStack(frostyWaterBottle_polymer);}
-            case DIRTY_COLD -> {return new ItemStack(badColdWaterBottle_polymer);}
-            case CLEAN_COLD -> {return new ItemStack(coldWaterBottle_polymer);}
-            case SALTY -> {return new ItemStack(saltWaterBottle_polymer);}
-            case DIRTY -> {return new ItemStack(badWaterBottle_polymer);}
-            case CLEAN_WARM -> {return new ItemStack(warmWaterBottle_polymer);}
-            case DIRTY_WARM -> {return new ItemStack(badWarmWaterBottle_polymer);}
-            case HOT -> {return new ItemStack(hotWaterBottle_polymer);}
-            default -> {return new ItemStack(cleanWaterBottle_polymer);}
+            
+            case RADIOACTIVE_FROSTY -> {return new ItemStack(radioactive_frosty_WaterBottle_polymer);}
+            case FROSTY -> {return new ItemStack(frosty_WaterBottle_polymer);}
+            
+            case RADIOACTIVE_COLD -> {return new ItemStack(radioactive_cold_WaterBottle_polymer);}
+            case DIRTY_COLD -> {return new ItemStack(dirty_cold_WaterBottle_polymer);}
+            case SALTY_COLD -> {return new ItemStack(salty_cold_WaterBottle_polymer);}
+            case CLEAN_COLD -> {return new ItemStack(clean_cold_WaterBottle_polymer);}
+    
+            case RADIOACTIVE -> {return new ItemStack(radioactive_WaterBottle_polymer);}
+            case DIRTY -> {return new ItemStack(dirty_WaterBottle_polymer);}
+            case SALTY -> {return new ItemStack(salty_WaterBottle_polymer);}
+    
+            case RADIOACTIVE_WARM -> {return new ItemStack(radioactive_warm_WaterBottle_polymer);}
+            case DIRTY_WARM -> {return new ItemStack(dirty_warm_WaterBottle_polymer);}
+            case SALTY_WARM -> {return new ItemStack(salty_warm_WaterBottle_polymer);}
+            case CLEAN_WARM -> {return new ItemStack(clean_warm_WaterBottle_polymer);}
+    
+            case RADIOACTIVE_HOT -> {return new ItemStack(radioactive_hot_WaterBottle_polymer);}
+            case HOT -> {return new ItemStack(hot_WaterBottle_polymer);}
+            
+            default -> {return new ItemStack(clean_WaterBottle_polymer);}
         }
     }
+    //AUTOGEN GOD
+    //   ↑, not autogen actually
+    //            ↑, shut up
     public static void registerRecipes() {
 
         ItemStack[] bottles = {
-            new ItemStack(frostyWaterBottle_polymer),
-            new ItemStack(badColdWaterBottle_polymer),
-            new ItemStack(coldWaterBottle_polymer),
-            new ItemStack(saltWaterBottle_polymer),
-            new ItemStack(badWaterBottle_polymer),
-            new ItemStack(cleanWaterBottle_polymer),
-            new ItemStack(warmWaterBottle_polymer),
-            new ItemStack(badWarmWaterBottle_polymer),
-            new ItemStack(hotWaterBottle_polymer),
+            new ItemStack(radioactive_frosty_WaterBottle_polymer),
+            new ItemStack(frosty_WaterBottle_polymer),
+            new ItemStack(radioactive_cold_WaterBottle_polymer),
+            new ItemStack(dirty_cold_WaterBottle_polymer),
+            new ItemStack(salty_cold_WaterBottle_polymer),
+            new ItemStack(clean_cold_WaterBottle_polymer),
+            new ItemStack(radioactive_WaterBottle_polymer),
+            new ItemStack(dirty_WaterBottle_polymer),
+            new ItemStack(salty_WaterBottle_polymer),
+            new ItemStack(clean_WaterBottle_polymer),
+            new ItemStack(radioactive_warm_WaterBottle_polymer),
+            new ItemStack(dirty_warm_WaterBottle_polymer),
+            new ItemStack(salty_warm_WaterBottle_polymer),
+            new ItemStack(clean_warm_WaterBottle_polymer),
+            new ItemStack(radioactive_hot_WaterBottle_polymer),
+            new ItemStack(hot_WaterBottle_polymer),
         };
 
         //HEATING
         for(ItemStack bottle : bottles) {
-            if(bottle.getItem() != hotWaterBottle_polymer) { //How can you heat already hot water?
                 WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
                 if (bottle.getItem() instanceof EnviroItemPolymerWaterBottle enviroItemPolymerWaterBottle) {
                     localType = enviroItemPolymerWaterBottle.getWaterType();
                 }
-                GameRegistry.addSmelting(bottle, getItemStackFromWaterType(WaterUtils.heatUp(localType)), 0.0F);
-            }
+                if(WaterUtils.heatUp(localType) != localType) {
+                    GameRegistry.addSmelting(bottle, getItemStackFromWaterType(WaterUtils.heatUp(localType)), 0.0F);
+                }
         }
 
         //COOLING
         for(ItemStack bottle : bottles) {
-            if(bottle.getItem() != frostyWaterBottle_polymer) { //Same
                 WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
                 if (bottle.getItem() instanceof EnviroItemPolymerWaterBottle enviroItemPolymerWaterBottle) {
                     localType = enviroItemPolymerWaterBottle.getWaterType();
                 }
+            if(WaterUtils.coolDown(localType) != localType) {
                 GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Items.snowball, 1));
             }
         }
-
-        GameRegistry.addShapelessRecipe(new ItemStack(badColdWaterBottle_polymer, 1, 0), new ItemStack(coldWaterBottle_polymer, 1, 0), new ItemStack(Blocks.dirt, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(badWarmWaterBottle_polymer, 1, 0), new ItemStack(warmWaterBottle_polymer, 1, 0), new ItemStack(Blocks.dirt, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(badWaterBottle_polymer, 1, 0), new ItemStack(cleanWaterBottle_polymer), new ItemStack(Blocks.dirt, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(saltWaterBottle_polymer, 1, 0), new ItemStack(cleanWaterBottle_polymer), new ItemStack(Blocks.sand, 1));
-
+        //SALTING
+        for(ItemStack bottle : bottles) {
+            WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
+            if (bottle.getItem() instanceof EnviroItemPolymerWaterBottle enviroItemPolymerWaterBottle) {
+                localType = enviroItemPolymerWaterBottle.getWaterType();
+            }
+            if(WaterUtils.saltDown(localType) != localType) {
+                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.saltDown(localType)), bottle, new ItemStack(Blocks.sand, 1));
+            }
+        }
+        //POLLUTING or whatever is this
+        for(ItemStack bottle : bottles) {
+            WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
+            if (bottle.getItem() instanceof EnviroItemPolymerWaterBottle enviroItemPolymerWaterBottle) {
+                localType = enviroItemPolymerWaterBottle.getWaterType();
+            }
+            if(WaterUtils.pollute(localType) != localType) {
+                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.pollute(localType)), bottle, new ItemStack(Blocks.dirt, 1));
+            }
+        }
 
         CraftingManager.addRecipeAuto(new ItemStack(waterBottle_polymer), "p p", " p ", 'p', OreDictManager.ANY_PLASTIC.ingot());
 
-        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(cleanWaterBottle_polymer), new ItemStack(waterBottle_polymer), Fluids.WATER, 500));
+        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(clean_WaterBottle_polymer), new ItemStack(waterBottle_polymer), Fluids.WATER, 500));
     }
 
 }

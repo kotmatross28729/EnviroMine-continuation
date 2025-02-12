@@ -10,6 +10,7 @@ import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.ModIdentification;
+import enviromine.utils.WaterUtils;
 import enviromine.utils.misc.CompatSafe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -223,29 +224,25 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		return EM_Settings.biomeProperties.get(biome.biomeID);
 	}
 
-	public int getWaterQualityId()
-	{
-        if(this.waterQuality.trim().equalsIgnoreCase("frosty")) {
-            return 5;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("dirty cold")) {
-            return 4;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("clean cold")) {
-            return 3;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("salty")) {
-            return 2;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("dirty")) {
-            return 1;
-        }  else if(this.waterQuality.trim().equalsIgnoreCase("clean")) {
-            return 0;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("clean warm")) {
-            return -1;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("dirty warm")) {
-            return -2;
-        }   else if(this.waterQuality.trim().equalsIgnoreCase("hot")) {
-            return -3;
-        } else {
-			return -4;
-		}
+	public WaterUtils.WATER_TYPES getWaterQuality() {
+		return switch (this.waterQuality.trim()) {
+			case "RADIOACTIVE_FROSTY" -> WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY;
+			case "FROSTY" -> WaterUtils.WATER_TYPES.FROSTY;
+			case "RADIOACTIVE_COLD" -> WaterUtils.WATER_TYPES.RADIOACTIVE_COLD;
+			case "DIRTY_COLD" -> WaterUtils.WATER_TYPES.DIRTY_COLD;
+			case "SALTY_COLD" -> WaterUtils.WATER_TYPES.SALTY_COLD;
+			case "CLEAN_COLD" -> WaterUtils.WATER_TYPES.CLEAN_COLD;
+			case "RADIOACTIVE" -> WaterUtils.WATER_TYPES.RADIOACTIVE;
+			case "DIRTY" -> WaterUtils.WATER_TYPES.DIRTY;
+			case "SALTY" -> WaterUtils.WATER_TYPES.SALTY;
+			case "RADIOACTIVE_WARM" -> WaterUtils.WATER_TYPES.RADIOACTIVE_WARM;
+			case "DIRTY_WARM" -> WaterUtils.WATER_TYPES.DIRTY_WARM;
+			case "SALTY_WARM" -> WaterUtils.WATER_TYPES.SALTY_WARM;
+			case "CLEAN_WARM" -> WaterUtils.WATER_TYPES.CLEAN_WARM;
+			case "RADIOACTIVE_HOT" -> WaterUtils.WATER_TYPES.RADIOACTIVE_HOT;
+			case "HOT" -> WaterUtils.WATER_TYPES.HOT;
+			default -> WaterUtils.WATER_TYPES.CLEAN;
+		};
 	}
 
 	@Override

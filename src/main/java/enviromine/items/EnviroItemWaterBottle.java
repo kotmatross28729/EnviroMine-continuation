@@ -1,11 +1,9 @@
 package enviromine.items;
 
+import com.hbm.extprop.HbmLivingProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroPotion;
-import enviromine.core.EM_Settings;
-import enviromine.handlers.EM_StatusManager;
-import enviromine.trackers.EnviroDataTracker;
 import enviromine.utils.WaterUtils;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,148 +41,38 @@ public class EnviroItemWaterBottle extends Item {
     @Override
     public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-        if(!par3EntityPlayer.capabilities.isCreativeMode)
-        {
+        if(!par3EntityPlayer.capabilities.isCreativeMode) {
             --par1ItemStack.stackSize;
         }
-
-        if(!par2World.isRemote)
-        {
-            EnviroDataTracker tracker = EM_StatusManager.lookupTracker(par3EntityPlayer);
-
-            if(tracker != null)
-            {
-
-                if(tracker.bodyTemp >= 0)
-                {
-                    if(waterType == WaterUtils.WATER_TYPES.FROSTY) {
-                        if (tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue) {
-                            tracker.bodyTemp += EM_Settings.FrostyWaterTemperatureInfluence;
-                        }
-                        if(EM_Settings.FrostyWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.FrostyWaterHydrate);
-                        } else if(EM_Settings.FrostyWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.FrostyWaterHydrate));
-                        }
-                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY_COLD) {
-                        if (tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue) {
-                            tracker.bodyTemp += EM_Settings.DirtyColdWaterTemperatureInfluence;
-                        }
-                        if(EM_Settings.DirtyColdWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.DirtyColdWaterHydrate);
-                        } else if(EM_Settings.DirtyColdWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.DirtyColdWaterHydrate));
-                        }
-                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN_COLD) {
-                        if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
-                        {
-                            tracker.bodyTemp += EM_Settings.CleanColdWaterTemperatureInfluence;
-                        }
-                        if(EM_Settings.CleanColdWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.CleanColdWaterHydrate);
-                        } else if(EM_Settings.CleanColdWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.CleanColdWaterHydrate));
-                        }
-                    } else if (waterType == WaterUtils.WATER_TYPES.SALTY) {
-                        if(par3EntityPlayer.getRNG().nextInt(1) == 0)
-                        {
-                            if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0)
-                            {
-                                int amp = par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
-                                par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
-                            } else
-                            {
-                                par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600));
-                            }
-                        }
-                            if(tracker.bodyTemp > EM_Settings.WaterReducesTemperatureStartingValue)
-                            {
-                                tracker.bodyTemp += EM_Settings.SaltyWaterTemperatureInfluence;
-                            }
-                        if(EM_Settings.SaltyWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.SaltyWaterHydrate);
-                        } else if(EM_Settings.SaltyWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.SaltyWaterHydrate));
-                        }
-                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY) {
-                        if(par3EntityPlayer.getRNG().nextInt(4) == 0)
-                        {
-                            par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
-                        }
-                        if(par3EntityPlayer.getRNG().nextInt(4) == 0)
-                        {
-                            par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
-                        }
-                        if(tracker.bodyTemp > EM_Settings.WaterReducesTemperatureStartingValue)
-                        {
-                            tracker.bodyTemp += EM_Settings.DirtyWaterTemperatureInfluence;
-                        }
-                        if(EM_Settings.DirtyWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.DirtyWaterHydrate);
-                        } else if(EM_Settings.DirtyWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.DirtyWaterHydrate));
-                        }
-                    } else if (waterType == WaterUtils.WATER_TYPES.CLEAN_WARM) {
-                        if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue) {
-                            tracker.bodyTemp += EM_Settings.CleanWarmWaterTemperatureInfluence;
-                        }
-                        if(EM_Settings.CleanWarmWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.CleanWarmWaterHydrate);
-                        } else if(EM_Settings.CleanWarmWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.CleanWarmWaterHydrate));
-                        }
-                    } else if (waterType == WaterUtils.WATER_TYPES.DIRTY_WARM) {
-                        if(par3EntityPlayer.getRNG().nextInt(4) == 0)
-                        {
-                            par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
-                        }
-                        if(par3EntityPlayer.getRNG().nextInt(4) == 0)
-                        {
-                            par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
-                        }
-                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue) {
-                                tracker.bodyTemp += EM_Settings.DirtyWarmWaterTemperatureInfluence;
-                            }
-                        if(EM_Settings.DirtyWarmWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.DirtyWarmWaterHydrate);
-                        } else if(EM_Settings.DirtyWarmWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.DirtyWarmWaterHydrate));
-                        }
-
-                    } else if (waterType == WaterUtils.WATER_TYPES.HOT) {
-                        if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue) {
-                            tracker.bodyTemp += EM_Settings.HotWarmWaterTemperatureInfluence;
-                        }
-                        if(EM_Settings.HotWaterHydrate > 0F)
-                        {
-                            tracker.hydrate(EM_Settings.HotWaterHydrate);
-                        } else if(EM_Settings.HotWaterHydrate < 0F)
-                        {
-                            tracker.dehydrate(Math.abs(EM_Settings.HotWaterHydrate));
-                        }
-                    }
+    
+        if (!par2World.isRemote) {
+            
+            //TODO compat.EnviroItemWaterBottle_NTM
+//            if(waterType.isRadioactive) {
+//                HbmLivingProps.incrementRadiation(par3EntityPlayer, 5.0F);
+//            }
+            
+            if(waterType.isDirty) { //TODO config
+                if(par3EntityPlayer.getRNG().nextInt(4) == 0) {
+                    par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
+                }
+                if(par3EntityPlayer.getRNG().nextInt(4) == 0) {
+                    par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+                }
+            }
+        
+            if(waterType.isSalty) { //TODO config
+                if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0) {
+                    int amp = par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
+                    par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
+                } else {
+                    par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600));
                 }
             }
         }
-
-        if(!par3EntityPlayer.capabilities.isCreativeMode)
-        {
-            if(par1ItemStack.stackSize <= 0)
-            {
+        
+        if(!par3EntityPlayer.capabilities.isCreativeMode) {
+            if(par1ItemStack.stackSize <= 0) {
                 return new ItemStack(Items.glass_bottle);
             }
 

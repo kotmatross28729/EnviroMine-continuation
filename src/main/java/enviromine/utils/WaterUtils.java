@@ -1,38 +1,84 @@
 package enviromine.utils;
 
 public class WaterUtils {
-
     public enum WATER_TYPES {
-        FROSTY, //5
-        DIRTY_COLD, //4
-        CLEAN_COLD, //3
-        SALTY, //2
-        DIRTY, //1
-        CLEAN, //Vanilla water bottle  //0
-        CLEAN_WARM, //-1
-        DIRTY_WARM, //-2
-        HOT //-3
+        RADIOACTIVE_FROSTY(-2, true, false, false),
+        FROSTY(-2, false, false, false),
+        
+        RADIOACTIVE_COLD(-1, true, false, false),
+        DIRTY_COLD(-1, false, true, false),
+        SALTY_COLD(-1, false, false,true),
+        CLEAN_COLD(-1, false, false, false),
+        
+        RADIOACTIVE(0, true, false, false),
+        DIRTY(0, false, true, false),
+        SALTY(0, false, false,true),
+        CLEAN(0, false, false, false),
+        
+        RADIOACTIVE_WARM(1, true, false, false),
+        DIRTY_WARM(1, false, true, false),
+        SALTY_WARM(1, false, false,true),
+        CLEAN_WARM(1, false, false, false),
+        
+        RADIOACTIVE_HOT(2, true, false, false),
+        HOT(2, false, false, false);
+        public int heatIndex = 0;
+        public boolean isRadioactive = false;
+        public boolean isDirty = false;
+        public boolean isSalty = false;
+        WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty) {
+            this.heatIndex = heatIndex;
+            this.isRadioactive = isRadioactive;
+            this.isDirty = isDirty;
+            this.isSalty = isSalty;
+        }
+        
+        public static WATER_TYPES fromTraits(WATER_TYPES waterTypeInitial, int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty) {
+            for (WATER_TYPES type : WATER_TYPES.values()) {
+                if (type.heatIndex == heatIndex &&
+                        type.isRadioactive == isRadioactive &&
+                        type.isDirty == isDirty &&
+                        type.isSalty == isSalty) {
+                    return type;
+                }
+            }
+            return waterTypeInitial;
+        }
     }
     public static WATER_TYPES heatUp(WATER_TYPES waterType) {
-        switch (waterType) {
-            case FROSTY -> {return WATER_TYPES.CLEAN_COLD;}
-            case DIRTY_COLD -> {return WATER_TYPES.DIRTY;}
-            case CLEAN -> {return WATER_TYPES.CLEAN_WARM;}
-            case CLEAN_WARM, DIRTY_WARM, HOT -> {return WATER_TYPES.HOT;}
-            default -> {return WATER_TYPES.CLEAN;}
+        if (waterType.heatIndex >= 0) {
+            waterType.isDirty = false;
+            waterType.isSalty = false;
         }
+
+        if (waterType.heatIndex < 2) {
+            waterType.heatIndex += 1;
+        }
+        
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
     }
 
     public static WATER_TYPES coolDown(WATER_TYPES waterType) {
-        switch (waterType) {
-            case FROSTY, CLEAN_COLD, DIRTY_COLD -> {return WATER_TYPES.FROSTY;}
-            case DIRTY -> {return WATER_TYPES.DIRTY_COLD;}
-            case CLEAN -> {return WATER_TYPES.CLEAN_COLD;}
-            case DIRTY_WARM -> {return WATER_TYPES.DIRTY;}
-            case HOT -> {return WATER_TYPES.CLEAN_WARM;}
-            default -> {return WATER_TYPES.CLEAN;}
+        if (waterType.heatIndex <= 0) {
+            waterType.isDirty = false;
+            waterType.isSalty = false;
         }
+    
+        if (waterType.heatIndex > -2) {
+            waterType.heatIndex -= 1;
+        }
+    
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
     }
-
-
+    
+    
+    public static WATER_TYPES saltDown(WATER_TYPES waterType) {
+        waterType.isSalty = true;
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
+    }
+    
+    public static WATER_TYPES pollute(WATER_TYPES waterType) {
+        waterType.isDirty = true;
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
+    }
 }

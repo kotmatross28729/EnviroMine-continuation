@@ -29,6 +29,7 @@ import enviromine.trackers.properties.ItemProperties;
 import enviromine.trackers.properties.RotProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
+import enviromine.utils.WaterUtils;
 import enviromine.utils.misc.CompatSafe;
 import enviromine.world.Earthquake;
 import enviromine.world.features.mineshaft.MineshaftBuilder;
@@ -639,8 +640,7 @@ public class EM_EventManager
 		}
 	}
 
-	public static void fillBottle(World world, EntityPlayer player, int x, int y, int z, ItemStack item, PlayerInteractEvent event, boolean isPolymer)
-	{
+	public static void fillBottle(World world, EntityPlayer player, int x, int y, int z, ItemStack item, PlayerInteractEvent event, boolean isPolymer) {
 		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player);
 
         if (movingobjectposition != null) {
@@ -665,7 +665,7 @@ public class EM_EventManager
                 boolean isWater;
 
                 if (targetblock == Blocks.water || targetblock == Blocks.flowing_water) {
-                    // if finite is on.. make sure player cant drink from infinite flowing water source
+                    // if finite is on... make sure player cant drink from infinite flowing water source
                     isWater = !(targetmeta > .2f) || !EM_Settings.finiteWater;
                 } else {
                     isWater = false;
@@ -674,121 +674,150 @@ public class EM_EventManager
                 if (isWater || isValidCauldron) {
                     Item newItem;
                     if (isPolymer) {
-                        newItem = ObjectHandlerCompat.cleanWaterBottle_polymer;
+                        newItem = ObjectHandlerCompat.clean_WaterBottle_polymer;
                     } else {
                         newItem = Items.potionitem;
                     }
 
                     switch (getWaterType(world, i, j, k)) {
-                        case -3 -> // Hot
-                        {
+	
+						case RADIOACTIVE_FROSTY -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.radioactive_frosty_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case FROSTY -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.frosty_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case RADIOACTIVE_COLD -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.radioactive_cold_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case DIRTY_COLD -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.dirty_cold_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case SALTY_COLD -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.salty_cold_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case CLEAN_COLD -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.clean_cold_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case RADIOACTIVE -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.radioactive_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case DIRTY -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.dirty_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.badWaterBottle;
+							}
+							break;
+						}
+						case SALTY -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.salty_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.saltWaterBottle;
+							}
+							break;
+						}
+						case CLEAN -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.clean_WaterBottle_polymer;
+							} else {
+								newItem = Items.potionitem;
+							}
+							break;
+						}
+						case RADIOACTIVE_WARM -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.radioactive_warm_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case DIRTY_WARM -> {
                             if (isPolymer) {
-                                newItem = ObjectHandlerCompat.hotWaterBottle_polymer;
+                                newItem = ObjectHandlerCompat.dirty_warm_WaterBottle_polymer;
                             } else {
-                                newItem = ObjectHandler.hotWaterBottle;
+                                newItem = ObjectHandler.;
                             }
                             break;
                         }
-                        case -2 -> // Dirty warm
-                        {
+						case SALTY_WARM -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.salty_warm_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case CLEAN_WARM -> {
                             if (isPolymer) {
-                                newItem = ObjectHandlerCompat.badWarmWaterBottle_polymer;
+                                newItem = ObjectHandlerCompat.clean_warm_WaterBottle_polymer;
                             } else {
-                                newItem = ObjectHandler.badWarmWaterBottle;
+                                newItem = ObjectHandler.;
                             }
                             break;
                         }
-                        case -1 -> // Clean warm
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.warmWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.warmWaterBottle;
-                            }
-                            break;
-                        }
-                        case 0 -> // Clean
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.cleanWaterBottle_polymer;
-                            } else {
-                                newItem = Items.potionitem;
-                            }
-                            break;
-                        }
-                        case 1 -> // Dirty
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.badWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.badWaterBottle;
-                            }
-                            break;
-                        }
-                        case 2 -> // Salty
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.saltWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.saltWaterBottle;
-                            }
-                            break;
-                        }
-                        case 3 -> // Clean cold
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.coldWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.coldWaterBottle;
-                            }
-                            break;
-                        }
-                        case 4 -> // Dirty cold
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.badColdWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.badColdWaterBottle;
-                            }
-                            break;
-                        }
-                        case 5 -> // Frosty
-                        {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.frostyWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.frostyWaterBottle;
-                            }
-                            break;
-                        }
+						case RADIOACTIVE_HOT -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.radioactive_hot_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
+						case HOT -> {
+							if (isPolymer) {
+								newItem = ObjectHandlerCompat.hot_WaterBottle_polymer;
+							} else {
+								newItem = ObjectHandler.;
+							}
+							break;
+						}
                     }
 
                     if (isValidCauldron && isCauldronHeatingBlock(world.getBlock(i, j - 1, k), world.getBlockMetadata(i, j - 1, k))) {
-                        if (getWaterType(world, i, j, k) == 5) {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.coldWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.coldWaterBottle;
-                            }
-                        } else if (getWaterType(world, i, j, k) == 1 || getWaterType(world, i, j, k) == 2 || getWaterType(world, i, j, k) == 3 || getWaterType(world, i, j, k) == 4) {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.cleanWaterBottle_polymer;
-                            } else {
-                                newItem = Items.potionitem;
-                            }
-                        } else if (getWaterType(world, i, j, k) == 0) {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.warmWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.warmWaterBottle;
-                            }
-                        } else if (getWaterType(world, i, j, k) == -2 || getWaterType(world, i, j, k) == -1) {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.hotWaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.hotWaterBottle;
-                            }
-                        }
+						if (isPolymer) {
+							newItem = ObjectHandlerCompat.getItemStackFromWaterType(WaterUtils.heatUp(getWaterType(world, i, j, k))).getItem();
+						} else {
+							//TODO
+//							newItem = ObjectHandler.coldWaterBottle;
+						}
                     }
 
                     if (isValidCauldron) {
@@ -818,8 +847,7 @@ public class EM_EventManager
         return;
     }
 
-	public static void drinkWater(EntityPlayer entityPlayer, PlayerInteractEvent event)
-	{
+	public static void drinkWater(EntityPlayer entityPlayer, PlayerInteractEvent event) {
 		// Skip drinking if hydration is not tracked
 		if(
 				(EM_Settings.dimensionProperties.containsKey(entityPlayer.dimension)
@@ -865,29 +893,26 @@ public class EM_EventManager
 				Block targetBlock = entityPlayer.worldObj.getBlock(i, j, k);
 				String targetBlockRegistryName = Block.blockRegistry.getNameForObject(targetBlock);
 
+				//TODO: our blocks
 				boolean isWater = (targetBlock == Blocks.flowing_water || targetBlock == Blocks.water
                     // Automatically make the block water if it's Streams water
                     || (EM_Settings.streamsDrink && targetBlockRegistryName.contains(WATER_ROOT_STREAMS))
                 )
-                    // If finite water is on, make sure player can't drink from an infinite flowing water source
+                    // If finite water is on, make sure player can't drink from infinite flowing water source
                     && !(entityPlayer.worldObj.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater)
                     // Automatically make the block not-water if it's BoP blood
                     && !(targetBlockRegistryName.equals(BLOOD_BLOCK_BOP));
 
                 boolean isValidCauldron = (entityPlayer.worldObj.getBlock(i, j, k) == Blocks.cauldron && entityPlayer.worldObj.getBlockMetadata(i, j, k) > 0);
 
-				if(isWater || isValidCauldron)
-				{
-					if(tracker != null && tracker.hydration < 100F)
-					{
-						int type = 0;
+				if(isWater || isValidCauldron) {
+					if(tracker != null && tracker.hydration < 100F) {
+						WaterUtils.WATER_TYPES type = WaterUtils.WATER_TYPES.CLEAN;
 
-						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k)))
-						{
-							type = 0;
+						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k))) {
+							type = WaterUtils.heatUp(type);
 						}
-						else
-						{
+						else {
 							type = getWaterType(entityPlayer.worldObj, i, j, k);
 						}
 
@@ -895,182 +920,49 @@ public class EM_EventManager
 						int werewolfDuration200 = MathHelper.clamp_int(200 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*15, 0, 200);
 						int werewolfDuration600 = MathHelper.clamp_int(600 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
-                        if(type == -3) // Hot
-                        {
-                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue)
-                            {
-                                tracker.bodyTemp += EM_Settings.HotWarmWaterTemperatureInfluence;
-                            }
-                            if(EM_Settings.HotWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.HotWaterHydrateWorld);
-                            } else if(EM_Settings.HotWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.HotWaterHydrateWorld));
-                            }
-                        } else if(type == -2) // Dirty warm
-                        {
+						if(type.isRadioactive) {
+							//TODO compat
+						}
+						
+						if(type.isDirty){
                             if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
                             {
-                                if(entityPlayer.getRNG().nextInt(2) == 0)
-                                {
+                                if(entityPlayer.getRNG().nextInt(2) == 0) {
                                     entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration200));
                                 }
-                                if(entityPlayer.getRNG().nextInt(4) == 0)
-                                {
+                                if(entityPlayer.getRNG().nextInt(4) == 0) {
                                     entityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, werewolfDuration200));
                                 }
                             }
-                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue)
-                            {
-                                tracker.bodyTemp += EM_Settings.DirtyWarmWaterTemperatureInfluence;
-                            }
-                            if(EM_Settings.DirtyWarmWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.DirtyWarmWaterHydrateWorld);
-                            } else if(EM_Settings.DirtyWarmWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.DirtyWarmWaterHydrateWorld));
-                            }
-                        } else if(type == -1) // Warm
-                        {
-                            if(tracker.bodyTemp >= EM_Settings.WarmHotWaterReducesTemperatureStartingValue)
-                            {
-                                tracker.bodyTemp += EM_Settings.CleanWarmWaterTemperatureInfluence;
-                            }
-                            if(EM_Settings.CleanWarmWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.CleanWarmWaterHydrateWorld);
-                            } else if(EM_Settings.CleanWarmWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.CleanWarmWaterHydrateWorld));
-                            }
-                        } else if(type == 0) // Clean
-						{
-							if(tracker.bodyTemp >= EM_Settings.WaterReducesTemperatureStartingValue)
-							{
-								tracker.bodyTemp += EM_Settings.CleanWaterTemperatureInfluence;
-							}
-                            if(EM_Settings.CleanWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.CleanWaterHydrateWorld);
-                            } else if(EM_Settings.CleanWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.CleanWaterHydrateWorld));
-                            }
-						} else if(type == 1) // Dirty
-						{
+						}
+						
+						if(type.isSalty){
 							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
 							{
-								if(entityPlayer.getRNG().nextInt(2) == 0)
-								{
-									entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, werewolfDuration200));
-								}
-								if(entityPlayer.getRNG().nextInt(4) == 0)
-								{
-									entityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, werewolfDuration200));
-								}
-							}
-
-							if(tracker.bodyTemp >= EM_Settings.WaterReducesTemperatureStartingValue)
-							{
-								tracker.bodyTemp += EM_Settings.DirtyWaterTemperatureInfluence;
-							}
-                            if(EM_Settings.DirtyWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.DirtyWaterHydrateWorld);
-                            } else if(EM_Settings.DirtyWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.DirtyWaterHydrateWorld));
-                            }
-						} else if(type == 2) // Salty
-						{
-							if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
-							{
-                                entityPlayer.getRNG().nextInt(1);
-                                if (entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0) {
-                                    int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
-                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600, amp + 1));
-                                } else {
-                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
-                                }
-                            }
-
-							if(tracker.bodyTemp >= EM_Settings.WaterReducesTemperatureStartingValue)
-							{
-								tracker.bodyTemp += EM_Settings.SaltyWaterTemperatureInfluence;
-							}
-                            if(EM_Settings.SaltyWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.SaltyWaterHydrateWorld);
-                            } else if(EM_Settings.SaltyWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.SaltyWaterHydrateWorld));
-                            }
-						} else if(type == 3) // Cold
-						{
-							if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
-							{
-								tracker.bodyTemp += EM_Settings.CleanColdWaterTemperatureInfluence;
-							}
-                            if(EM_Settings.CleanColdWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.CleanColdWaterHydrateWorld);
-                            } else if(EM_Settings.CleanColdWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.CleanColdWaterHydrateWorld));
-                            }
-						} else if(type == 4) // Dirty cold
-                        {
-                            if(!(EM_Settings.witcheryWerewolfImmunities && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer) || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer))))
-                            {
-                                entityPlayer.getRNG().nextInt(1);
-                                if (entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0) {
-                                    int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
-                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600, amp + 1));
-                                } else {
-                                    entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
-                                }
-                            }
-                            if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
-                            {
-                                tracker.bodyTemp += EM_Settings.DirtyColdWaterTemperatureInfluence;
-                            }
-                            if(EM_Settings.DirtyColdWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.DirtyColdWaterHydrateWorld);
-                            } else if(EM_Settings.DirtyColdWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.DirtyColdWaterHydrateWorld));
-                            }
-                        } else if(type == 5) // Frosty
-                        {
-                            if(tracker.bodyTemp >= EM_Settings.ColdFrostyWaterReducesTemperatureStartingValue)
-                            {
-                                tracker.bodyTemp += EM_Settings.FrostyWaterTemperatureInfluence;
-                            }
-                            if(EM_Settings.FrostyWaterHydrateWorld > 0F)
-                            {
-                                tracker.hydrate(EM_Settings.FrostyWaterHydrateWorld);
-                            } else if(EM_Settings.FrostyWaterHydrateWorld < 0F)
-                            {
-                                tracker.dehydrate(Math.abs(EM_Settings.FrostyWaterHydrateWorld));
-                            }
-                        }
-
-						if(isValidCauldron)
-						{
+                        	    entityPlayer.getRNG().nextInt(1);
+                        	    if (entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0) {
+                        	        int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
+                        	        entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600, amp + 1));
+                        	    } else {
+                        	        entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, werewolfDuration600));
+                        	    }
+                        	}
+						}
+						
+						switch (type) {
+							//TODO
+						}
+						
+						if(isValidCauldron) {
 							entityPlayer.worldObj.setBlockMetadataWithNotify(i, j, k, entityPlayer.worldObj.getBlockMetadata(i, j, k) - 1, 2);
 						}
-						else if(EM_Settings.finiteWater)
-						{
+						else if(EM_Settings.finiteWater) {
 							entityPlayer.worldObj.setBlock(i, j, k, Blocks.flowing_water, entityPlayer.worldObj.getBlockMetadata(i, j, k) + 1, 2);
 						}
 
 						entityPlayer.worldObj.playSoundAtEntity(entityPlayer, "random.drink", 1.0F, 1.0F);
 
-						if(event != null)
-						{
+						if(event != null) {
 							event.setCanceled(true);
 						}
 					}
@@ -1079,22 +971,19 @@ public class EM_EventManager
 		}
 	}
 
-	public static int getWaterType(World world, int x, int y, int z)
-	{
+	public static WaterUtils.WATER_TYPES getWaterType(World world, int x, int y, int z) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		DimensionProperties dimensionProperties = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
 		int seaLvl = dimensionProperties != null? dimensionProperties.sealevel : 64;
 
-		if(biome == null)
-		{
-			return 0;
+		if(biome == null) {
+			return WaterUtils.WATER_TYPES.CLEAN;
 		}
 
 		BiomeProperties biomeProperties = EM_Settings.biomeProperties.get(biome.biomeID);
 
-		if(biomeProperties != null && biomeProperties.getWaterQualityId() != -1)
-		{
-			return biomeProperties.getWaterQualityId();
+		if(biomeProperties != null) {
+			return biomeProperties.getWaterQuality();
 		}
 
 		int waterColour = biome.getWaterColorMultiplier();
@@ -1114,50 +1003,32 @@ public class EM_EventManager
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
         Collections.addAll(typeList, typeArray);
 
-        //-3 - hot
-        //-2 - dirty warm
-        //-1 - clean warm
-        // 0 - clean normal
-        // 1 - dirty normal
-        // 2 - salty
-        // 3 - clean cold
-        // 4 - dirty cold
-        // 5 - frosty
-
-        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA))
-        {
-            return -3; // hot
+        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA)) {
+            return WaterUtils.WATER_TYPES.HOT;
         }
-        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad))
-        {
-            return -2; // dirty warm
+        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad)) {
+            return WaterUtils.WATER_TYPES.DIRTY_WARM;
         }
-        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET))
-        {
-            return -2; // clean warm
+        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET)) {
+            return WaterUtils.WATER_TYPES.CLEAN_WARM;
         }
-		else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad) )
-		{
-			return 1; // dirty
+		else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad) ) {
+			return WaterUtils.WATER_TYPES.DIRTY;
 		}
-		else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
-		{
-			return 2; // salty
+		else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH)) {
+			return WaterUtils.WATER_TYPES.SALTY;
 		}
-		else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && !looksBad)
-		{
-			return 3; // clean Cold
+		else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && !looksBad) {
+			return WaterUtils.WATER_TYPES.CLEAN_COLD;
 		}
-        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && looksBad)
-        {
-            return 4; // dirty cold
+        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && looksBad) {
+            return WaterUtils.WATER_TYPES.DIRTY_COLD;
         }
-        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY))
-        {
-            return 5; // frosty
+        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY)) {
+            return WaterUtils.WATER_TYPES.FROSTY;
         }
         else {
-			return 0; // clean
+			return WaterUtils.WATER_TYPES.CLEAN;
 		}
 	}
 
