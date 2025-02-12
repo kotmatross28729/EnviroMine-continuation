@@ -51,15 +51,27 @@ import java.util.HashMap;
 public class ObjectHandler {
 	public static HashMap<Block, ArrayList<Integer>> igniteList = new HashMap<Block, ArrayList<Integer>>();
 	public static ArmorMaterial camelPackMaterial;
-
-    public static Item frostyWaterBottle;
-    public static Item coldWaterBottle;
-    public static Item badColdWaterBottle;
-    public static Item saltWaterBottle;
-    public static Item badWaterBottle;
-    public static Item warmWaterBottle;
-    public static Item badWarmWaterBottle;
-    public static Item hotWaterBottle;
+	
+	public static Item radioactive_frosty_WaterBottle;
+	public static Item frosty_WaterBottle;
+	
+	public static Item radioactive_cold_WaterBottle;
+	public static Item dirty_cold_WaterBottle;
+	public static Item salty_cold_WaterBottle;
+	public static Item clean_cold_WaterBottle;
+	
+	public static Item radioactive_WaterBottle;
+	public static Item dirty_WaterBottle;
+	public static Item salty_WaterBottle;
+	
+	public static Item radioactive_warm_WaterBottle;
+	public static Item dirty_warm_WaterBottle;
+	public static Item salty_warm_WaterBottle;
+	public static Item clean_warm_WaterBottle;
+	
+	public static Item radioactive_hot_WaterBottle;
+	public static Item hot_WaterBottle;
+	
 	public static Item airFilter;
 	public static Item davyLamp;
 	public static Item gasMeter;
@@ -90,16 +102,29 @@ public class ObjectHandler {
 
 	public static void initItems()
 	{
+		//NAMES
+		//[trait]_[temp]_WaterBottle
+		
+		radioactive_frosty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_frosty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		frosty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frosty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		dirty_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		salty_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		clean_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.clean_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		dirty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		salty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
 
-        frostyWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frostywater").setCreativeTab(EnviroMine.enviroTab);
-        coldWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.coldwater").setCreativeTab(EnviroMine.enviroTab);
-        badColdWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.badcoldwater").setCreativeTab(EnviroMine.enviroTab);
-        saltWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.saltwater").setCreativeTab(EnviroMine.enviroTab);
-        badWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.badwater").setCreativeTab(EnviroMine.enviroTab);
-        warmWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.warmwater").setCreativeTab(EnviroMine.enviroTab);
-        badWarmWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.badwarmwater").setCreativeTab(EnviroMine.enviroTab);
-        hotWaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hotwater").setCreativeTab(EnviroMine.enviroTab);
-
+		radioactive_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		dirty_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		salty_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		clean_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.clean_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_hot_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_hot_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		hot_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hot_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
         airFilter = new Item().setMaxStackSize(16).setUnlocalizedName("enviromine.airfilter").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:air_filter");
 		rottenFood = new RottenFood(1).setMaxStackSize(64).setUnlocalizedName("enviromine.rottenfood").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:rot");
 		spoiledMilk = new ItemSpoiledMilk().setUnlocalizedName("enviromine.spoiledmilk").setCreativeTab(EnviroMine.enviroTab).setTextureName("bucket_milk");
@@ -112,17 +137,27 @@ public class ObjectHandler {
 		hardHat = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("hard_hat").setUnlocalizedName("enviromine.hardhat").setCreativeTab(EnviroMine.enviroTab);
 	}
 
-	public static void registerItems()
+	public static void registerItems() 
 	{
-		GameRegistry.registerItem(badWaterBottle, "badWaterBottle");
-		GameRegistry.registerItem(saltWaterBottle, "saltWaterBottle");
-		GameRegistry.registerItem(coldWaterBottle, "coldWaterBottle");
-
-        GameRegistry.registerItem(warmWaterBottle, "warmWaterBottle");
-        GameRegistry.registerItem(badColdWaterBottle, "badColdWaterBottle");
-        GameRegistry.registerItem(badWarmWaterBottle, "badWarmWaterBottle");
-        GameRegistry.registerItem(frostyWaterBottle, "frostyWaterBottle");
-        GameRegistry.registerItem(hotWaterBottle, "hotWaterBottle");
+		GameRegistry.registerItem(radioactive_frosty_WaterBottle, "radioactive_frosty_WaterBottle");
+		GameRegistry.registerItem(frosty_WaterBottle, "frosty_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_cold_WaterBottle, "radioactive_cold_WaterBottle");
+		GameRegistry.registerItem(dirty_cold_WaterBottle, "dirty_cold_WaterBottle");
+		GameRegistry.registerItem(salty_cold_WaterBottle, "salty_cold_WaterBottle");
+		GameRegistry.registerItem(clean_cold_WaterBottle, "clean_cold_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_WaterBottle, "radioactive_WaterBottle");
+		GameRegistry.registerItem(dirty_WaterBottle, "dirty_WaterBottle");
+		GameRegistry.registerItem(salty_WaterBottle, "salty_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_warm_WaterBottle, "radioactive_warm_WaterBottle");
+		GameRegistry.registerItem(dirty_warm_WaterBottle, "dirty_warm_WaterBottle");
+		GameRegistry.registerItem(salty_warm_WaterBottle, "salty_warm_WaterBottle");
+		GameRegistry.registerItem(clean_warm_WaterBottle, "clean_warm_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_hot_WaterBottle, "radioactive_hot_WaterBottle");
+		GameRegistry.registerItem(hot_WaterBottle, "hot_WaterBottle");
 
         GameRegistry.registerItem(airFilter, "airFilter");
 		GameRegistry.registerItem(rottenFood, "rottenFood");
@@ -222,21 +257,34 @@ public class ObjectHandler {
 
 		GameRegistry.registerTileEntity(TileEntityDavyLamp.class, "enviromine.tile.davy_lamp");
 	}
-
-    public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
-		
+	
+	public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
 		switch (type) {
-			case FROSTY -> {return new ItemStack(frostyWaterBottle);}
-			case DIRTY_COLD -> {return new ItemStack(badColdWaterBottle);}
-			case CLEAN_COLD -> {return new ItemStack(coldWaterBottle);}
-			case SALTY -> {return new ItemStack(saltWaterBottle);}
-			case DIRTY -> {return new ItemStack(badWaterBottle);}
-			case CLEAN_WARM -> {return new ItemStack(warmWaterBottle);}
-			case DIRTY_WARM -> {return new ItemStack(badWarmWaterBottle);}
-			case HOT -> {return new ItemStack(hotWaterBottle);}
+			
+			case RADIOACTIVE_FROSTY -> {return new ItemStack(radioactive_frosty_WaterBottle);}
+			case FROSTY -> {return new ItemStack(frosty_WaterBottle);}
+			
+			case RADIOACTIVE_COLD -> {return new ItemStack(radioactive_cold_WaterBottle);}
+			case DIRTY_COLD -> {return new ItemStack(dirty_cold_WaterBottle);}
+			case SALTY_COLD -> {return new ItemStack(salty_cold_WaterBottle);}
+			case CLEAN_COLD -> {return new ItemStack(clean_cold_WaterBottle);}
+			
+			case RADIOACTIVE -> {return new ItemStack(radioactive_WaterBottle);}
+			case DIRTY -> {return new ItemStack(dirty_WaterBottle);}
+			case SALTY -> {return new ItemStack(salty_WaterBottle);}
+			
+			case RADIOACTIVE_WARM -> {return new ItemStack(radioactive_warm_WaterBottle);}
+			case DIRTY_WARM -> {return new ItemStack(dirty_warm_WaterBottle);}
+			case SALTY_WARM -> {return new ItemStack(salty_warm_WaterBottle);}
+			case CLEAN_WARM -> {return new ItemStack(clean_warm_WaterBottle);}
+			
+			case RADIOACTIVE_HOT -> {return new ItemStack(radioactive_hot_WaterBottle);}
+			case HOT -> {return new ItemStack(hot_WaterBottle);}
+			
 			default -> {return new ItemStack(Items.potionitem, 1, 0);}
 		}
-    }
+	}
+
 
 	public static void registerRecipes()
 	{
@@ -250,53 +298,79 @@ public class ObjectHandler {
 		}
 
         ItemStack[] bottles = {
-            new ItemStack(frostyWaterBottle),
-            new ItemStack(badColdWaterBottle),
-            new ItemStack(coldWaterBottle),
-            new ItemStack(saltWaterBottle),
-            new ItemStack(badWaterBottle),
-            new ItemStack(Items.potionitem, 1, 0),
-            new ItemStack(warmWaterBottle),
-            new ItemStack(badWarmWaterBottle),
-            new ItemStack(hotWaterBottle),
+			new ItemStack(radioactive_frosty_WaterBottle),
+			new ItemStack(frosty_WaterBottle),
+					
+			new ItemStack(radioactive_cold_WaterBottle),
+			new ItemStack(dirty_cold_WaterBottle),
+			new ItemStack(salty_cold_WaterBottle),
+			new ItemStack(clean_cold_WaterBottle),
+					
+			new ItemStack(radioactive_WaterBottle),
+			new ItemStack(dirty_WaterBottle),
+			new ItemStack(salty_WaterBottle),
+			new ItemStack(Items.potionitem, 1, 0),
+					
+			new ItemStack(radioactive_warm_WaterBottle),
+			new ItemStack(dirty_warm_WaterBottle),
+			new ItemStack(salty_warm_WaterBottle),
+			new ItemStack(clean_warm_WaterBottle),
+					
+			new ItemStack(radioactive_hot_WaterBottle),
+			new ItemStack(hot_WaterBottle),
         };
-
-        //HEATING
-        for(ItemStack bottle : bottles) {
-            if(bottle.getItem() != hotWaterBottle) { //How can you heat already hot water?
-                WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
-
-                if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
-                    localType = WaterUtils.WATER_TYPES.CLEAN;
-                } else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
-                    localType = enviroItemWaterBottle.getWaterType();
-                }
-
-                GameRegistry.addSmelting(bottle, getItemStackFromWaterType(WaterUtils.heatUp(localType)), 0.0F);
-            }
-        }
-
-        //COOLING
-        for(ItemStack bottle : bottles) {
-            if(bottle.getItem() != frostyWaterBottle) { //Same
-                WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
-
-                if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
-                    localType = WaterUtils.WATER_TYPES.CLEAN;
-                } else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
-                    localType = enviroItemWaterBottle.getWaterType();
-                }
-
-                GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Items.snowball, 1));
-            }
-        }
-
-        GameRegistry.addShapelessRecipe(new ItemStack(badColdWaterBottle, 1, 0), new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Blocks.dirt, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(badWarmWaterBottle, 1, 0), new ItemStack(warmWaterBottle, 1, 0), new ItemStack(Blocks.dirt, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(badWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.dirt, 1));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(saltWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.sand, 1));
-
+		
+		//HEATING
+		for(ItemStack bottle : bottles) {
+			WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
+			if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
+				localType = WaterUtils.WATER_TYPES.CLEAN;
+			} else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+				localType = enviroItemWaterBottle.getWaterType();
+			}
+			if(WaterUtils.heatUp(localType) != localType) {
+				GameRegistry.addSmelting(bottle, getItemStackFromWaterType(WaterUtils.heatUp(localType)), 0.0F);
+			}
+		}
+		
+		//COOLING
+		for(ItemStack bottle : bottles) {
+			WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
+			if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
+				localType = WaterUtils.WATER_TYPES.CLEAN;
+			} else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+				localType = enviroItemWaterBottle.getWaterType();
+			}
+			if(WaterUtils.coolDown(localType) != localType) {
+				GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.coolDown(localType)), bottle, new ItemStack(Items.snowball, 1));
+			}
+		}
+		
+		//SALTING
+		for(ItemStack bottle : bottles) {
+			WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
+			if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
+				localType = WaterUtils.WATER_TYPES.CLEAN;
+			} else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+				localType = enviroItemWaterBottle.getWaterType();
+			}
+			if(WaterUtils.saltDown(localType) != localType) {
+				GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.saltDown(localType)), bottle, new ItemStack(Blocks.sand, 1));
+			}
+		}
+		//POLLUTING or whatever is this
+		for(ItemStack bottle : bottles) {
+			WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;
+			if (bottle.equals(new ItemStack(Items.potionitem, 1, 0))) {
+				localType = WaterUtils.WATER_TYPES.CLEAN;
+			} else if (bottle.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+				localType = enviroItemWaterBottle.getWaterType();
+			}
+			if(WaterUtils.pollute(localType) != localType) {
+				GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.pollute(localType)), bottle, new ItemStack(Blocks.dirt, 1));
+			}
+		}
+		
 		GameRegistry.addRecipe(new ItemStack(Items.slime_ball, 4, 0), " r ", "rwr", " r ", 'w', new ItemStack(spoiledMilk, 1, 0), 'r', new ItemStack(rottenFood, 1));
 		GameRegistry.addRecipe(new ItemStack(Blocks.mycelium), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.grass), 'x', new ItemStack(Blocks.brown_mushroom), 'y', new ItemStack(rottenFood, 1));
 		GameRegistry.addRecipe(new ItemStack(Blocks.mycelium), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.grass), 'y', new ItemStack(Blocks.brown_mushroom), 'x', new ItemStack(rottenFood, 1));

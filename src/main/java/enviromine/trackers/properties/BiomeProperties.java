@@ -382,7 +382,25 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.setCategoryComment(this.categoryName(), this.categoryDescription());
 		int id = config.get(category, BOName[0], 0).getInt(0);
 		boolean biomeOveride = config.get(category, BOName[1], false).getBoolean(false);
-		String waterQ = config.get(category, BOName[2], "clean", "Water Quality: dirty, salty, cold, dirty cold, frosty, warm, dirty warm, hot, clean").getString();
+		String waterQ = config.get(category, BOName[2], "CLEAN", 
+				"Water Quality: " +
+						"RADIOACTIVE_FROSTY, " +
+						"FROSTY, " +
+						"RADIOACTIVE_COLD, " +
+						"DIRTY_COLD, " +
+						"SALTY_COLD, " +
+						"CLEAN_COLD, " +
+						"RADIOACTIVE, " +
+						"DIRTY, " +
+						"SALTY, " +
+						"CLEAN, " +
+						"RADIOACTIVE_WARM, " +
+						"DIRTY_WARM, " +
+						"SALTY_WARM, " +
+						"CLEAN_WARM, " +
+						"RADIOACTIVE_HOT, " +
+						"HOT "
+				).getString();
 		float ambTemp = (float)config.get(category, BOName[3], 25.00, "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(25.00);
 		float tempRate = (float)config.get(category, BOName[4], 0.0).getDouble(0.0);
 		float sanRate = (float)config.get(category, BOName[5], 0.0).getDouble(0.0);
@@ -497,7 +515,25 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	{
 		config.get(category, BOName[0], this.id).getInt(0);
 		config.get(category, BOName[1], this.biomeOveride).getBoolean(this.biomeOveride);
-		config.get(category, BOName[2], this.waterQuality, "Water Quality: dirty, salty, cold, dirty cold, frosty, warm, dirty warm, hot, clean").getString();
+		config.get(category, BOName[2], this.waterQuality,
+				"Water Quality: " +
+						"RADIOACTIVE_FROSTY, " +
+						"FROSTY, " +
+						"RADIOACTIVE_COLD, " +
+						"DIRTY_COLD, " +
+						"SALTY_COLD, " +
+						"CLEAN_COLD, " +
+						"RADIOACTIVE, " +
+						"DIRTY, " +
+						"SALTY, " +
+						"CLEAN, " +
+						"RADIOACTIVE_WARM, " +
+						"DIRTY_WARM, " +
+						"SALTY_WARM, " +
+						"CLEAN_WARM, " +
+						"RADIOACTIVE_HOT, " +
+						"HOT "
+						).getString();
 		config.get(category, BOName[3], this.ambientTemp, "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(this.ambientTemp);
 		config.get(category, BOName[4], this.tempRate).getDouble(this.tempRate);
 		config.get(category, BOName[5], this.sanityRate).getDouble(this.sanityRate);
@@ -803,7 +839,25 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 		config.get(catName, BOName[0], biome.biomeID).getInt(biome.biomeID);
 		config.get(catName, BOName[1], true).getBoolean(true);
-		config.get(catName, BOName[2], biomeWater, "Water Quality: dirty, salty, cold, dirty cold, frosty, warm, dirty warm, hot, clean").getString();
+		config.get(catName, BOName[2], biomeWater,
+				"Water Quality: " +
+						"RADIOACTIVE_FROSTY, " +
+						"FROSTY, " +
+						"RADIOACTIVE_COLD, " +
+						"DIRTY_COLD, " +
+						"SALTY_COLD, " +
+						"CLEAN_COLD, " +
+						"RADIOACTIVE, " +
+						"DIRTY, " +
+						"SALTY, " +
+						"CLEAN, " +
+						"RADIOACTIVE_WARM, " +
+						"DIRTY_WARM, " +
+						"SALTY_WARM, " +
+						"CLEAN_WARM, " +
+						"RADIOACTIVE_HOT, " +
+						"HOT "
+		).getString();
 		config.get(catName, BOName[3], biomeTemp, "Biome temperature in celsius (Player body temp is offset by + 12C)").getDouble(25.00);
 		config.get(catName, BOName[4], temp).getDouble(temp);
 		config.get(catName, BOName[5], sanity).getDouble(sanity);

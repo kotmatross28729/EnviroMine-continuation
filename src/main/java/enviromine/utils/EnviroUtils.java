@@ -177,38 +177,38 @@ public class EnviroUtils {
 
         if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA))
         {
-            return "hot"; //-3
+            return "HOT"; //-3
         }
         else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad))
         {
-            return "dirty warm"; //-2
+            return "DIRTY_WARM"; //-2
         }
         else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET))
         {
-            return "clean warm"; //-1
+            return "CLEAN_WARM"; //-1
         }
         else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || looksBad) )
         {
-            return "dirty"; //1
+            return "DIRTY"; //1
         }
         else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
         {
-            return "salty"; //2
+            return "SALTY"; //2
         }
         else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F && !looksBad))
         {
-            return "clean cold"; //3
+            return "CLEAN_COLD"; //3
         }
         else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F && looksBad))
         {
-            return "dirty cold"; //4
+            return "DIRTY_COLD"; //4
         }
         else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY))
         {
-            return "frosty"; //5
+            return "FROSTY"; //5
         }
         else {
-            return "clean"; //0
+            return "CLEAN"; //0
         }
 	}
 

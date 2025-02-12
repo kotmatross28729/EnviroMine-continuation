@@ -29,10 +29,10 @@ public class WaterUtils {
         
         RADIOACTIVE_HOT(2, true, false, false),
         HOT(2, false, false, false);
-        public int heatIndex = 0;
-        public boolean isRadioactive = false;
-        public boolean isDirty = false;
-        public boolean isSalty = false;
+        public int heatIndex;
+        public boolean isRadioactive; //"Non-final", how about shut up
+        public boolean isDirty;
+        public boolean isSalty;
         WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty) {
             this.heatIndex = heatIndex;
             this.isRadioactive = isRadioactive;

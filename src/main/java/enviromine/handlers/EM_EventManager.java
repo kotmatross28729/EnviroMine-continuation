@@ -379,6 +379,7 @@ public class EM_EventManager
 	
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		
 		ItemStack item = event.entityPlayer.getCurrentEquippedItem();
 
 		if(event.action == Action.RIGHT_CLICK_BLOCK && EM_Settings.foodSpoiling) {
@@ -389,35 +390,52 @@ public class EM_EventManager
 			}
 		}
 		
+		//RMB BLOCK WITH ITEM
 		if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item != null) {
+			
 			if(item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote) {
 				int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
 				EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, adjCoords[0], adjCoords[1], adjCoords[2], true, "Normal");
-			} else if( (item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer) && !event.entityPlayer.worldObj.isRemote)
-			{
+			}
+			
+			//CAULDRON
+			else if ((item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer) && !event.entityPlayer.worldObj.isRemote) {
 				if(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0)
 				{
 					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event, item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
+					//TODO fillBucket
 				}
-			} else if(item.getItem() == Items.record_11) {
+			}
+			
+			else if(item.getItem() == Items.record_11) {
 				RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
 			}
-		} else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item == null) {
+		}
+		
+		//RMB BLOCK WITH HAND
+		else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item == null) {
 			if(!event.entityPlayer.worldObj.isRemote) {
 				drinkWater(event.entityPlayer, event);
 			}
-		} else if(event.getResult() != Result.DENY && event.action == Action.LEFT_CLICK_BLOCK) {
+		}
+		//LMB BLOCK WITH HAND
+		else if(event.getResult() != Result.DENY && event.action == Action.LEFT_CLICK_BLOCK) {
 			EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, event.x, event.y, event.z, true, "Normal");
-		} else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item != null) {
-			if( (item.getItem() instanceof ItemGlassBottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer) && !event.entityPlayer.worldObj.isRemote) 
-			{
-				// Is not a cauldron with water
+		}
+		
+		//RMB AIR WITH ITEM
+		else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item != null) {
+			if( (item.getItem() instanceof ItemGlassBottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer) && !event.entityPlayer.worldObj.isRemote) {
+				// WATER
 				if(!(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0))
 				{
 					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event, item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
+					//TODO fillBucket
 				}
 			}
-		} else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item == null) {
+		}
+		//RMB AIR WITH HAND
+		else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item == null) {
 			NBTTagCompound pData = new NBTTagCompound();
 			pData.setInteger("id", 1);
 			pData.setString("player", event.entityPlayer.getCommandSenderName());
@@ -521,150 +539,18 @@ public class EM_EventManager
 
                 if (isWater || isValidCauldron) {
                     Item newItem;
-                    if (isPolymer) {
-                        newItem = ObjectHandlerCompat.clean_WaterBottle_polymer;
-                    } else {
-                        newItem = Items.potionitem;
-                    }
 
-                    switch (getWaterType(world, i, j, k)) {
-	
-						case RADIOACTIVE_FROSTY -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.radioactive_frosty_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case FROSTY -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.frosty_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case RADIOACTIVE_COLD -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.radioactive_cold_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case DIRTY_COLD -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.dirty_cold_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case SALTY_COLD -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.salty_cold_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case CLEAN_COLD -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.clean_cold_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case RADIOACTIVE -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.radioactive_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case DIRTY -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.dirty_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.badWaterBottle;
-							}
-							break;
-						}
-						case SALTY -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.salty_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.saltWaterBottle;
-							}
-							break;
-						}
-						case CLEAN -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.clean_WaterBottle_polymer;
-							} else {
-								newItem = Items.potionitem;
-							}
-							break;
-						}
-						case RADIOACTIVE_WARM -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.radioactive_warm_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case DIRTY_WARM -> {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.dirty_warm_WaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.;
-                            }
-                            break;
-                        }
-						case SALTY_WARM -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.salty_warm_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case CLEAN_WARM -> {
-                            if (isPolymer) {
-                                newItem = ObjectHandlerCompat.clean_warm_WaterBottle_polymer;
-                            } else {
-                                newItem = ObjectHandler.;
-                            }
-                            break;
-                        }
-						case RADIOACTIVE_HOT -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.radioactive_hot_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-						case HOT -> {
-							if (isPolymer) {
-								newItem = ObjectHandlerCompat.hot_WaterBottle_polymer;
-							} else {
-								newItem = ObjectHandler.;
-							}
-							break;
-						}
-                    }
-
+					if (isPolymer) {
+						newItem = ObjectHandlerCompat.getItemStackFromWaterType(getWaterType(world, i, j, k)).getItem();
+					} else {
+						newItem = ObjectHandler.getItemStackFromWaterType(getWaterType(world, i, j, k)).getItem();
+					}
+					
                     if (isValidCauldron && isCauldronHeatingBlock(world.getBlock(i, j - 1, k), world.getBlockMetadata(i, j - 1, k))) {
 						if (isPolymer) {
 							newItem = ObjectHandlerCompat.getItemStackFromWaterType(WaterUtils.heatUp(getWaterType(world, i, j, k))).getItem();
 						} else {
-							//TODO: heat up vanilla
-//							newItem = ObjectHandler.coldWaterBottle;
+							newItem = ObjectHandler.getItemStackFromWaterType(WaterUtils.heatUp(getWaterType(world, i, j, k))).getItem();
 						}
                     }
 

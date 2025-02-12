@@ -6,6 +6,8 @@ import net.minecraftforge.common.config.Configuration;
 
 public class ItemProperties_HarvestCraft {
 	
+	/**
+	
 	public static void registerItemsHarvestCraft(Configuration config, String category, String[] IPName, Item item) {
 		//TODO 25
 		if (
@@ -122,10 +124,9 @@ public class ItemProperties_HarvestCraft {
 			config.get(category, IPName[12], "").getString();
 			config.get(category, IPName[13], 0).getInt(0);
 		}
-
-
-
 	}
+	
+	*/
 	
 	
 	
