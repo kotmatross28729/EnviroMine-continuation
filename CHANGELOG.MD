@@ -4,6 +4,8 @@
 
 ### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG!
 
+---
+
 -  **[NTM Space compat]**
    * Rebalanced temperature values for planets to be more in line with ~~reality~~ common sense
      * The terraformed values are made up of nothing, of course, changing the composition of the atmosphere is half of a work, there is also mass, radius, and a bunch of parameters related to the orbit, rotation period, solar day, etc. But let's not forget that this is just a game made of cubes, okay?
@@ -13,19 +15,43 @@
 * **All logic for the Enviromine torch/coal has been moved to mixins (instead of completely replacing them with their Enviromine variants)**
   * [Torch] Added compatibility with netherlicious torches/lighters
   * [Coal] Fixed fixes VERY old (and rare) bugs, like `NullPointerException` when Enviromine tried to replace vanilla coal with its own
+
+* **Gas rework v1** **[TODO]**
+  * TODO
+
+* **Water types rework v2.0** **[TODO]**
+  * Now Enviromine water has traits : `heatIndex`, `isRadioactive`, `isDirty`, `isSalty`
+    * All cooling/heating recipes now use `heatIndex` instead of manually setting
+  * Added water block for each water type (16 blocks!)
+    * Added water compatibility for forge fluids and bobfluids (Hbm's NTM)
+    * Accordingly added buckets for each water type   
+      * This fixes an old balance issue: previously you could fill a bucket with water in a salty biome, pour it out in a biome with normal water and avoid boiling. Adding a bucket of salty water will fix this: eventually, if you fill a bucket with water in a salty biome, you'll get a bucket of salty water, and no matter where you pour it, it will still be salty.
+
 * **Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed**
+
+---
+
 * Fixed configs not appearing for LOTR biomes
   * Also fixed LOTR biome identification
+
 * Fixed Freezer Z-fighting on model
+
 * Added compatibility for MrCrayfish's Furniture Mod / Cooking For Blockheads fridges
   * [Cooking For Blockheads] Requires [GTNH version](https://github.com/GTNewHorizons/CookingForBlockheads/releases)!
+
 * Now cooling water uses snowball instead of ice (in favor of survival mode) [**Suggested by iamsoNewBee**]
+
 * Golden apple/carrot no longer rot [**Suggested by iamsoNewBee**]
   * Minor food hydration balance changes [**Suggested by iamsoNewBee**]
+
 * Hbm's NTM canned food no longer rot    [**Suggested by iamsoNewBee**]
+
 * Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description **[TODO]** [**Suggested by xronin01**]
+
 * Hbm's NTM drinks now restore hydration (And some also reduce the temperature (except for vodka, it increases))
+
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
+
 * Minor code optimizations
 
 # 1.3.147
