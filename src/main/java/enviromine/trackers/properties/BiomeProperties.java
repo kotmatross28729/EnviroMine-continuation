@@ -607,9 +607,6 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
         Collections.addAll(typeList, typeArray);
-
-		//TODO: REMOVE
-		long startTime = System.currentTimeMillis();
 		
 		double air = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
@@ -857,10 +854,6 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
         config.get(catName, BOName[43], dropSpeedRain).getDouble(dropSpeedRain);
         config.get(catName, BOName[44], dropSpeedThunder).getDouble(dropSpeedThunder);
-		
-		long endTime = System.currentTimeMillis();
-		long duration = endTime - startTime; 
-		System.out.println("Execution time: " + duration + " ms");
     }
 
 	@Override

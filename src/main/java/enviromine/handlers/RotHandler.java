@@ -55,7 +55,7 @@ public class RotHandler
 			
 			if(UBD == 0)
 			{
-				UBD = (world.getTotalWorldTime()/24000L) * 24000L; //TODO config
+				UBD = (world.getTotalWorldTime()/24000L) * 24000L; //TODO: validation config
 				UBD = UBD <= 0L? 1L : UBD;
 				item.getTagCompound().setLong("EM_ROT_DATE", UBD);
 				item.getTagCompound().setLong("EM_ROT_TIME", rotTime);

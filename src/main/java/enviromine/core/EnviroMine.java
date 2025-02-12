@@ -230,15 +230,6 @@ public class EnviroMine
 		proxy.postInit(event);
 
         if(isHbmLoaded) {
-	
-//			try {
-//				Class<?> clazz = LiquefactionRecipes.class;
-//				Field recipesField = clazz.getDeclaredField("recipes");
-//				recipesField.setAccessible(true);
-//				HashMap<Object, FluidStack> recipes = (HashMap<Object, FluidStack>) recipesField.get(LiquefactionRecipes.class);
-//				recipes.put(new RecipesCommon.ComparableStack(ObjectHandler.rottenFood), new FluidStack(50, Fluids.SALIENT));
-//			} catch (NoSuchFieldException | IllegalAccessException ignored) {}
-			
 			//TODO: mixins boyz
 			// 1) @Shadow recipes
 			// 2) Inject into registerDefaults()

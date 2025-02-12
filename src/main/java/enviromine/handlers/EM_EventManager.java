@@ -663,7 +663,7 @@ public class EM_EventManager
 						if (isPolymer) {
 							newItem = ObjectHandlerCompat.getItemStackFromWaterType(WaterUtils.heatUp(getWaterType(world, i, j, k))).getItem();
 						} else {
-							//TODO
+							//TODO: heat up vanilla
 //							newItem = ObjectHandler.coldWaterBottle;
 						}
                     }
@@ -738,7 +738,7 @@ public class EM_EventManager
 				Block targetBlock = entityPlayer.worldObj.getBlock(i, j, k);
 				String targetBlockRegistryName = Block.blockRegistry.getNameForObject(targetBlock);
 
-				//TODO: our blocks
+				//TODO: water brother versions (when done)
 				boolean isWater = (targetBlock == Blocks.flowing_water || targetBlock == Blocks.water
                     // Automatically make the block water if it's Streams water
                     || (EM_Settings.streamsDrink && targetBlockRegistryName.contains(WATER_ROOT_STREAMS))
@@ -756,8 +756,7 @@ public class EM_EventManager
 
 						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k))) {
 							type = WaterUtils.heatUp(type);
-						}
-						else {
+						} else {
 							type = getWaterType(entityPlayer.worldObj, i, j, k);
 						}
 
@@ -766,7 +765,7 @@ public class EM_EventManager
 						int werewolfDuration600 = MathHelper.clamp_int(600 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
 						if(type.isRadioactive) {
-							//TODO compat
+							//TODO: compat
 						}
 						
 						if(type.isDirty) {
@@ -795,7 +794,7 @@ public class EM_EventManager
 						}
 						
 						switch (type) {
-							//TODO
+							//TODO: types
 						}
 						
 						if(isValidCauldron) {

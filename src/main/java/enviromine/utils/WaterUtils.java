@@ -45,6 +45,8 @@ public class WaterUtils {
             return waterTypeInitial;
         }
     }
+    
+    //TODO: test
     public static WATER_TYPES heatUp(WATER_TYPES waterType) {
         if (waterType.heatIndex >= 0) {
             waterType.isDirty = false;
@@ -59,7 +61,7 @@ public class WaterUtils {
     }
 
     public static WATER_TYPES coolDown(WATER_TYPES waterType) {
-        if (waterType.heatIndex <= 0) {
+        if (waterType.heatIndex < 0) {
             waterType.isDirty = false;
             waterType.isSalty = false;
         }
