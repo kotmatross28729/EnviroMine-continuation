@@ -5,10 +5,16 @@ import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
 import net.minecraft.entity.EntityLivingBase;
 
+/**
+ *
+ * Helper class needed to get data outside enviromine 
+ *
+ * @author kotmatross28729
+ *
+ */
 public class TrackerUtil {
+	
 	/**
-	 * Helper method needed to get data outside enviromine
-	 * <p>
 	 * Example of use:
 	 * <p>
 	 * <pre>

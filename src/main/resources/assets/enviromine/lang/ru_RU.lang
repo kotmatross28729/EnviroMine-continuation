@@ -119,7 +119,6 @@ options.enviromine.physSound=Звуки физики
 options.enviromine.breathVol=Громкость дыхания
 options.enviromine.newsPage=Лента новостей
 
-
 options.enviromine.hud.temperature=Температура
 options.enviromine.hud.sanity=Здравомыслие
 options.enviromine.hud.hydration=Жажда

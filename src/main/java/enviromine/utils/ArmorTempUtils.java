@@ -4,15 +4,37 @@ import enviromine.trackers.properties.ArmorProperties;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
+/**
+ *
+ * Used for checking armor temperature resistance
+ *
+ * @author kotmatross28729
+ *
+ */
 public class ArmorTempUtils {
+    
+    //Average resistance (fire level)
     public static boolean getTempResistance(EntityLivingBase entityLiving) {
         return checkArmorProperty(entityLiving, true);
     }
 
+    //High resistance (lava level)
     public static boolean getTempSealing(EntityLivingBase entityLiving) {
         return checkArmorProperty(entityLiving, false);
     }
-
+    
+    public static boolean checkArmorPropertyItemStack(ItemStack stack, boolean Resistance) {
+        ArmorProperties props = getArmorProperties(stack);
+        if (props != null) {
+            if(Resistance) {
+                return props.isTemperatureResistance;
+            } else {
+                return props.isTemperatureSealed;
+            }
+        }
+        return false;
+    }
+    
     private static boolean checkArmorProperty(EntityLivingBase entityLiving, boolean Resistance) {
         ArmorProperties helmetprops = getArmorProperties(entityLiving, 4);
         ArmorProperties plateprops = getArmorProperties(entityLiving, 3);
@@ -26,18 +48,6 @@ public class ArmorTempUtils {
             } else {
                 return helmetprops.isTemperatureSealed && plateprops.isTemperatureSealed
                     && legsprops.isTemperatureSealed && bootsprops.isTemperatureSealed;
-            }
-        }
-        return false;
-    }
-    
-    public static boolean checkArmorPropertyItemStack(ItemStack stack, boolean Resistance) {
-        ArmorProperties props = getArmorProperties(stack);
-        if (props != null) {
-            if(Resistance) {
-                return props.isTemperatureResistance;
-            } else {
-                return props.isTemperatureSealed;
             }
         }
         return false;

@@ -28,7 +28,6 @@ import enviromine.handlers.compat.ObjectHandler_Netherlicious;
 import enviromine.network.packet.PacketAutoOverride;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.network.packet.PacketServerOverride;
-import enviromine.utils.EnviroUtils;
 import enviromine.world.WorldProviderCaves;
 import enviromine.world.biomes.BiomeGenCaves;
 import enviromine.world.features.WorldFeatureGenerator;

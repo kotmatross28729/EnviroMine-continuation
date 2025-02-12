@@ -5,7 +5,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-//import enviromine.client.gui.UpdateNotification;
 import enviromine.handlers.EM_EventManager;
 import enviromine.handlers.EM_ServerScheduledTickHandler;
 import enviromine.handlers.crafting.CamelPackExpandHandler;
@@ -37,7 +36,6 @@ public class EM_CommonProxy
 		EM_EventManager eventManager = new EM_EventManager();
 		MinecraftForge.EVENT_BUS.register(eventManager);
 		FMLCommonHandler.instance().bus().register(eventManager);
-		//FMLCommonHandler.instance().bus().register(new UpdateNotification());
 		
 		CamelPackRefillHandler tmp = new CamelPackRefillHandler();
 		RecipeSorter.register("enviromine:packRefill", CamelPackRefillHandler.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");

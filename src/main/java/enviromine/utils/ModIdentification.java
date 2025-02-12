@@ -18,9 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ModIdentification
-{
-    //TODO REWRITE
+public class ModIdentification {
 	public static HashMap<String, String> modID_Name = new HashMap<String, String>();
 	// Now uses full path (as a File object) instead of only the file name. This is to prevent identically named files in separate directories.
 	public static HashMap<File, String> modSource_ID = new HashMap<File, String>();

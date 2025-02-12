@@ -26,7 +26,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -35,17 +34,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.logging.log4j.Level;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
 
-import java.awt.Color;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static enviromine.core.EnviroMine.isTCLoaded;
 
-public class EnviroUtils
-{
-    //Get rid of unused methods
+public class EnviroUtils {
+
     public static final String[] reservedNames = new String[] {"CON", "COM", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
                                //  ↑ scary
     public static final char[] specialCharacters = new char[] {'/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};

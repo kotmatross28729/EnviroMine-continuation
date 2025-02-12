@@ -1,11 +1,8 @@
 package enviromine.asm;
 
 import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import enviromine.core.EM_Settings;
-import net.minecraft.launchwrapper.Launch;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ public class EnviroMineEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoad
 		
 		@Override
 		public List<String> getMixins(Set<String> loadedCoreMods) {
-			String configFolder = "config" + File.separator + EM_Settings.MOD_ID + File.separator;
+			//String configFolder = "config" + File.separator + EM_Settings.MOD_ID + File.separator;
 
 			List<String> mixins = new ArrayList<>();
 			

@@ -1,5 +1,12 @@
 package enviromine.utils;
 
+/**
+ *
+ * All sorts of things related to Enviromine water  
+ *
+ * @author kotmatross28729
+ *
+ */
 public class WaterUtils {
     public enum WATER_TYPES {
         RADIOACTIVE_FROSTY(-2, true, false, false),

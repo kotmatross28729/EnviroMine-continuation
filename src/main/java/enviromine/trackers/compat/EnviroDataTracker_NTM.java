@@ -40,8 +40,4 @@ public class EnviroDataTracker_NTM {
 		}
 		return 0;
 	}
-	
-	
-	
-	
 }

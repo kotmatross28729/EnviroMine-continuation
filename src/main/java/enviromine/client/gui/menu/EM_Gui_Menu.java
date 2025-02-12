@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.client.gui.menu.config.ProfileMenu;
-//import enviromine.client.gui.menu.update.NewsPage;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EnviroMine;
 import net.minecraft.client.Minecraft;

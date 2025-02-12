@@ -1,6 +1,5 @@
 package enviromine.items;
 
-import com.hbm.extprop.HbmLivingProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroPotion;
