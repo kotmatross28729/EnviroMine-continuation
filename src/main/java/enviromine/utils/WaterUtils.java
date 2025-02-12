@@ -29,10 +29,10 @@ public class WaterUtils {
         
         RADIOACTIVE_HOT(2, true, false, false),
         HOT(2, false, false, false);
-        public int heatIndex;
-        public boolean isRadioactive; //"Non-final", how about shut up
-        public boolean isDirty;
-        public boolean isSalty;
+        public final int heatIndex;
+        public final boolean isRadioactive;
+        public final boolean isDirty;
+        public final boolean isSalty;
         WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty) {
             this.heatIndex = heatIndex;
             this.isRadioactive = isRadioactive;
@@ -53,41 +53,46 @@ public class WaterUtils {
         }
     }
     
-    //TODO: test
     public static WATER_TYPES heatUp(WATER_TYPES waterType) {
-        if (waterType.heatIndex >= 0) {
-            waterType.isDirty = false;
-            waterType.isSalty = false;
+        boolean isDirty = waterType.isDirty;
+        boolean isSalty = waterType.isSalty;
+        int heatIndex   = waterType.heatIndex;
+        
+        if (heatIndex >= 0) {
+            isDirty = false;
+            isSalty = false;
         }
 
-        if (waterType.heatIndex < 2) {
-            waterType.heatIndex += 1;
+        if (heatIndex < 2) {
+            heatIndex += 1;
         }
         
-        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
+        return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
     }
 
     public static WATER_TYPES coolDown(WATER_TYPES waterType) {
-        if (waterType.heatIndex < 0) {
-            waterType.isDirty = false;
-            waterType.isSalty = false;
+        boolean isDirty = waterType.isDirty;
+        boolean isSalty = waterType.isSalty;
+        int heatIndex   = waterType.heatIndex;
+        
+        if (heatIndex < 0) {
+            isDirty = false;
+            isSalty = false;
         }
     
-        if (waterType.heatIndex > -2) {
-            waterType.heatIndex -= 1;
+        if (heatIndex > -2) {
+            heatIndex -= 1;
         }
     
-        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
+        return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
     }
     
     
     public static WATER_TYPES saltDown(WATER_TYPES waterType) {
-        waterType.isSalty = true;
-        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, true);
     }
     
     public static WATER_TYPES pollute(WATER_TYPES waterType) {
-        waterType.isDirty = true;
-        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, waterType.isSalty);
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, true, waterType.isSalty);
     }
 }

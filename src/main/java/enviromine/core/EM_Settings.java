@@ -169,6 +169,9 @@ public class EM_Settings
     public static float DirtyWarmWaterTemperatureInfluence = 0.1F;
     public static float HotWarmWaterTemperatureInfluence = 0.5F;
 
+	
+	//TODO: DELETE ALL THIS
+	// Add effect-related stuff, radiation value
     public static float WaterReducesTemperatureStartingValue = 37.05F;
     public static float ColdFrostyWaterReducesTemperatureStartingValue = 30.1F;
     public static float WarmHotWaterReducesTemperatureStartingValue = 0.0F;
@@ -180,7 +183,7 @@ public class EM_Settings
     public static float CleanWaterHydrate               = 25.0F;
     public static float CleanWarmWaterHydrate           = 25.0F;
     public static float DirtyWarmWaterHydrate           = 25.0F;
-    public static float HotWaterHydrate             = 25.0F;
+    public static float HotWaterHydrate             	= 25.0F;
 
     public static float FrostyWaterHydratePlastic       = 50.0F;
     public static float DirtyColdWaterHydratePlastic    = 50.0F;
@@ -190,8 +193,9 @@ public class EM_Settings
     public static float CleanWaterHydratePlastic        = 50.0F;
     public static float CleanWarmWaterHydratePlastic    = 50.0F;
     public static float DirtyWarmWaterHydratePlastic    = 50.0F;
-    public static float HotWaterHydratePlastic      = 50.0F;
-
+    public static float HotWaterHydratePlastic      	= 50.0F;
+	
+	//TODO: All new water
     public static float FrostyWaterHydrateWorld              = 10.0F;
     public static float DirtyColdWaterHydrateWorld           = 10.0F;
     public static float CleanColdWaterHydrateWorld           = 10.0F;
@@ -200,7 +204,7 @@ public class EM_Settings
     public static float CleanWaterHydrateWorld               = 10.0F;
     public static float CleanWarmWaterHydrateWorld           = 10.0F;
     public static float DirtyWarmWaterHydrateWorld           = 10.0F;
-    public static float HotWaterHydrateWorld             = 10.0F;
+    public static float HotWaterHydrateWorld             	= 10.0F;
 
     //EnviroDataTracker
 

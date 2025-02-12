@@ -175,40 +175,33 @@ public class EnviroUtils {
 			typeList.add(typeArray[i]);
 		}
 
-        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA))
-        {
-            return "HOT"; //-3
+        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA)) {
+            return "HOT";
         }
-        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad))
-        {
-            return "DIRTY_WARM"; //-2
+        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad)) {
+            return "DIRTY_WARM";
         }
-        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET))
-        {
-            return "CLEAN_WARM"; //-1
+        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET)) {
+            return "CLEAN_WARM";
         }
         else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || looksBad) )
         {
-            return "DIRTY"; //1
+            return "DIRTY";
         }
-        else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
-        {
-            return "SALTY"; //2
+        else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH)) {
+            return "SALTY";
         }
-        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F && !looksBad))
-        {
-            return "CLEAN_COLD"; //3
+        else if(typeList.contains(Type.COLD) && ((!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F) && !looksBad)) {
+            return "CLEAN_COLD";
         }
-        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F && looksBad))
-        {
-            return "DIRTY_COLD"; //4
+        else if(typeList.contains(Type.COLD) && ((!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F) && looksBad)) {
+            return "DIRTY_COLD";
         }
-        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY))
-        {
-            return "FROSTY"; //5
+        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY)) {
+            return "FROSTY";
         }
         else {
-            return "CLEAN"; //0
+            return "CLEAN";
         }
 	}
 

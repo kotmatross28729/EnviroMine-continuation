@@ -357,7 +357,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
 				config.get(category, IPName[6], -0.025D).getDouble(-0.025D);
 				config.get(category, IPName[7], 0D).getDouble(0D);
 				config.get(category, IPName[8], 0D).getDouble(0D);
-				config.get(category, IPName[9],  5D).getDouble(5D);
+				config.get(category, IPName[9],  10D).getDouble(10D);
 				config.get(category, IPName[10], 37D).getDouble(37D);
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
