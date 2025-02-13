@@ -19,6 +19,7 @@ import enviromine.blocks.tiles.TileEntityElevator;
 import enviromine.blocks.tiles.TileEntityEsky;
 import enviromine.blocks.tiles.TileEntityFreezer;
 import enviromine.blocks.tiles.TileEntityGas;
+import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -41,6 +42,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
@@ -99,6 +102,52 @@ public class ObjectHandler {
 
 	public static Material gasMat;
 	public static Material elevatorMat;
+	
+	///-------
+	
+	public static Fluid radioactive_frosty_Water;
+	public static Fluid frosty_Water;
+	
+	public static Fluid radioactive_cold_Water;
+	public static Fluid dirty_cold_Water;
+	public static Fluid salty_cold_Water;
+	public static Fluid clean_cold_Water;
+	
+	public static Fluid radioactive_Water;
+	public static Fluid dirty_Water;
+	public static Fluid salty_Water;
+	
+	public static Fluid radioactive_warm_Water;
+	public static Fluid dirty_warm_Water;
+	public static Fluid salty_warm_Water;
+	public static Fluid clean_warm_Water;
+	
+	public static Fluid radioactive_hot_Water;
+	public static Fluid hot_Water;
+	
+	///-------
+	
+	public static Block block_radioactive_frosty_Water;
+	public static Block block_frosty_Water;
+	
+	public static Block block_radioactive_cold_Water;
+	public static Block block_dirty_cold_Water;
+	public static Block block_salty_cold_Water;
+	public static Block block_clean_cold_Water;
+	
+	public static Block block_radioactive_Water;
+	public static Block block_dirty_Water;
+	public static Block block_salty_Water;
+	
+	public static Block block_radioactive_warm_Water;
+	public static Block block_dirty_warm_Water;
+	public static Block block_salty_warm_Water;
+	public static Block block_clean_warm_Water;
+	
+	public static Block block_radioactive_hot_Water;
+	public static Block block_hot_Water;
+	
+	///-------
 
 	public static void initItems()
 	{
@@ -203,8 +252,55 @@ public class ObjectHandler {
 		EnviroMine.enviroTab.addRawStack(mask);
 	}
 
-	public static void initBlocks()
-	{
+	public static void initBlocks() {
+		radioactive_frosty_Water 	= new Fluid("radioactive_frosty_Water");
+		frosty_Water				= new Fluid("frosty_Water");
+		radioactive_cold_Water		= new Fluid("radioactive_cold_Water");
+		dirty_cold_Water			= new Fluid("dirty_cold_Water");
+		salty_cold_Water			= new Fluid("salty_cold_Water");
+		clean_cold_Water			= new Fluid("clean_cold_Water");
+		radioactive_Water			= new Fluid("radioactive_Wate");
+		dirty_Water					= new Fluid("dirty_Water");
+		salty_Water					= new Fluid("salty_Water");
+		radioactive_warm_Water		= new Fluid("radioactive_warm_Water");
+		dirty_warm_Water			= new Fluid("dirty_warm_Water");
+		salty_warm_Water			= new Fluid("salty_warm_Water");
+		clean_warm_Water			= new Fluid("clean_warm_Water");
+		radioactive_hot_Water		= new Fluid("radioactive_hot_Water");
+		hot_Water					= new Fluid("hot_Water");
+		
+		FluidRegistry.registerFluid(radioactive_frosty_Water);
+		FluidRegistry.registerFluid(frosty_Water);
+		FluidRegistry.registerFluid(radioactive_cold_Water);
+		FluidRegistry.registerFluid(dirty_cold_Water);
+		FluidRegistry.registerFluid(salty_cold_Water);
+		FluidRegistry.registerFluid(clean_cold_Water);
+		FluidRegistry.registerFluid(radioactive_Water);
+		FluidRegistry.registerFluid(dirty_Water);
+		FluidRegistry.registerFluid(salty_Water);
+		FluidRegistry.registerFluid(radioactive_warm_Water);
+		FluidRegistry.registerFluid(dirty_warm_Water);
+		FluidRegistry.registerFluid(salty_warm_Water);
+		FluidRegistry.registerFluid(clean_warm_Water);
+		FluidRegistry.registerFluid(radioactive_hot_Water);
+		FluidRegistry.registerFluid(hot_Water);
+		
+		block_radioactive_frosty_Water	= new BlockEnviroMineWater(radioactive_frosty_Water, Material.water).setBlockName("block_radioactive_frosty_Water").setHardness(100.0f);
+		block_frosty_Water				= new BlockEnviroMineWater(frosty_Water, Material.water).setBlockName("block_frosty_Water").setHardness(100.0f);
+		block_radioactive_cold_Water	= new BlockEnviroMineWater(radioactive_cold_Water, Material.water).setBlockName("block_radioactive_cold_Water").setHardness(100.0f);
+		block_dirty_cold_Water			= new BlockEnviroMineWater(dirty_cold_Water, Material.water).setBlockName("block_dirty_cold_Water").setHardness(100.0f);
+		block_salty_cold_Water			= new BlockEnviroMineWater(salty_cold_Water, Material.water).setBlockName("block_salty_cold_Water").setHardness(100.0f);
+		block_clean_cold_Water			= new BlockEnviroMineWater(clean_cold_Water, Material.water).setBlockName("block_clean_cold_Water").setHardness(100.0f);
+		block_radioactive_Water			= new BlockEnviroMineWater(radioactive_Water, Material.water).setBlockName("block_radioactive_Water").setHardness(100.0f);
+		block_dirty_Water				= new BlockEnviroMineWater(dirty_Water, Material.water).setBlockName("block_dirty_Water").setHardness(100.0f);
+		block_salty_Water				= new BlockEnviroMineWater(salty_Water, Material.water).setBlockName("block_salty_Water").setHardness(100.0f);
+		block_radioactive_warm_Water	= new BlockEnviroMineWater(radioactive_warm_Water, Material.water).setBlockName("block_radioactive_warm_Water").setHardness(100.0f);
+		block_dirty_warm_Water			= new BlockEnviroMineWater(dirty_warm_Water, Material.water).setBlockName("block_dirty_warm_Water").setHardness(100.0f);
+		block_salty_warm_Water			= new BlockEnviroMineWater(salty_warm_Water, Material.water).setBlockName("block_salty_warm_Water").setHardness(100.0f);
+		block_clean_warm_Water			= new BlockEnviroMineWater(clean_warm_Water, Material.water).setBlockName("block_clean_warm_Water").setHardness(100.0f);
+		block_radioactive_hot_Water		= new BlockEnviroMineWater(radioactive_hot_Water, Material.water).setBlockName("block_radioactive_hot_Water").setHardness(100.0f);
+		block_hot_Water					= new BlockEnviroMineWater(hot_Water, Material.water).setBlockName("block_hot_Water").setHardness(100.0f);
+		
 		gasMat = new MaterialGas(MapColor.airColor);
 		gasBlock = new BlockGas(gasMat).setBlockName("enviromine.gas").setCreativeTab(EnviroMine.enviroTab).setBlockTextureName("enviromine:gas_block");
 		fireGasBlock = new BlockGas(gasMat).setBlockName("enviromine.firegas").setCreativeTab(EnviroMine.enviroTab).setBlockTextureName("enviromine:gas_block").setLightLevel(1.0F);
@@ -225,8 +321,24 @@ public class ObjectHandler {
 		Blocks.redstone_torch.setLightLevel(0.9375F);
 	}
 
-	public static void registerBlocks()
-	{
+	public static void registerBlocks() {
+		
+		GameRegistry.registerBlock(block_radioactive_frosty_Water, "block_radioactive_frosty_Water");
+		GameRegistry.registerBlock(block_frosty_Water, "block_frosty_Water");
+		GameRegistry.registerBlock(block_radioactive_cold_Water, "block_radioactive_cold_Water");
+		GameRegistry.registerBlock(block_dirty_cold_Water, "block_dirty_cold_Water");
+		GameRegistry.registerBlock(block_salty_cold_Water, "block_salty_cold_Water");
+		GameRegistry.registerBlock(block_clean_cold_Water, "block_clean_cold_Water");
+		GameRegistry.registerBlock(block_radioactive_Water, "block_radioactive_Water");
+		GameRegistry.registerBlock(block_dirty_Water, "block_dirty_Water");
+		GameRegistry.registerBlock(block_salty_Water, "block_salty_Water");
+		GameRegistry.registerBlock(block_radioactive_warm_Water, "block_radioactive_warm_Water");
+		GameRegistry.registerBlock(block_dirty_warm_Water, "block_dirty_warm_Water");
+		GameRegistry.registerBlock(block_salty_warm_Water, "block_salty_warm_Water");
+		GameRegistry.registerBlock(block_clean_warm_Water, "block_clean_warm_Water");
+		GameRegistry.registerBlock(block_radioactive_hot_Water, "block_radioactive_hot_Water");
+		GameRegistry.registerBlock(block_hot_Water, "block_hot_Water");
+		
 		GameRegistry.registerBlock(gasBlock, "gas");
 		GameRegistry.registerBlock(fireGasBlock, "firegas");
 		GameRegistry.registerBlock(elevator, ItemElevator.class, "elevator");

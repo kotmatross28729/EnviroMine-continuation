@@ -1,5 +1,8 @@
 package enviromine.utils;
 
+import net.minecraft.block.BlockLiquid;
+import net.minecraftforge.fluids.BlockFluidClassic;
+
 /**
  *
  * All sorts of things related to Enviromine water  
@@ -69,7 +72,6 @@ public class WaterUtils {
         
         return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
     }
-
     public static WATER_TYPES coolDown(WATER_TYPES waterType) {
         boolean isDirty = waterType.isDirty;
         boolean isSalty = waterType.isSalty;
@@ -86,8 +88,6 @@ public class WaterUtils {
     
         return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
     }
-    
-    
     public static WATER_TYPES saltDown(WATER_TYPES waterType) {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, true);
     }
