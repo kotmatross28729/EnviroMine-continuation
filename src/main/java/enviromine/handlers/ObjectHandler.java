@@ -253,21 +253,21 @@ public class ObjectHandler {
 	}
 
 	public static void initBlocks() {
-		radioactive_frosty_Water 	= new Fluid("radioactive_frosty_Water");
-		frosty_Water				= new Fluid("frosty_Water");
-		radioactive_cold_Water		= new Fluid("radioactive_cold_Water");
-		dirty_cold_Water			= new Fluid("dirty_cold_Water");
-		salty_cold_Water			= new Fluid("salty_cold_Water");
-		clean_cold_Water			= new Fluid("clean_cold_Water");
-		radioactive_Water			= new Fluid("radioactive_Wate");
-		dirty_Water					= new Fluid("dirty_Water");
-		salty_Water					= new Fluid("salty_Water");
-		radioactive_warm_Water		= new Fluid("radioactive_warm_Water");
-		dirty_warm_Water			= new Fluid("dirty_warm_Water");
-		salty_warm_Water			= new Fluid("salty_warm_Water");
-		clean_warm_Water			= new Fluid("clean_warm_Water");
-		radioactive_hot_Water		= new Fluid("radioactive_hot_Water");
-		hot_Water					= new Fluid("hot_Water");
+		radioactive_frosty_Water 	= new Fluid("radioactive_frosty_Water").setTemperature(275); 					//1,85 °C
+		frosty_Water				= new Fluid("frosty_Water").setTemperature(275); 								//1,85 °C
+		radioactive_cold_Water		= new Fluid("radioactive_cold_Water").setTemperature(283);						//9,85 °C
+		dirty_cold_Water			= new Fluid("dirty_cold_Water").setTemperature(283); 							//9,85 °C
+		salty_cold_Water			= new Fluid("salty_cold_Water").setTemperature(283).setDensity(1025); 			//9,85 °C , 1025 kg/m^3
+		clean_cold_Water			= new Fluid("clean_cold_Water").setTemperature(283); 							//9,85 °C
+		radioactive_Water			= new Fluid("radioactive_Water");												//26,85 °C
+		dirty_Water					= new Fluid("dirty_Water"); 													//26,85 °C
+		salty_Water					= new Fluid("salty_Water").setDensity(1023); 									//26,85 °C , 1023 kg/m^3
+		radioactive_warm_Water		= new Fluid("radioactive_warm_Water").setTemperature(313);						//39,85 °C
+		dirty_warm_Water			= new Fluid("dirty_warm_Water").setTemperature(313);							//39,85 °C
+		salty_warm_Water			= new Fluid("salty_warm_Water").setTemperature(313).setDensity(1020);			//39,85 °C , 1020 kg/m^3
+		clean_warm_Water			= new Fluid("clean_warm_Water").setTemperature(313);							//39,85 °C
+		radioactive_hot_Water		= new Fluid("radioactive_hot_Water").setTemperature(327);						//53,85 °C
+		hot_Water					= new Fluid("hot_Water").setTemperature(327);									//53,85 °C
 		
 		FluidRegistry.registerFluid(radioactive_frosty_Water);
 		FluidRegistry.registerFluid(frosty_Water);
