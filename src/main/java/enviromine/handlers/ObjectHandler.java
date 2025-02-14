@@ -27,6 +27,7 @@ import enviromine.items.EnviroArmor;
 import enviromine.items.EnviroItemWaterBottle;
 import enviromine.items.ItemDavyLamp;
 import enviromine.items.ItemElevator;
+import enviromine.items.ItemModBucket;
 import enviromine.items.ItemSpoiledMilk;
 import enviromine.items.RottenFood;
 import enviromine.utils.WaterUtils;
@@ -41,9 +42,12 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
@@ -148,110 +152,29 @@ public class ObjectHandler {
 	public static Block block_hot_Water;
 	
 	///-------
-
-	public static void initItems()
-	{
-		//NAMES
-		//[trait]_[temp]_WaterBottle
-		
-		radioactive_frosty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_frosty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		frosty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frosty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		
-		radioactive_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		dirty_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		salty_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		clean_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.clean_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		
-		radioactive_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		dirty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		salty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-
-		radioactive_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		dirty_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		salty_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		clean_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.clean_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		
-		radioactive_hot_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_hot_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		hot_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hot_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
-		
-        airFilter = new Item().setMaxStackSize(16).setUnlocalizedName("enviromine.airfilter").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:air_filter");
-		rottenFood = new RottenFood(1).setMaxStackSize(64).setUnlocalizedName("enviromine.rottenfood").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:rot");
-		spoiledMilk = new ItemSpoiledMilk().setUnlocalizedName("enviromine.spoiledmilk").setCreativeTab(EnviroMine.enviroTab).setTextureName("bucket_milk");
-
-		camelPackMaterial = EnumHelper.addArmorMaterial("camelPack", EM_Settings.camelPackMax, new int[]{2, 2, 0, 0}, 0);
-
-		camelPack = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 1).setTextureName("camel_pack").setUnlocalizedName("enviromine.camelpack").setCreativeTab(null);
-
-		gasMask = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("gas_mask").setUnlocalizedName("enviromine.gasmask").setCreativeTab(null);
-		hardHat = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("hard_hat").setUnlocalizedName("enviromine.hardhat").setCreativeTab(EnviroMine.enviroTab);
-	}
-
-	public static void registerItems() 
-	{
-		GameRegistry.registerItem(radioactive_frosty_WaterBottle, "radioactive_frosty_WaterBottle");
-		GameRegistry.registerItem(frosty_WaterBottle, "frosty_WaterBottle");
-		
-		GameRegistry.registerItem(radioactive_cold_WaterBottle, "radioactive_cold_WaterBottle");
-		GameRegistry.registerItem(dirty_cold_WaterBottle, "dirty_cold_WaterBottle");
-		GameRegistry.registerItem(salty_cold_WaterBottle, "salty_cold_WaterBottle");
-		GameRegistry.registerItem(clean_cold_WaterBottle, "clean_cold_WaterBottle");
-		
-		GameRegistry.registerItem(radioactive_WaterBottle, "radioactive_WaterBottle");
-		GameRegistry.registerItem(dirty_WaterBottle, "dirty_WaterBottle");
-		GameRegistry.registerItem(salty_WaterBottle, "salty_WaterBottle");
-		
-		GameRegistry.registerItem(radioactive_warm_WaterBottle, "radioactive_warm_WaterBottle");
-		GameRegistry.registerItem(dirty_warm_WaterBottle, "dirty_warm_WaterBottle");
-		GameRegistry.registerItem(salty_warm_WaterBottle, "salty_warm_WaterBottle");
-		GameRegistry.registerItem(clean_warm_WaterBottle, "clean_warm_WaterBottle");
-		
-		GameRegistry.registerItem(radioactive_hot_WaterBottle, "radioactive_hot_WaterBottle");
-		GameRegistry.registerItem(hot_WaterBottle, "hot_WaterBottle");
-
-        GameRegistry.registerItem(airFilter, "airFilter");
-		GameRegistry.registerItem(rottenFood, "rottenFood");
-		GameRegistry.registerItem(spoiledMilk, "spoiledMilk");
-		GameRegistry.registerItem(camelPack, "camelPack");
-		GameRegistry.registerItem(gasMask, "gasMask");
-		GameRegistry.registerItem(hardHat, "hardHat");
-
-		// Empty Pack
-		ItemStack camelStack1 = new ItemStack(camelPack);
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, 0);
-		tag.setInteger(EM_Settings.CAMEL_PACK_MAX_TAG_KEY, EM_Settings.camelPackMax);
-		tag.setBoolean(EM_Settings.IS_CAMEL_PACK_TAG_KEY, true);
-		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
-		camelStack1.setTagCompound(tag);
-		EnviroMine.enviroTab.addRawStack(camelStack1);
-
-		// Full Pack
-		ItemStack camelStack2 = new ItemStack(camelPack);
-		tag = new NBTTagCompound();
-		tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, EM_Settings.camelPackMax);
-		tag.setInteger(EM_Settings.CAMEL_PACK_MAX_TAG_KEY, EM_Settings.camelPackMax);
-		tag.setBoolean(EM_Settings.IS_CAMEL_PACK_TAG_KEY, true);
-		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
-		camelStack2.setTagCompound(tag);
-		EnviroMine.enviroTab.addRawStack(camelStack2);
-
-		// Empty Mask
-		ItemStack mask = new ItemStack(gasMask);
-		tag = new NBTTagCompound();
-		tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, 0);
-		tag.setInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY, EM_Settings.gasMaskMax);
-		mask.setTagCompound(tag);
-		EnviroMine.enviroTab.addRawStack(mask);
-
-		// Full Mask
-		mask = new ItemStack(gasMask);
-		tag = new NBTTagCompound();
-		tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, EM_Settings.gasMaskMax);
-		tag.setInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY, EM_Settings.gasMaskMax);
-		mask.setTagCompound(tag);
-		EnviroMine.enviroTab.addRawStack(mask);
-	}
-
+	
+	public static Item bucket_radioactive_frosty_Water;
+	public static Item bucket_frosty_Water;
+	
+	public static Item bucket_radioactive_cold_Water;
+	public static Item bucket_dirty_cold_Water;
+	public static Item bucket_salty_cold_Water;
+	public static Item bucket_clean_cold_Water;
+	
+	public static Item bucket_radioactive_Water;
+	public static Item bucket_dirty_Water;
+	public static Item bucket_salty_Water;
+	
+	public static Item bucket_radioactive_warm_Water;
+	public static Item bucket_dirty_warm_Water;
+	public static Item bucket_salty_warm_Water;
+	public static Item bucket_clean_warm_Water;
+	
+	public static Item bucket_radioactive_hot_Water;
+	public static Item bucket_hot_Water;
+	
+	///-------
+	
 	public static void initBlocks() {
 		radioactive_frosty_Water 	= new Fluid("radioactive_frosty_Water").setTemperature(275); 					//1,85 °C
 		frosty_Water				= new Fluid("frosty_Water").setTemperature(275); 								//1,85 °C
@@ -349,7 +272,182 @@ public class ObjectHandler {
 		GameRegistry.registerBlock(freezer, "freezer");
 		GameRegistry.registerBlock(noPhysBlock, "no_phys_block");
 	}
-
+	
+	public static void initItems() {
+		//NAMES
+		//[trait]_[temp]_WaterBottle
+		
+		radioactive_frosty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_frosty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		frosty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.FROSTY).setMaxStackSize(1).setUnlocalizedName("enviromine.frosty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		dirty_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		salty_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		clean_cold_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_COLD).setMaxStackSize(1).setUnlocalizedName("enviromine.clean_cold_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		dirty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		salty_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		dirty_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.DIRTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.dirty_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		salty_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.SALTY_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.salty_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		clean_warm_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.CLEAN_WARM).setMaxStackSize(1).setUnlocalizedName("enviromine.clean_warm_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		radioactive_hot_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.RADIOACTIVE_HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.radioactive_hot_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		hot_WaterBottle = new EnviroItemWaterBottle(WaterUtils.WATER_TYPES.HOT).setMaxStackSize(1).setUnlocalizedName("enviromine.hot_WaterBottle").setCreativeTab(EnviroMine.enviroTab);
+		
+		///-------
+		
+		bucket_radioactive_frosty_Water = new ItemModBucket(block_radioactive_frosty_Water).setUnlocalizedName("bucket_radioactive_frosty_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_radioactive_frosty_Water");
+		bucket_frosty_Water 			= new ItemModBucket(block_frosty_Water).setUnlocalizedName("bucket_frosty_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_frosty_Water");
+		bucket_radioactive_cold_Water 	= new ItemModBucket(block_radioactive_cold_Water).setUnlocalizedName("bucket_radioactive_cold_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_radioactive_cold_Water");
+		bucket_dirty_cold_Water 		= new ItemModBucket(block_dirty_cold_Water).setUnlocalizedName("bucket_dirty_cold_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_dirty_cold_Water");
+		bucket_salty_cold_Water 		= new ItemModBucket(block_salty_cold_Water).setUnlocalizedName("bucket_salty_cold_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_salty_cold_Water");
+		bucket_clean_cold_Water 		= new ItemModBucket(block_clean_cold_Water).setUnlocalizedName("bucket_clean_cold_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_clean_cold_Water");
+		bucket_radioactive_Water 		= new ItemModBucket(block_radioactive_Water).setUnlocalizedName("bucket_radioactive_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_radioactive_Water");
+		bucket_dirty_Water 				= new ItemModBucket(block_dirty_Water).setUnlocalizedName("bucket_dirty_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_dirty_Water");
+		bucket_salty_Water 				= new ItemModBucket(block_salty_Water).setUnlocalizedName("bucket_salty_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_salty_Water");
+		bucket_radioactive_warm_Water 	= new ItemModBucket(block_radioactive_warm_Water).setUnlocalizedName("bucket_radioactive_warm_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_radioactive_warm_Water");
+		bucket_dirty_warm_Water 		= new ItemModBucket(block_dirty_warm_Water).setUnlocalizedName("bucket_dirty_warm_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_dirty_warm_Water");
+		bucket_salty_warm_Water 		= new ItemModBucket(block_salty_warm_Water).setUnlocalizedName("bucket_salty_warm_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_salty_warm_Water");
+		bucket_clean_warm_Water 		= new ItemModBucket(block_clean_warm_Water).setUnlocalizedName("bucket_clean_warm_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_clean_warm_Water");
+		bucket_radioactive_hot_Water 	= new ItemModBucket(block_radioactive_hot_Water).setUnlocalizedName("bucket_radioactive_hot_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_radioactive_hot_Water");
+		bucket_hot_Water 				= new ItemModBucket(block_hot_Water).setUnlocalizedName("bucket_hot_Water").setContainerItem(Items.bucket).setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:bucket_hot_Water");
+		
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(radioactive_frosty_Water, 1000), new ItemStack(bucket_radioactive_frosty_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(frosty_Water, 1000), new ItemStack(bucket_frosty_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(radioactive_cold_Water, 1000), new ItemStack(bucket_radioactive_cold_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(dirty_cold_Water, 1000), new ItemStack(bucket_dirty_cold_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(salty_cold_Water, 1000), new ItemStack(bucket_salty_cold_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(clean_cold_Water, 1000), new ItemStack(bucket_clean_cold_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(radioactive_Water, 1000), new ItemStack(bucket_radioactive_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(dirty_Water, 1000), new ItemStack(bucket_dirty_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(salty_Water, 1000), new ItemStack(bucket_salty_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(radioactive_warm_Water, 1000), new ItemStack(bucket_radioactive_warm_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(dirty_warm_Water, 1000), new ItemStack(bucket_dirty_warm_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(salty_warm_Water, 1000), new ItemStack(bucket_salty_warm_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(clean_warm_Water, 1000), new ItemStack(bucket_clean_warm_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(radioactive_hot_Water, 1000), new ItemStack(bucket_radioactive_hot_Water), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(hot_Water, 1000), new ItemStack(bucket_hot_Water), new ItemStack(Items.bucket));
+		
+		EM_BucketHandler.INSTANCE.buckets.put(block_radioactive_frosty_Water, bucket_radioactive_frosty_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_frosty_Water, bucket_frosty_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_radioactive_cold_Water, bucket_radioactive_cold_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_dirty_cold_Water, bucket_dirty_cold_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_salty_cold_Water, bucket_salty_cold_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_clean_cold_Water, bucket_clean_cold_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_radioactive_Water, bucket_radioactive_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_dirty_Water, bucket_dirty_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_salty_Water, bucket_salty_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_radioactive_warm_Water, bucket_radioactive_warm_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_dirty_warm_Water, bucket_dirty_warm_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_salty_warm_Water, bucket_salty_warm_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_clean_warm_Water, bucket_clean_warm_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_radioactive_hot_Water, bucket_radioactive_hot_Water);
+		EM_BucketHandler.INSTANCE.buckets.put(block_hot_Water, bucket_hot_Water);
+		
+		MinecraftForge.EVENT_BUS.register(EM_BucketHandler.INSTANCE);
+		
+		///-------
+		
+		airFilter = new Item().setMaxStackSize(16).setUnlocalizedName("enviromine.airfilter").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:air_filter");
+		rottenFood = new RottenFood(1).setMaxStackSize(64).setUnlocalizedName("enviromine.rottenfood").setCreativeTab(EnviroMine.enviroTab).setTextureName("enviromine:rot");
+		spoiledMilk = new ItemSpoiledMilk().setUnlocalizedName("enviromine.spoiledmilk").setCreativeTab(EnviroMine.enviroTab).setTextureName("bucket_milk");
+		
+		camelPackMaterial = EnumHelper.addArmorMaterial("camelPack", EM_Settings.camelPackMax, new int[]{2, 2, 0, 0}, 0);
+		
+		camelPack = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 1).setTextureName("camel_pack").setUnlocalizedName("enviromine.camelpack").setCreativeTab(null);
+		
+		gasMask = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("gas_mask").setUnlocalizedName("enviromine.gasmask").setCreativeTab(null);
+		hardHat = (ItemArmor)new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("hard_hat").setUnlocalizedName("enviromine.hardhat").setCreativeTab(EnviroMine.enviroTab);
+	}
+	
+	public static void registerItems() {
+		GameRegistry.registerItem(radioactive_frosty_WaterBottle, "radioactive_frosty_WaterBottle");
+		GameRegistry.registerItem(frosty_WaterBottle, "frosty_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_cold_WaterBottle, "radioactive_cold_WaterBottle");
+		GameRegistry.registerItem(dirty_cold_WaterBottle, "dirty_cold_WaterBottle");
+		GameRegistry.registerItem(salty_cold_WaterBottle, "salty_cold_WaterBottle");
+		GameRegistry.registerItem(clean_cold_WaterBottle, "clean_cold_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_WaterBottle, "radioactive_WaterBottle");
+		GameRegistry.registerItem(dirty_WaterBottle, "dirty_WaterBottle");
+		GameRegistry.registerItem(salty_WaterBottle, "salty_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_warm_WaterBottle, "radioactive_warm_WaterBottle");
+		GameRegistry.registerItem(dirty_warm_WaterBottle, "dirty_warm_WaterBottle");
+		GameRegistry.registerItem(salty_warm_WaterBottle, "salty_warm_WaterBottle");
+		GameRegistry.registerItem(clean_warm_WaterBottle, "clean_warm_WaterBottle");
+		
+		GameRegistry.registerItem(radioactive_hot_WaterBottle, "radioactive_hot_WaterBottle");
+		GameRegistry.registerItem(hot_WaterBottle, "hot_WaterBottle");
+		
+		///-------
+		
+		GameRegistry.registerItem(bucket_radioactive_frosty_Water, "bucket_radioactive_frosty_Water");
+		GameRegistry.registerItem(bucket_frosty_Water, "bucket_frosty_Water");
+		GameRegistry.registerItem(bucket_radioactive_cold_Water, "bucket_radioactive_cold_Water");
+		GameRegistry.registerItem(bucket_dirty_cold_Water, "bucket_dirty_cold_Water");
+		GameRegistry.registerItem(bucket_salty_cold_Water, "bucket_salty_cold_Water");
+		GameRegistry.registerItem(bucket_clean_cold_Water, "bucket_clean_cold_Water");
+		GameRegistry.registerItem(bucket_radioactive_Water, "bucket_radioactive_Water");
+		GameRegistry.registerItem(bucket_dirty_Water, "bucket_dirty_Water");
+		GameRegistry.registerItem(bucket_salty_Water, "bucket_salty_Water");
+		GameRegistry.registerItem(bucket_radioactive_warm_Water, "bucket_radioactive_warm_Water");
+		GameRegistry.registerItem(bucket_dirty_warm_Water, "bucket_dirty_warm_Water");
+		GameRegistry.registerItem(bucket_salty_warm_Water, "bucket_salty_warm_Water");
+		GameRegistry.registerItem(bucket_clean_warm_Water, "bucket_clean_warm_Water");
+		GameRegistry.registerItem(bucket_radioactive_hot_Water, "bucket_radioactive_hot_Water");
+		GameRegistry.registerItem(bucket_hot_Water, "bucket_hot_Water");
+		
+		///-------
+		
+		GameRegistry.registerItem(airFilter, "airFilter");
+		GameRegistry.registerItem(rottenFood, "rottenFood");
+		GameRegistry.registerItem(spoiledMilk, "spoiledMilk");
+		GameRegistry.registerItem(camelPack, "camelPack");
+		GameRegistry.registerItem(gasMask, "gasMask");
+		GameRegistry.registerItem(hardHat, "hardHat");
+		
+		// Empty Pack
+		ItemStack camelStack1 = new ItemStack(camelPack);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, 0);
+		tag.setInteger(EM_Settings.CAMEL_PACK_MAX_TAG_KEY, EM_Settings.camelPackMax);
+		tag.setBoolean(EM_Settings.IS_CAMEL_PACK_TAG_KEY, true);
+		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
+		camelStack1.setTagCompound(tag);
+		EnviroMine.enviroTab.addRawStack(camelStack1);
+		
+		// Full Pack
+		ItemStack camelStack2 = new ItemStack(camelPack);
+		tag = new NBTTagCompound();
+		tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, EM_Settings.camelPackMax);
+		tag.setInteger(EM_Settings.CAMEL_PACK_MAX_TAG_KEY, EM_Settings.camelPackMax);
+		tag.setBoolean(EM_Settings.IS_CAMEL_PACK_TAG_KEY, true);
+		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
+		camelStack2.setTagCompound(tag);
+		EnviroMine.enviroTab.addRawStack(camelStack2);
+		
+		// Empty Mask
+		ItemStack mask = new ItemStack(gasMask);
+		tag = new NBTTagCompound();
+		tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, 0);
+		tag.setInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY, EM_Settings.gasMaskMax);
+		mask.setTagCompound(tag);
+		EnviroMine.enviroTab.addRawStack(mask);
+		
+		// Full Mask
+		mask = new ItemStack(gasMask);
+		tag = new NBTTagCompound();
+		tag.setInteger(EM_Settings.GAS_MASK_FILL_TAG_KEY, EM_Settings.gasMaskMax);
+		tag.setInteger(EM_Settings.GAS_MASK_MAX_TAG_KEY, EM_Settings.gasMaskMax);
+		mask.setTagCompound(tag);
+		EnviroMine.enviroTab.addRawStack(mask);
+	}
+	
 	public static void registerGases()
 	{
 	}

@@ -7,12 +7,12 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.world.World;
 
 public class ItemModBucket extends ItemBucket {
-	
 	protected int overrideFluidMeta = 0;
 	protected Block containedFluid;
 	
 	public ItemModBucket(Block fluid) {
 		super(fluid);
+		this.containedFluid = fluid;
 	}
 	
 	public ItemModBucket(Block fluid, int meta) {
@@ -51,5 +51,4 @@ public class ItemModBucket extends ItemBucket {
 			}
 		}
 	}
-	
 }

@@ -159,11 +159,11 @@ public class EnviroMine
 		LegacyHandler.init();
 
 		proxy.preInit(event);
-
-		ObjectHandler.initItems();
-		ObjectHandler.registerItems();
+		
 		ObjectHandler.initBlocks();
 		ObjectHandler.registerBlocks();
+		ObjectHandler.initItems();
+		ObjectHandler.registerItems();
 
         if(isHbmLoaded) {
             ObjectHandlerCompat.initItems();

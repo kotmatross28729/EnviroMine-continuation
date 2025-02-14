@@ -1,6 +1,7 @@
 package enviromine.items;
 
 import com.hbm.extprop.HbmLivingProps;
+import com.hbm.util.ContaminationUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroPotion;
@@ -61,7 +62,7 @@ public class EnviroItemPolymerWaterBottle extends Item {
     
         if (!par2World.isRemote) {
             if(waterType.isRadioactive) { //TODO config
-                HbmLivingProps.incrementRadiation(par3EntityPlayer, 5.0F); 
+                ContaminationUtil.contaminate(par3EntityPlayer, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.RAD_BYPASS, 5.0F);
             }
             
             if(waterType.isDirty) { //TODO config
