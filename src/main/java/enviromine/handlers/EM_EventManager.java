@@ -18,6 +18,8 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.gases.GasBuffer;
 import enviromine.handlers.compat.EM_EventManager_NTM;
+import enviromine.items.EnviroItemPolymerWaterBottle;
+import enviromine.items.EnviroItemWaterBottle;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.trackers.EnviroDataTracker;
 import enviromine.trackers.Hallucination;
@@ -1408,14 +1410,84 @@ public class EM_EventManager
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void onItemTooltip(ItemTooltipEvent event)
-	{
+	public void onItemTooltip(ItemTooltipEvent event) {
 		if (event.itemStack != null) {
 			
-			if(ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, false)){
+			if(ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, false)) {
 				event.toolTip.add(EnumChatFormatting.GOLD + "[" + I18n.format("enviromine.tooltip.armor.sealed") + "]");
 			} else if(ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, true)) {
 				event.toolTip.add(EnumChatFormatting.YELLOW + "[" + I18n.format("enviromine.tooltip.armor.resistance") + "]");
+			}
+			
+			if (ItemProperties.base.hasProperty(event.itemStack)) {
+				ItemProperties itemProps = ItemProperties.base.getProperty(event.itemStack);
+				
+				float effTemp = EM_Settings.enableItemPropsDivideByTwo ? itemProps.effTemp*2F : itemProps.effTemp;
+				float effAir = EM_Settings.enableItemPropsDivideByTwo ? itemProps.effAir*2F : itemProps.effAir;
+				float effSanity = EM_Settings.enableItemPropsDivideByTwo ? itemProps.effSanity*2F : itemProps.effSanity;
+				float effHydration = EM_Settings.enableItemPropsDivideByTwo ? itemProps.effHydration*2F : itemProps.effHydration;
+				
+				//AMBIENT
+				if(itemProps.enableTemp && itemProps.ambTemp > 0F) {
+					event.toolTip.add(EnumChatFormatting.RED + "[" + I18n.format("enviromine.tooltip.ambTemp") + " " + itemProps.ambTemp + "]");
+				} else if (itemProps.ambTemp < 0F) {
+					event.toolTip.add(EnumChatFormatting.AQUA + "[" + I18n.format("enviromine.tooltip.ambTemp") + " " + itemProps.ambTemp + "]");
+				}
+				if (itemProps.ambAir > 0F) {
+					event.toolTip.add(EnumChatFormatting.GREEN + "[" + I18n.format("enviromine.tooltip.ambAir") + " " + itemProps.ambAir + "]");
+				} else if (itemProps.ambAir < 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_GRAY + "[" + I18n.format("enviromine.tooltip.ambAir") + " " + itemProps.ambAir + "]");
+				}
+				if(itemProps.ambSanity > 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_AQUA + "[" + I18n.format("enviromine.tooltip.ambSanity") + " " + itemProps.ambSanity + "]");
+				} else if (itemProps.ambSanity < 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_PURPLE + "[" + I18n.format("enviromine.tooltip.ambSanity") + " " + itemProps.ambSanity + "]");
+				}
+				//EFFECTIVE
+				if(itemProps.effTemp > 0F) {
+					event.toolTip.add(EnumChatFormatting.RED + "[" + I18n.format("enviromine.tooltip.effTemp") + " " + effTemp + "]");
+				} else if (itemProps.effTemp < 0F) {
+					event.toolTip.add(EnumChatFormatting.AQUA + "[" + I18n.format("enviromine.tooltip.effTemp") + " " + effTemp + "]");
+				}
+				if(itemProps.effAir > 0F) {
+					event.toolTip.add(EnumChatFormatting.GREEN + "[" + I18n.format("enviromine.tooltip.effAir") + " " + effAir + "]");
+				} else if (itemProps.effAir < 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_GRAY + "[" + I18n.format("enviromine.tooltip.effAir") + " " + effAir + "]");
+				}
+				if(itemProps.effSanity > 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_AQUA + "[" + I18n.format("enviromine.tooltip.effSanity") + " " + effSanity + "]");
+				} else if (itemProps.effSanity < 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_PURPLE + "[" + I18n.format("enviromine.tooltip.effSanity") + " " + effSanity + "]");
+				}
+				if(itemProps.effHydration > 0F) {
+					event.toolTip.add(EnumChatFormatting.DARK_BLUE + "[" + I18n.format("enviromine.tooltip.effHydration") + " " + effHydration + "]");
+				} else if (itemProps.effHydration < 0F) {
+					event.toolTip.add(EnumChatFormatting.WHITE + "[" + I18n.format("enviromine.tooltip.effHydration") + " " + effHydration + "]");
+				}
+			}
+			
+			if(event.itemStack.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
+				WaterUtils.WATER_TYPES waterType = enviroItemWaterBottle.getWaterType();
+				if(waterType.isRadioactive) {
+					event.toolTip.add(EnumChatFormatting.GREEN + "[" + I18n.format("enviromine.tooltip.isRadioactive") + "]");
+				} 
+				else if (waterType.isDirty) {
+					event.toolTip.add(EnumChatFormatting.DARK_GREEN + "[" + I18n.format("enviromine.tooltip.isDirty") + "]");
+				}
+				else if (waterType.isSalty) {
+					event.toolTip.add(EnumChatFormatting.WHITE + "[" + I18n.format("enviromine.tooltip.isSalty") + "]");
+				}
+			} else if (event.itemStack.getItem() instanceof EnviroItemPolymerWaterBottle enviroItemPolymerWaterBottle) {
+				WaterUtils.WATER_TYPES waterType = enviroItemPolymerWaterBottle.getWaterType();
+				if(waterType.isRadioactive) {
+					event.toolTip.add(EnumChatFormatting.GREEN + "[" + I18n.format("enviromine.tooltip.isRadioactive") + "]");
+				}
+				else if (waterType.isDirty) {
+					event.toolTip.add(EnumChatFormatting.DARK_GREEN + "[" + I18n.format("enviromine.tooltip.isDirty") + "]");
+				}
+				else if (waterType.isSalty) {
+					event.toolTip.add(EnumChatFormatting.WHITE + "[" + I18n.format("enviromine.tooltip.isSalty") + "]");
+				}
 			}
 			
 			if(event.itemStack.hasTagCompound()) {

@@ -1,25 +1,51 @@
 language.name=English
 
-item.enviromine.badwater.name=Dirty Water Bottle
-item.enviromine.saltwater.name=Salt Water Bottle
-item.enviromine.coldwater.name=Cold Water Bottle
-item.enviromine.warmwater.name=Warm Water Bottle
-item.enviromine.badcoldwater.name=Dirty Cold Water Bottle
-item.enviromine.badwarmwater.name=Dirty Warm Water Bottle
-item.enviromine.frostywater.name=Frosty Water Bottle
-item.enviromine.hotwater.name=Hot Water Bottle
+# Water Bottle Types
+item.enviromine.radioactive_frosty_WaterBottle.name=Radioactive Frosty Water Bottle
+item.enviromine.frosty_WaterBottle.name=Frosty Water Bottle
 
+item.enviromine.radioactive_cold_WaterBottle.name=Radioactive Cold Water Bottle
+item.enviromine.dirty_cold_WaterBottle.name=Dirty Cold Water Bottle
+item.enviromine.salty_cold_WaterBottle.name=Salt Cold Water Bottle
+item.enviromine.clean_cold_WaterBottle.name=Cold Water Bottle
+
+item.enviromine.radioactive_WaterBottle.name=Radioactive Water Bottle
+item.enviromine.dirty_WaterBottle.name=Dirty Water Bottle
+item.enviromine.salty_WaterBottle.name=Salt Water Bottle
+
+item.enviromine.radioactive_warm_WaterBottle.name=Radioactive Warm Water Bottle
+item.enviromine.dirty_warm_WaterBottle.name=Dirty Warm Water Bottle
+item.enviromine.salty_warm_WaterBottle.name=Salt Warm Water Bottle
+item.enviromine.clean_warm_WaterBottle.name=Warm Water Bottle
+
+item.enviromine.radioactive_hot_WaterBottle.name=Radioactive Hot Water Bottle
+item.enviromine.hot_WaterBottle.name=Hot Water Bottle
+
+# Polymer Water Bottle Types (Hbm's NTM compat)
 item.enviromine.water.polymer.name=Plastic Bottle
-item.enviromine.cleanwater.polymer.name=Water Plastic Bottle
-item.enviromine.badwater.polymer.name=Dirty Water Plastic Bottle
-item.enviromine.saltwater.polymer.name=Salt Water Plastic Bottle
-item.enviromine.coldwater.polymer.name=Cold Water Plastic Bottle
-item.enviromine.warmwater.polymer.name=Warm Water Plastic Bottle
-item.enviromine.badcoldwater.polymer.name=Dirty Cold Water Plastic Bottle
-item.enviromine.badwarmwater.polymer.name=Dirty Warm Water Plastic Bottle
-item.enviromine.frostywater.polymer.name=Frosty Water Plastic Bottle
-item.enviromine.hotwater.polymer.name=Hot Water Plastic Bottle
 
+item.enviromine.radioactive_frosty_WaterBottle.polymer.name=Radioactive Frosty Water Plastic Bottle
+item.enviromine.frosty_WaterBottle.polymer.name=Frosty Water Plastic Bottle
+
+item.enviromine.radioactive_cold_WaterBottle.polymer.name=Radioactive Cold Water Plastic Bottle
+item.enviromine.dirty_cold_WaterBottle.polymer.name=Dirty Cold Water Plastic Bottle
+item.enviromine.salty_cold_WaterBottle.polymer.name=Salt Cold Water Plastic Bottle
+item.enviromine.clean_cold_WaterBottle.polymer.name=Cold Water Plastic Bottle
+
+item.enviromine.radioactive_WaterBottle.polymer.name=Radioactive Water Plastic Bottle
+item.enviromine.dirty_WaterBottle.polymer.name=Dirty Water Plastic Bottle
+item.enviromine.salty_WaterBottle.polymer.name=Salt Water Plastic Bottle
+item.enviromine.clean_WaterBottle.polymer.name=Water Plastic Bottle
+
+item.enviromine.radioactive_warm_WaterBottle.polymer.name=Radioactive Warm Water Plastic Bottle
+item.enviromine.dirty_warm_WaterBottle.polymer.name=Dirty Warm Water Plastic Bottle
+item.enviromine.salty_warm_WaterBottle.polymer.name=Salt Warm Water Plastic Bottle
+item.enviromine.clean_warm_WaterBottle.polymer.name=Warm Water Plastic Bottle
+
+item.enviromine.radioactive_hot_WaterBottle.polymer.name=Radioactive Hot Water Plastic Bottle
+item.enviromine.hot_WaterBottle.polymer.name=Hot Water Plastic Bottle
+
+# Enviromine items
 item.enviromine.camelpack.name=Camel Pack
 item.enviromine.gasmask.name=Respirator
 item.enviromine.hardhat.name=Hard Hat
@@ -27,12 +53,14 @@ item.enviromine.airfilter.name=Air Filter
 item.enviromine.rottenfood.name=Rotten Food
 item.enviromine.spoiledmilk.name=Spoiled Milk
 
+# Enviromine effects
 potion.enviromine.frostbite=Frostbite
 potion.enviromine.dehydration=Dehydration
 potion.enviromine.insanity=Insanity
 potion.enviromine.heatstroke=Heatstroke
 potion.enviromine.hypothermia=Hypothermia
 
+# Enviromine blocks
 tile.enviromine.elevator_top.name=Elevator Top
 tile.enviromine.elevator_bottom.name=Elevator Bottom
 tile.enviromine.esky.name=Esky
@@ -184,6 +212,18 @@ misc.enviromine.tooltip.rot=Rotten: %s (Day %s/%s)
 enviromine.tooltip.armor.resistance=This armor is resistant to average temperatures
 enviromine.tooltip.armor.sealed=This armor is resistant to extreme temperatures
 
+enviromine.tooltip.ambTemp=Ambient Temperature:
+enviromine.tooltip.ambAir=Ambient Air Quality:
+enviromine.tooltip.ambSanity=Ambient Sanity:
+enviromine.tooltip.effTemp=Effect Temperature:
+enviromine.tooltip.effAir=Effect Air Quality:
+enviromine.tooltip.effSanity=Effect Sanity:
+enviromine.tooltip.effHydration=Effect Hydration:
+
+enviromine.tooltip.isRadioactive=Radioactive Water
+enviromine.tooltip.isDirty=Dirty Water
+enviromine.tooltip.isSalty=Salt Water
+
 commands.enviromine.envirostat.add=add
 commands.enviromine.envirostat.set=set
 commands.enviromine.envirostat.temp=temp
@@ -219,11 +259,7 @@ editor.enviromine.create=Create
 editor.enviromine.nameProfile=New Profile
 editor.enviromine.insertName=Insert Name
 editor.enviromine.currentProfile=Current Profile
-editor.enviromine.global=Global Config
 editor.enviromine.settings=Profile Settings
-editor.enviromine.cave=Cave Dimension
-editor.enviromine.stability=Stability Types
-editor.enviromine.custom=Custom Configs
 editor.enviromine.GuiAdd.title=Add %s:
 editor.enviromine.GuiAdd.title.fail=Error occurred. Check log for details.
 editor.enviromine.GuiAdd.item=Add as Item

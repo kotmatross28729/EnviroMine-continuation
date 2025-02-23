@@ -48,6 +48,8 @@ import java.io.IOException;
 @Mod(modid = EM_Settings.MOD_ID, name = EM_Settings.MOD_NAME, version = EM_Settings.VERSION, guiFactory = EM_Settings.GUI_FACTORY)
 public class EnviroMine
 {
+	
+	
 	public static Logger logger;
 	public static BiomeGenCaves caves;
 	public static EnviroTab enviroTab;

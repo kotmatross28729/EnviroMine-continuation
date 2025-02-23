@@ -1,25 +1,52 @@
 language.name=Russian
 
-item.enviromine.badwater.name=Бутылка грязной воды
-item.enviromine.saltwater.name=Бутылка солёной воды
-item.enviromine.coldwater.name=Бутылка холодной воды
-item.enviromine.warmwater.name=Бутылка теплой воды
-item.enviromine.badcoldwater.name=Бутылка грязной холодной воды
-item.enviromine.badwarmwater.name=Бутылка грязной теплой воды
-item.enviromine.frostywater.name=Бутылка ледяной воды
-item.enviromine.hotwater.name=Бутылка горячей воды
 
+# Типы бутылок воды
+item.enviromine.radioactive_frosty_WaterBottle.name=Бутылка радиоактивной ледяной воды
+item.enviromine.frosty_WaterBottle.name=Бутылка ледяной воды
+
+item.enviromine.radioactive_cold_WaterBottle.name=Бутылка радиоактивной холодной воды
+item.enviromine.dirty_cold_WaterBottle.name=Бутылка грязной холодной воды
+item.enviromine.salty_cold_WaterBottle.name=Бутылка солёной холодной воды
+item.enviromine.clean_cold_WaterBottle.name=Бутылка холодной воды
+
+item.enviromine.radioactive_WaterBottle.name=Бутылка радиоактивной воды
+item.enviromine.dirty_WaterBottle.name=Бутылка грязной воды
+item.enviromine.salty_WaterBottle.name=Бутылка солёной воды
+
+item.enviromine.radioactive_warm_WaterBottle.name=Бутылка радиоактивной теплой воды
+item.enviromine.dirty_warm_WaterBottle.name=Бутылка грязной теплой воды
+item.enviromine.salty_warm_WaterBottle.name=Бутылка солёной теплой воды
+item.enviromine.clean_warm_WaterBottle.name=Бутылка теплой воды
+
+item.enviromine.radioactive_hot_WaterBottle.name=Бутылка радиоактивной горячей воды
+item.enviromine.hot_WaterBottle.name=Бутылка горячей воды
+
+# Типы пластиковых бутылок воды (совместимость с Hbm's NTM)
 item.enviromine.water.polymer.name=Пластиковая бутылка
-item.enviromine.cleanwater.polymer.name=Пластиковая бутылка воды
-item.enviromine.badwater.polymer.name=Пластиковая бутылка грязной воды
-item.enviromine.saltwater.polymer.name=Пластиковая бутылка солёной воды
-item.enviromine.coldwater.polymer.name=Пластиковая бутылка холодной воды
-item.enviromine.warmwater.polymer.name=Пластиковая бутылка теплой воды
-item.enviromine.badcoldwater.polymer.name=Пластиковая бутылка грязной холодной воды
-item.enviromine.badwarmwater.polymer.name=Пластиковая бутылка грязной теплой воды
-item.enviromine.frostywater.polymer.name=Пластиковая бутылка ледяной воды
-item.enviromine.hotwater.polymer.name=Пластиковая бутылка горячей воды
 
+item.enviromine.radioactive_frosty_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной ледяной воды
+item.enviromine.frosty_WaterBottle.polymer.name=Пластиковая бутылка ледяной воды
+
+item.enviromine.radioactive_cold_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной холодной воды
+item.enviromine.dirty_cold_WaterBottle.polymer.name=Пластиковая бутылка грязной холодной воды
+item.enviromine.salty_cold_WaterBottle.polymer.name=Пластиковая бутылка солёной холодной воды
+item.enviromine.clean_cold_WaterBottle.polymer.name=Пластиковая бутылка холодной воды
+
+item.enviromine.radioactive_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной воды
+item.enviromine.dirty_WaterBottle.polymer.name=Пластиковая бутылка грязной воды
+item.enviromine.salty_WaterBottle.polymer.name=Пластиковая бутылка солёной воды
+item.enviromine.clean_WaterBottle.polymer.name=Пластиковая бутылка воды
+
+item.enviromine.radioactive_warm_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной теплой воды
+item.enviromine.dirty_warm_WaterBottle.polymer.name=Пластиковая бутылка грязной теплой воды
+item.enviromine.salty_warm_WaterBottle.polymer.name=Пластиковая бутылка солёной теплой воды
+item.enviromine.clean_warm_WaterBottle.polymer.name=Пластиковая бутылка теплой воды
+
+item.enviromine.radioactive_hot_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной горячей воды
+item.enviromine.hot_WaterBottle.polymer.name=Пластиковая бутылка горячей воды
+
+# Предметы EnviroMine
 item.enviromine.camelpack.name=Бурдюк
 item.enviromine.gasmask.name=Противогаз
 item.enviromine.hardhat.name=Каска
@@ -27,12 +54,14 @@ item.enviromine.airfilter.name=Воздушный фильтр
 item.enviromine.rottenfood.name=Испорченная еда
 item.enviromine.spoiledmilk.name=Прокисшее молоко
 
+# Эффекты EnviroMine
 potion.enviromine.frostbite=Обморожение
 potion.enviromine.dehydration=Обезвоживание
 potion.enviromine.insanity=Безумие
 potion.enviromine.heatstroke=Тепловой удар
 potion.enviromine.hypothermia=Гипотермия
 
+# Блоки EnviroMine
 tile.enviromine.elevator_top.name=Верх лифта
 tile.enviromine.elevator_bottom.name=Низ лифта
 tile.enviromine.esky.name=Портативный холодильник 
@@ -173,6 +202,18 @@ misc.enviromine.tooltip.rot=Испорчено: %s (Day %s/%s)
 enviromine.tooltip.armor.resistance=Эта броня устойчива к средним температурам
 enviromine.tooltip.armor.sealed=Эта броня устойчива к экстремальным температурам
 
+enviromine.tooltip.ambTemp=Влияние на температуру:
+enviromine.tooltip.ambAir=Влияние на качество воздуха:
+enviromine.tooltip.ambSanity=Влияние на здравомыслие:
+enviromine.tooltip.effTemp=Влияние на температуру при использовании:
+enviromine.tooltip.effAir=Влияние на качество воздуха при использовании:
+enviromine.tooltip.effSanity=Влияние на здравомыслие при использовании:
+enviromine.tooltip.effHydration=Влияние на жажду при использовании:
+
+enviromine.tooltip.isRadioactive=Радиоактивная вода
+enviromine.tooltip.isDirty=Грязная вода
+enviromine.tooltip.isSalty=Солёная вода
+
 commands.enviromine.envirostat.add=добавить
 commands.enviromine.envirostat.set=установить
 commands.enviromine.envirostat.temp=температура
@@ -192,4 +233,48 @@ commands.enviromine.enviroquake.stop=стоп
 commands.enviromine.enviroquake.stoppedAll=Все землетрясения остановлены
 commands.enviromine.enviroquake.error.tooMany=У Вас нет прав вызывать больше одного землетрясения за раз!
 commands.enviromine.enviroquake.error.tooBig=Вы не можете вызвать землетрясение больше чем на 4096 блоков!
-msg.enviromine.RecordEasterEgg=Жуткая дрожь пробегает по вашей спине
+msg.enviromine.RecordEasterEgg=Жуткая дрожь пробегает по вашей спинеitem.enviromine.water.polymer.name=Plastic Bottle
+item.enviromine.radioactive_frosty_WaterBottle.polymer.name=Radioactive Frosty Water Plastic Bottle
+item.enviromine.frosty_WaterBottle.polymer.name=Frosty Water Plastic Bottle
+item.enviromine.radioactive_cold_WaterBottle.polymer.name=Radioactive Cold Water Plastic Bottle
+item.enviromine.dirty_cold_WaterBottle.polymer.name=Dirty Cold Water Plastic Bottle
+item.enviromine.salty_cold_WaterBottle.polymer.name=Salt Cold Water Plastic Bottle
+item.enviromine.clean_cold_WaterBottle.polymer.name=Cold Water Plastic Bottle
+item.enviromine.radioactive_WaterBottle.polymer.name=Radioactive Water Plastic Bottle
+item.enviromine.dirty_WaterBottle.polymer.name=Dirty Water Plastic Bottle
+item.enviromine.salty_WaterBottle.polymer.name=Salt Water Plastic Bottle
+item.enviromine.radioactive_warm_WaterBottle.polymer.name=Radioactive Warm Water Plastic Bottle
+item.enviromine.dirty_warm_WaterBottle.polymer.name=Dirty Warm Water Plastic Bottle
+item.enviromine.salty_warm_WaterBottle.polymer.name=Salt Warm Water Plastic Bottle
+item.enviromine.clean_warm_WaterBottle.polymer.name=Warm Water Plastic Bottle
+item.enviromine.radioactive_hot_WaterBottle.polymer.name=Radioactive Hot Water Plastic Bottle
+item.enviromine.hot_WaterBottle.polymer.name=Hot Water Plastic Bottle
+container.enviromine.esky=Esky
+container.enviromine.freezer=Freezer
+achievement.enviromine.KeepYourCool=Keep Your Cool
+achievement.enviromine.ThermalShock=Thermal Shock
+achievement.enviromine.KeepYourCool.desc=Craft a camel pack
+achievement.enviromine.ThermalShock.desc=Have heatstroke and hypothermia at the same time
+auth.enviromine.6=This version of EnviroMine has not been authenticated and is now disabled!
+auth.enviromine.7=If you are using a modpack please inform the dev to that they need to
+auth.enviromine.8=include the up-to-date AUTH file for this version. More info at:
+editor.enviromine.changeprofile=Change Profile
+editor.enviromine.currentprofile=Current Profile
+editor.enviromine.global=Global Config
+editor.enviromine.cave=Cave Dimension
+editor.enviromine.stability=Stability Types
+editor.enviromine.custom=Custom Configs
+editor.enviromine.createNewProfile=Create New Profile
+editor.enviromine.selectProfile=Select Profile
+editor.enviromine.genModConfigs=Generates Customs Configs for Mods Loaded.
+editor.enviromine.genBasicConfigs=Generates EnviroMines initial default files.
+editor.enviromine.create=Create
+editor.enviromine.nameProfile=New Profile
+editor.enviromine.insertName=Insert Name
+editor.enviromine.currentProfile=Current Profile
+editor.enviromine.settings=Profile Settings
+editor.enviromine.GuiAdd.title=Add %s:
+editor.enviromine.GuiAdd.title.fail=Error occurred. Check log for details.
+editor.enviromine.GuiAdd.item=Add as Item
+editor.enviromine.GuiAdd.block=Add as Block
+editor.enviromine.GuiAdd.both=Add Both

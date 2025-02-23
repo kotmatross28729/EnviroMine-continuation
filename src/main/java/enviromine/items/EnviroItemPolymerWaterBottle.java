@@ -23,29 +23,28 @@ public class EnviroItemPolymerWaterBottle extends Item {
     {
         super();
         this.waterType = waterType;
-
-        //TODO: textures
+        
         switch (this.waterType) {
-            case RADIOACTIVE_FROSTY :
-            case FROSTY             : setTextureName("enviromine:bottle_frosty");
+            case RADIOACTIVE_FROSTY -> setTextureName("enviromine:bottle_rad_frosty");
+            case FROSTY             -> setTextureName("enviromine:bottle_frosty");
 
-            case RADIOACTIVE_COLD :
-            case DIRTY_COLD       : setTextureName("enviromine:bottle_dirty_cold");
-            case SALTY_COLD       :
-            case CLEAN_COLD       : setTextureName("enviromine:bottle_cold");
+            case RADIOACTIVE_COLD -> setTextureName("enviromine:bottle_rad_cold");
+            case DIRTY_COLD       -> setTextureName("enviromine:bottle_dirty_cold");
+            case SALTY_COLD       -> setTextureName("enviromine:bottle_salt_cold");
+            case CLEAN_COLD       -> setTextureName("enviromine:bottle_cold");
 
-            case RADIOACTIVE :
-            case DIRTY       : setTextureName("enviromine:bottle_dirty");
-            case SALTY       : setTextureName("enviromine:bottle_salt");
-            case CLEAN       : setTextureName("enviromine:bottle_clean");
+            case RADIOACTIVE -> setTextureName("enviromine:bottle_rad");
+            case DIRTY       -> setTextureName("enviromine:bottle_dirty");
+            case SALTY       -> setTextureName("enviromine:bottle_salt");
+            case CLEAN       -> setTextureName("enviromine:bottle_clean");
 
-            case RADIOACTIVE_WARM :
-            case DIRTY_WARM       :  setTextureName("enviromine:bottle_dirty_warm");
-            case SALTY_WARM       :
-            case CLEAN_WARM       :  setTextureName("enviromine:bottle_warm");
+            case RADIOACTIVE_WARM -> setTextureName("enviromine:bottle_rad_warm");
+            case DIRTY_WARM       ->  setTextureName("enviromine:bottle_dirty_warm");
+            case SALTY_WARM       -> setTextureName("enviromine:bottle_salt_warm");
+            case CLEAN_WARM       ->  setTextureName("enviromine:bottle_warm");
 
-            case RADIOACTIVE_HOT :
-            case HOT             :  setTextureName("enviromine:bottle_hot");
+            case RADIOACTIVE_HOT -> setTextureName("enviromine:bottle_rad_hot");
+            case HOT             ->  setTextureName("enviromine:bottle_hot");
         }
     }
 
