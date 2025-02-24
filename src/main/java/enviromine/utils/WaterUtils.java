@@ -1,8 +1,5 @@
 package enviromine.utils;
 
-import net.minecraft.block.BlockLiquid;
-import net.minecraftforge.fluids.BlockFluidClassic;
-
 /**
  *
  * All sorts of things related to Enviromine water  

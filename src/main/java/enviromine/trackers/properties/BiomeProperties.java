@@ -31,6 +31,8 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	public int id;
 	public boolean biomeOveride;
+	
+	//TODO: serene seasons compat, water quality changes with season
 	public String waterQuality;
 	public float ambientTemp;
 	public float tempRate;

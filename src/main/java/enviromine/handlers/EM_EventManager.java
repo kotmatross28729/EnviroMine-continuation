@@ -11,6 +11,7 @@ import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
 import enviromine.blocks.tiles.TileEntityGas;
+import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
@@ -111,6 +112,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
@@ -532,7 +534,7 @@ public class EM_EventManager
 
                 boolean isWater;
 
-                if (targetblock == Blocks.water || targetblock == Blocks.flowing_water) {
+                if (targetblock == Blocks.water || targetblock == Blocks.flowing_water || targetblock instanceof BlockEnviroMineWater) {
                     // if finite is on... make sure player cant drink from infinite flowing water source
                     isWater = !(targetmeta > .2f) || !EM_Settings.finiteWater;
                 } else {
@@ -625,9 +627,9 @@ public class EM_EventManager
 
 				Block targetBlock = entityPlayer.worldObj.getBlock(i, j, k);
 				String targetBlockRegistryName = Block.blockRegistry.getNameForObject(targetBlock);
-
-				//TODO: water brother versions (when done)
+				
 				boolean isWater = (targetBlock == Blocks.flowing_water || targetBlock == Blocks.water
+					|| targetBlock instanceof BlockEnviroMineWater
                     // Automatically make the block water if it's Streams water
                     || (EM_Settings.streamsDrink && targetBlockRegistryName.contains(WATER_ROOT_STREAMS))
                 )
@@ -642,6 +644,7 @@ public class EM_EventManager
 					if(tracker != null && tracker.hydration < 100F) {
 						WaterUtils.WATER_TYPES type = WaterUtils.WATER_TYPES.CLEAN;
 
+						//TODO
 						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k))) {
 							type = WaterUtils.heatUp(type);
 						} else {
@@ -682,12 +685,14 @@ public class EM_EventManager
 						}
 						
 						switch (type) {
-							//TODO: types
+							//TODO: types (hydration)
 						}
 						
+						//TODO custom cauldron
 						if(isValidCauldron) {
 							entityPlayer.worldObj.setBlockMetadataWithNotify(i, j, k, entityPlayer.worldObj.getBlockMetadata(i, j, k) - 1, 2);
 						}
+						//TODO water types
 						else if(EM_Settings.finiteWater) {
 							entityPlayer.worldObj.setBlock(i, j, k, Blocks.flowing_water, entityPlayer.worldObj.getBlockMetadata(i, j, k) + 1, 2);
 						}
@@ -707,7 +712,15 @@ public class EM_EventManager
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		DimensionProperties dimensionProperties = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
 		int seaLvl = dimensionProperties != null? dimensionProperties.sealevel : 64;
-
+		
+		Block block = world.getBlock(x,y,z);
+		
+		if(block != null) {
+			if(block instanceof BlockEnviroMineWater enviroMineWater) {
+				return enviroMineWater.getType(enviroMineWater.getFluid());
+			}
+		}
+		
 		if(biome == null) {
 			return WaterUtils.WATER_TYPES.CLEAN;
 		}
