@@ -112,10 +112,9 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -434,8 +433,9 @@ public class EM_EventManager
 				if(!(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0))
 				{
 					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event, item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
-					//TODO fillBucket
 				}
+			} else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
+				fillBucket(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
 			}
 		}
 		//RMB AIR WITH HAND
@@ -509,6 +509,56 @@ public class EM_EventManager
 			}
 		}
 	}
+	
+	
+	public static void fillBucket(World world, EntityPlayer player, int x, int y, int z, ItemStack item, PlayerInteractEvent event) {
+		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player);
+		
+			if (movingobjectposition != null) {
+				if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+					int i = movingobjectposition.blockX;
+					int j = movingobjectposition.blockY;
+					int k = movingobjectposition.blockZ;
+					
+					Block targetblock = world.getBlock(i, j, k);
+
+					if (!world.canMineBlock(player, i, j, k)) {
+						return;
+					}
+					
+					if (!player.canPlayerEdit(i, j, k, movingobjectposition.sideHit, item)) {
+						return;
+					}
+					
+					boolean isWater;
+					
+					isWater = targetblock == Blocks.water || targetblock == Blocks.flowing_water;
+					
+					if (isWater) {
+						if (world.getBlockMetadata(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ) == 0) {
+							Item newItem = ObjectHandler.getBucketFromWaterType(getWaterType(world, i, j, k)).getItem();
+							
+							player.worldObj.setBlock(i, j, k, Blocks.air, 0, 3);
+
+							--item.stackSize;
+							
+							if (item.stackSize <= 0) {
+								item = new ItemStack(newItem);
+								item.stackSize = 1;
+								item.setItemDamage(0);
+								player.setCurrentItemOrArmor(0, item);
+							} else if (!player.inventory.addItemStackToInventory(new ItemStack(newItem, 1, 0))) {
+								player.dropPlayerItemWithRandomChoice(new ItemStack(newItem, 1, 0), false);
+							}
+							
+							//NEEDED TO RESYNC THE PLAYER CONTAINER
+							player.inventoryContainer.detectAndSendChanges();
+							event.setCanceled(true);
+						}
+					}
+				}
+			}
+	}
 
 	public static void fillBottle(World world, EntityPlayer player, int x, int y, int z, ItemStack item, PlayerInteractEvent event, boolean isPolymer) {
 		MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player);
@@ -581,7 +631,6 @@ public class EM_EventManager
                 }
             }
         }
-        return;
     }
 
 	public static void drinkWater(EntityPlayer entityPlayer, PlayerInteractEvent event) {
@@ -644,7 +693,7 @@ public class EM_EventManager
 					if(tracker != null && tracker.hydration < 100F) {
 						WaterUtils.WATER_TYPES type = WaterUtils.WATER_TYPES.CLEAN;
 
-						//TODO
+						//TODO cauldron
 						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k))) {
 							type = WaterUtils.heatUp(type);
 						} else {
@@ -656,7 +705,9 @@ public class EM_EventManager
 						int werewolfDuration600 = MathHelper.clamp_int(600 - (EM_Settings.witcheryWerewolfImmunities ? werewolfLevel : 0)*45, 0, 600);
 
 						if(type.isRadioactive) {
-							//TODO: compat
+							if(EnviroMine.isHbmLoaded) {
+								EM_EventManager_NTM.applyRadiation(entityPlayer, 5.0F);
+							}
 						}
 						
 						if(type.isDirty) {
@@ -684,8 +735,14 @@ public class EM_EventManager
                         	}
 						}
 						
-						switch (type) {
-							//TODO: types (hydration)
+						if(type.temperatureInfluence != 0.0F) {
+							tracker.bodyTemp += type.temperatureInfluence;
+						}
+						
+						if(type.hydration > 0.0F) {
+							tracker.hydrate(type.hydration);
+						} else if (type.hydration < 0.0F) {
+							tracker.dehydrate(Math.abs(type.hydration));
 						}
 						
 						//TODO custom cauldron

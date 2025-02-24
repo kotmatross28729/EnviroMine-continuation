@@ -470,7 +470,6 @@ public class ObjectHandler {
 	
 	public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {
 		switch (type) {
-			
 			case RADIOACTIVE_FROSTY -> {return new ItemStack(radioactive_frosty_WaterBottle);}
 			case FROSTY -> {return new ItemStack(frosty_WaterBottle);}
 			
@@ -492,6 +491,27 @@ public class ObjectHandler {
 			case HOT -> {return new ItemStack(hot_WaterBottle);}
 			
 			default -> {return new ItemStack(Items.potionitem, 1, 0);}
+		}
+	}
+	
+	public static ItemStack getBucketFromWaterType(WaterUtils.WATER_TYPES type) {
+		switch (type) {
+			case RADIOACTIVE_FROSTY -> 		{return new ItemStack(bucket_radioactive_frosty_Water);}
+			case FROSTY -> 					{return new ItemStack(bucket_frosty_Water);}
+			case RADIOACTIVE_COLD -> 		{return new ItemStack(bucket_radioactive_cold_Water);}
+			case DIRTY_COLD -> 				{return new ItemStack(bucket_dirty_cold_Water);}
+			case SALTY_COLD -> 				{return new ItemStack(bucket_salty_cold_Water);}
+			case CLEAN_COLD -> 				{return new ItemStack(bucket_clean_cold_Water);}
+			case RADIOACTIVE -> 			{return new ItemStack(bucket_radioactive_Water);}
+			case DIRTY ->					{return new ItemStack(bucket_dirty_Water);}
+			case SALTY ->					{return new ItemStack(bucket_salty_Water);}
+			case RADIOACTIVE_WARM -> 		{return new ItemStack(bucket_radioactive_warm_Water);}
+			case DIRTY_WARM -> 				{return new ItemStack(bucket_dirty_warm_Water);}
+			case SALTY_WARM -> 				{return new ItemStack(bucket_salty_warm_Water);}
+			case CLEAN_WARM -> 				{return new ItemStack(bucket_clean_warm_Water);}
+			case RADIOACTIVE_HOT -> 		{return new ItemStack(bucket_radioactive_hot_Water);}
+			case HOT -> 					{return new ItemStack(bucket_hot_Water);}
+			default -> 						{return new ItemStack(Items.water_bucket);}
 		}
 	}
 

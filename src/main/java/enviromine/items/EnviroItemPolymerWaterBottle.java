@@ -60,11 +60,11 @@ public class EnviroItemPolymerWaterBottle extends Item {
         }
     
         if (!par2World.isRemote) {
-            if(waterType.isRadioactive) { //TODO config
+            if(waterType.isRadioactive) {
                 ContaminationUtil.contaminate(par3EntityPlayer, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.RAD_BYPASS, 5.0F);
             }
             
-            if(waterType.isDirty) { //TODO config
+            if(waterType.isDirty) {
                 if(par3EntityPlayer.getRNG().nextInt(4) == 0) {
                     par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
                 }
@@ -73,7 +73,7 @@ public class EnviroItemPolymerWaterBottle extends Item {
                 }
             }
             
-            if(waterType.isSalty) { //TODO config
+            if(waterType.isSalty) {
                 if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0) {
                     int amp = par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
                     par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));

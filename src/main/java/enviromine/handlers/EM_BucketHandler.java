@@ -31,7 +31,7 @@ public class EM_BucketHandler {
 		event.setResult(Event.Result.ALLOW);
 	}
 	
-	private ItemStack fillCustomBucket(World world, MovingObjectPosition pos) {
+	public ItemStack fillCustomBucket(World world, MovingObjectPosition pos) {
 		
 		Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 		

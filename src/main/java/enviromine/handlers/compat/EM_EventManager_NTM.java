@@ -8,8 +8,10 @@ import com.hbm.blocks.gas.BlockGasRadonTomb;
 import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
+import com.hbm.util.ContaminationUtil;
 import enviromine.core.EM_Settings;
 import enviromine.handlers.ObjectHandler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -73,6 +75,11 @@ public class EM_EventManager_NTM {
 			//Fire -> No fire
 			ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 0);
 		}
+	}
+	
+	
+	public static void applyRadiation(EntityPlayer par3EntityPlayer, float ammount) {
+		ContaminationUtil.contaminate(par3EntityPlayer, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.RAD_BYPASS, ammount);
 	}
 	
 }

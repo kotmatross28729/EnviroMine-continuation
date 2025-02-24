@@ -4,6 +4,7 @@ import com.pam.harvestcraft.ItemRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 
+//Fuck
 public class ItemProperties_HarvestCraft {
 	
 	/**

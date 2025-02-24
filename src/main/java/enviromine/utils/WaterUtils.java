@@ -9,35 +9,41 @@ package enviromine.utils;
  */
 public class WaterUtils {
     public enum WATER_TYPES {
-        RADIOACTIVE_FROSTY(-2, true, false, false),
-        FROSTY(-2, false, false, false),
+        RADIOACTIVE_FROSTY(-2, true, false, false, 25.0F, -0.1F),
+        FROSTY(-2, false, false, false, 25.0F, -0.1F),
         
-        RADIOACTIVE_COLD(-1, true, false, false),
-        DIRTY_COLD(-1, false, true, false),
-        SALTY_COLD(-1, false, false,true),
-        CLEAN_COLD(-1, false, false, false),
+        RADIOACTIVE_COLD(-1, true, false, false, 25.0F, -0.05F),
+        DIRTY_COLD(-1, false, true, false, 25.0F, -0.05F),
+        SALTY_COLD(-1, false, false,true, 25.0F, -0.05F),
+        CLEAN_COLD(-1, false, false, false, 25.0F, -0.05F),
         
-        RADIOACTIVE(0, true, false, false),
-        DIRTY(0, false, true, false),
-        SALTY(0, false, false,true),
-        CLEAN(0, false, false, false),
+        RADIOACTIVE(0, true, false, false, 25.0F, 0.0F),
+        DIRTY(0, false, true, false, 25.0F, 0.0F),
+        SALTY(0, false, false,true, 25.0F, 0.0F),
+        CLEAN(0, false, false, false, 25.0F, 0.0F),
         
-        RADIOACTIVE_WARM(1, true, false, false),
-        DIRTY_WARM(1, false, true, false),
-        SALTY_WARM(1, false, false,true),
-        CLEAN_WARM(1, false, false, false),
+        RADIOACTIVE_WARM(1, true, false, false, 25.0F, 0.05F),
+        DIRTY_WARM(1, false, true, false, 25.0F, 0.05F),
+        SALTY_WARM(1, false, false,true, 25.0F, 0.05F),
+        CLEAN_WARM(1, false, false, false, 25.0F, 0.05F),
         
-        RADIOACTIVE_HOT(2, true, false, false),
-        HOT(2, false, false, false);
+        RADIOACTIVE_HOT(2, true, false, false, 25.0F, 0.1F),
+        HOT(2, false, false, false, 25.0F, 0.1F);
         public final int heatIndex;
         public final boolean isRadioactive;
         public final boolean isDirty;
         public final boolean isSalty;
-        WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty) {
+    
+        public final float hydration;
+    
+        public final float temperatureInfluence;
+        WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty, float hydration, float temperatureInfluence) {
             this.heatIndex = heatIndex;
             this.isRadioactive = isRadioactive;
             this.isDirty = isDirty;
             this.isSalty = isSalty;
+            this.hydration = hydration;
+            this.temperatureInfluence = temperatureInfluence;
         }
         
         public static WATER_TYPES fromTraits(WATER_TYPES waterTypeInitial, int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty) {

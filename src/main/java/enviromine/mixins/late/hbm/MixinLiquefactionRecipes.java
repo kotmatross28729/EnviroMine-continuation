@@ -16,7 +16,6 @@ public class MixinLiquefactionRecipes {
 	@Inject(method = "getOutput", at = @At(value = "HEAD"), cancellable = true, remap = false)
 	private static void getOutput(ItemStack stack, CallbackInfoReturnable<FluidStack> cir) {
 		if(stack != null && stack.getItem() != null && stack.getItem() == ObjectHandler.rottenFood) {
-			//TODO config?
 			cir.setReturnValue(new FluidStack(50, Fluids.SALIENT));
 		}
 	}

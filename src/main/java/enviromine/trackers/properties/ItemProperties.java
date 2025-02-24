@@ -29,6 +29,8 @@ import java.util.Iterator;
 @CompatSafe
 public class ItemProperties implements SerialisableProperty, PropertyBase {
 
+	//TODO WATER BOTTLES
+	
     public static final ItemProperties base = new ItemProperties();
     static String[] IPName;
 

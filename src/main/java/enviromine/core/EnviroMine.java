@@ -126,7 +126,6 @@ public class EnviroMine
 		if(Loader.isModLoaded("hbm")) {
 			isHbmLoaded = true;
 			
-			//TODO: test
 			try {
 				if(Launch.classLoader.getClassBytes("com.hbm.dim.SolarSystem") != null) {
 					isHbmSpaceLoaded = true;

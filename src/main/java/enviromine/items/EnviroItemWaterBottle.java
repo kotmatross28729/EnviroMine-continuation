@@ -3,6 +3,7 @@ package enviromine.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EnviroPotion;
+import enviromine.items.compat.EnviroItemWaterBottle_NTM;
 import enviromine.utils.WaterUtils;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,12 +47,11 @@ public class EnviroItemWaterBottle extends Item {
     
         if (!par2World.isRemote) {
             
-            //TODO compat.EnviroItemWaterBottle_NTM
-//            if(waterType.isRadioactive) {
-//                HbmLivingProps.incrementRadiation(par3EntityPlayer, 5.0F);
-//            }
+            if(waterType.isRadioactive) {
+                EnviroItemWaterBottle_NTM.applyRadiation(par3EntityPlayer, 5.0F);
+            }
             
-            if(waterType.isDirty) { //TODO config
+            if(waterType.isDirty) {
                 if(par3EntityPlayer.getRNG().nextInt(4) == 0) {
                     par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
                 }
@@ -60,7 +60,7 @@ public class EnviroItemWaterBottle extends Item {
                 }
             }
         
-            if(waterType.isSalty) { //TODO config
+            if(waterType.isSalty) {
                 if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0) {
                     int amp = par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
                     par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
