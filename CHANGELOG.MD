@@ -46,9 +46,11 @@
 
 * Hbm's NTM canned food no longer rot    [**Suggested by iamsoNewBee**]
 
-* Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description **[TODO]** [**Suggested by xronin01**]
+* Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description [**Suggested by xronin01**]
 
 * Hbm's NTM drinks now restore hydration (And some also reduce the temperature (except for vodka, it increases))
+
+* (Hbm's NTM) Rotten food can be liquefied into Salient Green (recycling rotten food)
 
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
 

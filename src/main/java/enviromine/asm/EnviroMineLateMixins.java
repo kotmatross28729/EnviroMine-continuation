@@ -32,6 +32,10 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
 			mixins.add("CookingForBlockheads.MixinTileFridge");
 		}
 		
+		if(loadedMods.contains("hbm")) {
+			mixins.add("hbm.MixinLiquefactionRecipes");
+		}
+		
 		
 		
 		return mixins;

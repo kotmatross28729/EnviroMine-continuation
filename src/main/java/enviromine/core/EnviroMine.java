@@ -231,19 +231,8 @@ public class EnviroMine
 		proxy.postInit(event);
 
         if(isHbmLoaded) {
-			//TODO: mixins boyz
-			// 1) @Shadow recipes
-			// 2) Inject into registerDefaults()
-			// 3) Profit
-			// OR
-			// 1) Inject into getOutput(ItemStack stack)
-			// 2) Profit
-			//                                              This ↓↓↓
-			// recipes.put(new RecipesCommon.ComparableStack(ObjectHandler.rottenFood), new FluidStack(50, Fluids.SALIENT));
-			
 			ObjectHandlerCompat.registerRecipes();
 		}
-		
 
 		EM_ConfigHandler.initConfig(); // Second pass for object initialized after pre-init
 	}
