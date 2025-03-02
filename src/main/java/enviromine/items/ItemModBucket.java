@@ -1,10 +1,13 @@
 package enviromine.items;
 
+import enviromine.blocks.water.BlockEnviroMineWater;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.world.World;
+
+import org.apache.logging.log4j.LogManager;
 
 public class ItemModBucket extends ItemBucket {
 	protected int overrideFluidMeta = 0;
@@ -20,6 +23,8 @@ public class ItemModBucket extends ItemBucket {
 		this.overrideFluidMeta = meta;
 	}
 	
+	
+	//TODO: NTM:SPACE
 	@Override
 	public boolean tryPlaceContainedLiquid(World world, int x, int y, int z) {
 		
@@ -32,7 +37,7 @@ public class ItemModBucket extends ItemBucket {
 			if(!world.isAirBlock(x, y, z) && !flag) {
 				return false;
 			} else {
-				if(world.provider.isHellWorld && this.containedFluid == Blocks.flowing_water) {
+				if(world.provider.isHellWorld && (this.containedFluid == Blocks.flowing_water || this.containedFluid instanceof BlockEnviroMineWater)) {
 					world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), "random.fizz", 0.5F,
 							2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					

@@ -19,6 +19,8 @@ import enviromine.blocks.tiles.TileEntityElevator;
 import enviromine.blocks.tiles.TileEntityEsky;
 import enviromine.blocks.tiles.TileEntityFreezer;
 import enviromine.blocks.tiles.TileEntityGas;
+import enviromine.blocks.tiles.TileEntityWaterCauldron;
+import enviromine.blocks.water.BlockEMWaterCauldron;
 import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.blocks.water.EnviroMineWaterFluid;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
@@ -99,6 +101,8 @@ public class ObjectHandler {
 
 	public static Block esky;
 	public static Block freezer;
+	
+	public static Block water_cauldron;
 
 	public static Block noPhysBlock;
 
@@ -239,7 +243,8 @@ public class ObjectHandler {
 		offTorch = new BlockOffTorch().setTickRandomly(false).setBlockName("torch").setBlockTextureName("enviromine:torch_off").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
 		esky = new BlockEsky(Material.iron).setBlockName("enviromine.esky").setCreativeTab(EnviroMine.enviroTab);
 		freezer = new BlockFreezer(Material.iron).setBlockName("enviromine.freezer").setCreativeTab(EnviroMine.enviroTab);
-
+		water_cauldron = new BlockEMWaterCauldron().setBlockName("enviromine.water_cauldron").setCreativeTab(EnviroMine.enviroTab);
+		
 		noPhysBlock = new BlockNoPhysics();
 
 		Blocks.redstone_torch.setLightLevel(0.9375F);
@@ -462,11 +467,9 @@ public class ObjectHandler {
 		GameRegistry.registerTileEntity(TileEntityBurningCoal.class, "enviromine.tile.burningcoal");
 		GameRegistry.registerTileEntity(TileEntityEsky.class, "enviromine.tile.esky");
 		GameRegistry.registerTileEntity(TileEntityFreezer.class, "enviromine.tile.freezer");
-
 		GameRegistry.registerTileEntity(TileEntityElevator.class, "enviromine.tile.elevator");
-
-
 		GameRegistry.registerTileEntity(TileEntityDavyLamp.class, "enviromine.tile.davy_lamp");
+		GameRegistry.registerTileEntity(TileEntityWaterCauldron.class, "enviromine.tile.water_cauldron");
 	}
 	
 	public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {

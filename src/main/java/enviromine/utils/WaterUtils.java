@@ -1,5 +1,7 @@
 package enviromine.utils;
 
+import net.minecraftforge.fluids.Fluid;
+
 /**
  *
  * All sorts of things related to Enviromine water  
@@ -97,5 +99,31 @@ public class WaterUtils {
     
     public static WATER_TYPES pollute(WATER_TYPES waterType) {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, true, waterType.isSalty);
+    }
+    
+    public static WaterUtils.WATER_TYPES getTypeFromFluid(Fluid fluid) {
+        switch (fluid.getName()) {
+            case "radioactive_frosty_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY;}
+            case "frosty_water" -> {return WaterUtils.WATER_TYPES.FROSTY;}
+            
+            case "radioactive_cold_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_COLD;}
+            case "dirty_cold_water" -> {return WaterUtils.WATER_TYPES.DIRTY_COLD;}
+            case "salty_cold_water" -> {return WaterUtils.WATER_TYPES.SALTY_COLD;}
+            case "clean_cold_water" -> {return WaterUtils.WATER_TYPES.CLEAN_COLD;}
+            
+            case "radioactive_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE;}
+            case "dirty_water" -> {return WaterUtils.WATER_TYPES.DIRTY;}
+            case "salty_water" -> {return WaterUtils.WATER_TYPES.SALTY;}
+            
+            case "radioactive_warm_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_WARM;}
+            case "dirty_warm_water" -> {return WaterUtils.WATER_TYPES.DIRTY_WARM;}
+            case "salty_warm_water" -> {return WaterUtils.WATER_TYPES.SALTY_WARM;}
+            case "clean_warm_water" -> {return WaterUtils.WATER_TYPES.CLEAN_WARM;}
+            
+            case "radioactive_hot_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_HOT;}
+            case "hot_water" -> {return WaterUtils.WATER_TYPES.HOT;}
+            
+            default -> {return WaterUtils.WATER_TYPES.CLEAN;}
+        }
     }
 }

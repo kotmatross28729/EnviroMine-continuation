@@ -9,11 +9,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+
+import java.util.Random;
 
 public class BlockEnviroMineWater extends BlockFluidClassic {
 	public static IIcon stillWater;
@@ -44,12 +47,14 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
 		///TODO COMAPTA LSCAA COMAPT CLASS CLOOAPL CLASS COMPAT CLASS
-		Block block = world.getBlock(x,y,z);
-		if(block instanceof BlockEnviroMineWater water) {
-			if(water.getType(water.getFluid()).isRadioactive) {
-				if (entity instanceof EntityLivingBase)
-					ContaminationUtil.contaminate((EntityLivingBase) entity, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, 5F);
+		if (!world.isRemote) {
+			Block block = world.getBlock(x, y, z);
+			if (block instanceof BlockEnviroMineWater water) {
+				if (WaterUtils.getTypeFromFluid(water.getFluid()).isRadioactive) {
+					if (entity instanceof EntityLivingBase entityLivingBase)
+						ContaminationUtil.contaminate(entityLivingBase, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, 5F);
 					//^, the fuck is this 200, not 5?
+				}
 			}
 		}
 	}
@@ -82,30 +87,17 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 		flowingWater = register.registerIcon("water_flow");
 	}
 	
-	public WaterUtils.WATER_TYPES getType(Fluid fluid) {
+	//TODO: NTM:SPACE
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		super.updateTick(world,x,y,z,rand);
 		
-		switch (fluid.getName()) {
-			case "radioactive_frosty_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY;}
-			case "frosty_water" -> {return WaterUtils.WATER_TYPES.FROSTY;}
-					
-			case "radioactive_cold_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_COLD;}
-			case "dirty_cold_water" -> {return WaterUtils.WATER_TYPES.DIRTY_COLD;}
-			case "salty_cold_water" -> {return WaterUtils.WATER_TYPES.SALTY_COLD;}
-			case "clean_cold_water" -> {return WaterUtils.WATER_TYPES.CLEAN_COLD;}
-					
-			case "radioactive_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE;}
-			case "dirty_water" -> {return WaterUtils.WATER_TYPES.DIRTY;}
-			case "salty_water" -> {return WaterUtils.WATER_TYPES.SALTY;}
-					
-			case "radioactive_warm_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_WARM;}
-			case "dirty_warm_water" -> {return WaterUtils.WATER_TYPES.DIRTY_WARM;}
-			case "salty_warm_water" -> {return WaterUtils.WATER_TYPES.SALTY_WARM;}
-			case "clean_warm_water" -> {return WaterUtils.WATER_TYPES.CLEAN_WARM;}
-					
-			case "radioactive_hot_water" -> {return WaterUtils.WATER_TYPES.RADIOACTIVE_HOT;}
-			case "hot_water" -> {return WaterUtils.WATER_TYPES.HOT;}
-			
-			default -> {return WaterUtils.WATER_TYPES.CLEAN;}
+		if(world.provider.isHellWorld) {
+			world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), "random.fizz", 0.5F,
+					2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+			for(int l = 0; l < 8; ++l) {
+				world.spawnParticle("largesmoke", (double) x + Math.random(), (double) y + Math.random(), (double) z + Math.random(), 0.0D, 0.0D, 0.0D);
+			}
+			world.setBlockToAir(x, y, z);
 		}
 	}
 	
