@@ -3,13 +3,14 @@ package enviromine.blocks.water;
 import com.hbm.util.ContaminationUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import enviromine.blocks.water.compat.BlockEnviroMineWater_NTM_SPACE;
+import enviromine.core.EnviroMine;
 import enviromine.utils.WaterUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -87,18 +88,13 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 		flowingWater = register.registerIcon("water_flow");
 	}
 	
-	//TODO: NTM:SPACE
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		super.updateTick(world,x,y,z,rand);
-		
-		if(world.provider.isHellWorld) {
-			world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), "random.fizz", 0.5F,
-					2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
-			for(int l = 0; l < 8; ++l) {
-				world.spawnParticle("largesmoke", (double) x + Math.random(), (double) y + Math.random(), (double) z + Math.random(), 0.0D, 0.0D, 0.0D);
+		if(EnviroMine.isHbmSpaceLoaded) {
+			if(BlockEnviroMineWater_NTM_SPACE.TEST(world,x,y,z, tickRate)) {
+				return; //Will not try to spill further if removed
 			}
-			world.setBlockToAir(x, y, z);
 		}
+		super.updateTick(world,x,y,z,rand);
 	}
 	
 	

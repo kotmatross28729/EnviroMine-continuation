@@ -23,8 +23,6 @@ public class ItemModBucket extends ItemBucket {
 		this.overrideFluidMeta = meta;
 	}
 	
-	
-	//TODO: NTM:SPACE
 	@Override
 	public boolean tryPlaceContainedLiquid(World world, int x, int y, int z) {
 		

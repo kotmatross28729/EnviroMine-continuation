@@ -41,6 +41,5 @@ public class EM_BucketHandler {
 			return new ItemStack(bucket);
 		} else
 			return null;
-		
 	}
 }
