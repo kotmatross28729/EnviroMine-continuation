@@ -90,7 +90,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 	
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		if(EnviroMine.isHbmSpaceLoaded) {
-			if(BlockEnviroMineWater_NTM_SPACE.TEST(world,x,y,z, tickRate)) {
+			if(BlockEnviroMineWater_NTM_SPACE.checkEvaporation(world,x,y,z, tickRate)) {
 				return; //Will not try to spill further if removed
 			}
 		}
