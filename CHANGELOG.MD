@@ -8,7 +8,6 @@
 
 -  **[NTM Space compat]**
    * Rebalanced temperature values for planets to be more in line with ~~reality~~ common sense
-     * The terraformed values are made up of nothing, of course, changing the composition of the atmosphere is half of a work, there is also mass, radius, and a bunch of parameters related to the orbit, rotation period, solar day, etc. But let's not forget that this is just a game made of cubes, okay?
      * **You can see the values [here](https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/DEBUG_SHEET/TEMPS.MD)**
    * Fixed "Hard temperatures" working even when the planet was terraformed
 
@@ -23,9 +22,12 @@
   * Now Enviromine water has traits : `heatIndex`, `isRadioactive`, `isDirty`, `isSalty`
     * All cooling/heating recipes now use `heatIndex` instead of manually setting
   * Added water block for each water type (16 blocks!)
-    * Added water compatibility for forge fluids and bobfluids (Hbm's NTM)
+    * **[NTM:Space] All 16 EnviroMine water blocks can evaporate in a vacuum (separate compatibility)**
+    * **Added water compatibility for forge fluids and bobfluids (Hbm's NTM)**
     * Accordingly added buckets for each water type   
       * This fixes an old balance issue: previously you could fill a bucket with water in a salty biome, pour it out in a biome with normal water and avoid boiling. Adding a bucket of salty water will fix this: eventually, if you fill a bucket with water in a salty biome, you'll get a bucket of salty water, and no matter where you pour it, it will still be salty.
+      * Cauldrons will also use water types
+  * **[Serene seasons] The type of water in the biome will also change depending on the season**
 
 * **Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed**
 
@@ -55,6 +57,16 @@
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
 
 * Minor code optimizations
+
+
+
+------------------
+
+------------------
+
+------------------
+
+
 
 # 1.3.147
 ### Fixed
