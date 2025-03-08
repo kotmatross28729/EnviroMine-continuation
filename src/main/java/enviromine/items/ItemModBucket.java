@@ -7,8 +7,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.world.World;
 
-import org.apache.logging.log4j.LogManager;
-
 public class ItemModBucket extends ItemBucket {
 	protected int overrideFluidMeta = 0;
 	public Block containedFluid;

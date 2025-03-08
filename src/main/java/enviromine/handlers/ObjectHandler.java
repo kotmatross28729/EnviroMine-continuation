@@ -14,6 +14,7 @@ import enviromine.blocks.BlockOffTorch;
 import enviromine.blocks.materials.MaterialElevator;
 import enviromine.blocks.materials.MaterialGas;
 import enviromine.blocks.tiles.TileEntityBurningCoal;
+import enviromine.blocks.tiles.TileEntityCauldron;
 import enviromine.blocks.tiles.TileEntityDavyLamp;
 import enviromine.blocks.tiles.TileEntityElevator;
 import enviromine.blocks.tiles.TileEntityEsky;
@@ -99,8 +100,6 @@ public class ObjectHandler {
 
 	public static Block esky;
 	public static Block freezer;
-	
-	public static Block water_cauldron;
 
 	public static Block noPhysBlock;
 
@@ -272,7 +271,6 @@ public class ObjectHandler {
 		GameRegistry.registerBlock(burningCoal, "burningcoal");
 		GameRegistry.registerBlock(esky, "esky");
 		GameRegistry.registerBlock(freezer, "freezer");
-		GameRegistry.registerBlock(water_cauldron, "water_cauldron");
 		GameRegistry.registerBlock(noPhysBlock, "no_phys_block");
 	}
 	
@@ -466,6 +464,8 @@ public class ObjectHandler {
 		GameRegistry.registerTileEntity(TileEntityFreezer.class, "enviromine.tile.freezer");
 		GameRegistry.registerTileEntity(TileEntityElevator.class, "enviromine.tile.elevator");
 		GameRegistry.registerTileEntity(TileEntityDavyLamp.class, "enviromine.tile.davy_lamp");
+		
+		GameRegistry.registerTileEntity(TileEntityCauldron.class, "enviromine.tile.cauldron");
 	}
 	
 	public static ItemStack getItemStackFromWaterType(WaterUtils.WATER_TYPES type) {

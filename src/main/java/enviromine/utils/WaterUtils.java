@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.Fluid;
  *
  */
 public class WaterUtils {
+    //TODO config for values
     public enum WATER_TYPES {
         RADIOACTIVE_FROSTY(-2, true, false, false, 25.0F, -0.1F),
         FROSTY(-2, false, false, false, 25.0F, -0.1F),

@@ -24,6 +24,7 @@ public class EnviroMineEarlyMixins implements IFMLLoadingPlugin, IEarlyMixinLoad
 
 			List<String> mixins = new ArrayList<>();
 			
+			mixins.add("MixinBlockCauldron");
 			mixins.add("MixinBlockTorch");
 			mixins.add("MixinBlockOre");
 			

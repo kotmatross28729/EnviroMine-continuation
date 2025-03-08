@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
+import enviromine.blocks.tiles.TileEntityCauldron;
 import enviromine.blocks.tiles.TileEntityGas;
 import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
@@ -791,6 +792,12 @@ public class EM_EventManager
 		if(block != null) {
 			if(block instanceof BlockEnviroMineWater enviroMineWater) {	//ENVIROMINE WATER
 				return WaterUtils.getTypeFromFluid(enviroMineWater.getFluid());
+			}
+			else if(block instanceof BlockCauldron) {
+				TileEntity te = world.getTileEntity(x, y, z);
+				if(te instanceof TileEntityCauldron cauldron) {
+					return cauldron.getWaterType();
+				}
 			}
 		}
 		
