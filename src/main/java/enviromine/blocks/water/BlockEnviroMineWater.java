@@ -97,5 +97,4 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 		super.updateTick(world,x,y,z,rand);
 	}
 	
-	
 }

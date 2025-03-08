@@ -818,9 +818,9 @@ public class EM_EventManager
 			if(block instanceof BlockEnviroMineWater enviroMineWater) {	//ENVIROMINE WATER
 				return WaterUtils.getTypeFromFluid(enviroMineWater.getFluid());
 			}
-			else if (block instanceof BlockEMWaterCauldron emWaterCauldron) { //ENVIROMINE CAULDRON
-				return WaterUtils.getTypeFromFluid(emWaterCauldron.containedFluid);
-			}
+//			else if (block instanceof BlockEMWaterCauldron emWaterCauldron) { //ENVIROMINE CAULDRON
+//				return WaterUtils.getTypeFromFluid(emWaterCauldron.containedFluid);
+//			}
 			else if (block instanceof BlockCauldron cauldron) { //VANILLA CAULDRON
 				return WaterUtils.WATER_TYPES.CLEAN;
 			}

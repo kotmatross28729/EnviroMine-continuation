@@ -9,35 +9,28 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
-public class TileEntityWaterCauldron extends TileEntity {
-	
-	public Fluid water;
-	public int ammount;
+public class TileEntityWaterCauldron extends TileEntity implements IFluidHandler {
+	private final FluidTank tank = new FluidTank(3000);
 	
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
-		
-		this.water = FluidStack.loadFluidStackFromNBT(compound.getCompoundTag("water")).getFluid();
-		this.ammount = FluidStack.loadFluidStackFromNBT(compound.getCompoundTag("water")).amount;
-		
-		if (water == null) {
-			System.err.println("Cauldron @ " + xCoord + " " + yCoord + " " + zCoord + " had an invalid FluidStack. Resetting to a normal cauldron.");
-			resetCauldron();
-		}
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		tank.readFromNBT(tag.getCompoundTag("Tank"));
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		if (water != null) {
-			FluidStack stack = new FluidStack(water, ammount);
-			
-			compound.setTag("water", stack.writeToNBT(new NBTTagCompound()));
-		}
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		NBTTagCompound tankTag = new NBTTagCompound();
+		tank.writeToNBT(tankTag);
+		tag.setTag("Tank", tankTag);
 	}
 	
 	@Override
@@ -48,19 +41,54 @@ public class TileEntityWaterCauldron extends TileEntity {
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		
 		this.writeToNBT(nbt);
-		
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 	
 	@Override
-	public boolean canUpdate() {
-		return false;
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		int amount = tank.fill(resource, doFill);
+		if(amount > 0 && doFill) markDirty();
+		return amount;
+	}
+	
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if(resource == null || !resource.isFluidEqual(tank.getFluid()))
+			return null;
+		
+		FluidStack drained = tank.drain(resource.amount, doDrain);
+		if(drained != null && doDrain) markDirty();
+		return drained;
+	}
+	
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		FluidStack drained = tank.drain(maxDrain, doDrain);
+		if(drained != null && doDrain) markDirty();
+		return drained;
+	}
+	
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+	
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+	
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[] { tank.getInfo() };
+	}
+	
+	public FluidTank getTank() {
+		return tank;
 	}
 	
 	protected void resetCauldron() {
 		worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.cauldron, 0, 3);
 	}
-	
 }

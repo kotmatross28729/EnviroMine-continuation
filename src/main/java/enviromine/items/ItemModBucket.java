@@ -11,16 +11,18 @@ import org.apache.logging.log4j.LogManager;
 
 public class ItemModBucket extends ItemBucket {
 	protected int overrideFluidMeta = 0;
-	protected Block containedFluid;
+	public Block containedFluid;
 	
 	public ItemModBucket(Block fluid) {
 		super(fluid);
 		this.containedFluid = fluid;
+		this.maxStackSize = 1;
 	}
 	
 	public ItemModBucket(Block fluid, int meta) {
 		this(fluid);
 		this.overrideFluidMeta = meta;
+		this.maxStackSize = 1;
 	}
 	
 	@Override

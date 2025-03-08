@@ -228,7 +228,7 @@ public class ObjectHandler {
 		block_clean_warm_Water			= new BlockEnviroMineWater(clean_warm_Water, Material.water).setBlockName("block_clean_warm_Water").setHardness(100.0f);
 		block_radioactive_hot_Water		= new BlockEnviroMineWater(radioactive_hot_Water, Material.water).setBlockName("block_radioactive_hot_Water").setHardness(100.0f);
 		block_hot_Water					= new BlockEnviroMineWater(hot_Water, Material.water).setBlockName("block_hot_Water").setHardness(100.0f);
-		
+
 		gasMat = new MaterialGas(MapColor.airColor);
 		gasBlock = new BlockGas(gasMat).setBlockName("enviromine.gas").setCreativeTab(EnviroMine.enviroTab).setBlockTextureName("enviromine:gas_block");
 		fireGasBlock = new BlockGas(gasMat).setBlockName("enviromine.firegas").setCreativeTab(EnviroMine.enviroTab).setBlockTextureName("enviromine:gas_block").setLightLevel(1.0F);
@@ -276,6 +276,7 @@ public class ObjectHandler {
 		GameRegistry.registerBlock(burningCoal, "burningcoal");
 		GameRegistry.registerBlock(esky, "esky");
 		GameRegistry.registerBlock(freezer, "freezer");
+		GameRegistry.registerBlock(water_cauldron, "water_cauldron");
 		GameRegistry.registerBlock(noPhysBlock, "no_phys_block");
 	}
 	
