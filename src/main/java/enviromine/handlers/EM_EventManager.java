@@ -11,7 +11,6 @@ import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
 import enviromine.blocks.tiles.TileEntityGas;
-import enviromine.blocks.water.BlockEMWaterCauldron;
 import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.core.EM_ConfigHandler;
@@ -457,27 +456,6 @@ public class EM_EventManager
 			}
 		}
 		
-		//TODO
-		// IF VANILLA WATER BLOCK
-		// 		BOTTLE -> CHECK BIOME
-		// 		BUCKET -> CHECK BIOME
-		// 		DRINK  -> CHECK BIOME
-		// IF ENVIROMINE WATER BLOCK
-		// 		BOTTLE -> CHECK BLOCK
-		// 		BUCKET -> CHECK BLOCK
-		// 		DRINK  -> CHECK BLOCK
-		// IF VANILLA CAULDRON
-		// 		BOTTLE -> HEATED ? WARM : CLEAN
-		// 		BUCKET -> HEATED ? WARM : CLEAN
-		// 		DRINK  -> HEATED ? WARM : CLEAN
-		// IF ENVIROMINE CAULDRON
-		// 		BOTTLE -> HEATED ? index+1 : CHECK WATER
-		// 		BUCKET -> HEATED ? index+1 : CHECK WATER
-		// 		DRINK  -> HEATED ? index+1 : CHECK WATER
-		
-		//IF RIGHT CLICK WITH SNOWBALL -> VANILLA CAULDRON -> ENVIROMINE CAULDRON -> COLD WATER
-		//IF RIGHT CLICK WITH SNOWBALL -> ENVIROMINE CAULDRON -> index-1
-		
 		//RMB BLOCK WITH ITEM
 		if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item != null) {
 			
@@ -555,9 +533,8 @@ public class EM_EventManager
 						return;
 					}
 					
-					
 					boolean isWater = targetblock == Blocks.water || targetblock == Blocks.flowing_water;
-					boolean isCauldron = targetblock == Blocks.cauldron && targetmeta > 0; //TODO register
+					boolean isCauldron = targetblock == Blocks.cauldron && targetmeta > 0;
 					
 					if (isWater) {
 						if (world.getBlockMetadata(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ) == 0) {
@@ -735,8 +712,7 @@ public class EM_EventManager
 				if(isWater || isValidCauldron) {
 					if(tracker != null && tracker.hydration < 100F) {
 						WaterUtils.WATER_TYPES type = WaterUtils.WATER_TYPES.CLEAN;
-
-						//TODO cauldron
+						
 						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k))) {
 							type = WaterUtils.heatUp(type);
 						} else {
@@ -788,11 +764,9 @@ public class EM_EventManager
 							tracker.dehydrate(Math.abs(type.hydration));
 						}
 						
-						//TODO custom cauldron
 						if(isValidCauldron) {
 							entityPlayer.worldObj.setBlockMetadataWithNotify(i, j, k, entityPlayer.worldObj.getBlockMetadata(i, j, k) - 1, 2);
 						}
-						//TODO water types
 						else if(EM_Settings.finiteWater) {
 							entityPlayer.worldObj.setBlock(i, j, k, Blocks.flowing_water, entityPlayer.worldObj.getBlockMetadata(i, j, k) + 1, 2);
 						}
@@ -817,12 +791,6 @@ public class EM_EventManager
 		if(block != null) {
 			if(block instanceof BlockEnviroMineWater enviroMineWater) {	//ENVIROMINE WATER
 				return WaterUtils.getTypeFromFluid(enviroMineWater.getFluid());
-			}
-//			else if (block instanceof BlockEMWaterCauldron emWaterCauldron) { //ENVIROMINE CAULDRON
-//				return WaterUtils.getTypeFromFluid(emWaterCauldron.containedFluid);
-//			}
-			else if (block instanceof BlockCauldron cauldron) { //VANILLA CAULDRON
-				return WaterUtils.WATER_TYPES.CLEAN;
 			}
 		}
 		

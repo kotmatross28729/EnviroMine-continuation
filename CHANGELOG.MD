@@ -26,7 +26,6 @@
     * **Added water compatibility for forge fluids and bobfluids (Hbm's NTM)**
     * Accordingly added buckets for each water type   
       * This fixes an old balance issue: previously you could fill a bucket with water in a salty biome, pour it out in a biome with normal water and avoid boiling. Adding a bucket of salty water will fix this: eventually, if you fill a bucket with water in a salty biome, you'll get a bucket of salty water, and no matter where you pour it, it will still be salty.
-      * Cauldrons will also use water types
   * **[Serene seasons] The type of water in the biome will also change depending on the season**
 
 * **Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed**
