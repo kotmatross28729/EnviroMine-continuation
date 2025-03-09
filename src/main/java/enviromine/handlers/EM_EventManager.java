@@ -472,7 +472,7 @@ public class EM_EventManager
 					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event, item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
 				}
 			} else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
-				if(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
+				if(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 3) {
 					fillBucket(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
 				}
 			}
@@ -562,7 +562,7 @@ public class EM_EventManager
 					else if (isCauldron) {
 						Item newItem = ObjectHandler.getBucketFromWaterType(getWaterType(world, i, j, k)).getItem();
 						
-						player.worldObj.setBlockMetadataWithNotify(i, j, k, player.worldObj.getBlockMetadata(i, j, k) - 1, 2);
+						player.worldObj.setBlockMetadataWithNotify(i, j, k, 0, 2);
 						
 						--item.stackSize;
 						
@@ -715,7 +715,7 @@ public class EM_EventManager
 						WaterUtils.WATER_TYPES type = WaterUtils.WATER_TYPES.CLEAN;
 						
 						if(isValidCauldron && isCauldronHeatingBlock(entityPlayer.worldObj.getBlock(i, j-1, k), entityPlayer.worldObj.getBlockMetadata(i, j-1, k))) {
-							type = WaterUtils.heatUp(type);
+							type = WaterUtils.heatUp(getWaterType(entityPlayer.worldObj, i, j, k));
 						} else {
 							type = getWaterType(entityPlayer.worldObj, i, j, k);
 						}
