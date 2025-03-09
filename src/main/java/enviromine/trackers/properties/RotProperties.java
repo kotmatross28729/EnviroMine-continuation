@@ -1,5 +1,16 @@
 package enviromine.trackers.properties;
 
+import java.io.File;
+import java.util.Iterator;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.config.Configuration;
+
+import org.apache.logging.log4j.Level;
+
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
@@ -10,284 +21,362 @@ import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.misc.CompatSafe;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.Level;
-
-import java.io.File;
-import java.util.Iterator;
 
 @CompatSafe
-public class RotProperties implements SerialisableProperty, PropertyBase
-{
-	public static final RotProperties base = new RotProperties();
-	static String[] RPName;
-	
-	public String name;
-	public int meta;
-	public String rotID;
-	public int rotMeta;
-	public int days;
-	public String loadedFrom;
-	
-	public RotProperties(NBTTagCompound tags)
-	{
-		this.ReadFromNBT(tags);
-	}
-	
-	public RotProperties()
-	{
-		// THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
-		
-		if(base != null && base != this)
-		{
-			throw new IllegalStateException();
-		}
-	}
-	
-	public RotProperties(String name, int meta, String rotID, int rotMeta, int days, String fileName)
-	{
-		this.name = name;
-		this.meta = meta;
-		this.rotID = rotID;
-		this.rotMeta = rotMeta;
-		this.days = days;
-		this.loadedFrom = fileName;
-	}
+public class RotProperties implements SerialisableProperty, PropertyBase {
 
-	@Override
-	public NBTTagCompound WriteToNBT()
-	{
-		NBTTagCompound tags = new NBTTagCompound();
-		tags.setString("name", this.name);
-		tags.setInteger("meta", this.meta);
-		tags.setString("rotID", this.rotID);
-		tags.setInteger("rotMeta", this.rotMeta);
-		tags.setInteger("days", this.days);
-		return tags;
-	}
+    public static final RotProperties base = new RotProperties();
+    static String[] RPName;
 
-	@Override
-	public void ReadFromNBT(NBTTagCompound tags)
-	{
-		this.name = tags.getString("name");
-		this.meta = tags.getInteger("meta");
-		this.rotID = tags.getString("rotID");
-		this.rotMeta = tags.getInteger("rotMeta");
-		this.days = tags.getInteger("days");
-	}
+    public String name;
+    public int meta;
+    public String rotID;
+    public int rotMeta;
+    public int days;
+    public String loadedFrom;
 
-	@Override
-	public String categoryName()
-	{
-		return "spoiling";
-	}
+    public RotProperties(NBTTagCompound tags) {
+        this.ReadFromNBT(tags);
+    }
 
-	@Override
-	public String categoryDescription()
-	{
-		return "Set the properties of spoliable items";
-	}
+    public RotProperties() {
+        // THIS CONSTRUCTOR IS FOR STATIC PURPOSES ONLY!
 
-	@Override
-	public void LoadProperty(Configuration config, String category)
-	{
-		config.addCustomCategoryComment(this.categoryName(), this.categoryDescription());
-		String name = config.get(category, RPName[0], "").getString();
-		int meta = config.get(category, RPName[1], -1).getInt(-1);
-		String rotID = config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
-		int rotMeta = config.get(category, RPName[3], 0).getInt(0);
-		int DTR = config.get(category, RPName[4], 0, "Set this to -1 to disable rotting on this item").getInt(0);
-		String filename = config.getConfigFile().getName();
-		
-		RotProperties entry = new RotProperties(name, meta, rotID, rotMeta, DTR, filename);
-		
-		if(meta < 0)
-		{
-			// If item already exist and current file hasn't completely been loaded do this
-			if(EM_Settings.rotProperties.containsKey("" + name) && !EM_ConfigHandler.loadedConfigs.contains(filename))
-			{
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Spoiling/Rot -"+ name.toUpperCase() +" was already added from "+ EM_Settings.rotProperties.get(name).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
-			}
-			
-			EM_Settings.rotProperties.put("" + name, entry);
-		} else
-		{
-			// If item already exist and current file hasn't completely been loaded do this
-			if(EM_Settings.rotProperties.containsKey("" + name + "," + meta) && !EM_ConfigHandler.loadedConfigs.contains(filename))
-			{
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "CONFIG DUPLICATE: Spoiling/Rot -"+ name.toUpperCase() +" - Meta:"+ meta +" was already added from "+ EM_Settings.rotProperties.get(name).loadedFrom.toUpperCase() +" and will be overriden by "+ filename.toUpperCase());
-			}
-			
-			EM_Settings.rotProperties.put("" + name + "," + meta, entry);
-		}
-	}
+        if (base != null && base != this) {
+            throw new IllegalStateException();
+        }
+    }
 
-	@Override
-	public void SaveProperty(Configuration config, String category)
-	{
-		config.get(category, RPName[0], name).getString();
-		config.get(category, RPName[1], meta).getInt(-1);
-		config.get(category, RPName[2], rotID, "Set blank to rot into nothing").getString();
-		config.get(category, RPName[3], rotMeta).getInt(0);
-		config.get(category, RPName[4], days, "Set this to -1 to disable rotting on this item").getInt(7);
-	}
+    public RotProperties(String name, int meta, String rotID, int rotMeta, int days, String fileName) {
+        this.name = name;
+        this.meta = meta;
+        this.rotID = rotID;
+        this.rotMeta = rotMeta;
+        this.days = days;
+        this.loadedFrom = fileName;
+    }
 
-	@Override
-	public void GenDefaults()
-	{
-		@SuppressWarnings("unchecked")
-		Iterator<Item> iterator = Item.itemRegistry.iterator();
-		
-		while(iterator.hasNext())
-		{
-			Item item = iterator.next();
-			
-			if(item == null)
-			{
-				continue;
-			}
-			
-			String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
-			
-			if(regName.length <= 0)
-			{
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + item.getUnlocalizedName() +"_"+ regName[1]);
-				continue;
-			}
-			
-			File itemFile = new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + EnviroUtils.SafeFilename(regName[0]) + ".cfg");
-			
-			if(!itemFile.exists())
-			{
-				try
-				{
-					itemFile.createNewFile();
-				} catch(Exception e)
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to create file for " + item.getUnlocalizedName() +"_"+ regName[1], e);
-					continue;
-				}
-			}
-			
-			Configuration config = new Configuration(itemFile, true);
-			
-			String category = this.categoryName() + "." + EnviroUtils.replaceULN(item.getUnlocalizedName() +"_"+ regName[1]);
-			
-			config.load();
-			
-			if(EnviroMine.isHbmLoaded) {
-				RotProperties_NTM.registerFoodNTM(config,category,RPName,item);
-			}
-			
-			if(item == Items.golden_apple || item == Items.golden_carrot)
-			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item").getInt(-1);
-			} else if(item == Items.rotten_flesh || item == ObjectHandler.rottenFood)
-			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item").getInt(-1);
-			} else if(item == Items.milk_bucket)
-			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.spoiledMilk), "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(item == Items.spider_eye)
-			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(Items.fermented_spider_eye), "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(item == Items.fermented_spider_eye || item == Items.beef || item == Items.chicken || item == Items.porkchop || item == Items.fish || item == Items.cooked_beef || item == Items.cooked_chicken || item == Items.cooked_porkchop || item == Items.cooked_fished)
-			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(Items.rotten_flesh), "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(item instanceof ItemFood && (regName[0].equals("minecraft"))) {
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(EM_Settings.genConfigs) {
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
-				config.get(category, RPName[3], 0).getInt(0);
-				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			}
-			
-			config.save();
-		}
-	}
+    @Override
+    public NBTTagCompound WriteToNBT() {
+        NBTTagCompound tags = new NBTTagCompound();
+        tags.setString("name", this.name);
+        tags.setInteger("meta", this.meta);
+        tags.setString("rotID", this.rotID);
+        tags.setInteger("rotMeta", this.rotMeta);
+        tags.setInteger("days", this.days);
+        return tags;
+    }
 
-	@Override
-	public File GetDefaultFile()
-	{
-		return new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + "Spoiling.cfg");
-	}
+    @Override
+    public void ReadFromNBT(NBTTagCompound tags) {
+        this.name = tags.getString("name");
+        this.meta = tags.getInteger("meta");
+        this.rotID = tags.getString("rotID");
+        this.rotMeta = tags.getInteger("rotMeta");
+        this.days = tags.getInteger("days");
+    }
 
-	@Override
-	public void generateEmpty(Configuration config, Object obj)
-	{
-		if(obj == null || !(obj instanceof Item))
-		{
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non item object!", new Exception());
-			return;
-		}
-		
-		Item item = (Item)obj;
-		
-		String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
-		
-		if(regName.length <= 0)
-		{
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to get correctly formatted object name for " + item.getUnlocalizedName() +"_"+ regName[1]);
-			return;
-		}
-		
-		String category = this.categoryName() + "." + EnviroUtils.replaceULN(item.getUnlocalizedName() +"_"+ regName[1]);
-		
-		config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
-		config.get(category, RPName[1], -1).getInt(-1);
-		config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
-		config.get(category, RPName[3], 0).getInt(0);
-		config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-	}
+    @Override
+    public String categoryName() {
+        return "spoiling";
+    }
 
-	@Override
-	public boolean useCustomConfigs()
-	{
-		return true;
-	}
+    @Override
+    public String categoryDescription() {
+        return "Set the properties of spoliable items";
+    }
 
-	@Override
-	public void customLoad()
-	{
-	}
-	
-	static
-	{
-		RPName = new String[5];
-		RPName[0] = "01.ID";
-		RPName[1] = "02.Damage";
-		RPName[2] = "03.Rotten ID";
-		RPName[3] = "04.Rotten Damage";
-		RPName[4] = "05.Days To Rot";
-	}
+    @Override
+    public void LoadProperty(Configuration config, String category) {
+        config.addCustomCategoryComment(this.categoryName(), this.categoryDescription());
+        String name = config.get(category, RPName[0], "")
+            .getString();
+        int meta = config.get(category, RPName[1], -1)
+            .getInt(-1);
+        String rotID = config.get(category, RPName[2], "", "Set blank to rot into nothing")
+            .getString();
+        int rotMeta = config.get(category, RPName[3], 0)
+            .getInt(0);
+        int DTR = config.get(category, RPName[4], 0, "Set this to -1 to disable rotting on this item")
+            .getInt(0);
+        String filename = config.getConfigFile()
+            .getName();
+
+        RotProperties entry = new RotProperties(name, meta, rotID, rotMeta, DTR, filename);
+
+        if (meta < 0) {
+            // If item already exist and current file hasn't completely been loaded do this
+            if (EM_Settings.rotProperties.containsKey("" + name)
+                && !EM_ConfigHandler.loadedConfigs.contains(filename)) {
+                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(
+                    Level.ERROR,
+                    "CONFIG DUPLICATE: Spoiling/Rot -" + name.toUpperCase()
+                        + " was already added from "
+                        + EM_Settings.rotProperties.get(name).loadedFrom.toUpperCase()
+                        + " and will be overriden by "
+                        + filename.toUpperCase());
+            }
+
+            EM_Settings.rotProperties.put("" + name, entry);
+        } else {
+            // If item already exist and current file hasn't completely been loaded do this
+            if (EM_Settings.rotProperties.containsKey("" + name + "," + meta)
+                && !EM_ConfigHandler.loadedConfigs.contains(filename)) {
+                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(
+                    Level.ERROR,
+                    "CONFIG DUPLICATE: Spoiling/Rot -" + name.toUpperCase()
+                        + " - Meta:"
+                        + meta
+                        + " was already added from "
+                        + EM_Settings.rotProperties.get(name).loadedFrom.toUpperCase()
+                        + " and will be overriden by "
+                        + filename.toUpperCase());
+            }
+
+            EM_Settings.rotProperties.put("" + name + "," + meta, entry);
+        }
+    }
+
+    @Override
+    public void SaveProperty(Configuration config, String category) {
+        config.get(category, RPName[0], name)
+            .getString();
+        config.get(category, RPName[1], meta)
+            .getInt(-1);
+        config.get(category, RPName[2], rotID, "Set blank to rot into nothing")
+            .getString();
+        config.get(category, RPName[3], rotMeta)
+            .getInt(0);
+        config.get(category, RPName[4], days, "Set this to -1 to disable rotting on this item")
+            .getInt(7);
+    }
+
+    @Override
+    public void GenDefaults() {
+        @SuppressWarnings("unchecked")
+        Iterator<Item> iterator = Item.itemRegistry.iterator();
+
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+
+            if (item == null) {
+                continue;
+            }
+
+            String[] regName = Item.itemRegistry.getNameForObject(item)
+                .split(":");
+
+            if (regName.length <= 0) {
+                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(
+                    Level.ERROR,
+                    "Failed to get correctly formatted object name for " + item.getUnlocalizedName()
+                        + "_"
+                        + regName[1]);
+                continue;
+            }
+
+            File itemFile = new File(
+                EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath
+                    + EnviroUtils.SafeFilename(regName[0])
+                    + ".cfg");
+
+            if (!itemFile.exists()) {
+                try {
+                    itemFile.createNewFile();
+                } catch (Exception e) {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(
+                        Level.ERROR,
+                        "Failed to create file for " + item.getUnlocalizedName() + "_" + regName[1],
+                        e);
+                    continue;
+                }
+            }
+
+            Configuration config = new Configuration(itemFile, true);
+
+            String category = this.categoryName() + "."
+                + EnviroUtils.replaceULN(item.getUnlocalizedName() + "_" + regName[1]);
+
+            config.load();
+
+            if (EnviroMine.isHbmLoaded) {
+                RotProperties_NTM.registerFoodNTM(config, category, RPName, item);
+            }
+
+            if (item == Items.golden_apple || item == Items.golden_carrot) {
+                config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, RPName[1], -1)
+                    .getInt(-1);
+                config.get(category, RPName[2], "", "Set blank to rot into nothing")
+                    .getString();
+                config.get(category, RPName[3], 0)
+                    .getInt(0);
+                config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item")
+                    .getInt(-1);
+            } else if (item == Items.rotten_flesh || item == ObjectHandler.rottenFood) {
+                config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, RPName[1], -1)
+                    .getInt(-1);
+                config.get(category, RPName[2], "", "Set blank to rot into nothing")
+                    .getString();
+                config.get(category, RPName[3], 0)
+                    .getInt(0);
+                config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item")
+                    .getInt(-1);
+            } else if (item == Items.milk_bucket) {
+                config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, RPName[1], -1)
+                    .getInt(-1);
+                config
+                    .get(
+                        category,
+                        RPName[2],
+                        Item.itemRegistry.getNameForObject(ObjectHandler.spoiledMilk),
+                        "Set blank to rot into nothing")
+                    .getString();
+                config.get(category, RPName[3], 0)
+                    .getInt(0);
+                config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item")
+                    .getInt(7);
+            } else if (item == Items.spider_eye) {
+                config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, RPName[1], -1)
+                    .getInt(-1);
+                config
+                    .get(
+                        category,
+                        RPName[2],
+                        Item.itemRegistry.getNameForObject(Items.fermented_spider_eye),
+                        "Set blank to rot into nothing")
+                    .getString();
+                config.get(category, RPName[3], 0)
+                    .getInt(0);
+                config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item")
+                    .getInt(7);
+            } else if (item == Items.fermented_spider_eye || item == Items.beef
+                || item == Items.chicken
+                || item == Items.porkchop
+                || item == Items.fish
+                || item == Items.cooked_beef
+                || item == Items.cooked_chicken
+                || item == Items.cooked_porkchop
+                || item == Items.cooked_fished) {
+                    config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                        .getString();
+                    config.get(category, RPName[1], -1)
+                        .getInt(-1);
+                    config
+                        .get(
+                            category,
+                            RPName[2],
+                            Item.itemRegistry.getNameForObject(Items.rotten_flesh),
+                            "Set blank to rot into nothing")
+                        .getString();
+                    config.get(category, RPName[3], 0)
+                        .getInt(0);
+                    config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item")
+                        .getInt(7);
+                } else if (item instanceof ItemFood && (regName[0].equals("minecraft"))) {
+                    config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                        .getString();
+                    config.get(category, RPName[1], -1)
+                        .getInt(-1);
+                    config
+                        .get(
+                            category,
+                            RPName[2],
+                            Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood),
+                            "Set blank to rot into nothing")
+                        .getString();
+                    config.get(category, RPName[3], 0)
+                        .getInt(0);
+                    config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item")
+                        .getInt(7);
+                } else if (EM_Settings.genConfigs) {
+                    config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+                        .getString();
+                    config.get(category, RPName[1], -1)
+                        .getInt(-1);
+                    config
+                        .get(
+                            category,
+                            RPName[2],
+                            Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood),
+                            "Set blank to rot into nothing")
+                        .getString();
+                    config.get(category, RPName[3], 0)
+                        .getInt(0);
+                    config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item")
+                        .getInt(7);
+                }
+
+            config.save();
+        }
+    }
+
+    @Override
+    public File GetDefaultFile() {
+        return new File(EM_ConfigHandler.loadedProfile + EM_ConfigHandler.customPath + "Spoiling.cfg");
+    }
+
+    @Override
+    public void generateEmpty(Configuration config, Object obj) {
+        if (obj == null || !(obj instanceof Item)) {
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel())
+                EnviroMine.logger.log(Level.ERROR, "Tried to register config with non item object!", new Exception());
+            return;
+        }
+
+        Item item = (Item) obj;
+
+        String[] regName = Item.itemRegistry.getNameForObject(item)
+            .split(":");
+
+        if (regName.length <= 0) {
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(
+                Level.ERROR,
+                "Failed to get correctly formatted object name for " + item.getUnlocalizedName() + "_" + regName[1]);
+            return;
+        }
+
+        String category = this.categoryName() + "."
+            + EnviroUtils.replaceULN(item.getUnlocalizedName() + "_" + regName[1]);
+
+        config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item))
+            .getString();
+        config.get(category, RPName[1], -1)
+            .getInt(-1);
+        config
+            .get(
+                category,
+                RPName[2],
+                Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood),
+                "Set blank to rot into nothing")
+            .getString();
+        config.get(category, RPName[3], 0)
+            .getInt(0);
+        config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item")
+            .getInt(7);
+    }
+
+    @Override
+    public boolean useCustomConfigs() {
+        return true;
+    }
+
+    @Override
+    public void customLoad() {}
+
+    static {
+        RPName = new String[5];
+        RPName[0] = "01.ID";
+        RPName[1] = "02.Damage";
+        RPName[2] = "03.Rotten ID";
+        RPName[3] = "04.Rotten Damage";
+        RPName[4] = "05.Days To Rot";
+    }
 }

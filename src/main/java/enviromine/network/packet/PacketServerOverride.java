@@ -6,6 +6,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -18,207 +22,194 @@ import enviromine.core.EM_Settings.ShouldOverride;
 import enviromine.core.EnviroMine;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
-public class PacketServerOverride implements IMessage
-{
-	protected NBTTagCompound tags = new NBTTagCompound();
+public class PacketServerOverride implements IMessage {
 
-	public PacketServerOverride()
-	{
-	}
+    protected NBTTagCompound tags = new NBTTagCompound();
 
-	@Override
-	public void fromBytes(ByteBuf buf)
-	{
-		tags = ByteBufUtils.readTag(buf);
-	}
+    public PacketServerOverride() {}
 
-	@Override
-	public void toBytes(ByteBuf buf)
-	{
-		ByteBufUtils.writeTag(buf, tags);
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        tags = ByteBufUtils.readTag(buf);
+    }
 
-	public static class Handler implements IMessageHandler<PacketServerOverride, IMessage>
-	{
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		@Override
-		public IMessage onMessage(PacketServerOverride message, MessageContext ctx)
-		{
-			if(!EnviroMine.proxy.isClient())
-			{
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.WARN, "AutoOverride attempted to run serverside! This should not happen!");
-				return null;
-			}
+    @Override
+    public void toBytes(ByteBuf buf) {
+        ByteBufUtils.writeTag(buf, tags);
+    }
 
-			NBTTagCompound tags = message.tags;
+    public static class Handler implements IMessageHandler<PacketServerOverride, IMessage> {
 
-			Field[] fields = EM_Settings.class.getDeclaredFields();
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @Override
+        public IMessage onMessage(PacketServerOverride message, MessageContext ctx) {
+            if (!EnviroMine.proxy.isClient()) {
+                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger
+                    .log(Level.WARN, "AutoOverride attempted to run serverside! This should not happen!");
+                return null;
+            }
 
-			for(Field f : fields)
-			{
-				try
-				{
-					ShouldOverride anno = f.getAnnotation(ShouldOverride.class);
-					Class<?>[] clazzes;
+            NBTTagCompound tags = message.tags;
 
-					if(anno != null)
-					{
-						clazzes = anno.value();
-					} else
-					{
-						continue;
-					}
+            Field[] fields = EM_Settings.class.getDeclaredFields();
 
-                    //TODO ping
-					if(!f.isAccessible()) // This is causing problems for some reason...
-					{
-						if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Field " + f.getName() + " is protected and cannot be synced!");
-						continue;
-					} else if(!Modifier.isStatic(f.getModifiers()))
-					{
-						if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Cannot sync non-static field " + f.getName() + "!");
-						continue;
-					}
+            for (Field f : fields) {
+                try {
+                    ShouldOverride anno = f.getAnnotation(ShouldOverride.class);
+                    Class<?>[] clazzes;
 
-					if(f.getType() == HashMap.class)
-					{
-						if(clazzes.length < 2)
-						{
-							if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Annotation for field " + f.getName() + " (" + f.getType().getName() + ") is missing class types!");
-							continue;
-						}
+                    if (anno != null) {
+                        clazzes = anno.value();
+                    } else {
+                        continue;
+                    }
 
-						NBTTagList nbtList = tags.getTagList(f.getName(), 10);
-						HashMap map = new HashMap();
+                    // TODO ping
+                    if (!f.isAccessible()) // This is causing problems for some reason...
+                    {
+                        if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger
+                            .log(Level.WARN, "Field " + f.getName() + " is protected and cannot be synced!");
+                        continue;
+                    } else if (!Modifier.isStatic(f.getModifiers())) {
+                        if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                            EnviroMine.logger.log(Level.WARN, "Cannot sync non-static field " + f.getName() + "!");
+                        continue;
+                    }
 
-						for(int i = 0; i < nbtList.tagCount(); i++)
-						{
-							NBTTagCompound tag = nbtList.getCompoundTagAt(i);
-							Object keyObj = this.getNBTValue(tag, "key", clazzes[0]);
-							Object valObj = this.getNBTValue(tag, "value", clazzes[1]);
+                    if (f.getType() == HashMap.class) {
+                        if (clazzes.length < 2) {
+                            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                                EnviroMine.logger.log(
+                                    Level.ERROR,
+                                    "Annotation for field " + f.getName()
+                                        + " ("
+                                        + f.getType()
+                                            .getName()
+                                        + ") is missing class types!");
+                            continue;
+                        }
 
-							if(keyObj == null || valObj == null)
-							{
-								if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Position " + i + " in HashMap " + f.getName() + " returned a null entry! Skipping...");
-								continue;
-							}
+                        NBTTagList nbtList = tags.getTagList(f.getName(), 10);
+                        HashMap map = new HashMap();
 
-							map.put(keyObj, valObj);
-						}
+                        for (int i = 0; i < nbtList.tagCount(); i++) {
+                            NBTTagCompound tag = nbtList.getCompoundTagAt(i);
+                            Object keyObj = this.getNBTValue(tag, "key", clazzes[0]);
+                            Object valObj = this.getNBTValue(tag, "value", clazzes[1]);
 
-						f.set(null, map);
-					} else if(f.getType() == ArrayList.class)
-					{
-						if(clazzes.length < 1)
-						{
-							if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Annotation for field " + f.getName() + " is missing class types!");
-							continue;
-						}
+                            if (keyObj == null || valObj == null) {
+                                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                                    EnviroMine.logger.log(
+                                        Level.WARN,
+                                        "Position " + i
+                                            + " in HashMap "
+                                            + f.getName()
+                                            + " returned a null entry! Skipping...");
+                                continue;
+                            }
 
-						Class<?> clazz = clazzes[0];
-						NBTTagList nbtList = tags.getTagList(f.getName(), 10);
-						ArrayList list = new ArrayList();
+                            map.put(keyObj, valObj);
+                        }
 
-						for(int i = 0; i < nbtList.tagCount(); i++)
-						{
-							NBTTagCompound tag = nbtList.getCompoundTagAt(i);
-							Object valObj = this.getNBTValue(tag, "value", clazz);
+                        f.set(null, map);
+                    } else if (f.getType() == ArrayList.class) {
+                        if (clazzes.length < 1) {
+                            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger
+                                .log(Level.ERROR, "Annotation for field " + f.getName() + " is missing class types!");
+                            continue;
+                        }
 
-							if(valObj == null)
-							{
-								if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Position " + i + " in ArrayList " + f.getName() + " returned a null entry! Skipping...");
-								continue;
-							}
+                        Class<?> clazz = clazzes[0];
+                        NBTTagList nbtList = tags.getTagList(f.getName(), 10);
+                        ArrayList list = new ArrayList();
 
-							list.add(valObj);
-						}
+                        for (int i = 0; i < nbtList.tagCount(); i++) {
+                            NBTTagCompound tag = nbtList.getCompoundTagAt(i);
+                            Object valObj = this.getNBTValue(tag, "value", clazz);
 
-						f.set(null, list);
-					} else
-					{
-						Object value = this.getNBTValue(tags, f.getName(), f.getType());
+                            if (valObj == null) {
+                                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                                    EnviroMine.logger.log(
+                                        Level.WARN,
+                                        "Position " + i
+                                            + " in ArrayList "
+                                            + f.getName()
+                                            + " returned a null entry! Skipping...");
+                                continue;
+                            }
 
-						if(value == null)
-						{
-							if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Field " + f.getName() + " returned a null value! Skipping...");
-							continue;
-						}
+                            list.add(valObj);
+                        }
 
-						f.set(null, value);
-					}
-				} catch(Exception e)
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "An error occurred while syncing setting " + f.getName(), e);
-				}
-			}
-			
-			return null; //Reply
-		}
+                        f.set(null, list);
+                    } else {
+                        Object value = this.getNBTValue(tags, f.getName(), f.getType());
 
-		/**
-		 * Returns the value of the given key and class type. If the class type implements SerialisableProperty then it will return a new instance
-		 * of that object from the NBTTagCompound stored under said key.
-		 * @param tag
-		 * @param key
-		 * @param clazz
-		 * @return
-		 */
-		public Object getNBTValue(NBTTagCompound tag, String key, Class<?> clazz)
-		{
-			if(key == null || key.length() <= 0 || !tag.hasKey(key))
-			{
-				return null;
-			}
+                        if (value == null) {
+                            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger
+                                .log(Level.WARN, "Field " + f.getName() + " returned a null value! Skipping...");
+                            continue;
+                        }
 
-			if(clazz == Boolean.class ||clazz == boolean.class)
-			{
-				return tag.getBoolean(key);
-			} else if(clazz == Integer.class || clazz == int.class)
-			{
-				return tag.getInteger(key);
-			} else if(clazz == String.class)
-			{
-				return tag.getString(key);
-			} else if(clazz == Byte.class || clazz == byte.class)
-			{
-				return tag.getByte(key);
-			} else if(clazz == Float.class || clazz == float.class)
-			{
-				return tag.getFloat(key);
-			} else if(clazz == Double.class || clazz == double.class)
-			{
-				return tag.getDouble(key);
-			} else if(clazz == Short.class || clazz == short.class)
-			{
-				return tag.getShort(key);
-			} else if(clazz == Long.class || clazz == long.class)
-			{
-				return tag.getLong(key);
-			} else if(clazz == Byte[].class || clazz == byte[].class)
-			{
-				return tag.getByteArray(key);
-			} else if(clazz.isAssignableFrom(NBTBase.class))
-			{
-				return tag.getTag(key);
-			} else if(clazz.isAssignableFrom(SerialisableProperty.class))
-			{
-				try
-				{
-					Constructor<?> ctor = clazz.getConstructor(NBTTagCompound.class);
-					return ctor.newInstance(tag.getCompoundTag(key));
-				} catch(Exception e)
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "An error occurred while trying to instantiate " + clazz.getSimpleName(), e);
-					return null;
-				}
-			} else
-			{
-				return null;
-			}
-		}
-	}
+                        f.set(null, value);
+                    }
+                } catch (Exception e) {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                        EnviroMine.logger.log(Level.ERROR, "An error occurred while syncing setting " + f.getName(), e);
+                }
+            }
+
+            return null; // Reply
+        }
+
+        /**
+         * Returns the value of the given key and class type. If the class type implements SerialisableProperty then it
+         * will return a new instance
+         * of that object from the NBTTagCompound stored under said key.
+         * 
+         * @param tag
+         * @param key
+         * @param clazz
+         * @return
+         */
+        public Object getNBTValue(NBTTagCompound tag, String key, Class<?> clazz) {
+            if (key == null || key.length() <= 0 || !tag.hasKey(key)) {
+                return null;
+            }
+
+            if (clazz == Boolean.class || clazz == boolean.class) {
+                return tag.getBoolean(key);
+            } else if (clazz == Integer.class || clazz == int.class) {
+                return tag.getInteger(key);
+            } else if (clazz == String.class) {
+                return tag.getString(key);
+            } else if (clazz == Byte.class || clazz == byte.class) {
+                return tag.getByte(key);
+            } else if (clazz == Float.class || clazz == float.class) {
+                return tag.getFloat(key);
+            } else if (clazz == Double.class || clazz == double.class) {
+                return tag.getDouble(key);
+            } else if (clazz == Short.class || clazz == short.class) {
+                return tag.getShort(key);
+            } else if (clazz == Long.class || clazz == long.class) {
+                return tag.getLong(key);
+            } else if (clazz == Byte[].class || clazz == byte[].class) {
+                return tag.getByteArray(key);
+            } else if (clazz.isAssignableFrom(NBTBase.class)) {
+                return tag.getTag(key);
+            } else if (clazz.isAssignableFrom(SerialisableProperty.class)) {
+                try {
+                    Constructor<?> ctor = clazz.getConstructor(NBTTagCompound.class);
+                    return ctor.newInstance(tag.getCompoundTag(key));
+                } catch (Exception e) {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger
+                        .log(Level.ERROR, "An error occurred while trying to instantiate " + clazz.getSimpleName(), e);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+    }
 }

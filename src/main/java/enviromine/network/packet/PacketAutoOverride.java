@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -17,149 +21,124 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EM_Settings.ShouldOverride;
 import enviromine.core.EnviroMine;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
-public class PacketAutoOverride extends PacketServerOverride implements IMessage
-{
-	public PacketAutoOverride()
-	{
-		if (!EnviroMine.proxy.isClient())
-		{
-			this.tags = readFromSettings();
-		}
-	}
+public class PacketAutoOverride extends PacketServerOverride implements IMessage {
 
-	private NBTTagCompound readFromSettings()
-	{
-		NBTTagCompound nTags = new NBTTagCompound();
-		Field[] fields = EM_Settings.class.getFields();
+    public PacketAutoOverride() {
+        if (!EnviroMine.proxy.isClient()) {
+            this.tags = readFromSettings();
+        }
+    }
 
-		for (Field f : fields)
-		{
-			try
-			{
-				ShouldOverride anno = f.getAnnotation(ShouldOverride.class);
-				//Class<?>[] clazzes;
+    private NBTTagCompound readFromSettings() {
+        NBTTagCompound nTags = new NBTTagCompound();
+        Field[] fields = EM_Settings.class.getFields();
 
-				if(anno != null)
-				{
-					//clazzes = anno.value();
-				} else
-				{
-					continue;
-				}
-				//TODO ping
-				if(!f.isAccessible()) // This is causing problems for some reason...
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Field " + f.getName() + " is protected and cannot be synced!");
-					continue;
-				} else if(!Modifier.isStatic(f.getModifiers()))
-				{
-					if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.WARN, "Cannot sync non-static field " + f.getName() + "!");
-					continue;
-				}
+        for (Field f : fields) {
+            try {
+                ShouldOverride anno = f.getAnnotation(ShouldOverride.class);
+                // Class<?>[] clazzes;
 
-				if(f.getType() == HashMap.class)
-				{
-					HashMap<?,?> map = (HashMap<?,?>)f.get(null);
-					Set<?> keys = map.keySet();
-					Iterator<?> iterator = keys.iterator();
-					NBTTagList nbtList = new NBTTagList();
+                if (anno != null) {
+                    // clazzes = anno.value();
+                } else {
+                    continue;
+                }
+                // TODO ping
+                if (!f.isAccessible()) // This is causing problems for some reason...
+                {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger
+                        .log(Level.WARN, "Field " + f.getName() + " is protected and cannot be synced!");
+                    continue;
+                } else if (!Modifier.isStatic(f.getModifiers())) {
+                    if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                        EnviroMine.logger.log(Level.WARN, "Cannot sync non-static field " + f.getName() + "!");
+                    continue;
+                }
 
-					while(iterator.hasNext())
-					{
-						NBTTagCompound entry = new NBTTagCompound();
-						Object keyObj = iterator.next();
-						Object valObj = map.get(keyObj);
-						this.setNBTValue(entry, "key", keyObj);
-						this.setNBTValue(entry, "value", valObj);
-						nbtList.appendTag(entry);
-					}
+                if (f.getType() == HashMap.class) {
+                    HashMap<?, ?> map = (HashMap<?, ?>) f.get(null);
+                    Set<?> keys = map.keySet();
+                    Iterator<?> iterator = keys.iterator();
+                    NBTTagList nbtList = new NBTTagList();
 
-					nTags.setTag(f.getName(), nbtList);
-				} else if(f.getType() == ArrayList.class)
-				{
-					ArrayList<?> list = (ArrayList<?>)f.get(null);
-					Iterator<?> iterator = list.iterator();
-					NBTTagList nbtList = new NBTTagList();
+                    while (iterator.hasNext()) {
+                        NBTTagCompound entry = new NBTTagCompound();
+                        Object keyObj = iterator.next();
+                        Object valObj = map.get(keyObj);
+                        this.setNBTValue(entry, "key", keyObj);
+                        this.setNBTValue(entry, "value", valObj);
+                        nbtList.appendTag(entry);
+                    }
 
-					while(iterator.hasNext())
-					{
-						NBTTagCompound entry = new NBTTagCompound();
-						Object valObj = iterator.next();
-						this.setNBTValue(entry, "value", valObj);
-						nbtList.appendTag(entry);
-					}
+                    nTags.setTag(f.getName(), nbtList);
+                } else if (f.getType() == ArrayList.class) {
+                    ArrayList<?> list = (ArrayList<?>) f.get(null);
+                    Iterator<?> iterator = list.iterator();
+                    NBTTagList nbtList = new NBTTagList();
 
-					nTags.setTag(f.getName(), nbtList);
-				} else
-				{
-					this.setNBTValue(nTags, f.getName(), f.get(null));
-				}
-			} catch(Exception e)
-			{
-				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "An error occured while syncing setting " + f.getName(), e);
-			}
-		}
+                    while (iterator.hasNext()) {
+                        NBTTagCompound entry = new NBTTagCompound();
+                        Object valObj = iterator.next();
+                        this.setNBTValue(entry, "value", valObj);
+                        nbtList.appendTag(entry);
+                    }
 
-		return nTags;
-	}
+                    nTags.setTag(f.getName(), nbtList);
+                } else {
+                    this.setNBTValue(nTags, f.getName(), f.get(null));
+                }
+            } catch (Exception e) {
+                if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                    EnviroMine.logger.log(Level.ERROR, "An error occured while syncing setting " + f.getName(), e);
+            }
+        }
 
-	public void setNBTValue(NBTTagCompound tag, String key, Object value)
-	{
-		if(key == null || key.length() <= 0 || value == null)
-		{
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to set NBTTagCompound without a value and or key!");
-			return;
-		}
+        return nTags;
+    }
 
-		if(value instanceof Boolean)
-		{
-			tag.setBoolean(key, (Boolean)value);
-		} else if(value instanceof Integer)
-		{
-			tag.setInteger(key, (Integer)value);
-		} else if(value instanceof String)
-		{
-			tag.setString(key, (String)value);
-		} else if(value instanceof Byte)
-		{
-			tag.setByte(key, (Byte)value);
-		} else if(value instanceof Float)
-		{
-			tag.setFloat(key, (Float)value);
-		} else if(value instanceof Double)
-		{
-			tag.setDouble(key, (Double)value);
-		} else if(value instanceof Short)
-		{
-			tag.setShort(key, (Short)value);
-		} else if(value instanceof Long)
-		{
-			tag.setLong(key, (Long)value);
-		} else if(value instanceof Byte[])
-		{
-			tag.setByteArray(key, (byte[])value);
-		} else if(value instanceof NBTBase)
-		{
-			tag.setTag(key, (NBTBase)value);
-		} else if(value instanceof SerialisableProperty)
-		{
-			tag.setTag(key, ((SerialisableProperty)value).WriteToNBT());
-		} else
-		{
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Cannot set NBTTagCompound a value type of " + value.getClass().getSimpleName());
-		}
-	}
+    public void setNBTValue(NBTTagCompound tag, String key, Object value) {
+        if (key == null || key.length() <= 0 || value == null) {
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                EnviroMine.logger.log(Level.ERROR, "Tried to set NBTTagCompound without a value and or key!");
+            return;
+        }
 
-	public static class Handler implements IMessageHandler<PacketAutoOverride, IMessage>
-	{
-		@Override
-		public IMessage onMessage(PacketAutoOverride message, MessageContext ctx)
-		{
-			return (new PacketServerOverride.Handler()).onMessage(message, ctx);
-		}
-	}
+        if (value instanceof Boolean) {
+            tag.setBoolean(key, (Boolean) value);
+        } else if (value instanceof Integer) {
+            tag.setInteger(key, (Integer) value);
+        } else if (value instanceof String) {
+            tag.setString(key, (String) value);
+        } else if (value instanceof Byte) {
+            tag.setByte(key, (Byte) value);
+        } else if (value instanceof Float) {
+            tag.setFloat(key, (Float) value);
+        } else if (value instanceof Double) {
+            tag.setDouble(key, (Double) value);
+        } else if (value instanceof Short) {
+            tag.setShort(key, (Short) value);
+        } else if (value instanceof Long) {
+            tag.setLong(key, (Long) value);
+        } else if (value instanceof Byte[]) {
+            tag.setByteArray(key, (byte[]) value);
+        } else if (value instanceof NBTBase) {
+            tag.setTag(key, (NBTBase) value);
+        } else if (value instanceof SerialisableProperty) {
+            tag.setTag(key, ((SerialisableProperty) value).WriteToNBT());
+        } else {
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(
+                Level.ERROR,
+                "Cannot set NBTTagCompound a value type of " + value.getClass()
+                    .getSimpleName());
+        }
+    }
+
+    public static class Handler implements IMessageHandler<PacketAutoOverride, IMessage> {
+
+        @Override
+        public IMessage onMessage(PacketAutoOverride message, MessageContext ctx) {
+            return (new PacketServerOverride.Handler()).onMessage(message, ctx);
+        }
+    }
 }

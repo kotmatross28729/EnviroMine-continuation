@@ -1,77 +1,71 @@
 package enviromine.world;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
+
 import org.apache.logging.log4j.Level;
 
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 
 public class EM_WorldData extends WorldSavedData {
 
-	private static final String IDENTIFIER = "EM_WorldData";
-	
-	private String profile = "default";
+    private static final String IDENTIFIER = "EM_WorldData";
 
-	public static EM_WorldData theWorldEM;		
-	
-	public EM_WorldData() 
-	{
-		super(IDENTIFIER);
-	}
-	
-	public EM_WorldData(String identifier) 
-	{
-		super(identifier);
-	}
+    private String profile = "default";
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) 
-	{
-		this.profile = nbt.getString("Profile");
+    public static EM_WorldData theWorldEM;
 
-	}
+    public EM_WorldData() {
+        super(IDENTIFIER);
+    }
 
-	public boolean setProfile(String newProfile)
-	{
-		this.profile = newProfile;
-		this.markDirty();
-		return true;
-	}
-	
-	public String getProfile()
-	{
-		return profile;
-	}
+    public EM_WorldData(String identifier) {
+        super(identifier);
+    }
 
-	public EM_WorldData getEMWorldData()
-	{
-		return theWorldEM;
-	}
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		
-		nbt.setString("Profile", profile);
-	}
-	
-	public static EM_WorldData get(World world) 
-	{
-		EM_WorldData data = (EM_WorldData)world.loadItemData(EM_WorldData.class, IDENTIFIER);
-		
-		if (data == null) 
-		{
-			data = new EM_WorldData();
-			world.setItemData(IDENTIFIER, data);
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Enviromine World Data Doesn't Exist. Creating now");
-		}
-		else
-		{
-			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) EnviroMine.logger.log(Level.INFO, "Loading Enviromine World Data");
-		}
-		
-		data.markDirty();
-		return data;
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        this.profile = nbt.getString("Profile");
+
+    }
+
+    public boolean setProfile(String newProfile) {
+        this.profile = newProfile;
+        this.markDirty();
+        return true;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public EM_WorldData getEMWorldData() {
+        return theWorldEM;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+
+        nbt.setString("Profile", profile);
+    }
+
+    public static EM_WorldData get(World world) {
+        EM_WorldData data = (EM_WorldData) world.loadItemData(EM_WorldData.class, IDENTIFIER);
+
+        if (data == null) {
+            data = new EM_WorldData();
+            world.setItemData(IDENTIFIER, data);
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel())
+                EnviroMine.logger.log(Level.ERROR, "Enviromine World Data Doesn't Exist. Creating now");
+        } else {
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel())
+                EnviroMine.logger.log(Level.INFO, "Loading Enviromine World Data");
+        }
+
+        data.markDirty();
+        return data;
+    }
 }

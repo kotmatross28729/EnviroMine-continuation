@@ -1,5 +1,13 @@
 package enviromine.client.renderer.tileentity;
 
+import static enviromine.core.EM_Settings.hardcoregases;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
@@ -11,77 +19,68 @@ import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.ObjectHandler;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-
-import static enviromine.core.EM_Settings.hardcoregases;
 
 @SideOnly(Side.CLIENT)
-public class RenderGasHandler implements ISimpleBlockRenderingHandler
-{
-	private IIcon icon;
-	private Tessellator tessellator;
-	private int verts;
+public class RenderGasHandler implements ISimpleBlockRenderingHandler {
 
-	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
-	{
-		Tessellator tessellator = Tessellator.instance;
+    private IIcon icon;
+    private Tessellator tessellator;
+    private int verts;
 
-		float red = 1.0F;
-		float green = 1.0F;
-		float blue = 1.0F;
+    @Override
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
+        Tessellator tessellator = Tessellator.instance;
 
-		if(renderer.useInventoryTint)
-		{
-			int var6 = block.getRenderColor(metadata);
+        float red = 1.0F;
+        float green = 1.0F;
+        float blue = 1.0F;
 
-			red = (float)(var6 >> 16 & 255) / 255.0F;
-			green = (float)(var6 >> 8 & 255) / 255.0F;
-			blue = (float)(var6 & 255) / 255.0F;
-		}
+        if (renderer.useInventoryTint) {
+            int var6 = block.getRenderColor(metadata);
 
-		renderer.setRenderBoundsFromBlock(block);
-		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		GL11.glColor4f(red, green, blue, 1.0F);
+            red = (float) (var6 >> 16 & 255) / 255.0F;
+            green = (float) (var6 >> 8 & 255) / 255.0F;
+            blue = (float) (var6 & 255) / 255.0F;
+        }
 
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, -1.0F, 0.0F);
-		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
-		tessellator.draw();
+        renderer.setRenderBoundsFromBlock(block);
+        GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        GL11.glColor4f(red, green, blue, 1.0F);
 
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
-		tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, -1.0F, 0.0F);
+        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+        tessellator.draw();
 
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
-		tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+        tessellator.draw();
 
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-	}
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(1.0F, 0.0F, 0.0F);
+        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+        tessellator.draw();
 
-	@Override
-	public boolean renderWorldBlock(IBlockAccess blockAccess, int i, int j, int k, Block oBlock, int modelId, RenderBlocks renderer)
-	{
+        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+    }
+
+    @Override
+    public boolean renderWorldBlock(IBlockAccess blockAccess, int i, int j, int k, Block oBlock, int modelId,
+        RenderBlocks renderer) {
         if (!hardcoregases) {
             BlockGas block = (BlockGas) oBlock;
 
@@ -132,13 +131,15 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
             tessellator.setColorRGBA_F(red * 0.9F, green * 0.9F, blue * 0.9F, alpha * 0.9F);
             if (block.shouldSideBeRendered(blockAccess, i, j, k, 2)) {
                 sideBlock = blockAccess.getBlock(i, j, k - 1);
-                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i, j, k - 1) : 0F;
+                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i, j, k - 1)
+                    : 0F;
 
                 if (sideAlpha > 0.1F) {
                     sideMinY = ((BlockGas) sideBlock).getMinY(blockAccess, i, j, k - 1);
                     sideMaxY = ((BlockGas) sideBlock).getMaxY(blockAccess, i, j, k - 1);
 
-                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY) | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
+                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY)
+                        | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
                         vertexAutoMap(minX, minY, minZ, maxX, minY);
                         vertexAutoMap(minX, maxY, minZ, maxX, maxY);
                         vertexAutoMap(maxX, maxY, minZ, minX, maxY);
@@ -169,13 +170,15 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 
             if (block.shouldSideBeRendered(blockAccess, i, j, k, 3)) {
                 sideBlock = blockAccess.getBlock(i, j, k + 1);
-                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i, j, k + 1) : 0F;
+                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i, j, k + 1)
+                    : 0F;
 
                 if (sideAlpha > 0.1F) {
                     sideMinY = ((BlockGas) sideBlock).getMinY(blockAccess, i, j, k + 1);
                     sideMaxY = ((BlockGas) sideBlock).getMaxY(blockAccess, i, j, k + 1);
 
-                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY) | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
+                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY)
+                        | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
                         vertexAutoMap(maxX, minY, maxZ, maxX, minY);
                         vertexAutoMap(maxX, maxY, maxZ, maxX, maxY);
                         vertexAutoMap(minX, maxY, maxZ, minX, maxY);
@@ -205,13 +208,15 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 
             if (block.shouldSideBeRendered(blockAccess, i, j, k, 4)) {
                 sideBlock = blockAccess.getBlock(i - 1, j, k);
-                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i - 1, j, k) : 0F;
+                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i - 1, j, k)
+                    : 0F;
 
                 if (sideAlpha > 0.1F) {
                     sideMinY = ((BlockGas) sideBlock).getMinY(blockAccess, i - 1, j, k);
                     sideMaxY = ((BlockGas) sideBlock).getMaxY(blockAccess, i - 1, j, k);
 
-                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY) | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
+                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY)
+                        | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
                         vertexAutoMap(minX, minY, maxZ, minZ, maxY);
                         vertexAutoMap(minX, maxY, maxZ, minZ, minY);
                         vertexAutoMap(minX, maxY, minZ, maxZ, minY);
@@ -241,13 +246,15 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 
             if (block.shouldSideBeRendered(blockAccess, i, j, k, 5)) {
                 sideBlock = blockAccess.getBlock(i + 1, j, k);
-                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i + 1, j, k) : 0F;
+                sideAlpha = sideBlock instanceof BlockGas ? ((BlockGas) sideBlock).getOpacity(blockAccess, i + 1, j, k)
+                    : 0F;
 
                 if (sideAlpha > 0.1F) {
                     sideMinY = ((BlockGas) sideBlock).getMinY(blockAccess, i + 1, j, k);
                     sideMaxY = ((BlockGas) sideBlock).getMaxY(blockAccess, i + 1, j, k);
 
-                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY) | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
+                    if ((minY <= sideMinY & minY <= sideMaxY & maxY <= sideMinY & maxY <= sideMinY)
+                        | (minY >= sideMinY & minY >= sideMaxY & maxY >= sideMinY & maxY >= sideMinY)) {
                         vertexAutoMap(maxX, minY, minZ, minZ, maxY);
                         vertexAutoMap(maxX, maxY, minZ, minZ, minY);
                         vertexAutoMap(maxX, maxY, maxZ, maxZ, minY);
@@ -293,29 +300,26 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 
             tessellator.addTranslation((float) -i, (float) -j, (float) -k);
         }
-            if (verts <= 0) {
-                return false;
-            } else {
-                return true;
-            }
-	}
+        if (verts <= 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-	private void vertexAutoMap(double x, double y, double z, double u, double v)
-	{
-		tessellator.addVertexWithUV(x, y, z, icon.getInterpolatedU(u * 16.0D), icon.getInterpolatedV(v * 16.0D));
-		verts += 1;
-	}
+    private void vertexAutoMap(double x, double y, double z, double u, double v) {
+        tessellator.addVertexWithUV(x, y, z, icon.getInterpolatedU(u * 16.0D), icon.getInterpolatedV(v * 16.0D));
+        verts += 1;
+    }
 
-	@Override
-	public boolean shouldRender3DInInventory(int i)
-	{
-		return true;
-	}
+    @Override
+    public boolean shouldRender3DInInventory(int i) {
+        return true;
+    }
 
-	@Override
-	public int getRenderId()
-	{
-		return ObjectHandler.renderGasID;
-	}
+    @Override
+    public int getRenderId() {
+        return ObjectHandler.renderGasID;
+    }
 
 }
