@@ -337,19 +337,7 @@ public class EM_Settings
 	public static int filterRestore = 500;
 	public static int camelPackMax = 100;
 	public static float gasMaskUpdateRestoreFraction = 1F;
-
-	/*
-	public static int gasMaskID = 5005;
-	public static int airFilterID = 5006;
-	public static int hardHatID = 5007;
-	public static int rottenFoodID = 5008;
-
-	public static int blockElevatorTopID = 501;
-	public static int blockElevatorBottomID = 502;
-	public static int gasBlockID = 503;
-	public static int fireGasBlockID = 504;
-	*/
-
+	
 	public static int hypothermiaPotionID = 27;
 	public static int heatstrokePotionID = 28;
 	public static int frostBitePotionID = 29;

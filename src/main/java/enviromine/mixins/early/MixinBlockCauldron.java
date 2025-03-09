@@ -9,12 +9,15 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -57,6 +60,25 @@ public class MixinBlockCauldron implements ITileEntityProvider {
 						}
 						cir.setReturnValue(true);
 					}
+					else if (itemstack.getItem() == Items.snowball) {
+						if (!player.capabilities.isCreativeMode) {
+							itemstack.stackSize--;
+						}
+						cauldron.setWaterType(WaterUtils.coolDown(cauldron.getWaterType()));
+						cir.setReturnValue(true);
+					} else {
+						for (int id : OreDictionary.getOreIDs(itemstack)) {
+							if (OreDictionary.getOreID("dustSalt") == id) {
+								if (!player.capabilities.isCreativeMode) {
+									itemstack.stackSize--;
+								}
+								cauldron.setWaterType(WaterUtils.saltDown(cauldron.getWaterType()));
+								cir.setReturnValue(true);
+								break;
+							}
+						}
+					}
+					
 				}
 			}
 		}

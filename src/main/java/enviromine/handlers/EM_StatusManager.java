@@ -498,8 +498,7 @@ public class EM_StatusManager {
         }
 
         if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
-            boolean isDesertBiome = false;
-            float DesertBiomeTemperatureMultiplier = 1F;
+            float TemperatureMultiplier = 1F;
 
             float biome_DAWN_TEMPERATURE = 4F;
             float biome_DAY_TEMPERATURE = 0F;
@@ -530,9 +529,7 @@ public class EM_StatusManager {
                     biomeOverride = BiomeProperties.base.getProperty(biome);
                 }
                 if (biomeOverride != null && biomeOverride.biomeOveride) {
-
-                    isDesertBiome = biomeOverride.isDesertBiome;
-                    DesertBiomeTemperatureMultiplier = biomeOverride.DesertBiomeTemperatureMultiplier;
+                    TemperatureMultiplier = biomeOverride.TemperatureMultiplier;
 
                     biome_DAWN_TEMPERATURE = biomeOverride.DAWN_TEMPERATURE;
                     biome_DAY_TEMPERATURE = biomeOverride.DAY_TEMPERATURE;
@@ -580,13 +577,9 @@ public class EM_StatusManager {
             } else {
                 temperatureChange = calculateTemperatureChange(currentTime % 24000L, biome_DAWN_TEMPERATURE, biome_DAY_TEMPERATURE, biome_DUSK_TEMPERATURE, biome_NIGHT_TEMPERATURE);
             }
-
-            if (biome.rainfall <= 0F || isDesertBiome) {
-                biomeTemperature -= temperatureChange * DesertBiomeTemperatureMultiplier;
-            } else {
-                biomeTemperature -= temperatureChange;
-            }
-
+            
+            biomeTemperature -= temperatureChange * TemperatureMultiplier;
+            
             if(EnviroMine.isSereneSeasonsLoaded) {
                 biomeTemperature = EM_StatusManager_SS.getTempDecreaseSeason(
                         entityLiving,

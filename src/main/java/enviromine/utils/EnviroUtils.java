@@ -26,6 +26,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -35,8 +36,11 @@ import org.apache.logging.log4j.Level;
 import thaumcraft.common.blocks.BlockMagicalLeaves;
 
 import java.awt.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static enviromine.core.EnviroMine.isTCLoaded;
 
@@ -153,56 +157,40 @@ public class EnviroUtils {
 	/*
 	 * This isn't accurate enough to
 	 */
-	public static String getBiomeWater(BiomeGenBase biome)
-	{
+	public static String getBiomeWater(BiomeGenBase biome) {
 		int waterColour = biome.getWaterColorMultiplier();
 		boolean looksBad = false;
 
-		if(waterColour != 16777215)
-		{
+		if(waterColour != 16777215) {
 			Color bColor = new Color(waterColour);
 
-			if(bColor.getRed() < 200 || bColor.getGreen() < 200 || bColor.getBlue() < 200)
-			{
+			if(bColor.getRed() < 200 || bColor.getGreen() < 200 || bColor.getBlue() < 200) {
 				looksBad = true;
 			}
 		}
 
 		ArrayList<Type> typeList = new ArrayList<Type>();
 		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
-		for(int i = 0; i < typeArray.length; i++)
-		{
-			typeList.add(typeArray[i]);
-		}
+		Collections.addAll(typeList, typeArray);
 
-        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA)) {
-            return "HOT";
-        }
-        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad)) {
-            return "DIRTY_WARM";
-        }
-        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET)) {
-            return "CLEAN_WARM";
-        }
-        else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || looksBad) )
-        {
-            return "DIRTY";
-        }
-        else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH)) {
-            return "SALTY";
-        }
-        else if(typeList.contains(Type.COLD) && ((!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F) && !looksBad)) {
-            return "CLEAN_COLD";
-        }
-        else if(typeList.contains(Type.COLD) && ((!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F) && looksBad)) {
-            return "DIRTY_COLD";
-        }
-        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY)) {
-            return "FROSTY";
-        }
-        else {
-            return "CLEAN";
-        }
+       	if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH)) {
+			return typeList.contains(Type.COLD) ? "SALTY_COLD" : typeList.contains(Type.HOT) ? "SALTY_WARM" : "SALTY";
+	   	}
+		else if (typeList.contains(Type.RIVER)) {
+			return typeList.contains(Type.COLD) ? "CLEAN_COLD" : typeList.contains(Type.HOT) ? "CLEAN_WARM" : "CLEAN";
+		}
+		else if (typeList.contains(Type.HOT)) {
+			return typeList.contains(Type.DRY) ? "HOT" : looksBad ? "DIRTY_WARM" : "CLEAN_WARM";
+		}
+		else if (typeList.contains(Type.COLD)) {
+			return (typeList.contains(Type.SNOWY) || biome.temperature <= 0F) ? "FROSTY" : ((typeList.contains(Type.WASTELAND) || looksBad) && biome.temperature > 0F) ? "DIRTY_COLD" : "CLEAN_COLD";
+		}
+		else if (typeList.contains(Type.SWAMP) || typeList.contains(Type.WASTELAND) || typeList.contains(Type.DEAD)) {
+			return "DIRTY";
+		}
+		else {
+			return "CLEAN";
+		}
 	}
 
 	public static StabilityType getDefaultStabilityType(Block block)
@@ -243,7 +231,57 @@ public class EnviroUtils {
 
 		return type;
 	}
-
+	
+	//!
+	public static void extendPotionList() {
+		int maxID = 32;
+		
+		if(EM_Settings.heatstrokePotionID >= maxID) {
+			maxID = EM_Settings.heatstrokePotionID + 1;
+		}
+		
+		if(EM_Settings.hypothermiaPotionID >= maxID) {
+			maxID = EM_Settings.hypothermiaPotionID + 1;
+		}
+		
+		if(EM_Settings.frostBitePotionID >= maxID) {
+			maxID = EM_Settings.frostBitePotionID + 1;
+		}
+		
+		if(EM_Settings.dehydratePotionID >= maxID) {
+			maxID = EM_Settings.dehydratePotionID + 1;
+		}
+		
+		if(EM_Settings.insanityPotionID >= maxID) {
+			maxID = EM_Settings.insanityPotionID + 1;
+		}
+		
+		if(Potion.potionTypes.length >= maxID) {
+			return;
+		}
+		
+		Potion[] potionTypes = null;
+		
+		for(Field f : Potion.class.getDeclaredFields()) {
+			f.setAccessible(true);
+			
+			try {
+				if(f.getName().equals("potionTypes") || f.getName().equals("field_76425_a")) {
+					Field modfield = Field.class.getDeclaredField("modifiers");
+					modfield.setAccessible(true);
+					modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+					
+					potionTypes = (Potion[])f.get(null);
+					final Potion[] newPotionTypes = new Potion[maxID];
+					System.arraycopy(potionTypes, 0, newPotionTypes, 0, potionTypes.length);
+					f.set(null, newPotionTypes);
+				}
+			} catch(Exception e) {
+				if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel()) EnviroMine.logger.log(Level.ERROR, "Failed to extend potion list for EnviroMine!", e);
+			}
+		}
+	}
+	
 	public static String SafeFilename(String filename)
 	{
 		String safeName = filename;

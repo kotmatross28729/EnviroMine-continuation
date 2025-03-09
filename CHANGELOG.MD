@@ -19,13 +19,14 @@
   * TODO
 
 * **Water types rework v2.0** **[TODO]**
-  * Now Enviromine water has traits : `heatIndex`, `isRadioactive`, `isDirty`, `isSalty`
+  * Now Enviromine water has traits : `heatIndex`, `isRadioactive`, `isDirty`, `isSalty` (**[Wiki page](https://github.com/kotmatross28729/EnviroMine-continuation/wiki/Water-types-v2)**)
     * All cooling/heating recipes now use `heatIndex` instead of manually setting
   * Added water block for each water type (16 blocks!)
     * **[NTM:Space] All 16 EnviroMine water blocks can evaporate in a vacuum (separate compatibility)**
     * **Added water compatibility for forge fluids and bobfluids (Hbm's NTM)**
     * Accordingly added buckets for each water type   
       * This fixes an old balance issue: previously you could fill a bucket with water in a salty biome, pour it out in a biome with normal water and avoid boiling. Adding a bucket of salty water will fix this: eventually, if you fill a bucket with water in a salty biome, you'll get a bucket of salty water, and no matter where you pour it, it will still be salty.
+      * Cauldrons will also use water types
   * **[Serene seasons] The type of water in the biome will also change depending on the season**
 
 * **Potentially fixed problems with `NoClassDefFoundError` crashing if mods for which there is compatibility are not installed**
@@ -37,8 +38,13 @@
 
 * Fixed Freezer Z-fighting on model
 
+* Added compatibility with Hbm's NTM craters
+  * Temperature and a special type of water - radioactive 
+
 * Added compatibility for MrCrayfish's Furniture Mod / Cooking For Blockheads fridges
   * [Cooking For Blockheads] Requires [GTNH version](https://github.com/GTNewHorizons/CookingForBlockheads/releases)!
+
+* Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description [**Suggested by xronin01**]
 
 * Now cooling water uses snowball instead of ice (in favor of survival mode) [**Suggested by iamsoNewBee**]
 
@@ -46,8 +52,6 @@
   * Minor food hydration balance changes [**Suggested by iamsoNewBee**]
 
 * Hbm's NTM canned food no longer rot    [**Suggested by iamsoNewBee**]
-
-* Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description [**Suggested by xronin01**]
 
 * Hbm's NTM drinks now restore hydration (And some also reduce the temperature (except for vodka, it increases))
 
@@ -66,7 +70,6 @@
 ------------------
 
 
-
 # 1.3.147
 ### Fixed
 * Crash on a server with Hbm's NTM installed
@@ -76,7 +79,7 @@
 * Compatibility between davy lamp / NTM gases
   * especially for NTM gases: the distance at which the davy lamp will react can be adjusted (`a-169_DavyLampGasDetectRange`)
 * Compatibility with Mekanism's gas mask
-
+------------------
 # 1.3.146
 
 ### Fixed
@@ -91,12 +94,8 @@
   * `Is Temperature Resistance` = `"This armor is resistant to average temperatures"` = protects against fire / normal NTM Space planets | doesn't protect against lava / extremely hot/cold NTM Space planets 
   * `Is Temperature Sealed` = `"This armor is resistant to extreme temperatures"` = protects against any temperatures
 
-
-
 ---
 # 1.3.144
-### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG! (concerns biome and general config)
-
 -  **[NTM Space compat] More severe temperature conditions on planets.**
    + "Cyclic temperature rate":
       + The same as “n temperature decrease”, but for temperature rate, that is, separate configs for Dawn, Day, Dusk, Night.
@@ -130,19 +129,12 @@
 
 + Added the ability to change a huge number of hardcoded values
   + config now has 150+ options
-
 ---
 # 1.3.143
 * Added support for Serene Seasons
     * All relevant settings in the parameters of each biome
 ---
-
-
 # 1.3.142
-
-**Attention: for the correct operation of biome temperatures on planets, go to: `Enviromine menu - Custom Editor - Profile settings - default_settings.cfg - Config - Generate Defaults - true`**
-
-
 * Added support for Hbm's NTM Space fork
   * Default temperature values on other planets
     * Temperature (depending on distance from the sun): closer than the Earth? very hot: further than the Earth? : very cold
@@ -150,8 +142,3 @@
   * Change in temperature values if the planet was terraformed (transition to more comfortable temperatures)
   * Improved compatibility for armor with temperatures (canSeal from space fork)
 ---
-
-Excluded (broken for now)
-+ If a player has a late stage of Mesothelioma/Black Lung, then his maximum airQuality = 50, 2 times less than normal (so he can spend less time in the cave without protection)
-+ If the player has a high radiation dose, his temperature will rise (more radiation, higher the temperature, at very high doses player can even die from fever (and not from rad itself))
-

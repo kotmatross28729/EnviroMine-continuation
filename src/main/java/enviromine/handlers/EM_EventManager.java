@@ -560,8 +560,13 @@ public class EM_EventManager
 						}
 					}
 					else if (isCauldron) {
+						
 						Item newItem = ObjectHandler.getBucketFromWaterType(getWaterType(world, i, j, k)).getItem();
 						
+						if (isCauldronHeatingBlock(world.getBlock(i, j - 1, k), world.getBlockMetadata(i, j - 1, k))) {
+							newItem = ObjectHandler.getBucketFromWaterType(WaterUtils.heatUp(getWaterType(world, i, j, k))).getItem();
+						}
+
 						player.worldObj.setBlockMetadataWithNotify(i, j, k, 0, 2);
 						
 						--item.stackSize;
@@ -811,48 +816,8 @@ public class EM_EventManager
 			return biomeProperties.getWaterQuality();
 		}
 
-		int waterColour = biome.getWaterColorMultiplier();
-		boolean looksBad = false;
-
-		if(waterColour != 16777215) {
-			Color bColor = new Color(waterColour);
-
-			if(bColor.getRed() < 200 || bColor.getGreen() < 200 || bColor.getBlue() < 200) {
-				looksBad = true;
-			}
-		}
-
-		ArrayList<Type> typeList = new ArrayList<Type>();
-		Type[] typeArray = BiomeDictionary.getTypesForBiome(biome);
-        Collections.addAll(typeList, typeArray);
-
-        if(typeList.contains(Type.HOT) && !typeList.contains(Type.WET) && !typeList.contains(Type.SAVANNA)) {
-            return WaterUtils.WATER_TYPES.HOT;
-        }
-        else if(typeList.contains(Type.HOT) && (!typeList.contains(Type.WET) || looksBad)) {
-            return WaterUtils.WATER_TYPES.DIRTY_WARM;
-        }
-        else if(typeList.contains(Type.HOT) && typeList.contains(Type.WET)) {
-            return WaterUtils.WATER_TYPES.CLEAN_WARM;
-        }
-		else if(!typeList.contains(Type.COLD) && (typeList.contains(Type.SWAMP) || typeList.contains(Type.JUNGLE) || typeList.contains(Type.DEAD) || typeList.contains(Type.WASTELAND) || y < (float)seaLvl/0.75F || looksBad) ) {
-			return WaterUtils.WATER_TYPES.DIRTY;
-		}
-		else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH)) {
-			return WaterUtils.WATER_TYPES.SALTY;
-		}
-		else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && !looksBad) {
-			return WaterUtils.WATER_TYPES.CLEAN_COLD;
-		}
-        else if(typeList.contains(Type.COLD) && (!typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getFloatTemperature(x, y, z) < 0F || y > seaLvl * 2) && looksBad) {
-            return WaterUtils.WATER_TYPES.DIRTY_COLD;
-        }
-        else if(typeList.contains(Type.COLD) && typeList.contains(Type.SNOWY)) {
-            return WaterUtils.WATER_TYPES.FROSTY;
-        }
-        else {
-			return WaterUtils.WATER_TYPES.CLEAN;
-		}
+		
+		return WaterUtils.getTypeFromString(EnviroUtils.getBiomeWater(biome));
 	}
 
 	@SubscribeEvent

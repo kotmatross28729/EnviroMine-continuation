@@ -28,6 +28,7 @@ import enviromine.handlers.compat.ObjectHandler_Netherlicious;
 import enviromine.network.packet.PacketAutoOverride;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.network.packet.PacketServerOverride;
+import enviromine.utils.EnviroUtils;
 import enviromine.world.WorldProviderCaves;
 import enviromine.world.biomes.BiomeGenCaves;
 import enviromine.world.features.WorldFeatureGenerator;
@@ -77,6 +78,8 @@ public class EnviroMine
 	
 	public static boolean isHarvestCraftLoaded;
 	public static boolean isJAFFALoaded;
+	
+	public static boolean isEndlessIDsLoaded;
 
     //public static EM_WorldData theWorldEM;
 
@@ -152,7 +155,8 @@ public class EnviroMine
 			isHarvestCraftLoaded = true;
 		if(Loader.isModLoaded("jaffa"))
 			isJAFFALoaded = true;
-		
+		if(Loader.isModLoaded("endlessids"))
+			isEndlessIDsLoaded = true;
 		
 		enviroTab = new EnviroTab("enviromine.enviroTab");
 
@@ -204,7 +208,10 @@ public class EnviroMine
 
 		ObjectHandler.registerRecipes();
 
-		//EnviroUtils.extendPotionList();
+		//!
+		if(!isEndlessIDsLoaded) {
+			EnviroUtils.extendPotionList();
+		}
 
 		EnviroPotion.RegisterPotions();
 

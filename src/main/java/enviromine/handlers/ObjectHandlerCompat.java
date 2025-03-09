@@ -13,6 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ObjectHandlerCompat {
     //FOR HBM'S NTM
@@ -171,6 +172,7 @@ public class ObjectHandlerCompat {
             }
             if(WaterUtils.saltDown(localType) != localType) {
                 GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.saltDown(localType)), bottle, new ItemStack(Blocks.sand, 1));
+                GameRegistry.addRecipe(new ShapelessOreRecipe(getItemStackFromWaterType(WaterUtils.saltDown(localType)), bottle, "dustSalt"));
             }
         }
         //POLLUTING or whatever is this

@@ -52,6 +52,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
@@ -586,8 +587,10 @@ public class ObjectHandler {
 			}
 			if(WaterUtils.saltDown(localType) != localType) {
 				GameRegistry.addShapelessRecipe(getItemStackFromWaterType(WaterUtils.saltDown(localType)), bottle, new ItemStack(Blocks.sand, 1));
+				GameRegistry.addRecipe(new ShapelessOreRecipe(getItemStackFromWaterType(WaterUtils.saltDown(localType)), bottle, "dustSalt"));
 			}
 		}
+		
 		//POLLUTING or whatever is this
 		for(ItemStack bottle : bottles) {
 			WaterUtils.WATER_TYPES localType = WaterUtils.WATER_TYPES.CLEAN;

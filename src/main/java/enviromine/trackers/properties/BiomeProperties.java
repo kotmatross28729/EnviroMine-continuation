@@ -5,6 +5,7 @@ import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.trackers.properties.compat.BiomeProperties_LOTR;
+import enviromine.trackers.properties.compat.BiomeProperties_NTM;
 import enviromine.trackers.properties.compat.BiomeProperties_NTM_SPACE;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
@@ -40,8 +41,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	public float dehydrateRate;
 	public float airRate;
 	public String loadedFrom;
-    public boolean isDesertBiome;
-    public float DesertBiomeTemperatureMultiplier;
+    public float TemperatureMultiplier;
     public float DAWN_TEMPERATURE;
     public float DAY_TEMPERATURE;
     public float DUSK_TEMPERATURE;
@@ -108,8 +108,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
         float dehydrateRate,
         float airRate,
         String filename,
-        boolean isDesertBiome,
-        float DesertBiomeTemperatureMultiplier,
+        float TemperatureMultiplier,
 
         float DAWN_TEMPERATURE,
         float DAY_TEMPERATURE,
@@ -159,8 +158,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		this.dehydrateRate = dehydrateRate;
 		this.airRate = airRate;
 		this.loadedFrom = filename;
-        this.isDesertBiome = isDesertBiome;
-        this.DesertBiomeTemperatureMultiplier = DesertBiomeTemperatureMultiplier;
+        this.TemperatureMultiplier = TemperatureMultiplier;
 
         this.DAWN_TEMPERATURE  = DAWN_TEMPERATURE;
         this.DAY_TEMPERATURE   = DAY_TEMPERATURE;
@@ -258,8 +256,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		tags.setFloat("tempRate", this.tempRate);
 		tags.setFloat("sanityRate", this.sanityRate);
 		tags.setFloat("dehydrateRate", this.dehydrateRate);
-        tags.setBoolean("isDesertBiome", this.isDesertBiome);
-        tags.setFloat("DesertBiomeTemperatureMultiplier", this.DesertBiomeTemperatureMultiplier);
+        tags.setFloat("TemperatureMultiplier", this.TemperatureMultiplier);
 
         tags.setFloat("DAWN_TEMPERATURE", this.DAWN_TEMPERATURE);
         tags.setFloat("DAY_TEMPERATURE", this.DAY_TEMPERATURE);
@@ -318,8 +315,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		this.tempRate = tags.getFloat("tempRate");
 		this.sanityRate = tags.getFloat("sanityRate");
 		this.dehydrateRate = tags.getFloat("dehydrateRate");
-        this.isDesertBiome = tags.getBoolean("isDesertBiome");
-        this.DesertBiomeTemperatureMultiplier = tags.getFloat("DesertBiomeTemperatureMultiplier");
+        this.TemperatureMultiplier = tags.getFloat("TemperatureMultiplier");
 
         this.DAWN_TEMPERATURE = tags.getFloat("DAWN_TEMPERATURE");
         this.DAY_TEMPERATURE = tags.getFloat("DAY_TEMPERATURE");
@@ -379,8 +375,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	}
 
 	@Override
-	public void LoadProperty(Configuration config, String category)
-	{
+	public void LoadProperty(Configuration config, String category) {
 		config.setCategoryComment(this.categoryName(), this.categoryDescription());
 		int id = config.get(category, BOName[0], 0).getInt(0);
 		boolean biomeOveride = config.get(category, BOName[1], false).getBoolean(false);
@@ -409,52 +404,51 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		float dehyRate = (float)config.get(category, BOName[6], 0.0).getDouble(0.0);
 		float airRate = (float)config.get(category, BOName[7], 0.0).getDouble(0.0);
 		String filename = config.getConfigFile().getName();
-        boolean isDesertBiome = config.get(category, BOName[8], false).getBoolean(false);
-        float DesertBiomeTemperatureMultiplier = (float)config.get(category, BOName[9], 1.0).getDouble(1.0);
+        float TemperatureMultiplier = (float)config.get(category, BOName[8], 1.0).getDouble(1.0);
 
-        float DAWN_TEMPERATURE  = (float)config.get(category, BOName[10], 4.0).getDouble(4.0);
-        float DAY_TEMPERATURE   = (float)config.get(category, BOName[11], 0.0).getDouble(0.0);
-        float DUSK_TEMPERATURE  = (float)config.get(category, BOName[12], 4.0).getDouble(4.0);
-        float NIGHT_TEMPERATURE = (float)config.get(category, BOName[13], 8.0).getDouble(8.0);
+        float DAWN_TEMPERATURE  = (float)config.get(category, BOName[9], 4.0).getDouble(4.0);
+        float DAY_TEMPERATURE   = (float)config.get(category, BOName[10], 0.0).getDouble(0.0);
+        float DUSK_TEMPERATURE  = (float)config.get(category, BOName[11], 4.0).getDouble(4.0);
+        float NIGHT_TEMPERATURE = (float)config.get(category, BOName[12], 8.0).getDouble(8.0);
 
-        float TemperatureRainDecrease = (float)config.get(category, BOName[14], 6.0).getDouble(6.0);
-        float TemperatureThunderDecrease = (float)config.get(category, BOName[15], 8.0).getDouble(8.0);
+        float TemperatureRainDecrease = (float)config.get(category, BOName[13], 6.0).getDouble(6.0);
+        float TemperatureThunderDecrease = (float)config.get(category, BOName[14], 8.0).getDouble(8.0);
 
-        boolean TemperatureRainBool = config.get(category, BOName[16], true).getBoolean(true);
-        boolean TemperatureThunderBool = config.get(category, BOName[17], true).getBoolean(true);
-        float TemperatureShadeDecrease = (float)config.get(category, BOName[18], 2.5).getDouble(2.5);
+        boolean TemperatureRainBool = config.get(category, BOName[15], true).getBoolean(true);
+        boolean TemperatureThunderBool = config.get(category, BOName[16], true).getBoolean(true);
+        float TemperatureShadeDecrease = (float)config.get(category, BOName[17], 2.5).getDouble(2.5);
 
-        float ambientTemp_TERRAFORMED       =   (float)config.get(category, BOName[19], 25.0).getDouble(25.0);
-        float DAWN_TEMPERATURE_TERRAFORMED  =   (float)config.get(category, BOName[20], 4.0).getDouble(4.0);
-        float DAY_TEMPERATURE_TERRAFORMED   =   (float)config.get(category, BOName[21], 0.0).getDouble(0.0);
-        float DUSK_TEMPERATURE_TERRAFORMED  =   (float)config.get(category, BOName[22], 4.0).getDouble(4.0);
-        float NIGHT_TEMPERATURE_TERRAFORMED =   (float)config.get(category, BOName[23], 8.0).getDouble(8.0);
+        float ambientTemp_TERRAFORMED       =   (float)config.get(category, BOName[18], 25.0).getDouble(25.0);
+        float DAWN_TEMPERATURE_TERRAFORMED  =   (float)config.get(category, BOName[19], 4.0).getDouble(4.0);
+        float DAY_TEMPERATURE_TERRAFORMED   =   (float)config.get(category, BOName[20], 0.0).getDouble(0.0);
+        float DUSK_TEMPERATURE_TERRAFORMED  =   (float)config.get(category, BOName[21], 4.0).getDouble(4.0);
+        float NIGHT_TEMPERATURE_TERRAFORMED =   (float)config.get(category, BOName[22], 8.0).getDouble(8.0);
 
-        float EARLY_SPRING_TEMPERATURE_DECREASE = (float)config.get(category, BOName[24], 5.0).getDouble(5.0);
-        float EARLY_SUMMER_TEMPERATURE_DECREASE = (float)config.get(category, BOName[25], -1.0).getDouble(-1.0);
-        float EARLY_WINTER_TEMPERATURE_DECREASE = (float)config.get(category, BOName[26], 12.0).getDouble(12.0);
-        float EARLY_AUTUMN_TEMPERATURE_DECREASE = (float)config.get(category, BOName[27], 6.0).getDouble(6.0);
-        float MID_SPRING_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[28], -2.0).getDouble(-2.0);
-        float MID_SUMMER_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[29], -3.0).getDouble(-3.0);
-        float MID_WINTER_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[30], 15.0).getDouble(15.0);
-        float MID_AUTUMN_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[31], 8.0).getDouble(8.0);
-        float LATE_SPRING_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[32], -1.0).getDouble(-1.0);
-        float LATE_SUMMER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[33], -1.0).getDouble(-1.0);
-        float LATE_WINTER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[34], 10.0).getDouble(10.0);
-        float LATE_AUTUMN_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[35], 10.0).getDouble(10.0);
+        float EARLY_SPRING_TEMPERATURE_DECREASE = (float)config.get(category, BOName[23], 5.0).getDouble(5.0);
+        float EARLY_SUMMER_TEMPERATURE_DECREASE = (float)config.get(category, BOName[24], -1.0).getDouble(-1.0);
+        float EARLY_WINTER_TEMPERATURE_DECREASE = (float)config.get(category, BOName[25], 12.0).getDouble(12.0);
+        float EARLY_AUTUMN_TEMPERATURE_DECREASE = (float)config.get(category, BOName[26], 6.0).getDouble(6.0);
+        float MID_SPRING_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[27], -2.0).getDouble(-2.0);
+        float MID_SUMMER_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[28], -3.0).getDouble(-3.0);
+        float MID_WINTER_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[29], 15.0).getDouble(15.0);
+        float MID_AUTUMN_TEMPERATURE_DECREASE   = (float)config.get(category, BOName[30], 8.0).getDouble(8.0);
+        float LATE_SPRING_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[31], -1.0).getDouble(-1.0);
+        float LATE_SUMMER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[32], -1.0).getDouble(-1.0);
+        float LATE_WINTER_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[33], 10.0).getDouble(10.0);
+        float LATE_AUTUMN_TEMPERATURE_DECREASE  = (float)config.get(category, BOName[34], 10.0).getDouble(10.0);
 
-        float tempRate_DAWN = (float)config.get(category, BOName[36], 0.0).getDouble(0.0);
-        float tempRate_DAY = (float)config.get(category, BOName[37], 0.0).getDouble(0.0);
-        float tempRate_DUSK = (float)config.get(category, BOName[38], 0.0).getDouble(0.0);
-        float tempRate_NIGHT = (float)config.get(category, BOName[39], 0.0).getDouble(0.0);
+        float tempRate_DAWN = (float)config.get(category, BOName[35], 0.0).getDouble(0.0);
+        float tempRate_DAY = (float)config.get(category, BOName[36], 0.0).getDouble(0.0);
+        float tempRate_DUSK = (float)config.get(category, BOName[37], 0.0).getDouble(0.0);
+        float tempRate_NIGHT = (float)config.get(category, BOName[38], 0.0).getDouble(0.0);
 
-        boolean tempRate_HARD = config.get(category, BOName[40], false).getBoolean(false);
+        boolean tempRate_HARD = config.get(category, BOName[39], false).getBoolean(false);
 
-        float TemperatureWaterDecrease = (float)config.get(category, BOName[41], 10.0).getDouble(10.0);
-        float dropSpeedWater = (float)config.get(category, BOName[42], 0.01).getDouble(0.01);
+        float TemperatureWaterDecrease = (float)config.get(category, BOName[40], 10.0).getDouble(10.0);
+        float dropSpeedWater = (float)config.get(category, BOName[41], 0.01).getDouble(0.01);
 
-        float dropSpeedRain = (float)config.get(category, BOName[43], 0.01).getDouble(0.01);
-        float dropSpeedThunder = (float)config.get(category, BOName[44], 0.01).getDouble(0.01);
+        float dropSpeedRain = (float)config.get(category, BOName[42], 0.01).getDouble(0.01);
+        float dropSpeedThunder = (float)config.get(category, BOName[43], 0.01).getDouble(0.01);
 
 		BiomeProperties entry = new BiomeProperties (
             id,
@@ -466,8 +460,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
             dehyRate,
             airRate,
             filename,
-            isDesertBiome,
-            DesertBiomeTemperatureMultiplier,
+			TemperatureMultiplier,
             DAWN_TEMPERATURE,
             DAY_TEMPERATURE,
             DUSK_TEMPERATURE,
@@ -541,51 +534,50 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.get(category, BOName[5], this.sanityRate).getDouble(this.sanityRate);
 		config.get(category, BOName[6], this.dehydrateRate).getDouble(this.dehydrateRate);
 		config.get(category, BOName[7], this.airRate).getDouble(this.airRate);
-        config.get(category, BOName[8], this.isDesertBiome, "Affects the temperature difference at night / day (useful for deserts)").getBoolean(this.isDesertBiome);
-        config.get(category, BOName[9], this.DesertBiomeTemperatureMultiplier, "The temperatureChange will be multiplied by this number if isDesertBiome=true").getDouble(this.DesertBiomeTemperatureMultiplier);
+        config.get(category, BOName[8], this.TemperatureMultiplier, "The temperatureChange will be multiplied by this number").getDouble(this.TemperatureMultiplier);
 
-        config.get(category, BOName[10], this.DAWN_TEMPERATURE, "Biome temperature will decrease by this amount at dawn").getDouble(this.DAWN_TEMPERATURE);
-        config.get(category, BOName[11], this.DAY_TEMPERATURE, "Biome temperature will decrease by this amount at day").getDouble(this.DAY_TEMPERATURE);
-        config.get(category, BOName[12], this.DUSK_TEMPERATURE, "Biome temperature will decrease by this amount at dusk").getDouble(this.DUSK_TEMPERATURE);
-        config.get(category, BOName[13], this.NIGHT_TEMPERATURE, "Biome temperature will decrease by this amount at midnight").getDouble(this.NIGHT_TEMPERATURE);
+        config.get(category, BOName[9], this.DAWN_TEMPERATURE, "Biome temperature will decrease by this amount at dawn").getDouble(this.DAWN_TEMPERATURE);
+        config.get(category, BOName[10], this.DAY_TEMPERATURE, "Biome temperature will decrease by this amount at day").getDouble(this.DAY_TEMPERATURE);
+        config.get(category, BOName[11], this.DUSK_TEMPERATURE, "Biome temperature will decrease by this amount at dusk").getDouble(this.DUSK_TEMPERATURE);
+        config.get(category, BOName[12], this.NIGHT_TEMPERATURE, "Biome temperature will decrease by this amount at midnight").getDouble(this.NIGHT_TEMPERATURE);
 
-        config.get(category, BOName[14], this.TemperatureRainDecrease, "Biome temperature decreases by n degrees if it rains").getDouble(this.TemperatureRainDecrease);
-        config.get(category, BOName[15], this.TemperatureThunderDecrease, "Biome temperature decreases by n degrees if there is a thunderstorm").getDouble(this.TemperatureThunderDecrease);
-        config.get(category, BOName[16], this.TemperatureRainBool, "Should the biome temperature decreases if it rains?").getBoolean(this.TemperatureRainBool);
-        config.get(category, BOName[17], this.TemperatureThunderBool, "Should the biome temperature decreases if there is a thunderstorm?").getBoolean(this.TemperatureThunderBool);
-        config.get(category, BOName[18], this.TemperatureShadeDecrease, "Biome temperature decreases by n degrees if player in the shadow").getDouble(this.TemperatureShadeDecrease);
+        config.get(category, BOName[13], this.TemperatureRainDecrease, "Biome temperature decreases by n degrees if it rains").getDouble(this.TemperatureRainDecrease);
+        config.get(category, BOName[14], this.TemperatureThunderDecrease, "Biome temperature decreases by n degrees if there is a thunderstorm").getDouble(this.TemperatureThunderDecrease);
+        config.get(category, BOName[15], this.TemperatureRainBool, "Should the biome temperature decreases if it rains?").getBoolean(this.TemperatureRainBool);
+        config.get(category, BOName[16], this.TemperatureThunderBool, "Should the biome temperature decreases if there is a thunderstorm?").getBoolean(this.TemperatureThunderBool);
+        config.get(category, BOName[17], this.TemperatureShadeDecrease, "Biome temperature decreases by n degrees if player in the shadow").getDouble(this.TemperatureShadeDecrease);
 
-        config.get(category, BOName[19], this.ambientTemp_TERRAFORMED, "Air temperature will be equal to this number if the planet is terraformed").getDouble(this.ambientTemp_TERRAFORMED);
-        config.get(category, BOName[20], this.DAWN_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dawn if the planet is terraformed").getDouble(this.DAWN_TEMPERATURE_TERRAFORMED);
-        config.get(category, BOName[21], this.DAY_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at day if the planet is terraformed").getDouble(this.DAY_TEMPERATURE_TERRAFORMED);
-        config.get(category, BOName[22], this.DUSK_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dusk if the planet is terraformed").getDouble(this.DUSK_TEMPERATURE_TERRAFORMED);
-        config.get(category, BOName[23], this.NIGHT_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at midnight if the planet is terraformed").getDouble(this.NIGHT_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[18], this.ambientTemp_TERRAFORMED, "Air temperature will be equal to this number if the planet is terraformed").getDouble(this.ambientTemp_TERRAFORMED);
+        config.get(category, BOName[19], this.DAWN_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dawn if the planet is terraformed").getDouble(this.DAWN_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[20], this.DAY_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at day if the planet is terraformed").getDouble(this.DAY_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[21], this.DUSK_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at dusk if the planet is terraformed").getDouble(this.DUSK_TEMPERATURE_TERRAFORMED);
+        config.get(category, BOName[22], this.NIGHT_TEMPERATURE_TERRAFORMED, "Biome temperature will decrease by this amount at midnight if the planet is terraformed").getDouble(this.NIGHT_TEMPERATURE_TERRAFORMED);
 
-        config.get(category, BOName[24], this.EARLY_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early spring").getDouble(this.EARLY_SPRING_TEMPERATURE_DECREASE);
-        config.get(category, BOName[25], this.EARLY_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early summer").getDouble(this.EARLY_SUMMER_TEMPERATURE_DECREASE);
-        config.get(category, BOName[26], this.EARLY_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early winter").getDouble(this.EARLY_WINTER_TEMPERATURE_DECREASE);
-        config.get(category, BOName[27], this.EARLY_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early autumn").getDouble(this.EARLY_AUTUMN_TEMPERATURE_DECREASE);
-        config.get(category, BOName[28], this.MID_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid spring").getDouble(this.MID_SPRING_TEMPERATURE_DECREASE);
-        config.get(category, BOName[29], this.MID_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid summer").getDouble(this.MID_SUMMER_TEMPERATURE_DECREASE);
-        config.get(category, BOName[30], this.MID_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid winter").getDouble(this.MID_WINTER_TEMPERATURE_DECREASE);
-        config.get(category, BOName[31], this.MID_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid autumn").getDouble(this.MID_AUTUMN_TEMPERATURE_DECREASE);
-        config.get(category, BOName[32], this.LATE_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late spring").getDouble(this.LATE_SPRING_TEMPERATURE_DECREASE);
-        config.get(category, BOName[33], this.LATE_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late summer").getDouble(this.LATE_SUMMER_TEMPERATURE_DECREASE);
-        config.get(category, BOName[34], this.LATE_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late winter").getDouble(this.LATE_WINTER_TEMPERATURE_DECREASE);
-        config.get(category, BOName[35], this.LATE_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late autumn").getDouble(this.LATE_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(category, BOName[23], this.EARLY_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early spring").getDouble(this.EARLY_SPRING_TEMPERATURE_DECREASE);
+        config.get(category, BOName[24], this.EARLY_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early summer").getDouble(this.EARLY_SUMMER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[25], this.EARLY_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early winter").getDouble(this.EARLY_WINTER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[26], this.EARLY_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at early autumn").getDouble(this.EARLY_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(category, BOName[27], this.MID_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid spring").getDouble(this.MID_SPRING_TEMPERATURE_DECREASE);
+        config.get(category, BOName[28], this.MID_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid summer").getDouble(this.MID_SUMMER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[29], this.MID_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid winter").getDouble(this.MID_WINTER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[30], this.MID_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at mid autumn").getDouble(this.MID_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(category, BOName[31], this.LATE_SPRING_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late spring").getDouble(this.LATE_SPRING_TEMPERATURE_DECREASE);
+        config.get(category, BOName[32], this.LATE_SUMMER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late summer").getDouble(this.LATE_SUMMER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[33], this.LATE_WINTER_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late winter").getDouble(this.LATE_WINTER_TEMPERATURE_DECREASE);
+        config.get(category, BOName[34], this.LATE_AUTUMN_TEMPERATURE_DECREASE, "Biome temperature will decrease by this amount at late autumn").getDouble(this.LATE_AUTUMN_TEMPERATURE_DECREASE);
 
-        config.get(category, BOName[36], this.tempRate_DAWN, "Biome temperature rate will be this number at dawn").getDouble(this.tempRate_DAWN);
-        config.get(category, BOName[37], this.tempRate_DAY, "Biome temperature rate will be this number at day").getDouble(this.tempRate_DAY);
-        config.get(category, BOName[38], this.tempRate_DUSK, "Biome temperature rate will be this number at dusk").getDouble(this.tempRate_DUSK);
-        config.get(category, BOName[39], this.tempRate_NIGHT, "Biome temperature rate will be this number at midnight").getDouble(this.tempRate_NIGHT);
+        config.get(category, BOName[35], this.tempRate_DAWN, "Biome temperature rate will be this number at dawn").getDouble(this.tempRate_DAWN);
+        config.get(category, BOName[36], this.tempRate_DAY, "Biome temperature rate will be this number at day").getDouble(this.tempRate_DAY);
+        config.get(category, BOName[37], this.tempRate_DUSK, "Biome temperature rate will be this number at dusk").getDouble(this.tempRate_DUSK);
+        config.get(category, BOName[38], this.tempRate_NIGHT, "Biome temperature rate will be this number at midnight").getDouble(this.tempRate_NIGHT);
 
-        config.get(category, BOName[40], this.tempRate_HARD, "The temperature of the biome is so strong that weak suits like MITTY/HEV cannot protect against it").getBoolean(this.tempRate_HARD);
+        config.get(category, BOName[39], this.tempRate_HARD, "The temperature of the biome is so strong that weak suits like MITTY/HEV cannot protect against it").getBoolean(this.tempRate_HARD);
 
-        config.get(category, BOName[41], this.TemperatureWaterDecrease,"Biome temperature decreases by this amount if the player is in water").getDouble(this.TemperatureWaterDecrease);
-        config.get(category, BOName[42], this.dropSpeedWater,"Biome drop speed will be this number if the player is in water").getDouble(this.dropSpeedWater);
+        config.get(category, BOName[40], this.TemperatureWaterDecrease,"Biome temperature decreases by this amount if the player is in water").getDouble(this.TemperatureWaterDecrease);
+        config.get(category, BOName[41], this.dropSpeedWater,"Biome drop speed will be this number if the player is in water").getDouble(this.dropSpeedWater);
 
-        config.get(category, BOName[43], this.dropSpeedRain,"Biome drop speed will be this number if it rains").getDouble(this.dropSpeedRain);
-        config.get(category, BOName[44], this.dropSpeedThunder,"Biome drop speed will be this number if there is a thunderstorm").getDouble(this.dropSpeedThunder);
+        config.get(category, BOName[42], this.dropSpeedRain,"Biome drop speed will be this number if it rains").getDouble(this.dropSpeedRain);
+        config.get(category, BOName[43], this.dropSpeedThunder,"Biome drop speed will be this number if there is a thunderstorm").getDouble(this.dropSpeedThunder);
     }
 
 	public void GenDefaultsProperty(BiomeGenBase[] biomeArray) {
@@ -634,8 +626,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	}
 
 	@Override
-	public void generateEmpty(Configuration config, Object obj)
-	{
+	public void generateEmpty(Configuration config, Object obj) {
         if(obj == null || !(obj instanceof BiomeGenBase biome)) //DONT TOUCH
 		{
 			if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(Level.ERROR, "Tried to register config with non biome object!", new Exception());
@@ -650,18 +641,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		double sanity = typeList.contains(Type.NETHER)? -0.1D : 0D;
 		double water = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.05D : 0D;
 		double temp = typeList.contains(Type.NETHER) || typeList.contains(Type.DRY)? 0.005D : 0D;
-        boolean isDesertBiome = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY);
-        double DesertBiomeTemperatureMultiplier = typeList.contains(Type.DESERT) || typeList.contains(Type.DRY)? 3D : 1D;
+        double TemperatureMultiplier = 1D;
 
         double TemperatureRainDecrease = typeList.contains(Type.WATER) ? 8D : typeList.contains(Type.JUNGLE)? 2D : 6D;
         double TemperatureThunderDecrease = typeList.contains(Type.WATER) ? 10D : typeList.contains(Type.JUNGLE)? 4D : 8D;
-        //boolean TemperatureRainBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD)) || (typeList.contains(Type.PLAINS) && !typeList.contains(Type.HOT));
-        //boolean TemperatureThunderBool = typeList.contains(Type.WATER) || typeList.contains(Type.WET) || typeList.contains(Type.JUNGLE) || (typeList.contains(Type.FOREST) && typeList.contains(Type.WET)) || (typeList.contains(Type.FOREST) && !typeList.contains(Type.COLD));
 
         boolean TemperatureRainBool = true;
         boolean TemperatureThunderBool = true;
 
-        double TemperatureShadeDecrease = /*typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :*/ 2.5D;
+        double TemperatureShadeDecrease = 2.5D;
 
         String biomeWater = EnviroUtils.getBiomeWater(biome);
 
@@ -773,21 +761,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
                         typeList.contains(Type.HOT) ? 8.0 :                         // ELSE HOT (SAVANNA)  (-2 (DEFAULT+2))
                             typeList.contains(Type.CONIFEROUS) ? 12.0 :             // TAIGA               (+2 (DEFAULT-2))
                             10.0;                                                   // DEFAULT             (0)
-
-
-		//This is just fucked up,
-		// I created a huge Excel spreadsheet with a ton of values to calculate all this crap.
-		// I already have a headache because of the fucking game about fucking cubes
 		
-		//^^^ Look what 1 hour of "La Realismé" did to bro
-		
-		//If anyone is interested in which version is faster: external or integrated, then here it is:
-		//integrated : 21:04:27 - 21:05:33 = 1 minute, 6 seconds
-		//external   : 21:08:41 - 21:09:42 = 1 minute, 1 second
-		
-		//So it's NORMAL ↓↓↓
-        if(EnviroMine.isHbmSpaceLoaded) {
-			BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
+		//COMPAT
+		if(EnviroMine.isHbmLoaded) {
+			BiomeProperties_NTM.registerNTMBiomes(
 					config,
 					biome,
 					BOName,
@@ -797,8 +774,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 					sanity,
 					water,
 					air,
-			 		isDesertBiome,
-			 		DesertBiomeTemperatureMultiplier,
+					TemperatureMultiplier,
 					DAWN_TEMPERATURE,
 					DAY_TEMPERATURE,
 					DUSK_TEMPERATURE,
@@ -835,7 +811,56 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 					dropSpeedRain,
 					dropSpeedThunder
 			);
-        }
+		}
+		if(EnviroMine.isHbmSpaceLoaded) {
+			BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
+					config,
+					biome,
+					BOName,
+					biomeWater,
+					biomeTemp,
+					temp,
+					sanity,
+					water,
+					air,
+					TemperatureMultiplier,
+					DAWN_TEMPERATURE,
+					DAY_TEMPERATURE,
+					DUSK_TEMPERATURE,
+					NIGHT_TEMPERATURE,
+					TemperatureRainDecrease,
+					TemperatureThunderDecrease,
+					TemperatureRainBool,
+					TemperatureThunderBool,
+					TemperatureShadeDecrease,
+					ambientTemp_TERRAFORMED,
+					DAWN_TEMPERATURE_TERRAFORMED,
+					DAY_TEMPERATURE_TERRAFORMED,
+					DUSK_TEMPERATURE_TERRAFORMED,
+					NIGHT_TEMPERATURE_TERRAFORMED,
+					EARLY_SPRING_TEMPERATURE_DECREASE,
+					EARLY_SUMMER_TEMPERATURE_DECREASE,
+					EARLY_WINTER_TEMPERATURE_DECREASE,
+					EARLY_AUTUMN_TEMPERATURE_DECREASE,
+					MID_SPRING_TEMPERATURE_DECREASE,
+					MID_SUMMER_TEMPERATURE_DECREASE,
+					MID_WINTER_TEMPERATURE_DECREASE,
+					MID_AUTUMN_TEMPERATURE_DECREASE,
+					LATE_SPRING_TEMPERATURE_DECREASE,
+					LATE_SUMMER_TEMPERATURE_DECREASE,
+					LATE_WINTER_TEMPERATURE_DECREASE,
+					LATE_AUTUMN_TEMPERATURE_DECREASE,
+					tempRate_DAWN,
+					tempRate_DAY,
+					tempRate_DUSK,
+					tempRate_NIGHT,
+					tempRate_HARD,
+					TemperatureWaterDecrease,
+					dropSpeedWater,
+					dropSpeedRain,
+					dropSpeedThunder
+			);
+		}
 		
 		String catName = this.categoryName() + "." + biome.biomeName;
 
@@ -865,51 +890,50 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		config.get(catName, BOName[5], sanity).getDouble(sanity);
 		config.get(catName, BOName[6], water).getDouble(water);
 		config.get(catName, BOName[7], air).getDouble(air);
-        config.get(catName, BOName[8], isDesertBiome).getBoolean(isDesertBiome);
-        config.get(catName, BOName[9], DesertBiomeTemperatureMultiplier).getDouble(DesertBiomeTemperatureMultiplier);
+        config.get(catName, BOName[8], TemperatureMultiplier).getDouble(TemperatureMultiplier);
 
-        config.get(catName, BOName[10], DAWN_TEMPERATURE).getDouble(DAWN_TEMPERATURE);
-        config.get(catName, BOName[11], DAY_TEMPERATURE).getDouble(DAY_TEMPERATURE);
-        config.get(catName, BOName[12], DUSK_TEMPERATURE).getDouble(DUSK_TEMPERATURE);
-        config.get(catName, BOName[13], NIGHT_TEMPERATURE).getDouble(NIGHT_TEMPERATURE);
+        config.get(catName, BOName[9], DAWN_TEMPERATURE).getDouble(DAWN_TEMPERATURE);
+        config.get(catName, BOName[10], DAY_TEMPERATURE).getDouble(DAY_TEMPERATURE);
+        config.get(catName, BOName[11], DUSK_TEMPERATURE).getDouble(DUSK_TEMPERATURE);
+        config.get(catName, BOName[12], NIGHT_TEMPERATURE).getDouble(NIGHT_TEMPERATURE);
 
-        config.get(catName, BOName[14], TemperatureRainDecrease).getDouble(TemperatureRainDecrease);
-        config.get(catName, BOName[15], TemperatureThunderDecrease).getDouble(TemperatureThunderDecrease);
-        config.get(catName, BOName[16], TemperatureRainBool).getBoolean(TemperatureRainBool);
-        config.get(catName, BOName[17], TemperatureThunderBool).getBoolean(TemperatureThunderBool);
-        config.get(catName, BOName[18], TemperatureShadeDecrease).getDouble(TemperatureShadeDecrease);
+        config.get(catName, BOName[13], TemperatureRainDecrease).getDouble(TemperatureRainDecrease);
+        config.get(catName, BOName[14], TemperatureThunderDecrease).getDouble(TemperatureThunderDecrease);
+        config.get(catName, BOName[15], TemperatureRainBool).getBoolean(TemperatureRainBool);
+        config.get(catName, BOName[16], TemperatureThunderBool).getBoolean(TemperatureThunderBool);
+        config.get(catName, BOName[17], TemperatureShadeDecrease).getDouble(TemperatureShadeDecrease);
 
-        config.get(catName, BOName[19], ambientTemp_TERRAFORMED).getDouble(ambientTemp_TERRAFORMED);
-        config.get(catName, BOName[20], DAWN_TEMPERATURE_TERRAFORMED).getDouble(DAWN_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[21], DAY_TEMPERATURE_TERRAFORMED).getDouble(DAY_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[22], DUSK_TEMPERATURE_TERRAFORMED).getDouble(DUSK_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[23], NIGHT_TEMPERATURE_TERRAFORMED).getDouble(NIGHT_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[18], ambientTemp_TERRAFORMED).getDouble(ambientTemp_TERRAFORMED);
+        config.get(catName, BOName[19], DAWN_TEMPERATURE_TERRAFORMED).getDouble(DAWN_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[20], DAY_TEMPERATURE_TERRAFORMED).getDouble(DAY_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[21], DUSK_TEMPERATURE_TERRAFORMED).getDouble(DUSK_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[22], NIGHT_TEMPERATURE_TERRAFORMED).getDouble(NIGHT_TEMPERATURE_TERRAFORMED);
 
-        config.get(catName, BOName[24], EARLY_SPRING_TEMPERATURE_DECREASE).getDouble(EARLY_SPRING_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[25], EARLY_SUMMER_TEMPERATURE_DECREASE).getDouble(EARLY_SUMMER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[26], EARLY_WINTER_TEMPERATURE_DECREASE).getDouble(EARLY_WINTER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[27], EARLY_AUTUMN_TEMPERATURE_DECREASE).getDouble(EARLY_AUTUMN_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[28], MID_SPRING_TEMPERATURE_DECREASE).getDouble(MID_SPRING_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[29], MID_SUMMER_TEMPERATURE_DECREASE).getDouble(MID_SUMMER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[30], MID_WINTER_TEMPERATURE_DECREASE).getDouble(MID_WINTER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[31], MID_AUTUMN_TEMPERATURE_DECREASE).getDouble(MID_AUTUMN_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[32], LATE_SPRING_TEMPERATURE_DECREASE).getDouble(LATE_SPRING_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[33], LATE_SUMMER_TEMPERATURE_DECREASE).getDouble(LATE_SUMMER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[34], LATE_WINTER_TEMPERATURE_DECREASE).getDouble(LATE_WINTER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[35], LATE_AUTUMN_TEMPERATURE_DECREASE).getDouble(LATE_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[23], EARLY_SPRING_TEMPERATURE_DECREASE).getDouble(EARLY_SPRING_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[24], EARLY_SUMMER_TEMPERATURE_DECREASE).getDouble(EARLY_SUMMER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[25], EARLY_WINTER_TEMPERATURE_DECREASE).getDouble(EARLY_WINTER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[26], EARLY_AUTUMN_TEMPERATURE_DECREASE).getDouble(EARLY_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[27], MID_SPRING_TEMPERATURE_DECREASE).getDouble(MID_SPRING_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[28], MID_SUMMER_TEMPERATURE_DECREASE).getDouble(MID_SUMMER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[29], MID_WINTER_TEMPERATURE_DECREASE).getDouble(MID_WINTER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[30], MID_AUTUMN_TEMPERATURE_DECREASE).getDouble(MID_AUTUMN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[31], LATE_SPRING_TEMPERATURE_DECREASE).getDouble(LATE_SPRING_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[32], LATE_SUMMER_TEMPERATURE_DECREASE).getDouble(LATE_SUMMER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[33], LATE_WINTER_TEMPERATURE_DECREASE).getDouble(LATE_WINTER_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[34], LATE_AUTUMN_TEMPERATURE_DECREASE).getDouble(LATE_AUTUMN_TEMPERATURE_DECREASE);
 
-        config.get(catName, BOName[36], tempRate_DAWN).getDouble(tempRate_DAWN);
-        config.get(catName, BOName[37], tempRate_DAY).getDouble(tempRate_DAY);
-        config.get(catName, BOName[38], tempRate_DUSK).getDouble(tempRate_DUSK);
-        config.get(catName, BOName[39], tempRate_NIGHT).getDouble(tempRate_NIGHT);
+        config.get(catName, BOName[35], tempRate_DAWN).getDouble(tempRate_DAWN);
+        config.get(catName, BOName[36], tempRate_DAY).getDouble(tempRate_DAY);
+        config.get(catName, BOName[37], tempRate_DUSK).getDouble(tempRate_DUSK);
+        config.get(catName, BOName[38], tempRate_NIGHT).getDouble(tempRate_NIGHT);
 
-        config.get(catName, BOName[40], tempRate_HARD).getBoolean(tempRate_HARD);
+        config.get(catName, BOName[39], tempRate_HARD).getBoolean(tempRate_HARD);
 
-        config.get(catName, BOName[41], TemperatureWaterDecrease).getDouble(TemperatureWaterDecrease);
-        config.get(catName, BOName[42], dropSpeedWater).getDouble(dropSpeedWater);
+        config.get(catName, BOName[40], TemperatureWaterDecrease).getDouble(TemperatureWaterDecrease);
+        config.get(catName, BOName[41], dropSpeedWater).getDouble(dropSpeedWater);
 
-        config.get(catName, BOName[43], dropSpeedRain).getDouble(dropSpeedRain);
-        config.get(catName, BOName[44], dropSpeedThunder).getDouble(dropSpeedThunder);
+        config.get(catName, BOName[42], dropSpeedRain).getDouble(dropSpeedRain);
+        config.get(catName, BOName[43], dropSpeedThunder).getDouble(dropSpeedThunder);
     }
 
 	@Override
@@ -925,7 +949,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 
 	static
 	{
-		BOName = new String[45];
+		BOName = new String[44];
 		BOName[0] = "01.Biome ID";
 		BOName[1] = "02.Allow Config Override";
 		BOName[2] = "03.Water Quality";
@@ -934,42 +958,41 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 		BOName[5] = "06.Sanity Rate";
 		BOName[6] = "07.Dehydrate Rate";
 		BOName[7] = "08.Air Quality Rate";
-        BOName[8] = "09.Is desert biome?";
-        BOName[9] = "10.Desert Biome Temperature Multiplier";
-        BOName[10] = "11.Dawn Biome Temperature Decrease";
-        BOName[11] = "12.Day Biome Temperature Decrease";
-        BOName[12] = "13.Dusk Biome Temperature Decrease";
-        BOName[13] = "14.Night Biome Temperature Decrease";
-        BOName[14] = "15.Biome Temperature Rain Decrease";
-        BOName[15] = "16.Biome Temperature Thunder Decrease";
-        BOName[16] = "17.Should Biome Temperature Decrease When Rain?";
-        BOName[17] = "18.Should Biome Temperature Decrease When Thunder?";
-        BOName[18] = "19.Biome Temperature Shadow Decrease";
-        BOName[19] = "20.[HBM] Ambient Temperature Terraformed";
-        BOName[20] = "21.[HBM] Dawn Biome Temperature Decrease Terraformed";
-        BOName[21] = "22.[HBM] Day Biome Temperature Decrease Terraformed";
-        BOName[22] = "23.[HBM] Dusk Biome Temperature Decrease Terraformed";
-        BOName[23] = "24.[HBM] Night Biome Temperature Decrease Terraformed";
-        BOName[24] = "25.[Serene Seasons] Early Spring Biome Temperature Decrease";
-        BOName[25] = "26.[Serene Seasons] Early Summer Biome Temperature Decrease";
-        BOName[26] = "27.[Serene Seasons] Early Winter Biome Temperature Decrease";
-        BOName[27] = "28.[Serene Seasons] Early Autumn Biome Temperature Decrease";
-        BOName[28] = "29.[Serene Seasons] Mid Spring Biome Temperature Decrease";
-        BOName[29] = "30.[Serene Seasons] Mid Summer Biome Temperature Decrease";
-        BOName[30] = "31.[Serene Seasons] Mid Winter Biome Temperature Decrease";
-        BOName[31] = "32.[Serene Seasons] Mid Autumn Biome Temperature Decrease";
-        BOName[32] = "33.[Serene Seasons] Late Spring Biome Temperature Decrease";
-        BOName[33] = "34.[Serene Seasons] Late Summer Biome Temperature Decrease";
-        BOName[34] = "35.[Serene Seasons] Late Winter Biome Temperature Decrease";
-        BOName[35] = "36.[Serene Seasons] Late Autumn Biome Temperature Decrease";
-        BOName[36] = "37.Dawn Biome Temperature Rate";
-        BOName[37] = "38.Day Biome Temperature Rate";
-        BOName[38] = "39.Dusk Biome Temperature Rate";
-        BOName[39] = "40.Night Biome Temperature Rate";
-        BOName[40] = "41.[HBM] Hard Biome Temperature Rate";
-        BOName[41] = "42.Ambient Temperature Decrease Water";
-        BOName[42] = "43.Drop Speed Water";
-        BOName[43] = "44.Drop Speed Rain";
-        BOName[44] = "45.Drop Speed Thunder";
+        BOName[8] = "10.Temperature Multiplier";
+        BOName[9] = "11.Dawn Biome Temperature Decrease";
+        BOName[10] = "12.Day Biome Temperature Decrease";
+        BOName[11] = "13.Dusk Biome Temperature Decrease";
+        BOName[12] = "14.Night Biome Temperature Decrease";
+        BOName[13] = "15.Biome Temperature Rain Decrease";
+        BOName[14] = "16.Biome Temperature Thunder Decrease";
+        BOName[15] = "17.Should Biome Temperature Decrease When Rain?";
+        BOName[16] = "18.Should Biome Temperature Decrease When Thunder?";
+        BOName[17] = "19.Biome Temperature Shadow Decrease";
+        BOName[18] = "20.[HBM] Ambient Temperature Terraformed";
+        BOName[19] = "21.[HBM] Dawn Biome Temperature Decrease Terraformed";
+        BOName[20] = "22.[HBM] Day Biome Temperature Decrease Terraformed";
+        BOName[21] = "23.[HBM] Dusk Biome Temperature Decrease Terraformed";
+        BOName[22] = "24.[HBM] Night Biome Temperature Decrease Terraformed";
+        BOName[23] = "25.[Serene Seasons] Early Spring Biome Temperature Decrease";
+        BOName[24] = "26.[Serene Seasons] Early Summer Biome Temperature Decrease";
+        BOName[25] = "27.[Serene Seasons] Early Winter Biome Temperature Decrease";
+        BOName[26] = "28.[Serene Seasons] Early Autumn Biome Temperature Decrease";
+        BOName[27] = "29.[Serene Seasons] Mid Spring Biome Temperature Decrease";
+        BOName[28] = "30.[Serene Seasons] Mid Summer Biome Temperature Decrease";
+        BOName[29] = "31.[Serene Seasons] Mid Winter Biome Temperature Decrease";
+        BOName[30] = "32.[Serene Seasons] Mid Autumn Biome Temperature Decrease";
+        BOName[31] = "33.[Serene Seasons] Late Spring Biome Temperature Decrease";
+        BOName[32] = "34.[Serene Seasons] Late Summer Biome Temperature Decrease";
+        BOName[33] = "35.[Serene Seasons] Late Winter Biome Temperature Decrease";
+        BOName[34] = "36.[Serene Seasons] Late Autumn Biome Temperature Decrease";
+        BOName[35] = "37.Dawn Biome Temperature Rate";
+        BOName[36] = "38.Day Biome Temperature Rate";
+        BOName[37] = "39.Dusk Biome Temperature Rate";
+        BOName[38] = "40.Night Biome Temperature Rate";
+        BOName[39] = "41.[HBM] Hard Biome Temperature Rate";
+        BOName[40] = "42.Ambient Temperature Decrease Water";
+        BOName[41] = "43.Drop Speed Water";
+        BOName[42] = "44.Drop Speed Rain";
+        BOName[43] = "45.Drop Speed Thunder";
 	}
 }
