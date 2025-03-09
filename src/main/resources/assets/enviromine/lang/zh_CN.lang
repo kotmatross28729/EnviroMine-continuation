@@ -1,24 +1,49 @@
 language.name=Chinese
 
-item.enviromine.badwater.name=脏水瓶
-item.enviromine.saltwater.name=盐水瓶
-item.enviromine.coldwater.name=冷水瓶
-item.enviromine.warmwater.name=温水瓶
-item.enviromine.badcoldwater.name=冷脏水瓶
-item.enviromine.badwarmwater.name=温脏水瓶
-item.enviromine.frostywater.name=冰水瓶
-item.enviromine.hotwater.name=热水瓶
+# 水Bottle Types
+item.enviromine.radioactive_frosty_WaterBottle.name=放射性冰水瓶
+item.enviromine.frosty_WaterBottle.name=冰水瓶
 
+item.enviromine.radioactive_cold_WaterBottle.name=放射性凉水瓶
+item.enviromine.dirty_cold_WaterBottle.name=脏的凉水瓶
+item.enviromine.salty_cold_WaterBottle.name=咸的凉水瓶
+item.enviromine.clean_cold_WaterBottle.name=凉水瓶
+
+item.enviromine.radioactive_WaterBottle.name=放射性水瓶
+item.enviromine.dirty_WaterBottle.name=脏水瓶
+item.enviromine.salty_WaterBottle.name=咸水瓶
+
+item.enviromine.radioactive_warm_WaterBottle.name=放射性温水瓶
+item.enviromine.dirty_warm_WaterBottle.name=脏的温水瓶
+item.enviromine.salty_warm_WaterBottle.name=咸的温水瓶
+item.enviromine.clean_warm_WaterBottle.name=温水瓶
+
+item.enviromine.radioactive_hot_WaterBottle.name=放射性热水瓶
+item.enviromine.hot_WaterBottle.name=热水瓶
+
+# Polymer 水Bottle Types (Hbm's NTM compat)
 item.enviromine.water.polymer.name=塑料瓶
-item.enviromine.cleanwater.polymer.name=塑料瓶装水
-item.enviromine.badwater.polymer.name=塑料瓶装水
-item.enviromine.saltwater.polymer.name=塑料瓶装盐水
-item.enviromine.coldwater.polymer.name=塑料瓶装冷水
-item.enviromine.warmwater.polymer.name=塑料瓶装温水
-item.enviromine.badcoldwater.polymer.name=不干净的塑料水瓶装冷水
-item.enviromine.badwarmwater.polymer.name=不干净的塑料瓶装温水
-item.enviromine.frostywater.polymer.name=塑料瓶装冰水
-item.enviromine.hotwater.polymer.name=塑料瓶装热水
+
+item.enviromine.radioactive_frosty_WaterBottle.polymer.name=放射性塑料瓶装冰水
+item.enviromine.frosty_WaterBottle.polymer.name=塑料瓶装冰水
+
+item.enviromine.radioactive_cold_WaterBottle.polymer.name=放射性塑料瓶装凉水
+item.enviromine.dirty_cold_WaterBottle.polymer.name=脏的塑料瓶装凉水
+item.enviromine.salty_cold_WaterBottle.polymer.name=咸的塑料瓶装凉水
+item.enviromine.clean_cold_WaterBottle.polymer.name=塑料瓶装凉水
+
+item.enviromine.radioactive_WaterBottle.polymer.name=放射性塑料瓶装水
+item.enviromine.dirty_WaterBottle.polymer.name=脏的塑料瓶装水
+item.enviromine.salty_WaterBottle.polymer.name=咸的塑料瓶装水
+item.enviromine.clean_WaterBottle.polymer.name=塑料瓶装水
+
+item.enviromine.radioactive_warm_WaterBottle.polymer.name=放射性塑料瓶装温水
+item.enviromine.dirty_warm_WaterBottle.polymer.name=脏的塑料瓶装温水
+item.enviromine.salty_warm_WaterBottle.polymer.name=咸的塑料瓶装温水
+item.enviromine.clean_warm_WaterBottle.polymer.name=塑料瓶装温水
+
+item.enviromine.radioactive_hot_WaterBottle.polymer.name=放射性塑料瓶装热水
+item.enviromine.hot_WaterBottle.polymer.name=塑料瓶装热水
 
 
 item.enviromine.camelpack.name=储水包
@@ -113,10 +138,23 @@ options.enviromine.barPos=状态条位置
 options.enviromine.tempScale=温标
 options.enviromine.tempScale.f=华氏
 options.enviromine.tempScale.c=摄氏
-options.enviromine.barPos.hydration=水分条
-options.enviromine.barPos.temprature=体温条
-options.enviromine.barPos.sanity=神智条
-options.enviromine.barPos.airQuality=氧气条
+options.enviromine.barPos.hydration=水分值
+options.enviromine.barPos.temprature=体温值
+options.enviromine.barPos.sanity=san值
+options.enviromine.barPos.airQuality=空气质量值
+
+options.enviromine.hud.temperature=温度
+options.enviromine.hud.sanity=san
+options.enviromine.hud.hydration=水分
+options.enviromine.hud.air=空气质量
+options.enviromine.hud.resetDefault=恢复默认设置
+options.enviromine.hud.resetDefault.desc=将所有 Hud 恢复为默认位置
+options.enviromine.hud.reposition=单击确认，退出取消，按R键重置
+options.enviromine.hud.alignment=对齐：
+
+options.enviromine.supportUs=支持我们
+options.enviromine.website=我们的网站
+options.enviromine.website.YesNo=这将在默认浏览器中打开一个页面。是否继续？
 
 deathmessage.enviromine.suffocate=%s窒息而死
 deathmessage.enviromine.frostbite=%s冻死了
@@ -131,3 +169,84 @@ updatemsg.enviromine.avalible=EnviroMine可用更新版本 %s
 updatemsg.enviromine.download=[下载]
 updatemsg.enviromine.changelog=[更新日志]
 updatemsg.enviromine.otherlinks=[Other links]
+
+news.enviromine.newpost=（新帖子）
+news.enviromine.button.news=新闻提要
+news.enviromine.button.changelog=更改日志
+news.enviromine.button.version=版本信息
+news.enviromine.version.current=你现在的版本是 %s
+news.enviromine.news.changelog=查看更改日志以了解最新动态！
+news.enviromine.news.wiki=在wiki上下载新版本！
+
+auth.enviromine.1=enviromine %s 已成功通过验证！
+auth.enviromine.2=感谢您使用官方版本<3
+auth.enviromine.3=警告：如果你需要重新安装它或包含它
+auth.enviromine.4=的整合包，您需要将 AUTH 文件保存在配置目录中
+auth.enviromine.5=支持 %s 活动！
+auth.enviromine.6=此版本的enviromine尚未通过认证，现在已被禁用！
+auth.enviromine.7=如果您使用的是整合包，请通知开发人员他们需要
+auth.enviromine.8=包含此版本的最新 AUTH 文件。更多信息请访问：
+
+keybinds.enviromine.reload=重载配置
+keybinds.enviromine.addremove=添加自定义配置
+
+misc.enviromine.tooltip.filter=剩余过滤器耐久: %s (%s/%s)
+misc.enviromine.tooltip.water=剩余水量: %s (%s/%s)
+misc.enviromine.tooltip.rot=剩余保质期: %s (天 %s/%s)
+
+enviromine.tooltip.armor.resistance=该盔甲可以抵御平均气温变化
+enviromine.tooltip.armor.sealed=该盔甲可以抵御极端气温变化
+
+enviromine.tooltip.ambTemp=温度：
+enviromine.tooltip.ambAir=空气质量：
+enviromine.tooltip.ambSanity=san值：
+enviromine.tooltip.effTemp=体温：
+enviromine.tooltip.effAir=空气质量：
+enviromine.tooltip.effSanity=san值：
+enviromine.tooltip.effHydration=水分：
+
+enviromine.tooltip.isRadioactive=放射性水
+enviromine.tooltip.isDirty=脏水
+enviromine.tooltip.isSalty=咸水
+
+commands.enviromine.envirostat.add=add
+commands.enviromine.envirostat.set=set
+commands.enviromine.envirostat.temp=temp
+commands.enviromine.envirostat.sanity=sanity
+commands.enviromine.envirostat.water=water
+commands.enviromine.envirostat.air=air
+commands.enviromine.envirostat.noTracker=Target not found or has no enviro tracker!
+commands.enviromine.envirophysic.toggle=toggle
+commands.enviromine.envirophysic.status=status
+commands.enviromine.envirophysic.statusText=%s Physics Status: %s
+commands.enviromine.envirophysic.physics= %s Physics %s
+commands.enviromine.enviroquake.length=length
+commands.enviromine.enviroquake.width=width
+commands.enviromine.enviroquake.rotation=rotation
+commands.enviromine.enviroquake.mode=mode
+commands.enviromine.enviroquake.stop=stop
+commands.enviromine.enviroquake.stoppedAll=停止所有地震
+commands.enviromine.enviroquake.error.tooMany=你已经禁止所有地震！
+commands.enviromine.enviroquake.error.tooBig=你已禁止所有破坏超过4096个方块的大型地震！
+
+editor.enviromine.changeprofile=更改配置文件
+editor.enviromine.currentprofile=当前配置
+editor.enviromine.global=全局设置
+editor.enviromine.cave=洞穴维度
+editor.enviromine.stability=稳定性类型
+editor.enviromine.custom=自定义配置
+editor.enviromine.createNewProfile=创建新配置
+editor.enviromine.selectProfile=选择配置文件
+editor.enviromine.genModConfigs=为加载的 MOD 生成配置。
+editor.enviromine.genBasicConfigs=生成EnviroMine的初始默认文件。
+editor.enviromine.create=创建
+editor.enviromine.nameProfile=新配置
+editor.enviromine.insertName=插入名称
+editor.enviromine.currentProfile=当前配置
+editor.enviromine.settings=配置文件设置
+editor.enviromine.GuiAdd.title=添加 %s:
+editor.enviromine.GuiAdd.title.fail=发生错误。查看日志以了解详细信息。
+editor.enviromine.GuiAdd.item=作为物品添加
+editor.enviromine.GuiAdd.block=作为方块添加
+editor.enviromine.GuiAdd.both=作为两者添加
+msg.enviromine.RecordEasterEgg=一股诡异的寒意顺着你的脊椎蔓延……
