@@ -38,6 +38,8 @@ import enviromine.handlers.EnviroShaftCreationHandler;
 import enviromine.handlers.Legacy.LegacyHandler;
 import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.ObjectHandlerCompat;
+import enviromine.handlers.compat.ObjectHandler_MCF;
+import enviromine.handlers.compat.ObjectHandler_MCF_NTM;
 import enviromine.handlers.compat.ObjectHandler_Netherlicious;
 import enviromine.network.packet.PacketAutoOverride;
 import enviromine.network.packet.PacketEnviroMine;
@@ -162,6 +164,12 @@ public class EnviroMine {
         if (isNetherliciousLoaded) {
             ObjectHandler_Netherlicious.initBlocks();
             ObjectHandler_Netherlicious.registerBlocks();
+        }
+        if (isCFMLoaded) {
+            ObjectHandler_MCF.register();
+            if (isHbmLoaded) {
+                ObjectHandler_MCF_NTM.register();
+            }
         }
 
         // Load Configuration files And Custom files

@@ -41,8 +41,9 @@
 * Added compatibility with Hbm's NTM craters
   * Temperature and a special type of water - radioactive 
 
-* Added compatibility for MrCrayfish's Furniture Mod / Cooking For Blockheads fridges
+* Added compatibility for MrCrayfish's Furniture Mod / Cooking For Blockheads fridges (Food doesn't rot / rots 2 times slower)
   * [Cooking For Blockheads] Requires [GTNH version](https://github.com/GTNewHorizons/CookingForBlockheads/releases)!
+  * [MrCrayfish's Furniture Mod] Added the ability to cool water in the freezer chamber
 
 * Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description [**Suggested by xronin01**]
 
