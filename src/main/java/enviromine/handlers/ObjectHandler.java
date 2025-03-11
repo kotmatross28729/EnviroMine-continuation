@@ -870,6 +870,10 @@ public class ObjectHandler {
                     new ItemStack(Blocks.dirt, 1));
             }
         }
+        GameRegistry.addShapelessRecipe(
+            new ItemStack(Items.potionitem, 1, 0),
+            new ItemStack(Items.glass_bottle),
+            new ItemStack(Items.snowball));
 
         GameRegistry.addRecipe(
             new ItemStack(Items.slime_ball, 4, 0),

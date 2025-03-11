@@ -272,8 +272,15 @@ public class ObjectHandlerCompat {
             }
         }
 
+        GameRegistry.addShapelessRecipe(
+            new ItemStack(clean_WaterBottle_polymer),
+            new ItemStack(waterBottle_polymer),
+            new ItemStack(Items.snowball));
+
         CraftingManager
             .addRecipeAuto(new ItemStack(waterBottle_polymer), "p p", " p ", 'p', OreDictManager.ANY_PLASTIC.ingot());
+
+        // TODO more bob
 
         FluidContainerRegistry.registerContainer(
             new FluidContainer(

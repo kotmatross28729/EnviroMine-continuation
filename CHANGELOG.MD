@@ -59,6 +59,8 @@
 
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
 
+* Added craft for clean water from an empty bottle and snowball
+
 * Minor code optimizations
 
 
