@@ -6,10 +6,10 @@
     Big thanks to the AstroTibs for developing EnviroMine for Galaxy Odyssey
 
 # EnviroMine continuation
-    Big thanks to the iamsoNewBee for Chinese localization and nice suggestions
+    Big thanks to the iamsoNewBee for Chinese localization, nice suggestions and new plastic bottles textures
     Big thanks to the xronin01 for nice suggestions
     
 # Honorable mentions [EnviroMine continuation]
     HbmMods - motivation for creating EnviroMine continuation (Hbm's Nuclear Tech Mod)
-    MellowArpeggiation - tips for developing compatibility for NTM:Space
+    MellowArpeggiation - tips for developing compatibility with NTM:Space
     

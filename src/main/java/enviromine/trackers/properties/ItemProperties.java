@@ -22,6 +22,7 @@ import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
+import enviromine.items.EnviroItemWaterBottle;
 import enviromine.trackers.properties.compat.ItemProperties_NTM;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
@@ -30,8 +31,6 @@ import enviromine.utils.misc.CompatSafe;
 
 @CompatSafe
 public class ItemProperties implements SerialisableProperty, PropertyBase {
-
-    // TODO WATER BOTTLES
 
     public static final ItemProperties base = new ItemProperties();
     static String[] IPName;
@@ -373,7 +372,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getString();
                 config.get(category, IPName[13], 0)
                     .getInt(0);
-            } else if (item == Items.potionitem) {
+            } else if (item == Items.potionitem || item instanceof EnviroItemWaterBottle) {
                 config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
                     .getString();
                 config.get(category, IPName[1], -1)
@@ -386,16 +385,44 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[5], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[6], -0.1D)
-                    .getDouble(-0.1D);
+                config
+                    .get(
+                        category,
+                        IPName[6],
+                        item instanceof EnviroItemWaterBottle enviroItemWaterBottle
+                            ? enviroItemWaterBottle.getWaterType().heatIndex == -2 ? -0.5F
+                                : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
+                                    : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
+                                        : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F
+                            : -0.1F)
+                    .getDouble(
+                        item instanceof EnviroItemWaterBottle enviroItemWaterBottle
+                            ? enviroItemWaterBottle.getWaterType().heatIndex
+                                == -2
+                                    ? -0.5F
+                                    : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
+                                        : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
+                                            : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F
+                            : -0.1F);
                 config.get(category, IPName[7], 0D)
                     .getDouble(0D);
                 config.get(category, IPName[8], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[9], EM_Settings.CleanWaterHydrate)
-                    .getDouble(EM_Settings.CleanWaterHydrate);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config
+                    .get(
+                        category,
+                        IPName[9],
+                        item instanceof EnviroItemWaterBottle enviroItemWaterBottle
+                            ? (enviroItemWaterBottle.getWaterType().isSalty
+                                || enviroItemWaterBottle.getWaterType().isDirty) ? 10.0F : 25.0F
+                            : 25.0F)
+                    .getDouble(
+                        item instanceof EnviroItemWaterBottle enviroItemWaterBottle
+                            ? (enviroItemWaterBottle.getWaterType().isSalty
+                                || enviroItemWaterBottle.getWaterType().isDirty) ? 10.0F : 25.0F
+                            : 25.0F);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")

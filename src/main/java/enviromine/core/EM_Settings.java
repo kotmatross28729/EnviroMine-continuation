@@ -149,12 +149,11 @@ public class EM_Settings {
     public static float TurbofanAfterburnerHeatConstant = 250;
     public static float CCGasTurbineHeatDivisor = 0.5F;
 
-    // HAZARDS
-    // ...
-
     // UNHARDCODE PROJECT
 
     // WATER
+    // TODO: new water types
+    // public static float FrostyWaterTemperatureInfluence = -0.5F;
     public static float FrostyWaterTemperatureInfluence = -0.5F;
     public static float DirtyColdWaterTemperatureInfluence = -0.1F;
     public static float CleanColdWaterTemperatureInfluence = -0.1F;
@@ -163,34 +162,8 @@ public class EM_Settings {
     public static float CleanWaterTemperatureInfluence = -0.05F;
     public static float CleanWarmWaterTemperatureInfluence = 0.1F;
     public static float DirtyWarmWaterTemperatureInfluence = 0.1F;
-    public static float HotWarmWaterTemperatureInfluence = 0.5F;
+    public static float HotWaterTemperatureInfluence = 0.5F;
 
-    // TODO: DELETE ALL THIS
-    // Add effect-related stuff, radiation value
-    public static float WaterReducesTemperatureStartingValue = 37.05F;
-    public static float ColdFrostyWaterReducesTemperatureStartingValue = 30.1F;
-    public static float WarmHotWaterReducesTemperatureStartingValue = 0.0F;
-    public static float FrostyWaterHydrate = 25.0F;
-    public static float DirtyColdWaterHydrate = 25.0F;
-    public static float CleanColdWaterHydrate = 25.0F;
-    public static float SaltyWaterHydrate = 10.0F;
-    public static float DirtyWaterHydrate = 25.0F;
-    public static float CleanWaterHydrate = 25.0F;
-    public static float CleanWarmWaterHydrate = 25.0F;
-    public static float DirtyWarmWaterHydrate = 25.0F;
-    public static float HotWaterHydrate = 25.0F;
-
-    public static float FrostyWaterHydratePlastic = 50.0F;
-    public static float DirtyColdWaterHydratePlastic = 50.0F;
-    public static float CleanColdWaterHydratePlastic = 50.0F;
-    public static float SaltyWaterHydratePlastic = 30.0F;
-    public static float DirtyWaterHydratePlastic = 50.0F;
-    public static float CleanWaterHydratePlastic = 50.0F;
-    public static float CleanWarmWaterHydratePlastic = 50.0F;
-    public static float DirtyWarmWaterHydratePlastic = 50.0F;
-    public static float HotWaterHydratePlastic = 50.0F;
-
-    // TODO: All new water
     public static float FrostyWaterHydrateWorld = 10.0F;
     public static float DirtyColdWaterHydrateWorld = 10.0F;
     public static float CleanColdWaterHydrateWorld = 10.0F;

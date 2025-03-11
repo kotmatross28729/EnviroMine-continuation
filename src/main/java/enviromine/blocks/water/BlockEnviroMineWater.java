@@ -52,7 +52,6 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-        /// TODO COMAPTA LSCAA COMAPT CLASS CLOOAPL CLASS COMPAT CLASS
         if (!world.isRemote) {
             Block block = world.getBlock(x, y, z);
             if (block instanceof BlockEnviroMineWater water) {
@@ -61,8 +60,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
                         entityLivingBase,
                         ContaminationUtil.HazardType.RADIATION,
                         ContaminationUtil.ContaminationType.CREATIVE,
-                        5F);
-                    // ^, the fuck is this 200, not 5?
+                        0.125F);
                 }
             }
         }

@@ -2,6 +2,8 @@ package enviromine.utils;
 
 import net.minecraftforge.fluids.Fluid;
 
+import enviromine.core.EM_Settings;
+
 /**
  *
  * All sorts of things related to Enviromine water
@@ -15,22 +17,22 @@ public class WaterUtils {
     public enum WATER_TYPES {
 
         RADIOACTIVE_FROSTY(-2, true, false, false, 25.0F, -0.1F),
-        FROSTY(-2, false, false, false, 25.0F, -0.1F),
+        FROSTY(-2, false, false, false, 25.0F, EM_Settings.FrostyWaterTemperatureInfluence),
 
         RADIOACTIVE_COLD(-1, true, false, false, 25.0F, -0.05F),
-        DIRTY_COLD(-1, false, true, false, 25.0F, -0.05F),
+        DIRTY_COLD(-1, false, true, false, 25.0F, EM_Settings.DirtyColdWaterTemperatureInfluence),
         SALTY_COLD(-1, false, false, true, 25.0F, -0.05F),
-        CLEAN_COLD(-1, false, false, false, 25.0F, -0.05F),
+        CLEAN_COLD(-1, false, false, false, 25.0F, EM_Settings.CleanColdWaterTemperatureInfluence),
 
         RADIOACTIVE(0, true, false, false, 25.0F, 0.0F),
-        DIRTY(0, false, true, false, 25.0F, 0.0F),
-        SALTY(0, false, false, true, 25.0F, 0.0F),
-        CLEAN(0, false, false, false, 25.0F, 0.0F),
+        DIRTY(0, false, true, false, 25.0F, EM_Settings.DirtyWaterTemperatureInfluence),
+        SALTY(0, false, false, true, 25.0F, EM_Settings.SaltyWaterTemperatureInfluence),
+        CLEAN(0, false, false, false, 25.0F, EM_Settings.CleanWaterTemperatureInfluence),
 
         RADIOACTIVE_WARM(1, true, false, false, 25.0F, 0.05F),
-        DIRTY_WARM(1, false, true, false, 25.0F, 0.05F),
+        DIRTY_WARM(1, false, true, false, 25.0F, EM_Settings.DirtyWarmWaterTemperatureInfluence),
         SALTY_WARM(1, false, false, true, 25.0F, 0.05F),
-        CLEAN_WARM(1, false, false, false, 25.0F, 0.05F),
+        CLEAN_WARM(1, false, false, false, 25.0F, EM_Settings.CleanWarmWaterTemperatureInfluence),
 
         RADIOACTIVE_HOT(2, true, false, false, 25.0F, 0.1F),
         HOT(2, false, false, false, 25.0F, 0.1F);

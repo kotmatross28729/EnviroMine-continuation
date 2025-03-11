@@ -8,6 +8,8 @@ import com.hbm.hazard.HazardRegistry;
 import com.hbm.hazard.HazardSystem;
 import com.hbm.items.ModItems;
 
+import enviromine.items.EnviroItemPolymerWaterBottle;
+
 public class ItemProperties_NTM {
 
     public static void registerItemsNTM(Configuration config, String category, String[] IPName, Item item) {
@@ -17,7 +19,54 @@ public class ItemProperties_NTM {
         float Coallevel = -((HazardSystem.getHazardLevelFromStack(HazardStack, HazardRegistry.COAL)) / 2);
         float Digammalevel = -((HazardSystem.getHazardLevelFromStack(HazardStack, HazardRegistry.DIGAMMA)) * 5);
 
-        if (item == ModItems.canteen_vodka || item == ModItems.canteen_fab) {
+        if (item instanceof EnviroItemPolymerWaterBottle enviroItemWaterBottle) {
+            config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
+                .getString();
+            config.get(category, IPName[1], -1)
+                .getInt(-1);
+            config.get(category, IPName[2], false)
+                .getBoolean(false);
+            config.get(category, IPName[3], 0D)
+                .getDouble(0D);
+            config.get(category, IPName[4], 0D)
+                .getDouble(0D);
+            config.get(category, IPName[5], 0D)
+                .getDouble(0D);
+            config
+                .get(
+                    category,
+                    IPName[6],
+                    enviroItemWaterBottle.getWaterType().heatIndex == -2 ? -0.5F
+                        : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
+                            : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
+                                : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F)
+                .getDouble(
+                    enviroItemWaterBottle.getWaterType().heatIndex == -2 ? -0.5F
+                        : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
+                            : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
+                                : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F);
+            config.get(category, IPName[7], 0D)
+                .getDouble(0D);
+            config.get(category, IPName[8], 0D)
+                .getDouble(0D);
+            config.get(
+                category,
+                IPName[9],
+                (enviroItemWaterBottle.getWaterType().isSalty || enviroItemWaterBottle.getWaterType().isDirty) ? 20.0F
+                    : 50.0F)
+                .getDouble(
+                    (enviroItemWaterBottle.getWaterType().isSalty || enviroItemWaterBottle.getWaterType().isDirty)
+                        ? 20.0F
+                        : 50.0F);
+            config.get(category, IPName[10], 36.6D)
+                .getDouble(36.6D);
+            config.get(category, IPName[11], 0)
+                .getInt(0);
+            config.get(category, IPName[12], "")
+                .getString();
+            config.get(category, IPName[13], 0)
+                .getInt(0);
+        } else if (item == ModItems.canteen_vodka || item == ModItems.canteen_fab) {
             config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
                 .getString();
             config.get(category, IPName[1], -1)
