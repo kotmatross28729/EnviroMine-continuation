@@ -192,7 +192,7 @@ keybinds.enviromine.addremove=添加自定义配置
 
 misc.enviromine.tooltip.filter=剩余过滤器耐久: %s (%s/%s)
 misc.enviromine.tooltip.water=剩余水量: %s (%s/%s)
-misc.enviromine.tooltip.rot=剩余保质期: %s (天 %s/%s)
+misc.enviromine.tooltip.rot=腐坏程度: %s (天数 %s/%s)
 
 enviromine.tooltip.armor.resistance=该盔甲可以抵御平均气温变化
 enviromine.tooltip.armor.sealed=该盔甲可以抵御极端气温变化
