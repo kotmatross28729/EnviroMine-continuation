@@ -1,6 +1,6 @@
 language.name=Chinese
 
-# 水Bottle Types
+#Bottle Types
 item.enviromine.radioactive_frosty_WaterBottle.name=放射性冰水瓶
 item.enviromine.frosty_WaterBottle.name=冰水瓶
 
@@ -21,7 +21,7 @@ item.enviromine.clean_warm_WaterBottle.name=温水瓶
 item.enviromine.radioactive_hot_WaterBottle.name=放射性热水瓶
 item.enviromine.hot_WaterBottle.name=热水瓶
 
-# Polymer 水Bottle Types (Hbm's NTM compat)
+# Polymer Bottle Types (Hbm's NTM compat)
 item.enviromine.water.polymer.name=塑料瓶
 
 item.enviromine.radioactive_frosty_WaterBottle.polymer.name=放射性塑料瓶装冰水
@@ -138,10 +138,10 @@ options.enviromine.barPos=状态条位置
 options.enviromine.tempScale=温标
 options.enviromine.tempScale.f=华氏
 options.enviromine.tempScale.c=摄氏
-options.enviromine.barPos.hydration=水分值
-options.enviromine.barPos.temprature=体温值
-options.enviromine.barPos.sanity=san值
-options.enviromine.barPos.airQuality=空气质量值
+options.enviromine.barPos.hydration=Hydration Bar
+options.enviromine.barPos.temprature=Temperature Bar
+options.enviromine.barPos.sanity=Sanity Bar
+options.enviromine.barPos.airQuality=Sanity Bar
 
 options.enviromine.hud.temperature=温度
 options.enviromine.hud.sanity=san
@@ -198,8 +198,8 @@ enviromine.tooltip.armor.resistance=该盔甲可以抵御平均气温变化
 enviromine.tooltip.armor.sealed=该盔甲可以抵御极端气温变化
 
 enviromine.tooltip.ambTemp=温度：
-enviromine.tooltip.ambAir=空气质量：
-enviromine.tooltip.ambSanity=san值：
+enviromine.tooltip.ambAir=环境空气质量：
+enviromine.tooltip.ambSanity=环境san值：
 enviromine.tooltip.effTemp=体温：
 enviromine.tooltip.effAir=空气质量：
 enviromine.tooltip.effSanity=san值：
