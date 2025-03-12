@@ -1,6 +1,6 @@
 language.name=Chinese
 
-# 水Bottle Types
+#Bottle Types
 item.enviromine.radioactive_frosty_WaterBottle.name=放射性冰水瓶
 item.enviromine.frosty_WaterBottle.name=冰水瓶
 
@@ -197,9 +197,9 @@ misc.enviromine.tooltip.rot=腐坏程度: %s (天数 %s/%s)
 enviromine.tooltip.armor.resistance=该盔甲可以抵御平均气温变化
 enviromine.tooltip.armor.sealed=该盔甲可以抵御极端气温变化
 
-enviromine.tooltip.ambTemp=温度：
-enviromine.tooltip.ambAir=空气质量：
-enviromine.tooltip.ambSanity=san值：
+enviromine.tooltip.ambTemp=环境温度：
+enviromine.tooltip.ambAir=环境空气质量：
+enviromine.tooltip.ambSanity=环境san值：
 enviromine.tooltip.effTemp=体温：
 enviromine.tooltip.effAir=空气质量：
 enviromine.tooltip.effSanity=san值：
@@ -209,22 +209,22 @@ enviromine.tooltip.isRadioactive=放射性水
 enviromine.tooltip.isDirty=脏水
 enviromine.tooltip.isSalty=咸水
 
-commands.enviromine.envirostat.add=add
-commands.enviromine.envirostat.set=set
-commands.enviromine.envirostat.temp=temp
-commands.enviromine.envirostat.sanity=sanity
-commands.enviromine.envirostat.water=water
-commands.enviromine.envirostat.air=air
-commands.enviromine.envirostat.noTracker=Target not found or has no enviro tracker!
-commands.enviromine.envirophysic.toggle=toggle
-commands.enviromine.envirophysic.status=status
-commands.enviromine.envirophysic.statusText=%s Physics Status: %s
-commands.enviromine.envirophysic.physics= %s Physics %s
-commands.enviromine.enviroquake.length=length
-commands.enviromine.enviroquake.width=width
-commands.enviromine.enviroquake.rotation=rotation
-commands.enviromine.enviroquake.mode=mode
-commands.enviromine.enviroquake.stop=stop
+commands.enviromine.envirostat.add=添加
+commands.enviromine.envirostat.set=设置
+commands.enviromine.envirostat.temp=体温
+commands.enviromine.envirostat.sanity=san值
+commands.enviromine.envirostat.water=水分
+commands.enviromine.envirostat.air=空气质量
+commands.enviromine.envirostat.noTracker=找不到目标！
+commands.enviromine.envirophysic.toggle=切换
+commands.enviromine.envirophysic.status=状态
+commands.enviromine.envirophysic.statusText=%s 物理状态： %s
+commands.enviromine.envirophysic.physics= %s 物理 %s
+commands.enviromine.enviroquake.length=长度
+commands.enviromine.enviroquake.width=宽度
+commands.enviromine.enviroquake.rotation=旋转
+commands.enviromine.enviroquake.mode=模式
+commands.enviromine.enviroquake.stop=停止
 commands.enviromine.enviroquake.stoppedAll=停止所有地震
 commands.enviromine.enviroquake.error.tooMany=你已经禁止所有地震！
 commands.enviromine.enviroquake.error.tooBig=你已禁止所有破坏超过4096个方块的大型地震！
@@ -249,4 +249,4 @@ editor.enviromine.GuiAdd.title.fail=发生错误。查看日志以了解详细�
 editor.enviromine.GuiAdd.item=作为物品添加
 editor.enviromine.GuiAdd.block=作为方块添加
 editor.enviromine.GuiAdd.both=作为两者添加
-msg.enviromine.RecordEasterEgg=一股诡异的寒意顺着你的脊椎蔓延……
+msg.enviromine.RecordEasterEgg=一股诡异的寒意沿着你的脊椎蔓延……
