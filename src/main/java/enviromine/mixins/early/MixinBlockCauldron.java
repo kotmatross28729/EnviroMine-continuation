@@ -121,7 +121,7 @@ public class MixinBlockCauldron implements ITileEntityProvider {
             if (l > 0 && entityIn.boundingBox.minY <= (double) f) {
                 if (cauldron.getWaterType().isRadioactive) {
                     if (entityIn instanceof EntityLivingBase entityLivingBase) {
-                        // TODO
+                        // TODO rad
                         entityLivingBase.addPotionEffect(new PotionEffect(Potion.poison.id, 100));
                         // ContaminationUtil.contaminate(entityLivingBase, ContaminationUtil.HazardType.RADIATION,
                         // ContaminationUtil.ContaminationType.CREATIVE, 5F);

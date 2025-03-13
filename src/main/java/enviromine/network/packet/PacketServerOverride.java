@@ -65,7 +65,6 @@ public class PacketServerOverride implements IMessage {
                         continue;
                     }
 
-                    // TODO ping
                     if (!f.isAccessible()) // This is causing problems for some reason...
                     {
                         if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger

@@ -450,8 +450,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[8], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[9], EM_Settings.CleanWaterHydrate)
-                    .getDouble(EM_Settings.CleanWaterHydrate);
+                config.get(category, IPName[9], EM_Settings.CLEAN_Hydration)
+                    .getDouble(EM_Settings.CLEAN_Hydration);
                 config.get(category, IPName[10], 37D)
                     .getDouble(37D);
                 config.get(category, IPName[11], 25)

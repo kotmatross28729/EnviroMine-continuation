@@ -13,29 +13,39 @@ import enviromine.core.EM_Settings;
  */
 public class WaterUtils {
 
-    // TODO config for values
     public enum WATER_TYPES {
 
-        RADIOACTIVE_FROSTY(-2, true, false, false, 25.0F, -0.1F),
-        FROSTY(-2, false, false, false, 25.0F, EM_Settings.FrostyWaterTemperatureInfluence),
+        RADIOACTIVE_FROSTY(-2, true, false, false, EM_Settings.RADIOACTIVE_FROSTY_Hydration,
+            EM_Settings.RADIOACTIVE_FROSTY_TemperatureInfluence),
+        FROSTY(-2, false, false, false, EM_Settings.FROSTY_Hydration, EM_Settings.FROSTY_TemperatureInfluence),
 
-        RADIOACTIVE_COLD(-1, true, false, false, 25.0F, -0.05F),
-        DIRTY_COLD(-1, false, true, false, 25.0F, EM_Settings.DirtyColdWaterTemperatureInfluence),
-        SALTY_COLD(-1, false, false, true, 25.0F, -0.05F),
-        CLEAN_COLD(-1, false, false, false, 25.0F, EM_Settings.CleanColdWaterTemperatureInfluence),
+        RADIOACTIVE_COLD(-1, true, false, false, EM_Settings.RADIOACTIVE_COLD_Hydration,
+            EM_Settings.RADIOACTIVE_COLD_TemperatureInfluence),
+        DIRTY_COLD(-1, false, true, false, EM_Settings.DIRTY_COLD_Hydration,
+            EM_Settings.DIRTY_COLD_TemperatureInfluence),
+        SALTY_COLD(-1, false, false, true, EM_Settings.SALTY_COLD_Hydration,
+            EM_Settings.SALTY_COLD_TemperatureInfluence),
+        CLEAN_COLD(-1, false, false, false, EM_Settings.CLEAN_COLD_Hydration,
+            EM_Settings.CLEAN_COLD_TemperatureInfluence),
 
-        RADIOACTIVE(0, true, false, false, 25.0F, 0.0F),
-        DIRTY(0, false, true, false, 25.0F, EM_Settings.DirtyWaterTemperatureInfluence),
-        SALTY(0, false, false, true, 25.0F, EM_Settings.SaltyWaterTemperatureInfluence),
-        CLEAN(0, false, false, false, 25.0F, EM_Settings.CleanWaterTemperatureInfluence),
+        RADIOACTIVE(0, true, false, false, EM_Settings.RADIOACTIVE_Hydration,
+            EM_Settings.RADIOACTIVE_TemperatureInfluence),
+        DIRTY(0, false, true, false, EM_Settings.DIRTY_Hydration, EM_Settings.DIRTY_TemperatureInfluence),
+        SALTY(0, false, false, true, EM_Settings.SALTY_Hydration, EM_Settings.SALTY_TemperatureInfluence),
+        CLEAN(0, false, false, false, EM_Settings.CLEAN_Hydration, EM_Settings.CLEAN_TemperatureInfluence),
 
-        RADIOACTIVE_WARM(1, true, false, false, 25.0F, 0.05F),
-        DIRTY_WARM(1, false, true, false, 25.0F, EM_Settings.DirtyWarmWaterTemperatureInfluence),
-        SALTY_WARM(1, false, false, true, 25.0F, 0.05F),
-        CLEAN_WARM(1, false, false, false, 25.0F, EM_Settings.CleanWarmWaterTemperatureInfluence),
+        RADIOACTIVE_WARM(1, true, false, false, EM_Settings.RADIOACTIVE_WARM_Hydration,
+            EM_Settings.RADIOACTIVE_WARM_TemperatureInfluence),
+        DIRTY_WARM(1, false, true, false, EM_Settings.DIRTY_WARM_Hydration,
+            EM_Settings.DIRTY_WARM_TemperatureInfluence),
+        SALTY_WARM(1, false, false, true, EM_Settings.SALTY_WARM_Hydration,
+            EM_Settings.SALTY_WARM_TemperatureInfluence),
+        CLEAN_WARM(1, false, false, false, EM_Settings.CLEAN_WARM_Hydration,
+            EM_Settings.CLEAN_WARM_TemperatureInfluence),
 
-        RADIOACTIVE_HOT(2, true, false, false, 25.0F, 0.1F),
-        HOT(2, false, false, false, 25.0F, 0.1F);
+        RADIOACTIVE_HOT(2, true, false, false, EM_Settings.RADIOACTIVE_HOT_Hydration,
+            EM_Settings.RADIOACTIVE_HOT_TemperatureInfluence),
+        HOT(2, false, false, false, EM_Settings.HOT_Hydration, EM_Settings.HOT_TemperatureInfluence);
 
         public final int heatIndex;
         public final boolean isRadioactive;
@@ -43,7 +53,6 @@ public class WaterUtils {
         public final boolean isSalty;
 
         public final float hydration;
-
         public final float temperatureInfluence;
 
         WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty, float hydration,

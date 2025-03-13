@@ -208,16 +208,16 @@ public class EnviroMine {
 
         EnviroAchievements.InitAchievements();
 
-        // TODO config
-        caves = (BiomeGenCaves) (new BiomeGenCaves(EM_Settings.caveBiomeID).setColor(0)
-            .setBiomeName("Caves")
-            .setDisableRain()
-            .setTemperatureRainfall(1.0F, 0.0F));
-        // GameRegistry.addBiome(caves);
-        BiomeDictionary.registerBiomeType(caves, Type.WASTELAND);
+        if (!EM_Settings.disableCaves) {
+            caves = (BiomeGenCaves) (new BiomeGenCaves(EM_Settings.caveBiomeID).setColor(0)
+                .setBiomeName("Caves")
+                .setDisableRain()
+                .setTemperatureRainfall(1.0F, 0.0F));
+            BiomeDictionary.registerBiomeType(caves, Type.WASTELAND);
 
-        DimensionManager.registerProviderType(EM_Settings.caveDimID, WorldProviderCaves.class, false);
-        DimensionManager.registerDimension(EM_Settings.caveDimID, EM_Settings.caveDimID);
+            DimensionManager.registerProviderType(EM_Settings.caveDimID, WorldProviderCaves.class, false);
+            DimensionManager.registerDimension(EM_Settings.caveDimID, EM_Settings.caveDimID);
+        }
 
         proxy.registerTickHandlers();
         proxy.registerEventHandlers();

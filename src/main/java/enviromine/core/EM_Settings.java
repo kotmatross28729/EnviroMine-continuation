@@ -153,26 +153,40 @@ public class EM_Settings {
 
     // WATER
     // TODO: new water types
-    // public static float FrostyWaterTemperatureInfluence = -0.5F;
-    public static float FrostyWaterTemperatureInfluence = -0.5F;
-    public static float DirtyColdWaterTemperatureInfluence = -0.1F;
-    public static float CleanColdWaterTemperatureInfluence = -0.1F;
-    public static float SaltyWaterTemperatureInfluence = -0.05F;
-    public static float DirtyWaterTemperatureInfluence = -0.05F;
-    public static float CleanWaterTemperatureInfluence = -0.05F;
-    public static float CleanWarmWaterTemperatureInfluence = 0.1F;
-    public static float DirtyWarmWaterTemperatureInfluence = 0.1F;
-    public static float HotWaterTemperatureInfluence = 0.5F;
 
-    public static float FrostyWaterHydrateWorld = 10.0F;
-    public static float DirtyColdWaterHydrateWorld = 10.0F;
-    public static float CleanColdWaterHydrateWorld = 10.0F;
-    public static float SaltyWaterHydrateWorld = 5.0F;
-    public static float DirtyWaterHydrateWorld = 10.0F;
-    public static float CleanWaterHydrateWorld = 10.0F;
-    public static float CleanWarmWaterHydrateWorld = 10.0F;
-    public static float DirtyWarmWaterHydrateWorld = 10.0F;
-    public static float HotWaterHydrateWorld = 10.0F;
+    public static float RADIOACTIVE_FROSTY_TemperatureInfluence = -0.1F;
+    public static float FROSTY_TemperatureInfluence = -0.1F;
+    public static float RADIOACTIVE_COLD_TemperatureInfluence = -0.05F;
+    public static float DIRTY_COLD_TemperatureInfluence = -0.05F;
+    public static float SALTY_COLD_TemperatureInfluence = -0.05F;
+    public static float CLEAN_COLD_TemperatureInfluence = -0.05F;
+    public static float RADIOACTIVE_TemperatureInfluence = -0.01F;
+    public static float DIRTY_TemperatureInfluence = -0.01F;
+    public static float SALTY_TemperatureInfluence = -0.01F;
+    public static float CLEAN_TemperatureInfluence = -0.01F;
+    public static float RADIOACTIVE_WARM_TemperatureInfluence = 0.05F;
+    public static float DIRTY_WARM_TemperatureInfluence = 0.05F;
+    public static float SALTY_WARM_TemperatureInfluence = 0.05F;
+    public static float CLEAN_WARM_TemperatureInfluence = 0.05F;
+    public static float RADIOACTIVE_HOT_TemperatureInfluence = 0.1F;
+    public static float HOT_TemperatureInfluence = 0.1F;
+
+    public static float RADIOACTIVE_FROSTY_Hydration = 20.0F;
+    public static float FROSTY_Hydration = 25.0F;
+    public static float RADIOACTIVE_COLD_Hydration = 20.0F;
+    public static float DIRTY_COLD_Hydration = 15.0F;
+    public static float SALTY_COLD_Hydration = 10.0F;
+    public static float CLEAN_COLD_Hydration = 25.0F;
+    public static float RADIOACTIVE_Hydration = 20.0F;
+    public static float DIRTY_Hydration = 15.0F;
+    public static float SALTY_Hydration = 10.0F;
+    public static float CLEAN_Hydration = 25.0F;
+    public static float RADIOACTIVE_WARM_Hydration = 20.0F;
+    public static float DIRTY_WARM_Hydration = 15.0F;
+    public static float SALTY_WARM_Hydration = 10.0F;
+    public static float CLEAN_WARM_Hydration = 25.0F;
+    public static float RADIOACTIVE_HOT_Hydration = 20.0F;
+    public static float HOT_Hydration = 25.0F;
 
     // EnviroDataTracker
 

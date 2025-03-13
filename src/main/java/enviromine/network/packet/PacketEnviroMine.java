@@ -78,8 +78,6 @@ public class PacketEnviroMine implements IMessage {
             } else if (id == 3) {
                 this.registerQuake(packet.tags);
             } else if (id == 4) {
-                // TODO this will need to be updated on the Teardown
-                // Teardown is game where you break houses? what
                 if (!packet.tags.getBoolean("enableAirQ")) {
                     HUDRegistry.disableHudItem(HUDRegistry.getHudItemByID(EM_ConfigHandler.HUD_ID_AIR_QUALITY));
                 } else {
