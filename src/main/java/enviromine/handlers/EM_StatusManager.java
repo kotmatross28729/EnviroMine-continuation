@@ -1008,11 +1008,9 @@ public class EM_StatusManager {
         float ambientTemperature = 0F;
 
         if (blockAndItemTempInfluence > biomeTemperature) {
-            ambientTemperature = (biomeTemperature + blockAndItemTempInfluence)
-                / EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider;
-            if (blockAndItemTempInfluence > (biomeTemperature
-                + EM_Settings.AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant)) {
-                riseSpeed = EM_Settings.AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant;
+            ambientTemperature = (biomeTemperature + blockAndItemTempInfluence) / EM_Settings.AmbTemp_Bl_It_TempInf_Div;
+            if (blockAndItemTempInfluence > (biomeTemperature + EM_Settings.AmbTemp_Bl_It_TempInf_For_RiseSpeedConst)) {
+                riseSpeed = EM_Settings.AmbTemp_Bl_It_TempInf_RiseSpeedConst;
             }
         } else {
             ambientTemperature = biomeTemperature;

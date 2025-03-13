@@ -190,7 +190,7 @@ public class EM_Settings {
 
     // EnviroDataTracker
 
-    public static float SanityDropHealth = 0.0F;
+    public static float SanityDropHealth = 7.0F;
     public static float SanityDropTemperatureHigh = 41.0F;
     public static float SanityDropTemperatureLow = 30.0F;
 
@@ -199,9 +199,9 @@ public class EM_Settings {
 
     public static float RealTemperatureConstant = 12.0F;
 
-    public static float TimeBelow10AirAndTemperatureConstantAir = 10.0F;
-    public static float TimeBelow10AirAndTemperatureConstantBodyTemperature = 35.0F;
-    public static float TimeBelow10BodyTemperatureConstant = 30.0F;
+    public static float TimeBelow10_Air_Temp_Const_Air = 10.0F;
+    public static float TimeBelow10_Air_Temp_Const_BodyTemp = 35.0F;
+    public static float TimeBelow10_BodyTemp_Const = 30.0F;
 
     public static float BodyTemperatureHeatStartValue = 39.0F;
     public static float BodyTemperatureHeatInstantDeath = 1000.0F;
@@ -257,11 +257,11 @@ public class EM_Settings {
 
     public static float AvgEntityTempDivider = 2.0F;
 
-    public static float AmbientTemperatureblockAndItemTempInfluenceDivider = 2.0F;
+    public static float AmbTemp_Bl_It_TempInf_Div = 2.0F;
 
-    public static float AmbientTemperatureblockAndItemTempInfluencebiomeTemperatureForRiseSpeedConstant = 5.0F;
+    public static float AmbTemp_Bl_It_TempInf_For_RiseSpeedConst = 5.0F;
 
-    public static float AmbientTemperatureblockAndItemTempInfluenceRiseSpeedConstant = 0.005F;
+    public static float AmbTemp_Bl_It_TempInf_RiseSpeedConst = 0.005F;
 
     public static float HungerEffectDehydrateBonus = 0.1F;
 

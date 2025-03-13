@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import enviromine.core.config.ConfigWater;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -26,6 +25,8 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import enviromine.client.gui.hud.HUDRegistry;
 import enviromine.core.config.ConfigGases;
 import enviromine.core.config.ConfigGeneral;
+import enviromine.core.config.ConfigNTM;
+import enviromine.core.config.ConfigWater;
 import enviromine.handlers.Legacy.LegacyHandler;
 import enviromine.handlers.ObjectHandler;
 import enviromine.trackers.properties.ArmorProperties;
@@ -306,7 +307,7 @@ public class EM_ConfigHandler {
         config.get("Do not Edit", "Current Config Version", CONFIG_VERSION)
             .getString();
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
         // !!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!//
         // !!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!//
         // !!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!//
@@ -318,12 +319,14 @@ public class EM_ConfigHandler {
         // !!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!//
         // !!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!//
         // !!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!// //!!!!!!!!!!!!!!!!!!!!!!//
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 
         ConfigGeneral.init(config);
         ConfigGases.init(config);
         ConfigWater.init(config);
-        
+
+        ConfigNTM.init(config);
+
         // --------------- //
         // --- General --- //
         // --------------- //

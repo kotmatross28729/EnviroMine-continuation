@@ -10,7 +10,7 @@ public class ConfigGases {
 
     public static void init(Configuration config) {
         int i = 0;
-        
+
         EM_Settings.hardcoregases = config.getBoolean(
             String.format("%03d" + "_HardcoreGases", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES_GASES,

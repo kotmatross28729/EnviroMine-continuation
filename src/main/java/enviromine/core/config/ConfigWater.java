@@ -10,7 +10,7 @@ public class ConfigWater {
 
     public static void init(Configuration config) {
         int i = 0;
-//TODO: remaining ones
+        // TODO: remaining ones
         EM_Settings.RADIOACTIVE_FROSTY_TemperatureInfluence = config.getFloat(
             String.format("%03d" + "_FrostyWaterTemperatureInfluence", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,

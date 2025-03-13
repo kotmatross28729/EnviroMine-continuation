@@ -451,9 +451,9 @@ public class EnviroDataTracker {
         }
 
         // Apply side effects
-        if (airTemp <= EM_Settings.TimeBelow10AirAndTemperatureConstantAir
-            && bodyTemp <= EM_Settings.TimeBelow10AirAndTemperatureConstantBodyTemperature
-            || bodyTemp <= EM_Settings.TimeBelow10BodyTemperatureConstant) {
+        if (airTemp <= EM_Settings.TimeBelow10_Air_Temp_Const_Air
+            && bodyTemp <= EM_Settings.TimeBelow10_Air_Temp_Const_BodyTemp
+            || bodyTemp <= EM_Settings.TimeBelow10_BodyTemp_Const) {
             timeBelow10 += 1;
         } else {
             timeBelow10 = 0;
