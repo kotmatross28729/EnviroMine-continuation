@@ -57,8 +57,7 @@ public class EM_StatusManager_NTM {
                 blockAndItemTempInfluence += getTempFalloff(
                     Math.min(
                         (press.burnTime / EM_Settings.BurnerPressHeatDivisor),
-                        EM_Settings.BurnerPressHeatHardCap
-                            * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                        EM_Settings.BurnerPressHeatHardCap * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -102,8 +101,7 @@ public class EM_StatusManager_NTM {
                 blockAndItemTempInfluence += getTempFalloff(
                     Math.min(
                         heaterElectric.heatEnergy / EM_Settings.HeaterElectricHeatDivisor,
-                        (EM_Settings.HeaterElectricHeatHardCap
-                            * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider)),
+                        (EM_Settings.HeaterElectricHeatHardCap * EM_Settings.AmbTemp_Bl_It_TempInf_Div)),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -116,8 +114,7 @@ public class EM_StatusManager_NTM {
                 blockAndItemTempInfluence += getTempFalloff(
                     Math.min(
                         furnaceIron.burnTime / EM_Settings.IronFurnaceHeatDivisor,
-                        (EM_Settings.IronFurnaceHeatHardCap
-                            * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider)),
+                        (EM_Settings.IronFurnaceHeatHardCap * EM_Settings.AmbTemp_Bl_It_TempInf_Div)),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -202,8 +199,7 @@ public class EM_StatusManager_NTM {
                 blockAndItemTempInfluence += getTempFalloff(
                     Math.min(
                         (furnaceBrick.burnTime / EM_Settings.FurnaceBrickHeatDivisor),
-                        EM_Settings.FurnaceBrickHeatHardCap
-                            * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                        EM_Settings.FurnaceBrickHeatHardCap * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -271,8 +267,7 @@ public class EM_StatusManager_NTM {
             if (diesel.tank.getFill() > 0 && TileEntityMachineDiesel.getHEFromFuel(diesel.tank.getTankType()) > 0L) {
                 // Works in space - ❌
                 blockAndItemTempInfluence += getTempFalloff(
-                    (EM_Settings.DieselGenHeatConstant
-                        * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                    (EM_Settings.DieselGenHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -281,7 +276,7 @@ public class EM_StatusManager_NTM {
             if (combustionEngine.wasOn) {
                 // Works in space - ❌
                 blockAndItemTempInfluence += getTempFalloff(
-                    (EM_Settings.ICEHeatConstant * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                    (EM_Settings.ICEHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -290,8 +285,7 @@ public class EM_StatusManager_NTM {
             if (cyclotron.progress > 0) {
                 // Works in space - ✅
                 blockAndItemTempInfluence += getTempFalloff(
-                    (EM_Settings.CyclotronHeatConstant
-                        * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                    (EM_Settings.CyclotronHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -322,8 +316,7 @@ public class EM_StatusManager_NTM {
             if (arcFurnaceLarge.isProgressing) {
                 // Works in space - ✅
                 blockAndItemTempInfluence += getTempFalloff(
-                    (EM_Settings.ArcFurnaceHeatConstant
-                        * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                    (EM_Settings.ArcFurnaceHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -338,8 +331,7 @@ public class EM_StatusManager_NTM {
             if (gasFlare.doesBurn && powerGen > 0) {
                 // Works in space - ❌
                 blockAndItemTempInfluence += getTempFalloff(
-                    (EM_Settings.FlareStackHeatConstant
-                        * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                    (EM_Settings.FlareStackHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
@@ -359,10 +351,8 @@ public class EM_StatusManager_NTM {
                 // Works in space - ❌
                 blockAndItemTempInfluence += getTempFalloff(
                     (turbofan.afterburner > 0
-                        ? EM_Settings.TurbofanAfterburnerHeatConstant
-                            * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider
-                        : EM_Settings.TurbofanHeatConstant
-                            * EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
+                        ? EM_Settings.TurbofanAfterburnerHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div
+                        : EM_Settings.TurbofanHeatConstant * EM_Settings.AmbTemp_Bl_It_TempInf_Div),
                     dist,
                     cubeRadius,
                     EM_Settings.blockTempDropoffPower);
