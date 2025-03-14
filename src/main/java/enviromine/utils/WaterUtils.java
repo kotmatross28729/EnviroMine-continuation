@@ -16,36 +16,41 @@ public class WaterUtils {
     public enum WATER_TYPES {
 
         RADIOACTIVE_FROSTY(-2, true, false, false, EM_Settings.RADIOACTIVE_FROSTY_Hydration,
-            EM_Settings.RADIOACTIVE_FROSTY_TemperatureInfluence),
-        FROSTY(-2, false, false, false, EM_Settings.FROSTY_Hydration, EM_Settings.FROSTY_TemperatureInfluence),
+            EM_Settings.RADIOACTIVE_FROSTY_TemperatureInfluence, EM_Settings.RADIOACTIVE_FROSTY_TempInfluenceCap),
+        FROSTY(-2, false, false, false, EM_Settings.FROSTY_Hydration, EM_Settings.FROSTY_TemperatureInfluence,
+            EM_Settings.FROSTY_TempInfluenceCap),
 
         RADIOACTIVE_COLD(-1, true, false, false, EM_Settings.RADIOACTIVE_COLD_Hydration,
-            EM_Settings.RADIOACTIVE_COLD_TemperatureInfluence),
+            EM_Settings.RADIOACTIVE_COLD_TemperatureInfluence, EM_Settings.RADIOACTIVE_COLD_TempInfluenceCap),
         DIRTY_COLD(-1, false, true, false, EM_Settings.DIRTY_COLD_Hydration,
-            EM_Settings.DIRTY_COLD_TemperatureInfluence),
+            EM_Settings.DIRTY_COLD_TemperatureInfluence, EM_Settings.DIRTY_COLD_TempInfluenceCap),
         SALTY_COLD(-1, false, false, true, EM_Settings.SALTY_COLD_Hydration,
-            EM_Settings.SALTY_COLD_TemperatureInfluence),
+            EM_Settings.SALTY_COLD_TemperatureInfluence, EM_Settings.SALTY_COLD_TempInfluenceCap),
         CLEAN_COLD(-1, false, false, false, EM_Settings.CLEAN_COLD_Hydration,
-            EM_Settings.CLEAN_COLD_TemperatureInfluence),
+            EM_Settings.CLEAN_COLD_TemperatureInfluence, EM_Settings.CLEAN_COLD_TempInfluenceCap),
 
         RADIOACTIVE(0, true, false, false, EM_Settings.RADIOACTIVE_Hydration,
-            EM_Settings.RADIOACTIVE_TemperatureInfluence),
-        DIRTY(0, false, true, false, EM_Settings.DIRTY_Hydration, EM_Settings.DIRTY_TemperatureInfluence),
-        SALTY(0, false, false, true, EM_Settings.SALTY_Hydration, EM_Settings.SALTY_TemperatureInfluence),
-        CLEAN(0, false, false, false, EM_Settings.CLEAN_Hydration, EM_Settings.CLEAN_TemperatureInfluence),
+            EM_Settings.RADIOACTIVE_TemperatureInfluence, EM_Settings.RADIOACTIVE_TempInfluenceCap),
+        DIRTY(0, false, true, false, EM_Settings.DIRTY_Hydration, EM_Settings.DIRTY_TemperatureInfluence,
+            EM_Settings.DIRTY_TempInfluenceCap),
+        SALTY(0, false, false, true, EM_Settings.SALTY_Hydration, EM_Settings.SALTY_TemperatureInfluence,
+            EM_Settings.SALTY_TempInfluenceCap),
+        CLEAN(0, false, false, false, EM_Settings.CLEAN_Hydration, EM_Settings.CLEAN_TemperatureInfluence,
+            EM_Settings.CLEAN_TempInfluenceCap),
 
         RADIOACTIVE_WARM(1, true, false, false, EM_Settings.RADIOACTIVE_WARM_Hydration,
-            EM_Settings.RADIOACTIVE_WARM_TemperatureInfluence),
-        DIRTY_WARM(1, false, true, false, EM_Settings.DIRTY_WARM_Hydration,
-            EM_Settings.DIRTY_WARM_TemperatureInfluence),
-        SALTY_WARM(1, false, false, true, EM_Settings.SALTY_WARM_Hydration,
-            EM_Settings.SALTY_WARM_TemperatureInfluence),
+            EM_Settings.RADIOACTIVE_WARM_TemperatureInfluence, EM_Settings.RADIOACTIVE_WARM_TempInfluenceCap),
+        DIRTY_WARM(1, false, true, false, EM_Settings.DIRTY_WARM_Hydration, EM_Settings.DIRTY_WARM_TemperatureInfluence,
+            EM_Settings.DIRTY_WARM_TempInfluenceCap),
+        SALTY_WARM(1, false, false, true, EM_Settings.SALTY_WARM_Hydration, EM_Settings.SALTY_WARM_TemperatureInfluence,
+            EM_Settings.SALTY_WARM_TempInfluenceCap),
         CLEAN_WARM(1, false, false, false, EM_Settings.CLEAN_WARM_Hydration,
-            EM_Settings.CLEAN_WARM_TemperatureInfluence),
+            EM_Settings.CLEAN_WARM_TemperatureInfluence, EM_Settings.CLEAN_WARM_TempInfluenceCap),
 
         RADIOACTIVE_HOT(2, true, false, false, EM_Settings.RADIOACTIVE_HOT_Hydration,
-            EM_Settings.RADIOACTIVE_HOT_TemperatureInfluence),
-        HOT(2, false, false, false, EM_Settings.HOT_Hydration, EM_Settings.HOT_TemperatureInfluence);
+            EM_Settings.RADIOACTIVE_HOT_TemperatureInfluence, EM_Settings.RADIOACTIVE_HOT_TempInfluenceCap),
+        HOT(2, false, false, false, EM_Settings.HOT_Hydration, EM_Settings.HOT_TemperatureInfluence,
+            EM_Settings.HOT_TempInfluenceCap);
 
         public final int heatIndex;
         public final boolean isRadioactive;
@@ -55,14 +60,17 @@ public class WaterUtils {
         public final float hydration;
         public final float temperatureInfluence;
 
+        public final float temperatureInfluenceCap;
+
         WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty, float hydration,
-            float temperatureInfluence) {
+            float temperatureInfluence, float temperatureInfluenceCap) {
             this.heatIndex = heatIndex;
             this.isRadioactive = isRadioactive;
             this.isDirty = isDirty;
             this.isSalty = isSalty;
             this.hydration = hydration;
             this.temperatureInfluence = temperatureInfluence;
+            this.temperatureInfluenceCap = temperatureInfluenceCap;
         }
 
         public static WATER_TYPES fromTraits(WATER_TYPES waterTypeInitial, int heatIndex, boolean isRadioactive,

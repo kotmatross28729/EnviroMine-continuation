@@ -32,34 +32,16 @@ public class ItemProperties_NTM {
                 .getDouble(0D);
             config.get(category, IPName[5], 0D)
                 .getDouble(0D);
-            config
-                .get(
-                    category,
-                    IPName[6],
-                    enviroItemWaterBottle.getWaterType().heatIndex == -2 ? -0.5F
-                        : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
-                            : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
-                                : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F)
-                .getDouble(
-                    enviroItemWaterBottle.getWaterType().heatIndex == -2 ? -0.5F
-                        : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
-                            : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
-                                : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F);
+            config.get(category, IPName[6], enviroItemWaterBottle.getWaterType().temperatureInfluence)
+                .getDouble(enviroItemWaterBottle.getWaterType().temperatureInfluence);
             config.get(category, IPName[7], 0D)
                 .getDouble(0D);
             config.get(category, IPName[8], 0D)
                 .getDouble(0D);
-            config.get(
-                category,
-                IPName[9],
-                (enviroItemWaterBottle.getWaterType().isSalty || enviroItemWaterBottle.getWaterType().isDirty) ? 20.0F
-                    : 50.0F)
-                .getDouble(
-                    (enviroItemWaterBottle.getWaterType().isSalty || enviroItemWaterBottle.getWaterType().isDirty)
-                        ? 20.0F
-                        : 50.0F);
-            config.get(category, IPName[10], 36.6D)
-                .getDouble(36.6D);
+            config.get(category, IPName[9], enviroItemWaterBottle.getWaterType().hydration * 2.0F)
+                .getDouble(enviroItemWaterBottle.getWaterType().hydration * 2.0F);
+            config.get(category, IPName[10], enviroItemWaterBottle.getWaterType().temperatureInfluenceCap)
+                .getDouble(enviroItemWaterBottle.getWaterType().temperatureInfluenceCap);
             config.get(category, IPName[11], 0)
                 .getInt(0);
             config.get(category, IPName[12], "")
@@ -190,8 +172,8 @@ public class ItemProperties_NTM {
                     .getDouble(item == ModItems.coffee ? 5D : 10D); // I know this from myself
                 config.get(category, IPName[9], 25D)
                     .getDouble(25D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -219,8 +201,8 @@ public class ItemProperties_NTM {
                     .getDouble(item == ModItems.crackpipe ? 40D : 30D);
                 config.get(category, IPName[9], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -248,8 +230,8 @@ public class ItemProperties_NTM {
                     .getDouble(item == ModItems.xanax ? 10D : item == ModItems.fmn ? 50D : 100D);
                 config.get(category, IPName[9], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -263,8 +245,8 @@ public class ItemProperties_NTM {
                     .getInt(-1);
                 config.get(category, IPName[2], HotlevelCelc > 0)
                     .getBoolean(HotlevelCelc > 0);
-                config.get(category, IPName[3], HotlevelCelc > 0 ? HotlevelCelc : 37D)
-                    .getDouble(HotlevelCelc > 0 ? HotlevelCelc : 37D);
+                config.get(category, IPName[3], HotlevelCelc > 0 ? HotlevelCelc : 36.6D)
+                    .getDouble(HotlevelCelc > 0 ? HotlevelCelc : 36.6D);
                 double aDefault = Asbestoslevel < 0 ? Asbestoslevel : Coallevel < 0 ? Coallevel : 0D;
                 config.get(category, IPName[4], aDefault)
                     .getDouble(aDefault);
@@ -278,8 +260,8 @@ public class ItemProperties_NTM {
                     .getDouble(0D);
                 config.get(category, IPName[9], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")

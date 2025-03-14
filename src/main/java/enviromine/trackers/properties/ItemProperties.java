@@ -197,8 +197,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
             .getDouble(0D);
         float effHydration = (float) config.get(category, IPName[9], 0D)
             .getDouble(0D);
-        float effTempCap = (float) config.get(category, IPName[10], 37D)
-            .getDouble(37D);
+        float effTempCap = (float) config.get(category, IPName[10], 36.6D)
+            .getDouble(36.6D);
         int camelFill = config.get(category, IPName[11], 0)
             .getInt(0);
         String camelReturnItem = config.get(category, IPName[12], "")
@@ -350,8 +350,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getInt(-1);
                 config.get(category, IPName[2], false)
                     .getBoolean(false);
-                config.get(category, IPName[3], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[3], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[4], 0D)
                     .getDouble(0D);
                 config.get(category, IPName[5], 0D)
@@ -364,8 +364,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[9], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], -25)
                     .getInt(-25);
                 config.get(category, IPName[12], "minecraft:potion")
@@ -390,19 +390,11 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                         category,
                         IPName[6],
                         item instanceof EnviroItemWaterBottle enviroItemWaterBottle
-                            ? enviroItemWaterBottle.getWaterType().heatIndex == -2 ? -0.5F
-                                : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
-                                    : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
-                                        : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F
+                            ? enviroItemWaterBottle.getWaterType().temperatureInfluence
                             : -0.1F)
                     .getDouble(
                         item instanceof EnviroItemWaterBottle enviroItemWaterBottle
-                            ? enviroItemWaterBottle.getWaterType().heatIndex
-                                == -2
-                                    ? -0.5F
-                                    : enviroItemWaterBottle.getWaterType().heatIndex == -1 ? -0.1F
-                                        : enviroItemWaterBottle.getWaterType().heatIndex == 1 ? 0.1F
-                                            : enviroItemWaterBottle.getWaterType().heatIndex == 2 ? 0.5F : -0.1F
+                            ? enviroItemWaterBottle.getWaterType().temperatureInfluence
                             : -0.1F);
                 config.get(category, IPName[7], 0D)
                     .getDouble(0D);
@@ -413,16 +405,23 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                         category,
                         IPName[9],
                         item instanceof EnviroItemWaterBottle enviroItemWaterBottle
-                            ? (enviroItemWaterBottle.getWaterType().isSalty
-                                || enviroItemWaterBottle.getWaterType().isDirty) ? 10.0F : 25.0F
+                            ? enviroItemWaterBottle.getWaterType().hydration
                             : 25.0F)
                     .getDouble(
                         item instanceof EnviroItemWaterBottle enviroItemWaterBottle
-                            ? (enviroItemWaterBottle.getWaterType().isSalty
-                                || enviroItemWaterBottle.getWaterType().isDirty) ? 10.0F : 25.0F
+                            ? enviroItemWaterBottle.getWaterType().hydration
                             : 25.0F);
-                config.get(category, IPName[10], 36.6D)
-                    .getDouble(36.6D);
+                config
+                    .get(
+                        category,
+                        IPName[10],
+                        item instanceof EnviroItemWaterBottle enviroItemWaterBottle
+                            ? enviroItemWaterBottle.getWaterType().temperatureInfluenceCap
+                            : 36.6F)
+                    .getDouble(
+                        item instanceof EnviroItemWaterBottle enviroItemWaterBottle
+                            ? enviroItemWaterBottle.getWaterType().temperatureInfluenceCap
+                            : 36.6F);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -444,16 +443,16 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[5], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[6], -0.1D)
-                    .getDouble(-0.1D);
+                config.get(category, IPName[6], EM_Settings.CLEAN_TemperatureInfluence)
+                    .getDouble(EM_Settings.CLEAN_TemperatureInfluence);
                 config.get(category, IPName[7], 0D)
                     .getDouble(0D);
                 config.get(category, IPName[8], 0D)
                     .getDouble(0D);
                 config.get(category, IPName[9], EM_Settings.CLEAN_Hydration)
                     .getDouble(EM_Settings.CLEAN_Hydration);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], EM_Settings.CLEAN_TempInfluenceCap)
+                    .getDouble(EM_Settings.CLEAN_TempInfluenceCap);
                 config.get(category, IPName[11], 25)
                     .getInt(25);
                 config.get(category, IPName[12], "minecraft:glass_bottle")
@@ -481,8 +480,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[9], item == Items.melon ? 15D : 5D)
                     .getDouble(item == Items.melon ? 15D : 5D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -510,8 +509,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[9], 10D)
                     .getDouble(10D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -539,8 +538,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[9], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
                 config.get(category, IPName[12], "")
@@ -568,8 +567,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                     .getDouble(0D);
                 config.get(category, IPName[9], 0D)
                     .getDouble(0D);
-                config.get(category, IPName[10], 37D)
-                    .getDouble(37D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
                 config.get(category, IPName[12], "")
                     .getString();
                 config.get(category, IPName[13], 0)
@@ -597,8 +596,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                         .getDouble(0D);
                     config.get(category, IPName[9], 0D)
                         .getDouble(0D);
-                    config.get(category, IPName[10], 37D)
-                        .getDouble(37D);
+                    config.get(category, IPName[10], 36.6D)
+                        .getDouble(36.6D);
                     config.get(category, IPName[12], "")
                         .getString();
                     config.get(category, IPName[13], 0)
@@ -624,8 +623,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                         .getDouble(0D);
                     config.get(category, IPName[9], 0D)
                         .getDouble(0D);
-                    config.get(category, IPName[10], 37D)
-                        .getDouble(37D);
+                    config.get(category, IPName[10], 36.6D)
+                        .getDouble(36.6D);
                     config.get(category, IPName[11], 0)
                         .getInt(0);
                     config.get(category, IPName[12], "")
@@ -661,8 +660,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                             .getDouble(0D);
                         config.get(category, IPName[9], 0D)
                             .getDouble(0D);
-                        config.get(category, IPName[10], 37D)
-                            .getDouble(37D);
+                        config.get(category, IPName[10], 36.6D)
+                            .getDouble(36.6D);
                         config.get(category, IPName[11], 0)
                             .getInt(0);
                         config.get(category, IPName[12], "")
@@ -690,8 +689,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                             .getDouble(0D);
                         config.get(category, IPName[9], 0D)
                             .getDouble(0D);
-                        config.get(category, IPName[10], 37D)
-                            .getDouble(37D);
+                        config.get(category, IPName[10], 36.6D)
+                            .getDouble(36.6D);
                         config.get(category, IPName[11], 0)
                             .getInt(0);
                         config.get(category, IPName[12], "")
@@ -740,8 +739,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
             .getInt(-1);
         config.get(category, IPName[2], false)
             .getBoolean(false);
-        config.get(category, IPName[3], 37D)
-            .getDouble(37D);
+        config.get(category, IPName[3], 36.6D)
+            .getDouble(36.6D);
         config.get(category, IPName[4], 0D)
             .getDouble(0D);
         config.get(category, IPName[5], 0D)
@@ -754,8 +753,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
             .getDouble(0D);
         config.get(category, IPName[9], 0D)
             .getDouble(0D);
-        config.get(category, IPName[10], 37D)
-            .getDouble(37D);
+        config.get(category, IPName[10], 36.6D)
+            .getDouble(36.6D);
         config.get(category, IPName[11], 0)
             .getInt(0);
         config.get(category, IPName[12], "")

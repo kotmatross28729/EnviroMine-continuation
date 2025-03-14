@@ -152,8 +152,6 @@ public class EM_Settings {
     // UNHARDCODE PROJECT
 
     // WATER
-    // TODO: new water types
-
     public static float RADIOACTIVE_FROSTY_TemperatureInfluence = -0.1F;
     public static float FROSTY_TemperatureInfluence = -0.1F;
     public static float RADIOACTIVE_COLD_TemperatureInfluence = -0.05F;
@@ -187,6 +185,23 @@ public class EM_Settings {
     public static float CLEAN_WARM_Hydration = 25.0F;
     public static float RADIOACTIVE_HOT_Hydration = 20.0F;
     public static float HOT_Hydration = 25.0F;
+
+    public static float RADIOACTIVE_FROSTY_TempInfluenceCap = 25.0F;
+    public static float FROSTY_TempInfluenceCap = 25.0F;
+    public static float RADIOACTIVE_COLD_TempInfluenceCap = 30.0F;
+    public static float DIRTY_COLD_TempInfluenceCap = 30.0F;
+    public static float SALTY_COLD_TempInfluenceCap = 30.0F;
+    public static float CLEAN_COLD_TempInfluenceCap = 30.0F;
+    public static float RADIOACTIVE_TempInfluenceCap = 36.6F;
+    public static float DIRTY_TempInfluenceCap = 36.6F;
+    public static float SALTY_TempInfluenceCap = 36.6F;
+    public static float CLEAN_TempInfluenceCap = 36.6F;
+    public static float RADIOACTIVE_WARM_TempInfluenceCap = 40.0F;
+    public static float DIRTY_WARM_TempInfluenceCap = 40.0F;
+    public static float SALTY_WARM_TempInfluenceCap = 40.0F;
+    public static float CLEAN_WARM_TempInfluenceCap = 40.0F;
+    public static float RADIOACTIVE_HOT_TempInfluenceCap = 45.0F;
+    public static float HOT_TempInfluenceCap = 45.0F;
 
     // EnviroDataTracker
 
