@@ -59,7 +59,6 @@ public class WaterUtils {
 
         public final float hydration;
         public final float temperatureInfluence;
-
         public final float temperatureInfluenceCap;
 
         WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty, float hydration,
@@ -98,6 +97,32 @@ public class WaterUtils {
 
         if (heatIndex < 2) {
             heatIndex += 1;
+        } else {
+            heatIndex = 2;
+        }
+
+        return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
+    }
+
+    public static WATER_TYPES heatUp(WATER_TYPES waterType, int iterations) {
+        boolean isDirty = waterType.isDirty;
+        boolean isSalty = waterType.isSalty;
+        int heatIndex = waterType.heatIndex;
+
+        if (heatIndex >= 0) {
+            isDirty = false;
+            isSalty = false;
+        }
+
+        if ((heatIndex + iterations) < 2) {
+            heatIndex += iterations;
+        } else {
+            heatIndex = 2;
+        }
+
+        if (heatIndex == 2) {
+            isDirty = false;
+            isSalty = false;
         }
 
         return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
@@ -115,6 +140,32 @@ public class WaterUtils {
 
         if (heatIndex > -2) {
             heatIndex -= 1;
+        } else {
+            heatIndex = -2;
+        }
+
+        return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
+    }
+
+    public static WATER_TYPES coolDown(WATER_TYPES waterType, int iterations) {
+        boolean isDirty = waterType.isDirty;
+        boolean isSalty = waterType.isSalty;
+        int heatIndex = waterType.heatIndex;
+
+        if (heatIndex < 0) {
+            isDirty = false;
+            isSalty = false;
+        }
+
+        if ((heatIndex - iterations) > -2) {
+            heatIndex -= iterations;
+        } else {
+            heatIndex = -2;
+        }
+
+        if (heatIndex == -2) {
+            isDirty = false;
+            isSalty = false;
         }
 
         return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
@@ -124,8 +175,20 @@ public class WaterUtils {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, true);
     }
 
+    public static WATER_TYPES forceSaltDown(WATER_TYPES waterType) {
+        int heatIndex = (waterType.heatIndex == 2 ? 1 : waterType.heatIndex == -2 ? -1 : waterType.heatIndex);
+
+        return WATER_TYPES.fromTraits(waterType, heatIndex, false, false, true);
+    }
+
     public static WATER_TYPES pollute(WATER_TYPES waterType) {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, true, waterType.isSalty);
+    }
+
+    public static WATER_TYPES forcePollute(WATER_TYPES waterType) {
+        int heatIndex = (waterType.heatIndex == 2 ? 1 : waterType.heatIndex == -2 ? -1 : waterType.heatIndex);
+
+        return WATER_TYPES.fromTraits(waterType, heatIndex, false, true, false);
     }
 
     public static WaterUtils.WATER_TYPES getTypeFromFluid(Fluid fluid) {
@@ -204,6 +267,27 @@ public class WaterUtils {
             case "RADIOACTIVE_HOT" -> WaterUtils.WATER_TYPES.RADIOACTIVE_HOT;
             case "HOT" -> WaterUtils.WATER_TYPES.HOT;
             default -> WaterUtils.WATER_TYPES.CLEAN;
+        };
+    }
+
+    public static String getStringFromType(WaterUtils.WATER_TYPES type) {
+        return switch (type) {
+            case RADIOACTIVE_FROSTY -> "RADIOACTIVE_FROSTY";
+            case FROSTY -> "FROSTY";
+            case RADIOACTIVE_COLD -> "RADIOACTIVE_COLD";
+            case DIRTY_COLD -> "DIRTY_COLD";
+            case SALTY_COLD -> "SALTY_COLD";
+            case CLEAN_COLD -> "CLEAN_COLD";
+            case RADIOACTIVE -> "RADIOACTIVE";
+            case DIRTY -> "DIRTY";
+            case SALTY -> "SALTY";
+            case RADIOACTIVE_WARM -> "RADIOACTIVE_WARM";
+            case DIRTY_WARM -> "DIRTY_WARM";
+            case SALTY_WARM -> "SALTY_WARM";
+            case CLEAN_WARM -> "CLEAN_WARM";
+            case RADIOACTIVE_HOT -> "RADIOACTIVE_HOT";
+            case HOT -> "HOT";
+            default -> "CLEAN";
         };
     }
 

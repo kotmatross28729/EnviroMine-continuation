@@ -1,10 +1,18 @@
 package enviromine.trackers.properties;
 
+import static enviromine.utils.WaterUtils.coolDown;
+import static enviromine.utils.WaterUtils.forcePollute;
+import static enviromine.utils.WaterUtils.forceSaltDown;
+import static enviromine.utils.WaterUtils.getStringFromType;
+import static enviromine.utils.WaterUtils.getTypeFromString;
+import static enviromine.utils.WaterUtils.heatUp;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -19,6 +27,7 @@ import enviromine.core.EnviroMine;
 import enviromine.trackers.properties.compat.BiomeProperties_LOTR;
 import enviromine.trackers.properties.compat.BiomeProperties_NTM;
 import enviromine.trackers.properties.compat.BiomeProperties_NTM_SPACE;
+import enviromine.trackers.properties.compat.BiomeProperties_SS;
 import enviromine.trackers.properties.helpers.PropertyBase;
 import enviromine.trackers.properties.helpers.SerialisableProperty;
 import enviromine.utils.EnviroUtils;
@@ -84,6 +93,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
     public float dropSpeedRain;
     public float dropSpeedThunder;
 
+    public String SPRING_waterQuality;
+    public String SUMMER_waterQuality;
+    public String AUTUMN_waterQuality;
+    public String WINTER_waterQuality;
+
     public BiomeProperties(NBTTagCompound tags) {
         this.ReadFromNBT(tags);
     }
@@ -116,7 +130,9 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         float LATE_SPRING_TEMPERATURE_DECREASE, float LATE_SUMMER_TEMPERATURE_DECREASE,
         float LATE_WINTER_TEMPERATURE_DECREASE, float LATE_AUTUMN_TEMPERATURE_DECREASE, float tempRate_DAWN,
         float tempRate_DAY, float tempRate_DUSK, float tempRate_NIGHT, boolean tempRate_HARD,
-        float TemperatureWaterDecrease, float dropSpeedWater, float dropSpeedRain, float dropSpeedThunder) {
+        float TemperatureWaterDecrease, float dropSpeedWater, float dropSpeedRain, float dropSpeedThunder,
+        String SPRING_waterQuality, String SUMMER_waterQuality, String AUTUMN_waterQuality,
+        String WINTER_waterQuality) {
         this.id = id;
         this.biomeOveride = biomeOveride;
         this.waterQuality = waterQuality;
@@ -170,6 +186,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
         this.dropSpeedRain = dropSpeedRain;
         this.dropSpeedThunder = dropSpeedThunder;
+
+        this.SPRING_waterQuality = SPRING_waterQuality;
+        this.SUMMER_waterQuality = SUMMER_waterQuality;
+        this.AUTUMN_waterQuality = AUTUMN_waterQuality;
+        this.WINTER_waterQuality = WINTER_waterQuality;
     }
 
     /**
@@ -196,25 +217,21 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         return EM_Settings.biomeProperties.get(biome.biomeID);
     }
 
-    public WaterUtils.WATER_TYPES getWaterQuality() {
-        return switch (this.waterQuality.trim()) {
-            case "RADIOACTIVE_FROSTY" -> WaterUtils.WATER_TYPES.RADIOACTIVE_FROSTY;
-            case "FROSTY" -> WaterUtils.WATER_TYPES.FROSTY;
-            case "RADIOACTIVE_COLD" -> WaterUtils.WATER_TYPES.RADIOACTIVE_COLD;
-            case "DIRTY_COLD" -> WaterUtils.WATER_TYPES.DIRTY_COLD;
-            case "SALTY_COLD" -> WaterUtils.WATER_TYPES.SALTY_COLD;
-            case "CLEAN_COLD" -> WaterUtils.WATER_TYPES.CLEAN_COLD;
-            case "RADIOACTIVE" -> WaterUtils.WATER_TYPES.RADIOACTIVE;
-            case "DIRTY" -> WaterUtils.WATER_TYPES.DIRTY;
-            case "SALTY" -> WaterUtils.WATER_TYPES.SALTY;
-            case "RADIOACTIVE_WARM" -> WaterUtils.WATER_TYPES.RADIOACTIVE_WARM;
-            case "DIRTY_WARM" -> WaterUtils.WATER_TYPES.DIRTY_WARM;
-            case "SALTY_WARM" -> WaterUtils.WATER_TYPES.SALTY_WARM;
-            case "CLEAN_WARM" -> WaterUtils.WATER_TYPES.CLEAN_WARM;
-            case "RADIOACTIVE_HOT" -> WaterUtils.WATER_TYPES.RADIOACTIVE_HOT;
-            case "HOT" -> WaterUtils.WATER_TYPES.HOT;
-            default -> WaterUtils.WATER_TYPES.CLEAN;
-        };
+    public WaterUtils.WATER_TYPES getWaterQuality(World world) {
+
+        if (EnviroMine.isSereneSeasonsLoaded) {
+            String seasonWater = BiomeProperties_SS.checkSeasonWater(
+                world,
+                this.SPRING_waterQuality,
+                this.SUMMER_waterQuality,
+                this.AUTUMN_waterQuality,
+                this.WINTER_waterQuality);
+            if (seasonWater != null) {
+                return WaterUtils.getTypeFromString(seasonWater);
+            }
+        }
+
+        return WaterUtils.getTypeFromString(this.waterQuality);
     }
 
     @Override
@@ -271,6 +288,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
         tags.setFloat("dropSpeedRain", this.dropSpeedRain);
         tags.setFloat("dropSpeedThunder", this.dropSpeedThunder);
+
+        tags.setString("SPRING_waterQuality", this.SPRING_waterQuality);
+        tags.setString("SUMMER_waterQuality", this.SUMMER_waterQuality);
+        tags.setString("AUTUMN_waterQuality", this.AUTUMN_waterQuality);
+        tags.setString("WINTER_waterQuality", this.WINTER_waterQuality);
 
         return tags;
     }
@@ -329,6 +351,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
         this.dropSpeedRain = tags.getFloat("dropSpeedRain");
         this.dropSpeedThunder = tags.getFloat("dropSpeedThunder");
+
+        this.SPRING_waterQuality = tags.getString("SPRING_waterQuality");
+        this.SUMMER_waterQuality = tags.getString("SUMMER_waterQuality");
+        this.AUTUMN_waterQuality = tags.getString("AUTUMN_waterQuality");
+        this.WINTER_waterQuality = tags.getString("WINTER_waterQuality");
     }
 
     @Override
@@ -465,6 +492,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         float dropSpeedThunder = (float) config.get(category, BOName[43], 0.01)
             .getDouble(0.01);
 
+        String SPRING_waterQuality = config.get(category, BOName[44], "CLEAN", "Water Quality at spring")
+            .getString();
+        String SUMMER_waterQuality = config.get(category, BOName[45], "CLEAN", "Water Quality at summer")
+            .getString();
+        String AUTUMN_waterQuality = config.get(category, BOName[46], "CLEAN", "Water Quality at autumn")
+            .getString();
+        String WINTER_waterQuality = config.get(category, BOName[47], "CLEAN", "Water Quality at winter")
+            .getString();
+
         BiomeProperties entry = new BiomeProperties(
             id,
             biomeOveride,
@@ -510,7 +546,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
             TemperatureWaterDecrease,
             dropSpeedWater,
             dropSpeedRain,
-            dropSpeedThunder);
+            dropSpeedThunder,
+            SPRING_waterQuality,
+            SUMMER_waterQuality,
+            AUTUMN_waterQuality,
+            WINTER_waterQuality);
 
         if (EM_Settings.biomeProperties.containsKey(id) && !EM_ConfigHandler.loadedConfigs.contains(filename)) {
             if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.NORMAL.getLevel()) EnviroMine.logger.log(
@@ -798,6 +838,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
                 this.dropSpeedThunder,
                 "Biome drop speed will be this number if there is a thunderstorm")
             .getDouble(this.dropSpeedThunder);
+
+        config.get(category, BOName[44], this.SPRING_waterQuality, "Water Quality at spring")
+            .getString();
+        config.get(category, BOName[45], this.SUMMER_waterQuality, "Water Quality at summer")
+            .getString();
+        config.get(category, BOName[46], this.AUTUMN_waterQuality, "Water Quality at autumn")
+            .getString();
+        config.get(category, BOName[47], this.WINTER_waterQuality, "Water Quality at winter")
+            .getString();
     }
 
     public void GenDefaultsProperty(BiomeGenBase[] biomeArray) {
@@ -902,6 +951,33 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         float dropSpeedRain = 0.01F;
         float dropSpeedThunder = 0.01F;
 
+        String SPRING_waterQuality;
+        String SUMMER_waterQuality;
+        String AUTUMN_waterQuality;
+        String WINTER_waterQuality;
+
+        if (getTypeFromString(EnviroUtils.getBiomeWater(biome)).isSalty) { // Because oceans don't become fresh in
+                                                                           // summer/winter
+            SPRING_waterQuality = EnviroUtils.getBiomeWater(biome);
+            SUMMER_waterQuality = getStringFromType(
+                forceSaltDown(heatUp(getTypeFromString(EnviroUtils.getBiomeWater(biome)))));
+            AUTUMN_waterQuality = EnviroUtils.getBiomeWater(biome);
+            WINTER_waterQuality = getStringFromType(
+                forceSaltDown(coolDown(getTypeFromString(EnviroUtils.getBiomeWater(biome)), 2)));
+        } else if (getTypeFromString(EnviroUtils.getBiomeWater(biome)).isDirty) { // Same with swamps
+            SPRING_waterQuality = EnviroUtils.getBiomeWater(biome);
+            SUMMER_waterQuality = getStringFromType(
+                forcePollute(heatUp(getTypeFromString(EnviroUtils.getBiomeWater(biome)))));
+            AUTUMN_waterQuality = EnviroUtils.getBiomeWater(biome);
+            WINTER_waterQuality = getStringFromType(
+                forcePollute(coolDown(getTypeFromString(EnviroUtils.getBiomeWater(biome)), 2)));
+        } else {
+            SPRING_waterQuality = EnviroUtils.getBiomeWater(biome);
+            SUMMER_waterQuality = getStringFromType(heatUp(getTypeFromString(EnviroUtils.getBiomeWater(biome))));
+            AUTUMN_waterQuality = EnviroUtils.getBiomeWater(biome);
+            WINTER_waterQuality = getStringFromType(coolDown(getTypeFromString(EnviroUtils.getBiomeWater(biome)), 2));
+        }
+
         double EARLY_SPRING_TEMPERATURE_DECREASE = (typeList.contains(Type.HOT) && typeList.contains(Type.SANDY)) ? -3.0
             : // DESERT (-8 (DEFAULT+8))
             typeList.contains(Type.JUNGLE) ? 0.0 : // JUNGLE (-5 (DEFAULT+5))
@@ -1001,7 +1077,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
                 DAY_TEMPERATURE_DECREASE,
                 DUSK_TEMPERATURE_DECREASE,
                 NIGHT_TEMPERATURE_DECREASE,
-                ambientTemp_TERRAFORMED);
+                ambientTemp_TERRAFORMED,
+                SPRING_waterQuality,
+                SUMMER_waterQuality,
+                AUTUMN_waterQuality,
+                WINTER_waterQuality);
         }
         if (EnviroMine.isHbmSpaceLoaded) {
             BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
@@ -1144,6 +1224,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
             .getDouble(dropSpeedRain);
         config.get(catName, BOName[43], dropSpeedThunder)
             .getDouble(dropSpeedThunder);
+
+        config.get(catName, BOName[44], SPRING_waterQuality, "Water Quality at spring")
+            .getString();
+        config.get(catName, BOName[45], SUMMER_waterQuality, "Water Quality at summer")
+            .getString();
+        config.get(catName, BOName[46], AUTUMN_waterQuality, "Water Quality at autumn")
+            .getString();
+        config.get(catName, BOName[47], WINTER_waterQuality, "Water Quality at winter")
+            .getString();
     }
 
     @Override
@@ -1155,7 +1244,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
     public void customLoad() {}
 
     static {
-        BOName = new String[44];
+        BOName = new String[48];
         BOName[0] = "01.Biome ID";
         BOName[1] = "02.Allow Config Override";
         BOName[2] = "03.Water Quality";
@@ -1164,41 +1253,45 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         BOName[5] = "06.Sanity Rate";
         BOName[6] = "07.Dehydrate Rate";
         BOName[7] = "08.Air Quality Rate";
-        BOName[8] = "10.Temperature Multiplier";
-        BOName[9] = "11.Dawn Biome Temperature Decrease";
-        BOName[10] = "12.Day Biome Temperature Decrease";
-        BOName[11] = "13.Dusk Biome Temperature Decrease";
-        BOName[12] = "14.Night Biome Temperature Decrease";
-        BOName[13] = "15.Biome Temperature Rain Decrease";
-        BOName[14] = "16.Biome Temperature Thunder Decrease";
-        BOName[15] = "17.Should Biome Temperature Decrease When Rain?";
-        BOName[16] = "18.Should Biome Temperature Decrease When Thunder?";
-        BOName[17] = "19.Biome Temperature Shadow Decrease";
-        BOName[18] = "20.[HBM] Ambient Temperature Terraformed";
-        BOName[19] = "21.[HBM] Dawn Biome Temperature Decrease Terraformed";
-        BOName[20] = "22.[HBM] Day Biome Temperature Decrease Terraformed";
-        BOName[21] = "23.[HBM] Dusk Biome Temperature Decrease Terraformed";
-        BOName[22] = "24.[HBM] Night Biome Temperature Decrease Terraformed";
-        BOName[23] = "25.[Serene Seasons] Early Spring Biome Temperature Decrease";
-        BOName[24] = "26.[Serene Seasons] Early Summer Biome Temperature Decrease";
-        BOName[25] = "27.[Serene Seasons] Early Winter Biome Temperature Decrease";
-        BOName[26] = "28.[Serene Seasons] Early Autumn Biome Temperature Decrease";
-        BOName[27] = "29.[Serene Seasons] Mid Spring Biome Temperature Decrease";
-        BOName[28] = "30.[Serene Seasons] Mid Summer Biome Temperature Decrease";
-        BOName[29] = "31.[Serene Seasons] Mid Winter Biome Temperature Decrease";
-        BOName[30] = "32.[Serene Seasons] Mid Autumn Biome Temperature Decrease";
-        BOName[31] = "33.[Serene Seasons] Late Spring Biome Temperature Decrease";
-        BOName[32] = "34.[Serene Seasons] Late Summer Biome Temperature Decrease";
-        BOName[33] = "35.[Serene Seasons] Late Winter Biome Temperature Decrease";
-        BOName[34] = "36.[Serene Seasons] Late Autumn Biome Temperature Decrease";
-        BOName[35] = "37.Dawn Biome Temperature Rate";
-        BOName[36] = "38.Day Biome Temperature Rate";
-        BOName[37] = "39.Dusk Biome Temperature Rate";
-        BOName[38] = "40.Night Biome Temperature Rate";
-        BOName[39] = "41.[HBM] Hard Biome Temperature Rate";
-        BOName[40] = "42.Ambient Temperature Decrease Water";
-        BOName[41] = "43.Drop Speed Water";
-        BOName[42] = "44.Drop Speed Rain";
-        BOName[43] = "45.Drop Speed Thunder";
+        BOName[8] = "9.Temperature Multiplier";
+        BOName[9] = "10.Dawn Biome Temperature Decrease";
+        BOName[10] = "11.Day Biome Temperature Decrease";
+        BOName[11] = "12.Dusk Biome Temperature Decrease";
+        BOName[12] = "13.Night Biome Temperature Decrease";
+        BOName[13] = "14.Biome Temperature Rain Decrease";
+        BOName[14] = "15.Biome Temperature Thunder Decrease";
+        BOName[15] = "16.Should Biome Temperature Decrease When Rain?";
+        BOName[16] = "17.Should Biome Temperature Decrease When Thunder?";
+        BOName[17] = "18.Biome Temperature Shadow Decrease";
+        BOName[18] = "19.[HBM] Ambient Temperature Terraformed";
+        BOName[19] = "20.[HBM] Dawn Biome Temperature Decrease Terraformed";
+        BOName[20] = "21.[HBM] Day Biome Temperature Decrease Terraformed";
+        BOName[21] = "22.[HBM] Dusk Biome Temperature Decrease Terraformed";
+        BOName[22] = "23.[HBM] Night Biome Temperature Decrease Terraformed";
+        BOName[23] = "24.[Serene Seasons] Early Spring Biome Temperature Decrease";
+        BOName[24] = "25.[Serene Seasons] Early Summer Biome Temperature Decrease";
+        BOName[25] = "26.[Serene Seasons] Early Winter Biome Temperature Decrease";
+        BOName[26] = "27.[Serene Seasons] Early Autumn Biome Temperature Decrease";
+        BOName[27] = "28.[Serene Seasons] Mid Spring Biome Temperature Decrease";
+        BOName[28] = "29.[Serene Seasons] Mid Summer Biome Temperature Decrease";
+        BOName[29] = "30.[Serene Seasons] Mid Winter Biome Temperature Decrease";
+        BOName[30] = "31.[Serene Seasons] Mid Autumn Biome Temperature Decrease";
+        BOName[31] = "32.[Serene Seasons] Late Spring Biome Temperature Decrease";
+        BOName[32] = "33.[Serene Seasons] Late Summer Biome Temperature Decrease";
+        BOName[33] = "34.[Serene Seasons] Late Winter Biome Temperature Decrease";
+        BOName[34] = "35.[Serene Seasons] Late Autumn Biome Temperature Decrease";
+        BOName[35] = "36.Dawn Biome Temperature Rate";
+        BOName[36] = "37.Day Biome Temperature Rate";
+        BOName[37] = "38.Dusk Biome Temperature Rate";
+        BOName[38] = "39.Night Biome Temperature Rate";
+        BOName[39] = "40.[HBM] Hard Biome Temperature Rate";
+        BOName[40] = "41.Ambient Temperature Decrease Water";
+        BOName[41] = "42.Drop Speed Water";
+        BOName[42] = "43.Drop Speed Rain";
+        BOName[43] = "44.Drop Speed Thunder";
+        BOName[44] = "45.[Serene Seasons] Water Quality Spring";
+        BOName[45] = "46.[Serene Seasons] Water Quality Summer";
+        BOName[46] = "47.[Serene Seasons] Water Quality Autumn";
+        BOName[47] = "48.[Serene Seasons] Water Quality Winter";
     }
 }

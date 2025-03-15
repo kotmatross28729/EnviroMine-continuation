@@ -944,7 +944,7 @@ public class EM_EventManager {
         Block block = world.getBlock(x, y, z);
 
         if (block != null) {
-            if (block instanceof BlockEnviroMineWater enviroMineWater) { // ENVIROMINE WATER
+            if (block instanceof BlockEnviroMineWater enviroMineWater) {
                 return WaterUtils.getTypeFromFluid(enviroMineWater.getFluid());
             } else if (block instanceof BlockCauldron) {
                 TileEntity te = world.getTileEntity(x, y, z);
@@ -961,7 +961,7 @@ public class EM_EventManager {
         BiomeProperties biomeProperties = EM_Settings.biomeProperties.get(biome.biomeID);
 
         if (biomeProperties != null) {
-            return biomeProperties.getWaterQuality();
+            return biomeProperties.getWaterQuality(world);
         }
 
         return WaterUtils.getTypeFromString(EnviroUtils.getBiomeWater(biome));
