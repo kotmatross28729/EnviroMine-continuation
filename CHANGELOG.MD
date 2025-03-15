@@ -13,6 +13,7 @@
 
 * **All logic for the Enviromine torch/coal has been moved to mixins (instead of completely replacing them with their Enviromine variants)**
   * [Torch] Added compatibility with netherlicious torches/lighters
+    * There is an option to enable the old, non-mixin torch system (oldTorchLogic) if you don't want to see burnt villages (villagers are stupid)
   * [Coal] Fixed fixes VERY old (and rare) bugs, like `NullPointerException` when Enviromine tried to replace vanilla coal with its own
 
 * **Gas rework v1** **[TODO]**

@@ -11,6 +11,12 @@ public class ConfigGeneral {
     public static void init(Configuration config) {
         int i = 0;
 
+        EM_Settings.oldTorchLogic = config.getBoolean(
+            String.format("%03d" + "_oldTorchLogic", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.oldTorchLogic,
+            "Enables old torch logic without mixins, enable this if you don't want to see burned villages");
+
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean(
             String.format("%03d" + "_PlayerInsanityRandomMobRender", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,

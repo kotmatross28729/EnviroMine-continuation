@@ -14,7 +14,9 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.blocks.compat.BlockOffTorch_Bone_Netherlicious;
+import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
+import enviromine.handlers.ObjectHandler;
 import enviromine.utils.misc.CompatSafe;
 
 @CompatSafe
@@ -56,7 +58,11 @@ public class BlockOffTorch extends BlockTorch {
                 }
             } else if (stack.getItem() == Items.flint_and_steel) {
                 if (!player.capabilities.isCreativeMode) stack.damageItem(1, player);
-                world.setBlock(i, j, k, Blocks.torch, world.getBlockMetadata(i, j, k), 3);
+                if (EM_Settings.oldTorchLogic) {
+                    world.setBlock(i, j, k, ObjectHandler.fireTorch, world.getBlockMetadata(i, j, k), 3);
+                } else {
+                    world.setBlock(i, j, k, Blocks.torch, world.getBlockMetadata(i, j, k), 3);
+                }
             }
         }
 

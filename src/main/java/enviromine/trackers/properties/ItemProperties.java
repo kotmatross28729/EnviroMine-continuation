@@ -424,41 +424,44 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
                             : 36.6F);
                 config.get(category, IPName[11], 0)
                     .getInt(0);
-                config.get(category, IPName[12], "")
+                config.get(category, IPName[12], item instanceof EnviroItemWaterBottle ? "minecraft:glass_bottle" : "")
                     .getString();
                 config.get(category, IPName[13], 0)
                     .getInt(0);
 
-                category = category + "_(water)";
+                // Water only, metadata = 0
+                if (item == Items.potionitem) {
+                    category = category + "_(water)";
 
-                config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
-                    .getString();
-                config.get(category, IPName[1], 0)
-                    .getInt(0);
-                config.get(category, IPName[2], false)
-                    .getBoolean(false);
-                config.get(category, IPName[3], 0D)
-                    .getDouble(0D);
-                config.get(category, IPName[4], 0D)
-                    .getDouble(0D);
-                config.get(category, IPName[5], 0D)
-                    .getDouble(0D);
-                config.get(category, IPName[6], EM_Settings.CLEAN_TemperatureInfluence)
-                    .getDouble(EM_Settings.CLEAN_TemperatureInfluence);
-                config.get(category, IPName[7], 0D)
-                    .getDouble(0D);
-                config.get(category, IPName[8], 0D)
-                    .getDouble(0D);
-                config.get(category, IPName[9], EM_Settings.CLEAN_Hydration)
-                    .getDouble(EM_Settings.CLEAN_Hydration);
-                config.get(category, IPName[10], EM_Settings.CLEAN_TempInfluenceCap)
-                    .getDouble(EM_Settings.CLEAN_TempInfluenceCap);
-                config.get(category, IPName[11], 25)
-                    .getInt(25);
-                config.get(category, IPName[12], "minecraft:glass_bottle")
-                    .getString();
-                config.get(category, IPName[13], 0)
-                    .getInt(0);
+                    config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
+                        .getString();
+                    config.get(category, IPName[1], 0)
+                        .getInt(0);
+                    config.get(category, IPName[2], false)
+                        .getBoolean(false);
+                    config.get(category, IPName[3], 0D)
+                        .getDouble(0D);
+                    config.get(category, IPName[4], 0D)
+                        .getDouble(0D);
+                    config.get(category, IPName[5], 0D)
+                        .getDouble(0D);
+                    config.get(category, IPName[6], EM_Settings.CLEAN_TemperatureInfluence)
+                        .getDouble(EM_Settings.CLEAN_TemperatureInfluence);
+                    config.get(category, IPName[7], 0D)
+                        .getDouble(0D);
+                    config.get(category, IPName[8], 0D)
+                        .getDouble(0D);
+                    config.get(category, IPName[9], EM_Settings.CLEAN_Hydration)
+                        .getDouble(EM_Settings.CLEAN_Hydration);
+                    config.get(category, IPName[10], EM_Settings.CLEAN_TempInfluenceCap)
+                        .getDouble(EM_Settings.CLEAN_TempInfluenceCap);
+                    config.get(category, IPName[11], 25)
+                        .getInt(25);
+                    config.get(category, IPName[12], "minecraft:glass_bottle")
+                        .getString();
+                    config.get(category, IPName[13], 0)
+                        .getInt(0);
+                }
             } else if (item == Items.melon || item == Items.carrot || item == Items.apple) {
                 config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
                     .getString();

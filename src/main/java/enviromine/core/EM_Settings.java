@@ -49,6 +49,8 @@ public class EM_Settings {
 
     // Fork changes
 
+    public static boolean oldTorchLogic = false;
+
     // EM_StatusManager
     public static float LavaBlockAmbientTemperature = 200F;
     public static float BurningambientTemperature = 75F;

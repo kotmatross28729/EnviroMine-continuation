@@ -47,7 +47,7 @@ public abstract class MixinBlockTorch extends Block {
 
     @Inject(method = "updateTick", at = @At(value = "HEAD"))
     protected void updateTick(World world, int x, int y, int z, Random rand, CallbackInfo ci) {
-        if (EM_Settings.torchesGoOut) {
+        if ((!EM_Settings.oldTorchLogic) && EM_Settings.torchesGoOut) {
             Block block = world.getBlock(x, y, z);
             int meta = world.getBlockMetadata(x, y, z);
             if (BlockProperties.base.hasProperty(block, meta)) {
@@ -86,7 +86,7 @@ public abstract class MixinBlockTorch extends Block {
             shift = At.Shift.AFTER))
     protected void updateTick2(World world, int x, int y, int z, Random rand, CallbackInfo ci) {
         // Don't go any further unless this torch is allowed to burn stuff
-        if (EM_Settings.torchesBurn
+        if ((!EM_Settings.oldTorchLogic) && EM_Settings.torchesBurn
             && (this != ObjectHandler.offTorch && this != ObjectHandler_Netherlicious.offTorchBone)) {
             world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world) + rand.nextInt(10));
 

@@ -15,6 +15,8 @@ import DelirusCrux.Netherlicious.Common.BlockItemUtility.ModBlocks;
 import DelirusCrux.Netherlicious.Common.BlockItemUtility.ModItems;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import enviromine.core.EM_Settings;
+import enviromine.handlers.ObjectHandler;
 
 public class BlockOffTorch_Bone_Netherlicious extends BlockTorch {
 
@@ -90,7 +92,13 @@ public class BlockOffTorch_Bone_Netherlicious extends BlockTorch {
             return ModBlocks.ShadowTorch;
         } else if (lighter.getItem() == Items.flint_and_steel) {
             if (!player.capabilities.isCreativeMode) lighter.damageItem(1, player);
-            return Blocks.torch;
+
+            if (EM_Settings.oldTorchLogic) {
+                return ObjectHandler.fireTorch;
+            } else {
+                return Blocks.torch;
+            }
+
         }
 
         return null;

@@ -33,6 +33,7 @@ import enviromine.blocks.BlockBurningCoal;
 import enviromine.blocks.BlockDavyLamp;
 import enviromine.blocks.BlockElevator;
 import enviromine.blocks.BlockEsky;
+import enviromine.blocks.BlockFireTorch;
 import enviromine.blocks.BlockFreezer;
 import enviromine.blocks.BlockGas;
 import enviromine.blocks.BlockNoPhysics;
@@ -100,6 +101,9 @@ public class ObjectHandler {
     public static Block gasBlock;
     public static Block fireGasBlock;
     public static Block burningCoal;
+
+    public static Block fireTorch;
+
     public static Block offTorch;
 
     public static Block esky;
@@ -280,6 +284,11 @@ public class ObjectHandler {
 
         burningCoal = new BlockBurningCoal(Material.rock).setBlockName("enviromine.burningcoal")
             .setCreativeTab(EnviroMine.enviroTab);
+        fireTorch = new BlockFireTorch().setTickRandomly(true)
+            .setBlockName("torch")
+            .setBlockTextureName("torch_on")
+            .setLightLevel(0.9375F)
+            .setCreativeTab(EnviroMine.enviroTab);
         offTorch = new BlockOffTorch().setTickRandomly(false)
             .setBlockName("torch")
             .setBlockTextureName("enviromine:torch_off")
@@ -316,6 +325,7 @@ public class ObjectHandler {
         GameRegistry.registerBlock(fireGasBlock, "firegas");
         GameRegistry.registerBlock(elevator, ItemElevator.class, "elevator");
         GameRegistry.registerBlock(davyLampBlock, ItemDavyLamp.class, "davy_lamp");
+        GameRegistry.registerBlock(fireTorch, "firetorch");
         GameRegistry.registerBlock(offTorch, "offtorch");
         GameRegistry.registerBlock(burningCoal, "burningcoal");
         GameRegistry.registerBlock(esky, "esky");
@@ -1063,7 +1073,10 @@ public class ObjectHandler {
             new ItemStack(davyLampBlock, 1, 1),
             new ItemStack(davyLampBlock, 1, 0),
             new ItemStack(Blocks.torch));
-
+        GameRegistry.addShapelessRecipe(
+            new ItemStack(davyLampBlock, 1, 1),
+            new ItemStack(davyLampBlock, 1, 0),
+            new ItemStack(fireTorch));
         GameRegistry.addRecipe(
             new ItemStack(esky),
             "xxx",
@@ -1132,7 +1145,7 @@ public class ObjectHandler {
     public static String[] DefaultIgnitionSources() {
         String[] list = new String[] { "minecraft:flowing_lava", "minecraft:lava", "minecraft:torch",
             "minecraft:lit_furnace", "minecraft:fire", "minecraft:lit_pumpkin", "minecraft:lava_bucket",
-            "enviromine:firegas", "enviromine:burningcoal", "campfirebackport:campfire",
+            "enviromine:firegas", "enviromine:burningcoal", "enviromine:firetorch", "campfirebackport:campfire",
             "campfirebackport:soul_campfire", "CarpentersBlocks:blockCarpentersTorch", "CaveBiomes:stone_lavacrust",
             "chisel:jackolantern1", "chisel:jackolantern2", "chisel:jackolantern3", "chisel:jackolantern4",
             "chisel:jackolantern5", "chisel:jackolantern6", "chisel:jackolantern7", "chisel:jackolantern8",
