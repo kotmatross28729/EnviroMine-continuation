@@ -34,8 +34,6 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
     public int id;
     public boolean biomeOveride;
-
-    // TODO: serene seasons compat, water quality changes with season
     public String waterQuality;
     public float ambientTemp;
     public float tempRate;
@@ -44,10 +42,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
     public float airRate;
     public String loadedFrom;
     public float TemperatureMultiplier;
-    public float DAWN_TEMPERATURE;
-    public float DAY_TEMPERATURE;
-    public float DUSK_TEMPERATURE;
-    public float NIGHT_TEMPERATURE;
+    public float DAWN_TEMPERATURE_DECREASE;
+    public float DAY_TEMPERATURE_DECREASE;
+    public float DUSK_TEMPERATURE_DECREASE;
+    public float NIGHT_TEMPERATURE_DECREASE;
 
     public float TemperatureRainDecrease;
     public float TemperatureThunderDecrease;
@@ -56,10 +54,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
     public float TemperatureShadeDecrease;
 
     public float ambientTemp_TERRAFORMED;
-    public float DAWN_TEMPERATURE_TERRAFORMED;
-    public float DAY_TEMPERATURE_TERRAFORMED;
-    public float DUSK_TEMPERATURE_TERRAFORMED;
-    public float NIGHT_TEMPERATURE_TERRAFORMED;
+    public float DAWN_TEMPERATURE_DECREASE_TERRAFORMED;
+    public float DAY_TEMPERATURE_DECREASE_TERRAFORMED;
+    public float DUSK_TEMPERATURE_DECREASE_TERRAFORMED;
+    public float NIGHT_TEMPERATURE_DECREASE_TERRAFORMED;
 
     public float EARLY_SPRING_TEMPERATURE_DECREASE;
     public float EARLY_SUMMER_TEMPERATURE_DECREASE;
@@ -101,13 +99,15 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
     public BiomeProperties(int id, boolean biomeOveride, String waterQuality, float ambientTemp, float tempRate,
         float sanityRate, float dehydrateRate, float airRate, String filename, float TemperatureMultiplier,
 
-        float DAWN_TEMPERATURE, float DAY_TEMPERATURE, float DUSK_TEMPERATURE, float NIGHT_TEMPERATURE,
+        float DAWN_TEMPERATURE_DECREASE, float DAY_TEMPERATURE_DECREASE, float DUSK_TEMPERATURE_DECREASE,
+        float NIGHT_TEMPERATURE_DECREASE,
 
         float TemperatureRainDecrease, float TemperatureThunderDecrease, boolean TemperatureRainBool,
         boolean TemperatureThunderBool, float TemperatureShadeDecrease,
 
-        float ambientTemp_TERRAFORMED, float DAWN_TEMPERATURE_TERRAFORMED, float DAY_TEMPERATURE_TERRAFORMED,
-        float DUSK_TEMPERATURE_TERRAFORMED, float NIGHT_TEMPERATURE_TERRAFORMED,
+        float ambientTemp_TERRAFORMED, float DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
+        float DAY_TEMPERATURE_DECREASE_TERRAFORMED, float DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
+        float NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
 
         float EARLY_SPRING_TEMPERATURE_DECREASE, float EARLY_SUMMER_TEMPERATURE_DECREASE,
         float EARLY_WINTER_TEMPERATURE_DECREASE, float EARLY_AUTUMN_TEMPERATURE_DECREASE,
@@ -128,10 +128,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         this.loadedFrom = filename;
         this.TemperatureMultiplier = TemperatureMultiplier;
 
-        this.DAWN_TEMPERATURE = DAWN_TEMPERATURE;
-        this.DAY_TEMPERATURE = DAY_TEMPERATURE;
-        this.DUSK_TEMPERATURE = DUSK_TEMPERATURE;
-        this.NIGHT_TEMPERATURE = NIGHT_TEMPERATURE;
+        this.DAWN_TEMPERATURE_DECREASE = DAWN_TEMPERATURE_DECREASE;
+        this.DAY_TEMPERATURE_DECREASE = DAY_TEMPERATURE_DECREASE;
+        this.DUSK_TEMPERATURE_DECREASE = DUSK_TEMPERATURE_DECREASE;
+        this.NIGHT_TEMPERATURE_DECREASE = NIGHT_TEMPERATURE_DECREASE;
 
         this.TemperatureRainDecrease = TemperatureRainDecrease;
         this.TemperatureThunderDecrease = TemperatureThunderDecrease;
@@ -140,10 +140,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         this.TemperatureShadeDecrease = TemperatureShadeDecrease;
 
         this.ambientTemp_TERRAFORMED = ambientTemp_TERRAFORMED;
-        this.DAWN_TEMPERATURE_TERRAFORMED = DAWN_TEMPERATURE_TERRAFORMED;
-        this.DAY_TEMPERATURE_TERRAFORMED = DAY_TEMPERATURE_TERRAFORMED;
-        this.DUSK_TEMPERATURE_TERRAFORMED = DUSK_TEMPERATURE_TERRAFORMED;
-        this.NIGHT_TEMPERATURE_TERRAFORMED = NIGHT_TEMPERATURE_TERRAFORMED;
+        this.DAWN_TEMPERATURE_DECREASE_TERRAFORMED = DAWN_TEMPERATURE_DECREASE_TERRAFORMED;
+        this.DAY_TEMPERATURE_DECREASE_TERRAFORMED = DAY_TEMPERATURE_DECREASE_TERRAFORMED;
+        this.DUSK_TEMPERATURE_DECREASE_TERRAFORMED = DUSK_TEMPERATURE_DECREASE_TERRAFORMED;
+        this.NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = NIGHT_TEMPERATURE_DECREASE_TERRAFORMED;
 
         this.EARLY_SPRING_TEMPERATURE_DECREASE = EARLY_SPRING_TEMPERATURE_DECREASE;
         this.EARLY_SUMMER_TEMPERATURE_DECREASE = EARLY_SUMMER_TEMPERATURE_DECREASE;
@@ -229,10 +229,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         tags.setFloat("dehydrateRate", this.dehydrateRate);
         tags.setFloat("TemperatureMultiplier", this.TemperatureMultiplier);
 
-        tags.setFloat("DAWN_TEMPERATURE", this.DAWN_TEMPERATURE);
-        tags.setFloat("DAY_TEMPERATURE", this.DAY_TEMPERATURE);
-        tags.setFloat("DUSK_TEMPERATURE", this.DUSK_TEMPERATURE);
-        tags.setFloat("NIGHT_TEMPERATURE", this.NIGHT_TEMPERATURE);
+        tags.setFloat("DAWN_TEMPERATURE_DECREASE", this.DAWN_TEMPERATURE_DECREASE);
+        tags.setFloat("DAY_TEMPERATURE_DECREASE", this.DAY_TEMPERATURE_DECREASE);
+        tags.setFloat("DUSK_TEMPERATURE_DECREASE", this.DUSK_TEMPERATURE_DECREASE);
+        tags.setFloat("NIGHT_TEMPERATURE_DECREASE", this.NIGHT_TEMPERATURE_DECREASE);
 
         tags.setFloat("TemperatureRainDecrease", this.TemperatureRainDecrease);
         tags.setFloat("TemperatureThunderDecrease", this.TemperatureThunderDecrease);
@@ -241,10 +241,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         tags.setFloat("TemperatureShadeDecrease", this.TemperatureShadeDecrease);
 
         tags.setFloat("ambientTemp_TERRAFORMED", this.ambientTemp_TERRAFORMED);
-        tags.setFloat("DAWN_TEMPERATURE_TERRAFORMED", this.DAWN_TEMPERATURE_TERRAFORMED);
-        tags.setFloat("DAY_TEMPERATURE_TERRAFORMED", this.DAY_TEMPERATURE_TERRAFORMED);
-        tags.setFloat("DUSK_TEMPERATURE_TERRAFORMED", this.DUSK_TEMPERATURE_TERRAFORMED);
-        tags.setFloat("NIGHT_TEMPERATURE_TERRAFORMED", this.NIGHT_TEMPERATURE_TERRAFORMED);
+        tags.setFloat("DAWN_TEMPERATURE_DECREASE_TERRAFORMED", this.DAWN_TEMPERATURE_DECREASE_TERRAFORMED);
+        tags.setFloat("DAY_TEMPERATURE_DECREASE_TERRAFORMED", this.DAY_TEMPERATURE_DECREASE_TERRAFORMED);
+        tags.setFloat("DUSK_TEMPERATURE_DECREASE_TERRAFORMED", this.DUSK_TEMPERATURE_DECREASE_TERRAFORMED);
+        tags.setFloat("NIGHT_TEMPERATURE_DECREASE_TERRAFORMED", this.NIGHT_TEMPERATURE_DECREASE_TERRAFORMED);
 
         tags.setFloat("EARLY_SPRING_TEMPERATURE_DECREASE", this.EARLY_SPRING_TEMPERATURE_DECREASE);
         tags.setFloat("EARLY_SUMMER_TEMPERATURE_DECREASE", this.EARLY_SUMMER_TEMPERATURE_DECREASE);
@@ -286,10 +286,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         this.dehydrateRate = tags.getFloat("dehydrateRate");
         this.TemperatureMultiplier = tags.getFloat("TemperatureMultiplier");
 
-        this.DAWN_TEMPERATURE = tags.getFloat("DAWN_TEMPERATURE");
-        this.DAY_TEMPERATURE = tags.getFloat("DAY_TEMPERATURE");
-        this.DUSK_TEMPERATURE = tags.getFloat("DUSK_TEMPERATURE");
-        this.NIGHT_TEMPERATURE = tags.getFloat("NIGHT_TEMPERATURE");
+        this.DAWN_TEMPERATURE_DECREASE = tags.getFloat("DAWN_TEMPERATURE_DECREASE");
+        this.DAY_TEMPERATURE_DECREASE = tags.getFloat("DAY_TEMPERATURE_DECREASE");
+        this.DUSK_TEMPERATURE_DECREASE = tags.getFloat("DUSK_TEMPERATURE_DECREASE");
+        this.NIGHT_TEMPERATURE_DECREASE = tags.getFloat("NIGHT_TEMPERATURE_DECREASE");
 
         this.TemperatureRainDecrease = tags.getFloat("TemperatureRainDecrease");
         this.TemperatureThunderDecrease = tags.getFloat("TemperatureThunderDecrease");
@@ -298,10 +298,10 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         this.TemperatureShadeDecrease = tags.getFloat("TemperatureShadeDecrease");
 
         this.ambientTemp_TERRAFORMED = tags.getFloat("ambientTemp_TERRAFORMED");
-        this.DAWN_TEMPERATURE_TERRAFORMED = tags.getFloat("DAWN_TEMPERATURE_TERRAFORMED");
-        this.DAY_TEMPERATURE_TERRAFORMED = tags.getFloat("DAY_TEMPERATURE_TERRAFORMED");
-        this.DUSK_TEMPERATURE_TERRAFORMED = tags.getFloat("DUSK_TEMPERATURE_TERRAFORMED");
-        this.NIGHT_TEMPERATURE_TERRAFORMED = tags.getFloat("NIGHT_TEMPERATURE_TERRAFORMED");
+        this.DAWN_TEMPERATURE_DECREASE_TERRAFORMED = tags.getFloat("DAWN_TEMPERATURE_DECREASE_TERRAFORMED");
+        this.DAY_TEMPERATURE_DECREASE_TERRAFORMED = tags.getFloat("DAY_TEMPERATURE_DECREASE_TERRAFORMED");
+        this.DUSK_TEMPERATURE_DECREASE_TERRAFORMED = tags.getFloat("DUSK_TEMPERATURE_DECREASE_TERRAFORMED");
+        this.NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = tags.getFloat("NIGHT_TEMPERATURE_DECREASE_TERRAFORMED");
 
         this.EARLY_SPRING_TEMPERATURE_DECREASE = tags.getFloat("EARLY_SPRING_TEMPERATURE_DECREASE");
         this.EARLY_SUMMER_TEMPERATURE_DECREASE = tags.getFloat("EARLY_SUMMER_TEMPERATURE_DECREASE");
@@ -386,13 +386,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         float TemperatureMultiplier = (float) config.get(category, BOName[8], 1.0)
             .getDouble(1.0);
 
-        float DAWN_TEMPERATURE = (float) config.get(category, BOName[9], 4.0)
+        float DAWN_TEMPERATURE_DECREASE = (float) config.get(category, BOName[9], 4.0)
             .getDouble(4.0);
-        float DAY_TEMPERATURE = (float) config.get(category, BOName[10], 0.0)
+        float DAY_TEMPERATURE_DECREASE = (float) config.get(category, BOName[10], 0.0)
             .getDouble(0.0);
-        float DUSK_TEMPERATURE = (float) config.get(category, BOName[11], 4.0)
+        float DUSK_TEMPERATURE_DECREASE = (float) config.get(category, BOName[11], 4.0)
             .getDouble(4.0);
-        float NIGHT_TEMPERATURE = (float) config.get(category, BOName[12], 8.0)
+        float NIGHT_TEMPERATURE_DECREASE = (float) config.get(category, BOName[12], 8.0)
             .getDouble(8.0);
 
         float TemperatureRainDecrease = (float) config.get(category, BOName[13], 6.0)
@@ -409,13 +409,13 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
         float ambientTemp_TERRAFORMED = (float) config.get(category, BOName[18], 25.0)
             .getDouble(25.0);
-        float DAWN_TEMPERATURE_TERRAFORMED = (float) config.get(category, BOName[19], 4.0)
+        float DAWN_TEMPERATURE_DECREASE_TERRAFORMED = (float) config.get(category, BOName[19], 4.0)
             .getDouble(4.0);
-        float DAY_TEMPERATURE_TERRAFORMED = (float) config.get(category, BOName[20], 0.0)
+        float DAY_TEMPERATURE_DECREASE_TERRAFORMED = (float) config.get(category, BOName[20], 0.0)
             .getDouble(0.0);
-        float DUSK_TEMPERATURE_TERRAFORMED = (float) config.get(category, BOName[21], 4.0)
+        float DUSK_TEMPERATURE_DECREASE_TERRAFORMED = (float) config.get(category, BOName[21], 4.0)
             .getDouble(4.0);
-        float NIGHT_TEMPERATURE_TERRAFORMED = (float) config.get(category, BOName[22], 8.0)
+        float NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = (float) config.get(category, BOName[22], 8.0)
             .getDouble(8.0);
 
         float EARLY_SPRING_TEMPERATURE_DECREASE = (float) config.get(category, BOName[23], 5.0)
@@ -476,20 +476,20 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
             airRate,
             filename,
             TemperatureMultiplier,
-            DAWN_TEMPERATURE,
-            DAY_TEMPERATURE,
-            DUSK_TEMPERATURE,
-            NIGHT_TEMPERATURE,
+            DAWN_TEMPERATURE_DECREASE,
+            DAY_TEMPERATURE_DECREASE,
+            DUSK_TEMPERATURE_DECREASE,
+            NIGHT_TEMPERATURE_DECREASE,
             TemperatureRainDecrease,
             TemperatureThunderDecrease,
             TemperatureRainBool,
             TemperatureThunderBool,
             TemperatureShadeDecrease,
             ambientTemp_TERRAFORMED,
-            DAWN_TEMPERATURE_TERRAFORMED,
-            DAY_TEMPERATURE_TERRAFORMED,
-            DUSK_TEMPERATURE_TERRAFORMED,
-            NIGHT_TEMPERATURE_TERRAFORMED,
+            DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
+            DAY_TEMPERATURE_DECREASE_TERRAFORMED,
+            DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
+            NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
             EARLY_SPRING_TEMPERATURE_DECREASE,
             EARLY_SUMMER_TEMPERATURE_DECREASE,
             EARLY_WINTER_TEMPERATURE_DECREASE,
@@ -575,20 +575,34 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
                 "The temperatureChange will be multiplied by this number")
             .getDouble(this.TemperatureMultiplier);
 
-        config.get(category, BOName[9], this.DAWN_TEMPERATURE, "Biome temperature will decrease by this amount at dawn")
-            .getDouble(this.DAWN_TEMPERATURE);
-        config.get(category, BOName[10], this.DAY_TEMPERATURE, "Biome temperature will decrease by this amount at day")
-            .getDouble(this.DAY_TEMPERATURE);
         config
-            .get(category, BOName[11], this.DUSK_TEMPERATURE, "Biome temperature will decrease by this amount at dusk")
-            .getDouble(this.DUSK_TEMPERATURE);
+            .get(
+                category,
+                BOName[9],
+                this.DAWN_TEMPERATURE_DECREASE,
+                "Biome temperature will decrease by this amount at dawn")
+            .getDouble(this.DAWN_TEMPERATURE_DECREASE);
+        config
+            .get(
+                category,
+                BOName[10],
+                this.DAY_TEMPERATURE_DECREASE,
+                "Biome temperature will decrease by this amount at day")
+            .getDouble(this.DAY_TEMPERATURE_DECREASE);
+        config
+            .get(
+                category,
+                BOName[11],
+                this.DUSK_TEMPERATURE_DECREASE,
+                "Biome temperature will decrease by this amount at dusk")
+            .getDouble(this.DUSK_TEMPERATURE_DECREASE);
         config
             .get(
                 category,
                 BOName[12],
-                this.NIGHT_TEMPERATURE,
+                this.NIGHT_TEMPERATURE_DECREASE,
                 "Biome temperature will decrease by this amount at midnight")
-            .getDouble(this.NIGHT_TEMPERATURE);
+            .getDouble(this.NIGHT_TEMPERATURE_DECREASE);
 
         config
             .get(
@@ -633,30 +647,30 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
             .get(
                 category,
                 BOName[19],
-                this.DAWN_TEMPERATURE_TERRAFORMED,
+                this.DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
                 "Biome temperature will decrease by this amount at dawn if the planet is terraformed")
-            .getDouble(this.DAWN_TEMPERATURE_TERRAFORMED);
+            .getDouble(this.DAWN_TEMPERATURE_DECREASE_TERRAFORMED);
         config
             .get(
                 category,
                 BOName[20],
-                this.DAY_TEMPERATURE_TERRAFORMED,
+                this.DAY_TEMPERATURE_DECREASE_TERRAFORMED,
                 "Biome temperature will decrease by this amount at day if the planet is terraformed")
-            .getDouble(this.DAY_TEMPERATURE_TERRAFORMED);
+            .getDouble(this.DAY_TEMPERATURE_DECREASE_TERRAFORMED);
         config
             .get(
                 category,
                 BOName[21],
-                this.DUSK_TEMPERATURE_TERRAFORMED,
+                this.DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
                 "Biome temperature will decrease by this amount at dusk if the planet is terraformed")
-            .getDouble(this.DUSK_TEMPERATURE_TERRAFORMED);
+            .getDouble(this.DUSK_TEMPERATURE_DECREASE_TERRAFORMED);
         config
             .get(
                 category,
                 BOName[22],
-                this.NIGHT_TEMPERATURE_TERRAFORMED,
+                this.NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
                 "Biome temperature will decrease by this amount at midnight if the planet is terraformed")
-            .getDouble(this.NIGHT_TEMPERATURE_TERRAFORMED);
+            .getDouble(this.NIGHT_TEMPERATURE_DECREASE_TERRAFORMED);
 
         config
             .get(
@@ -864,16 +878,16 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         String biomeWater = EnviroUtils.getBiomeWater(biome);
 
         double biomeTemp = EnviroUtils.getBiomeTemp(biome);
-        double DAWN_TEMPERATURE = 4D;
-        double DAY_TEMPERATURE = 0D;
-        double DUSK_TEMPERATURE = 4D;
-        double NIGHT_TEMPERATURE = 8D;
+        double DAWN_TEMPERATURE_DECREASE = 4D;
+        double DAY_TEMPERATURE_DECREASE = 0D;
+        double DUSK_TEMPERATURE_DECREASE = 4D;
+        double NIGHT_TEMPERATURE_DECREASE = 8D;
 
         double ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
-        double DAWN_TEMPERATURE_TERRAFORMED = 4F;
-        double DAY_TEMPERATURE_TERRAFORMED = 0F;
-        double DUSK_TEMPERATURE_TERRAFORMED = 4F;
-        double NIGHT_TEMPERATURE_TERRAFORMED = 8F;
+        double DAWN_TEMPERATURE_DECREASE_TERRAFORMED = 4F;
+        double DAY_TEMPERATURE_DECREASE_TERRAFORMED = 0F;
+        double DUSK_TEMPERATURE_DECREASE_TERRAFORMED = 4F;
+        double NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = 8F;
 
         double tempRate_DAWN = temp;
         double tempRate_DAY = temp;
@@ -983,46 +997,11 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
                 BOName,
                 biomeWater,
                 biomeTemp,
-                temp,
-                sanity,
-                water,
-                air,
-                TemperatureMultiplier,
-                DAWN_TEMPERATURE,
-                DAY_TEMPERATURE,
-                DUSK_TEMPERATURE,
-                NIGHT_TEMPERATURE,
-                TemperatureRainDecrease,
-                TemperatureThunderDecrease,
-                TemperatureRainBool,
-                TemperatureThunderBool,
-                TemperatureShadeDecrease,
-                ambientTemp_TERRAFORMED,
-                DAWN_TEMPERATURE_TERRAFORMED,
-                DAY_TEMPERATURE_TERRAFORMED,
-                DUSK_TEMPERATURE_TERRAFORMED,
-                NIGHT_TEMPERATURE_TERRAFORMED,
-                EARLY_SPRING_TEMPERATURE_DECREASE,
-                EARLY_SUMMER_TEMPERATURE_DECREASE,
-                EARLY_WINTER_TEMPERATURE_DECREASE,
-                EARLY_AUTUMN_TEMPERATURE_DECREASE,
-                MID_SPRING_TEMPERATURE_DECREASE,
-                MID_SUMMER_TEMPERATURE_DECREASE,
-                MID_WINTER_TEMPERATURE_DECREASE,
-                MID_AUTUMN_TEMPERATURE_DECREASE,
-                LATE_SPRING_TEMPERATURE_DECREASE,
-                LATE_SUMMER_TEMPERATURE_DECREASE,
-                LATE_WINTER_TEMPERATURE_DECREASE,
-                LATE_AUTUMN_TEMPERATURE_DECREASE,
-                tempRate_DAWN,
-                tempRate_DAY,
-                tempRate_DUSK,
-                tempRate_NIGHT,
-                tempRate_HARD,
-                TemperatureWaterDecrease,
-                dropSpeedWater,
-                dropSpeedRain,
-                dropSpeedThunder);
+                DAWN_TEMPERATURE_DECREASE,
+                DAY_TEMPERATURE_DECREASE,
+                DUSK_TEMPERATURE_DECREASE,
+                NIGHT_TEMPERATURE_DECREASE,
+                ambientTemp_TERRAFORMED);
         }
         if (EnviroMine.isHbmSpaceLoaded) {
             BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
@@ -1031,46 +1010,20 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
                 BOName,
                 biomeWater,
                 biomeTemp,
-                temp,
-                sanity,
-                water,
-                air,
-                TemperatureMultiplier,
-                DAWN_TEMPERATURE,
-                DAY_TEMPERATURE,
-                DUSK_TEMPERATURE,
-                NIGHT_TEMPERATURE,
-                TemperatureRainDecrease,
-                TemperatureThunderDecrease,
-                TemperatureRainBool,
-                TemperatureThunderBool,
-                TemperatureShadeDecrease,
+                DAWN_TEMPERATURE_DECREASE,
+                DAY_TEMPERATURE_DECREASE,
+                DUSK_TEMPERATURE_DECREASE,
+                NIGHT_TEMPERATURE_DECREASE,
                 ambientTemp_TERRAFORMED,
-                DAWN_TEMPERATURE_TERRAFORMED,
-                DAY_TEMPERATURE_TERRAFORMED,
-                DUSK_TEMPERATURE_TERRAFORMED,
-                NIGHT_TEMPERATURE_TERRAFORMED,
-                EARLY_SPRING_TEMPERATURE_DECREASE,
-                EARLY_SUMMER_TEMPERATURE_DECREASE,
-                EARLY_WINTER_TEMPERATURE_DECREASE,
-                EARLY_AUTUMN_TEMPERATURE_DECREASE,
-                MID_SPRING_TEMPERATURE_DECREASE,
-                MID_SUMMER_TEMPERATURE_DECREASE,
-                MID_WINTER_TEMPERATURE_DECREASE,
-                MID_AUTUMN_TEMPERATURE_DECREASE,
-                LATE_SPRING_TEMPERATURE_DECREASE,
-                LATE_SUMMER_TEMPERATURE_DECREASE,
-                LATE_WINTER_TEMPERATURE_DECREASE,
-                LATE_AUTUMN_TEMPERATURE_DECREASE,
+                DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
+                DAY_TEMPERATURE_DECREASE_TERRAFORMED,
+                DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
+                NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
                 tempRate_DAWN,
                 tempRate_DAY,
                 tempRate_DUSK,
                 tempRate_NIGHT,
-                tempRate_HARD,
-                TemperatureWaterDecrease,
-                dropSpeedWater,
-                dropSpeedRain,
-                dropSpeedThunder);
+                tempRate_HARD);
         }
 
         String catName = this.categoryName() + "." + biome.biomeName;
@@ -1114,14 +1067,14 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         config.get(catName, BOName[8], TemperatureMultiplier)
             .getDouble(TemperatureMultiplier);
 
-        config.get(catName, BOName[9], DAWN_TEMPERATURE)
-            .getDouble(DAWN_TEMPERATURE);
-        config.get(catName, BOName[10], DAY_TEMPERATURE)
-            .getDouble(DAY_TEMPERATURE);
-        config.get(catName, BOName[11], DUSK_TEMPERATURE)
-            .getDouble(DUSK_TEMPERATURE);
-        config.get(catName, BOName[12], NIGHT_TEMPERATURE)
-            .getDouble(NIGHT_TEMPERATURE);
+        config.get(catName, BOName[9], DAWN_TEMPERATURE_DECREASE)
+            .getDouble(DAWN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[10], DAY_TEMPERATURE_DECREASE)
+            .getDouble(DAY_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[11], DUSK_TEMPERATURE_DECREASE)
+            .getDouble(DUSK_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[12], NIGHT_TEMPERATURE_DECREASE)
+            .getDouble(NIGHT_TEMPERATURE_DECREASE);
 
         config.get(catName, BOName[13], TemperatureRainDecrease)
             .getDouble(TemperatureRainDecrease);
@@ -1136,14 +1089,14 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
         config.get(catName, BOName[18], ambientTemp_TERRAFORMED)
             .getDouble(ambientTemp_TERRAFORMED);
-        config.get(catName, BOName[19], DAWN_TEMPERATURE_TERRAFORMED)
-            .getDouble(DAWN_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[20], DAY_TEMPERATURE_TERRAFORMED)
-            .getDouble(DAY_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[21], DUSK_TEMPERATURE_TERRAFORMED)
-            .getDouble(DUSK_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[22], NIGHT_TEMPERATURE_TERRAFORMED)
-            .getDouble(NIGHT_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[19], DAWN_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(DAWN_TEMPERATURE_DECREASE_TERRAFORMED);
+        config.get(catName, BOName[20], DAY_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(DAY_TEMPERATURE_DECREASE_TERRAFORMED);
+        config.get(catName, BOName[21], DUSK_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(DUSK_TEMPERATURE_DECREASE_TERRAFORMED);
+        config.get(catName, BOName[22], NIGHT_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(NIGHT_TEMPERATURE_DECREASE_TERRAFORMED);
 
         config.get(catName, BOName[23], EARLY_SPRING_TEMPERATURE_DECREASE)
             .getDouble(EARLY_SPRING_TEMPERATURE_DECREASE);

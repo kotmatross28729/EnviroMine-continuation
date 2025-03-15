@@ -526,15 +526,15 @@ public class EM_StatusManager {
             || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp)) {
             float TemperatureMultiplier = 1F;
 
-            float biome_DAWN_TEMPERATURE = 4F;
-            float biome_DAY_TEMPERATURE = 0F;
-            float biome_DUSK_TEMPERATURE = 4F;
-            float biome_NIGHT_TEMPERATURE = 8F;
+            float biome_DAWN_TEMPERATURE_DECREASE = 4F;
+            float biome_DAY_TEMPERATURE_DECREASE = 0F;
+            float biome_DUSK_TEMPERATURE_DECREASE = 4F;
+            float biome_NIGHT_TEMPERATURE_DECREASE = 8F;
 
-            float biome_DAWN_TEMPERATURE_TERRAFORMED = 4F;
-            float biome_DAY_TEMPERATURE_TERRAFORMED = 0F;
-            float biome_DUSK_TEMPERATURE_TERRAFORMED = 4F;
-            float biome_NIGHT_TEMPERATURE_TERRAFORMED = 8F;
+            float biome_DAWN_TEMPERATURE_DECREASE_TERRAFORMED = 4F;
+            float biome_DAY_TEMPERATURE_DECREASE_TERRAFORMED = 0F;
+            float biome_DUSK_TEMPERATURE_DECREASE_TERRAFORMED = 4F;
+            float biome_NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = 8F;
 
             float biome_EARLY_SPRING_TEMPERATURE_DECREASE = 5.0F;
             float biome_MID_SPRING_TEMPERATURE_DECREASE = -2.0F;
@@ -557,15 +557,15 @@ public class EM_StatusManager {
                 if (biomeOverride != null && biomeOverride.biomeOveride) {
                     TemperatureMultiplier = biomeOverride.TemperatureMultiplier;
 
-                    biome_DAWN_TEMPERATURE = biomeOverride.DAWN_TEMPERATURE;
-                    biome_DAY_TEMPERATURE = biomeOverride.DAY_TEMPERATURE;
-                    biome_DUSK_TEMPERATURE = biomeOverride.DUSK_TEMPERATURE;
-                    biome_NIGHT_TEMPERATURE = biomeOverride.NIGHT_TEMPERATURE;
+                    biome_DAWN_TEMPERATURE_DECREASE = biomeOverride.DAWN_TEMPERATURE_DECREASE;
+                    biome_DAY_TEMPERATURE_DECREASE = biomeOverride.DAY_TEMPERATURE_DECREASE;
+                    biome_DUSK_TEMPERATURE_DECREASE = biomeOverride.DUSK_TEMPERATURE_DECREASE;
+                    biome_NIGHT_TEMPERATURE_DECREASE = biomeOverride.NIGHT_TEMPERATURE_DECREASE;
 
-                    biome_DAWN_TEMPERATURE_TERRAFORMED = biomeOverride.DAWN_TEMPERATURE_TERRAFORMED;
-                    biome_DAY_TEMPERATURE_TERRAFORMED = biomeOverride.DAY_TEMPERATURE_TERRAFORMED;
-                    biome_DUSK_TEMPERATURE_TERRAFORMED = biomeOverride.DUSK_TEMPERATURE_TERRAFORMED;
-                    biome_NIGHT_TEMPERATURE_TERRAFORMED = biomeOverride.NIGHT_TEMPERATURE_TERRAFORMED;
+                    biome_DAWN_TEMPERATURE_DECREASE_TERRAFORMED = biomeOverride.DAWN_TEMPERATURE_DECREASE_TERRAFORMED;
+                    biome_DAY_TEMPERATURE_DECREASE_TERRAFORMED = biomeOverride.DAY_TEMPERATURE_DECREASE_TERRAFORMED;
+                    biome_DUSK_TEMPERATURE_DECREASE_TERRAFORMED = biomeOverride.DUSK_TEMPERATURE_DECREASE_TERRAFORMED;
+                    biome_NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = biomeOverride.NIGHT_TEMPERATURE_DECREASE_TERRAFORMED;
 
                     biome_EARLY_SPRING_TEMPERATURE_DECREASE = biomeOverride.EARLY_SPRING_TEMPERATURE_DECREASE;
                     biome_MID_SPRING_TEMPERATURE_DECREASE = biomeOverride.MID_SPRING_TEMPERATURE_DECREASE;
@@ -590,22 +590,22 @@ public class EM_StatusManager {
                 temperatureChange = EM_StatusManager_NTM_SPACE.TemperatureChangeSpace(
                     entityLiving,
                     currentTime,
-                    biome_DAWN_TEMPERATURE_TERRAFORMED,
-                    biome_DAY_TEMPERATURE_TERRAFORMED,
-                    biome_DUSK_TEMPERATURE_TERRAFORMED,
-                    biome_NIGHT_TEMPERATURE_TERRAFORMED,
-                    biome_DAWN_TEMPERATURE,
-                    biome_DAY_TEMPERATURE,
-                    biome_DUSK_TEMPERATURE,
-                    biome_NIGHT_TEMPERATURE);
+                    biome_DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
+                    biome_DAY_TEMPERATURE_DECREASE_TERRAFORMED,
+                    biome_DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
+                    biome_NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
+                    biome_DAWN_TEMPERATURE_DECREASE,
+                    biome_DAY_TEMPERATURE_DECREASE,
+                    biome_DUSK_TEMPERATURE_DECREASE,
+                    biome_NIGHT_TEMPERATURE_DECREASE);
                 airVentConst = EM_StatusManager_NTM_SPACE.getAirVentConst(entityLiving);
             } else {
                 temperatureChange = calculateTemperatureChange(
                     currentTime % 24000L,
-                    biome_DAWN_TEMPERATURE,
-                    biome_DAY_TEMPERATURE,
-                    biome_DUSK_TEMPERATURE,
-                    biome_NIGHT_TEMPERATURE);
+                    biome_DAWN_TEMPERATURE_DECREASE,
+                    biome_DAY_TEMPERATURE_DECREASE,
+                    biome_DUSK_TEMPERATURE_DECREASE,
+                    biome_NIGHT_TEMPERATURE_DECREASE);
             }
 
             biomeTemperature -= temperatureChange * TemperatureMultiplier;
