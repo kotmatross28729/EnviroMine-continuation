@@ -197,10 +197,6 @@ public class EnviroMine {
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
 
-        // if (isHbmLoaded) {
-        // ObjectHandlerCompat.initFluids();
-        // }
-
         ObjectHandler.registerRecipes();
 
         // !
@@ -233,6 +229,7 @@ public class EnviroMine {
 
         if (isHbmLoaded) {
             ObjectHandlerCompat.registerRecipes();
+            ObjectHandlerCompat.registerNTMFluidContainers();
         }
 
         EM_ConfigHandler.initConfig(); // Second pass for object initialized after pre-init

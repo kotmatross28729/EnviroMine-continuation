@@ -13,6 +13,7 @@ import enviromine.core.EM_Settings;
  */
 public class WaterUtils {
 
+    // Actual water types
     public enum WATER_TYPES {
 
         RADIOACTIVE_FROSTY(-2, true, false, false, EM_Settings.RADIOACTIVE_FROSTY_Hydration,
@@ -72,6 +73,7 @@ public class WaterUtils {
             this.temperatureInfluenceCap = temperatureInfluenceCap;
         }
 
+        // Method to find water type from traits
         public static WATER_TYPES fromTraits(WATER_TYPES waterTypeInitial, int heatIndex, boolean isRadioactive,
             boolean isDirty, boolean isSalty) {
             for (WATER_TYPES type : WATER_TYPES.values()) {
@@ -175,6 +177,7 @@ public class WaterUtils {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, waterType.isDirty, true);
     }
 
+    // In case the returned water type MUST be salty
     public static WATER_TYPES forceSaltDown(WATER_TYPES waterType) {
         int heatIndex = (waterType.heatIndex == 2 ? 1 : waterType.heatIndex == -2 ? -1 : waterType.heatIndex);
 
@@ -185,6 +188,7 @@ public class WaterUtils {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, waterType.isRadioactive, true, waterType.isSalty);
     }
 
+    // In case the returned water type MUST be dirty
     public static WATER_TYPES forcePollute(WATER_TYPES waterType) {
         int heatIndex = (waterType.heatIndex == 2 ? 1 : waterType.heatIndex == -2 ? -1 : waterType.heatIndex);
 
@@ -291,4 +295,25 @@ public class WaterUtils {
         };
     }
 
+    // Used to find the relevant NTM fluid: `Fluids.fromName(WaterUtils.getStringFromTypeNTMFluid(type))`
+    public static String getStringFromTypeNTMFluid(WaterUtils.WATER_TYPES type) {
+        return switch (type) {
+            case RADIOACTIVE_FROSTY -> "RADIOACTIVE_FROSTY_WATER";
+            case FROSTY -> "FROSTY_WATER";
+            case RADIOACTIVE_COLD -> "RADIOACTIVE_COLD_WATER";
+            case DIRTY_COLD -> "DIRTY_COLD_WATER";
+            case SALTY_COLD -> "SALTY_COLD_WATER";
+            case CLEAN_COLD -> "CLEAN_COLD_WATER";
+            case RADIOACTIVE -> "RADIOACTIVE_WATER";
+            case DIRTY -> "DIRTY_WATER";
+            case SALTY -> "SALTY_WATER";
+            case RADIOACTIVE_WARM -> "RADIOACTIVE_WARM_WATER";
+            case DIRTY_WARM -> "DIRTY_WARM_WATER";
+            case SALTY_WARM -> "SALTY_WARM_WATER";
+            case CLEAN_WARM -> "CLEAN_WARM_WATER";
+            case RADIOACTIVE_HOT -> "RADIOACTIVE_HOT_WATER";
+            case HOT -> "HOT_WATER";
+            default -> "CLEAN_WATER";
+        };
+    }
 }

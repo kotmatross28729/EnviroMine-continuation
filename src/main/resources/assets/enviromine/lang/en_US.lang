@@ -21,6 +21,24 @@ item.enviromine.clean_warm_WaterBottle.name=Warm Water Bottle
 item.enviromine.radioactive_hot_WaterBottle.name=Radioactive Hot Water Bottle
 item.enviromine.hot_WaterBottle.name=Hot Water Bottle
 
+# This… is a bucket.
+
+item.bucket_radioactive_frosty_Water.name=Radioactive Frosty Water Bucket
+item.bucket_frosty_Water.name=Frosty Water Bucket
+item.bucket_radioactive_cold_Water.name=Radioactive Cold Water Bucket
+item.bucket_dirty_cold_Water.name=Dirty Cold Water Bucket
+item.bucket_salty_cold_Water.name=Salt Cold Water Bucket
+item.bucket_clean_cold_Water.name=Cold Water Bucket
+item.bucket_radioactive_Water.name=Radioactive Water Bucket
+item.bucket_dirty_Water.name=Dirty Water Bucket
+item.bucket_salty_Water.name=Salt Water Bucket
+item.bucket_radioactive_warm_Water.name=Radioactive Warm Water Bucket
+item.bucket_dirty_warm_Water.name=Dirty Warm Water Bucket
+item.bucket_salty_warm_Water.name=Salt Warm Water Bucket
+item.bucket_clean_warm_Water.name=Warm Water Bucket
+item.bucket_radioactive_hot_Water.name=Radioactive Hot Water Bucket
+item.bucket_hot_Water.name=Hot Water Bucket
+
 # Polymer Water Bottle Types (Hbm's NTM compat)
 item.enviromine.water.polymer.name=Plastic Bottle
 
@@ -45,6 +63,23 @@ item.enviromine.clean_warm_WaterBottle.polymer.name=Warm Water Plastic Bottle
 item.enviromine.radioactive_hot_WaterBottle.polymer.name=Radioactive Hot Water Plastic Bottle
 item.enviromine.hot_WaterBottle.polymer.name=Hot Water Plastic Bottle
 
+# NTM fluid names (Hbm's NTM compat)
+hbmfluid.radioactive_frosty_water=Radioactive Frosty Water
+hbmfluid.frosty_water=Frosty Water
+hbmfluid.radioactive_cold_water=Radioactive Cold Water
+hbmfluid.dirty_cold_water=Dirty Cold Water
+hbmfluid.salty_cold_water=Salt Cold Water
+hbmfluid.clean_cold_water=Cold Water
+hbmfluid.radioactive_water=Radioactive Water
+hbmfluid.dirty_water=Dirty Water
+hbmfluid.salty_water=Salt Water
+hbmfluid.radioactive_warm_water=Radioactive Warm Water
+hbmfluid.dirty_warm_water=Dirty Warm Water
+hbmfluid.salty_warm_water=Salt Warm Water
+hbmfluid.clean_warm_water=Warm Water
+hbmfluid.radioactive_hot_water=Radioactive Hot Water
+hbmfluid.hot_water=Hot Water
+
 # Enviromine items
 item.enviromine.camelpack.name=Camel Pack
 item.enviromine.gasmask.name=Respirator
@@ -61,6 +96,24 @@ potion.enviromine.heatstroke=Heatstroke
 potion.enviromine.hypothermia=Hypothermia
 
 # Enviromine blocks
+
+# Water
+tile.block_radioactive_frosty_Water.name=Radioactive Frosty Water
+tile.block_frosty_Water.name=Frosty Water
+tile.block_radioactive_cold_Water.name=Radioactive Cold Water
+tile.block_dirty_cold_Water.name=Dirty Cold Water
+tile.block_salty_cold_Water.name=Salt Cold Water
+tile.block_clean_cold_Water.name=Cold Water
+tile.block_radioactive_Water.name=Radioactive Water
+tile.block_dirty_Water.name=Dirty Water
+tile.block_salty_Water.name=Salt Water
+tile.block_radioactive_warm_Water.name=Radioactive Warm Water
+tile.block_dirty_warm_Water.name=Dirty Warm Water
+tile.block_salty_warm_Water.name=Salt Warm Water
+tile.block_clean_warm_Water.name=Warm Water
+tile.block_radioactive_hot_Water.name=Radioactive Hot Water
+tile.block_hot_Water.name=Hot Water
+
 tile.enviromine.elevator_top.name=Elevator Top
 tile.enviromine.elevator_bottom.name=Elevator Bottom
 tile.enviromine.esky.name=Esky
@@ -154,7 +207,6 @@ options.enviromine.physSound=Physics Sounds
 options.enviromine.breathVol=Breath Volume
 options.enviromine.newsPage=News Feed
 
-
 options.enviromine.hud.temperature=Temperature
 options.enviromine.hud.sanity=Sanity
 options.enviromine.hud.hydration=Hydration
@@ -244,7 +296,6 @@ commands.enviromine.enviroquake.stoppedAll=Stopped all earthquakes
 commands.enviromine.enviroquake.error.tooMany=You are not permitted to spawn more than one earthquake at a time!
 commands.enviromine.enviroquake.error.tooBig=You may not spawn an earthquake over 4096 blocks!
 
-
 editor.enviromine.changeprofile=Change Profile
 editor.enviromine.currentprofile=Current Profile
 editor.enviromine.global=Global Config
@@ -266,6 +317,3 @@ editor.enviromine.GuiAdd.item=Add as Item
 editor.enviromine.GuiAdd.block=Add as Block
 editor.enviromine.GuiAdd.both=Add Both
 msg.enviromine.RecordEasterEgg=An eerie shiver travels down your spine
-
-
-

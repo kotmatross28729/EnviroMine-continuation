@@ -1,6 +1,5 @@
 language.name=Russian
 
-
 # Типы бутылок воды
 item.enviromine.radioactive_frosty_WaterBottle.name=Бутылка радиоактивной ледяной воды
 item.enviromine.frosty_WaterBottle.name=Бутылка ледяной воды
@@ -14,13 +13,31 @@ item.enviromine.radioactive_WaterBottle.name=Бутылка радиоактив
 item.enviromine.dirty_WaterBottle.name=Бутылка грязной воды
 item.enviromine.salty_WaterBottle.name=Бутылка солёной воды
 
-item.enviromine.radioactive_warm_WaterBottle.name=Бутылка радиоактивной теплой воды
-item.enviromine.dirty_warm_WaterBottle.name=Бутылка грязной теплой воды
-item.enviromine.salty_warm_WaterBottle.name=Бутылка солёной теплой воды
-item.enviromine.clean_warm_WaterBottle.name=Бутылка теплой воды
+item.enviromine.radioactive_warm_WaterBottle.name=Бутылка радиоактивной тёплой воды
+item.enviromine.dirty_warm_WaterBottle.name=Бутылка грязной тёплой воды
+item.enviromine.salty_warm_WaterBottle.name=Бутылка солёной тёплой воды
+item.enviromine.clean_warm_WaterBottle.name=Бутылка тёплой воды
 
 item.enviromine.radioactive_hot_WaterBottle.name=Бутылка радиоактивной горячей воды
 item.enviromine.hot_WaterBottle.name=Бутылка горячей воды
+
+# Вёдра.
+
+item.bucket_radioactive_frosty_Water.name=Ведро радиоактивной ледяной воды
+item.bucket_frosty_Water.name=Ведро ледяной воды
+item.bucket_radioactive_cold_Water.name=Ведро радиоактивной холодной воды
+item.bucket_dirty_cold_Water.name=Ведро грязной холодной воды
+item.bucket_salty_cold_Water.name=Ведро солёной холодной воды
+item.bucket_clean_cold_Water.name=Ведро холодной воды
+item.bucket_radioactive_Water.name=Ведро радиоактивной воды
+item.bucket_dirty_Water.name=Ведро грязной воды
+item.bucket_salty_Water.name=Ведро солёной воды
+item.bucket_radioactive_warm_Water.name=Ведро радиоактивной тёплой воды
+item.bucket_dirty_warm_Water.name=Ведро грязной тёплой воды
+item.bucket_salty_warm_Water.name=Ведро солёной тёплой воды
+item.bucket_clean_warm_Water.name=Ведро тёплой воды
+item.bucket_radioactive_hot_Water.name=Ведро радиоактивной горячей воды
+item.bucket_hot_Water.name=Ведро горячей воды
 
 # Типы пластиковых бутылок воды (совместимость с Hbm's NTM)
 item.enviromine.water.polymer.name=Пластиковая бутылка
@@ -38,13 +55,30 @@ item.enviromine.dirty_WaterBottle.polymer.name=Пластиковая бутыл
 item.enviromine.salty_WaterBottle.polymer.name=Пластиковая бутылка солёной воды
 item.enviromine.clean_WaterBottle.polymer.name=Пластиковая бутылка воды
 
-item.enviromine.radioactive_warm_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной теплой воды
-item.enviromine.dirty_warm_WaterBottle.polymer.name=Пластиковая бутылка грязной теплой воды
-item.enviromine.salty_warm_WaterBottle.polymer.name=Пластиковая бутылка солёной теплой воды
-item.enviromine.clean_warm_WaterBottle.polymer.name=Пластиковая бутылка теплой воды
+item.enviromine.radioactive_warm_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной тёплой воды
+item.enviromine.dirty_warm_WaterBottle.polymer.name=Пластиковая бутылка грязной тёплой воды
+item.enviromine.salty_warm_WaterBottle.polymer.name=Пластиковая бутылка солёной тёплой воды
+item.enviromine.clean_warm_WaterBottle.polymer.name=Пластиковая бутылка тёплой воды
 
 item.enviromine.radioactive_hot_WaterBottle.polymer.name=Пластиковая бутылка радиоактивной горячей воды
 item.enviromine.hot_WaterBottle.polymer.name=Пластиковая бутылка горячей воды
+
+# Жидкости NTM (совместимость с Hbm's NTM)
+hbmfluid.radioactive_frosty_water=Радиоактивная ледяная вода
+hbmfluid.frosty_water=Ледяная вода
+hbmfluid.radioactive_cold_water=Радиоактивная холодная вода
+hbmfluid.dirty_cold_water=Грязная холодная вода
+hbmfluid.salty_cold_water=Солёная холодная вода
+hbmfluid.clean_cold_water=Холодная вода
+hbmfluid.radioactive_water=Радиоактивная вода
+hbmfluid.dirty_water=Грязная вода
+hbmfluid.salty_water=Солёная вода
+hbmfluid.radioactive_warm_water=Радиоактивная тёплая вода
+hbmfluid.dirty_warm_water=Грязная тёплая вода
+hbmfluid.salty_warm_water=Солёная тёплая вода
+hbmfluid.clean_warm_water=Тёплая вода
+hbmfluid.radioactive_hot_water=Радиоактивная горячая вода
+hbmfluid.hot_water=Горячая вода
 
 # Предметы EnviroMine
 item.enviromine.camelpack.name=Бурдюк
@@ -62,6 +96,24 @@ potion.enviromine.heatstroke=Тепловой удар
 potion.enviromine.hypothermia=Гипотермия
 
 # Блоки EnviroMine
+
+# Вода
+tile.block_radioactive_frosty_Water.name=Радиоактивная ледяная вода
+tile.block_frosty_Water.name=Ледяная вода
+tile.block_radioactive_cold_Water.name=Радиоактивная холодная вода
+tile.block_dirty_cold_Water.name=Грязная холодная вода
+tile.block_salty_cold_Water.name=Солёная холодная вода
+tile.block_clean_cold_Water.name=Холодная вода
+tile.block_radioactive_Water.name=Радиоактивная вода
+tile.block_dirty_Water.name=Грязная вода
+tile.block_salty_Water.name=Солёная вода
+tile.block_radioactive_warm_Water.name=Радиоактивная тёплая вода
+tile.block_dirty_warm_Water.name=Грязная тёплая вода
+tile.block_salty_warm_Water.name=Солёная тёплая вода
+tile.block_clean_warm_Water.name=Тёплая вода
+tile.block_radioactive_hot_Water.name=Радиоактивная горячая вода
+tile.block_hot_Water.name=Горячая вода
+
 tile.enviromine.elevator_top.name=Верх лифта
 tile.enviromine.elevator_bottom.name=Низ лифта
 tile.enviromine.esky.name=Портативный холодильник 
@@ -71,6 +123,9 @@ tile.enviromine.gas.name=Газ
 tile.enviromine.firegas.name=Огнеопасный газ
 tile.enviromine.burningcoal.name=Горящий уголь
 tile.enviromine.nophysblock.name=Пустой физический блок
+
+container.enviromine.esky=Портативный холодильник
+container.enviromine.freezer=Морозилка
 
 itemGroup.enviromine.enviroTab=EnviroMine
 
@@ -92,6 +147,8 @@ achievement.enviromine.TenSecondRule=Правило 10 секунд
 achievement.enviromine.MedicalMarvels=Медицинские чудеса
 achievement.enviromine.SuckItUpPrincess=Получи принцесса
 achievement.enviromine.BreatheEasy=Дыши свободнее
+achievement.enviromine.KeepYourCool=Keep Your Cool
+achievement.enviromine.ThermalShock=Thermal Shock
 
 achievement.enviromine.FunwaysFault.desc=Выживете в пещере
 achievement.enviromine.MindOverMatter.desc=Убейте 5 враждебных мобов, находясь под воздействием безумия III
@@ -111,6 +168,8 @@ achievement.enviromine.TenSecondRule.desc=Съешьте испорченную 
 achievement.enviromine.MedicalMarvels.desc=Вылечите любую инфекцию или заболевание
 achievement.enviromine.SuckItUpPrincess.desc=Убейте враждебного моба, когда у Вас сломана одна или более конечностей
 achievement.enviromine.BreatheEasy.desc=Сделайте противогаз
+achievement.enviromine.KeepYourCool.desc=Craft a camel pack
+achievement.enviromine.ThermalShock.desc=Have heatstroke and hypothermia at the same time
 
 options.enviromine.on=Вкл.
 options.enviromine.off=Выкл.
@@ -191,6 +250,9 @@ auth.enviromine.2=Спасибо за использование официал�
 auth.enviromine.3=ВНИМАНИЕ: Если Вам понадобится установить более старую версию или добавить её
 auth.enviromine.4=в пакет модов, Вам НЕ нужно удалять "AUTH" файл из папки конфигурации
 auth.enviromine.5=Это поможет в поддержке кампании %s
+auth.enviromine.6=This version of EnviroMine has not been authenticated and is now disabled!
+auth.enviromine.7=If you are using a modpack please inform the dev to that they need to
+auth.enviromine.8=include the up-to-date AUTH file for this version. More info at:
 
 keybinds.enviromine.reload=Перезагрузить конфигурацию
 keybinds.enviromine.addremove=Добавить/удалить пользоват. конфигурацию
@@ -233,31 +295,7 @@ commands.enviromine.enviroquake.stop=стоп
 commands.enviromine.enviroquake.stoppedAll=Все землетрясения остановлены
 commands.enviromine.enviroquake.error.tooMany=У Вас нет прав вызывать больше одного землетрясения за раз!
 commands.enviromine.enviroquake.error.tooBig=Вы не можете вызвать землетрясение больше чем на 4096 блоков!
-msg.enviromine.RecordEasterEgg=Жуткая дрожь пробегает по вашей спинеitem.enviromine.water.polymer.name=Plastic Bottle
-item.enviromine.radioactive_frosty_WaterBottle.polymer.name=Radioactive Frosty Water Plastic Bottle
-item.enviromine.frosty_WaterBottle.polymer.name=Frosty Water Plastic Bottle
-item.enviromine.radioactive_cold_WaterBottle.polymer.name=Radioactive Cold Water Plastic Bottle
-item.enviromine.dirty_cold_WaterBottle.polymer.name=Dirty Cold Water Plastic Bottle
-item.enviromine.salty_cold_WaterBottle.polymer.name=Salt Cold Water Plastic Bottle
-item.enviromine.clean_cold_WaterBottle.polymer.name=Cold Water Plastic Bottle
-item.enviromine.radioactive_WaterBottle.polymer.name=Radioactive Water Plastic Bottle
-item.enviromine.dirty_WaterBottle.polymer.name=Dirty Water Plastic Bottle
-item.enviromine.salty_WaterBottle.polymer.name=Salt Water Plastic Bottle
-item.enviromine.radioactive_warm_WaterBottle.polymer.name=Radioactive Warm Water Plastic Bottle
-item.enviromine.dirty_warm_WaterBottle.polymer.name=Dirty Warm Water Plastic Bottle
-item.enviromine.salty_warm_WaterBottle.polymer.name=Salt Warm Water Plastic Bottle
-item.enviromine.clean_warm_WaterBottle.polymer.name=Warm Water Plastic Bottle
-item.enviromine.radioactive_hot_WaterBottle.polymer.name=Radioactive Hot Water Plastic Bottle
-item.enviromine.hot_WaterBottle.polymer.name=Hot Water Plastic Bottle
-container.enviromine.esky=Esky
-container.enviromine.freezer=Freezer
-achievement.enviromine.KeepYourCool=Keep Your Cool
-achievement.enviromine.ThermalShock=Thermal Shock
-achievement.enviromine.KeepYourCool.desc=Craft a camel pack
-achievement.enviromine.ThermalShock.desc=Have heatstroke and hypothermia at the same time
-auth.enviromine.6=This version of EnviroMine has not been authenticated and is now disabled!
-auth.enviromine.7=If you are using a modpack please inform the dev to that they need to
-auth.enviromine.8=include the up-to-date AUTH file for this version. More info at:
+
 editor.enviromine.changeprofile=Change Profile
 editor.enviromine.currentprofile=Current Profile
 editor.enviromine.global=Global Config
@@ -278,3 +316,4 @@ editor.enviromine.GuiAdd.title.fail=Error occurred. Check log for details.
 editor.enviromine.GuiAdd.item=Add as Item
 editor.enviromine.GuiAdd.block=Add as Block
 editor.enviromine.GuiAdd.both=Add Both
+msg.enviromine.RecordEasterEgg=Жуткая дрожь пробегает по вашей спинеitem.enviromine.water.polymer.name=Plastic Bottle

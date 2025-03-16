@@ -36,6 +36,7 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
 
         if (loadedMods.contains("hbm")) {
             mixins.add("hbm.MixinLiquefactionRecipes");
+            mixins.add("hbm.MixinFluids");
         }
 
         return mixins;

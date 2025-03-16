@@ -19,10 +19,10 @@
 * **Gas rework v1** **[TODO]**
   * TODO
 
-* **Water types rework v2.0** **[TODO]**
+* **Water types rework v2.0**
   * Now Enviromine water has traits : `heatIndex`, `isRadioactive`, `isDirty`, `isSalty` (**[Wiki page](https://github.com/kotmatross28729/EnviroMine-continuation/wiki/Water-types-v2)**)
     * All cooling/heating recipes now use `heatIndex` instead of manually setting
-  * Added water block for each water type (16 blocks!)
+  * Added water block for each water type (15 blocks!)
     * **[NTM:Space] All 16 EnviroMine water blocks can evaporate in a vacuum (separate compatibility)**
     * **Added water compatibility for forge fluids and bobfluids (Hbm's NTM)**
     * Accordingly added buckets for each water type   
