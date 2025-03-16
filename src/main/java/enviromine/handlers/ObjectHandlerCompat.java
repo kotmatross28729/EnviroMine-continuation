@@ -43,6 +43,188 @@ public class ObjectHandlerCompat {
     public static Item radioactive_hot_WaterBottle_polymer;
     public static Item hot_WaterBottle_polymer;
 
+    /// -------------------------
+
+    // TODO: BOB WHAT HAVE YOU DONE
+
+    // public static FluidType RADIOACTIVE_FROSTY;
+    // public static FluidType FROSTY;
+    // public static FluidType RADIOACTIVE_COLD;
+    // public static FluidType DIRTY_COLD;
+    // public static FluidType SALTY_COLD;
+    // public static FluidType CLEAN_COLD;
+    // public static FluidType RADIOACTIVE;
+    // public static FluidType DIRTY;
+    // public static FluidType SALTY;
+    // public static FluidType RADIOACTIVE_WARM;
+    // public static FluidType DIRTY_WARM;
+    // public static FluidType SALTY_WARM;
+    // public static FluidType CLEAN_WARM;
+    // public static FluidType RADIOACTIVE_HOT;
+    // public static FluidType HOT;
+
+    // public static void initFluids() {
+    // String RADIOACTIVE_FROSTY_NAME = "RADIOACTIVE_FROSTY";
+    // String FROSTY_NAME = "FROSTY";
+    // String RADIOACTIVE_COLD_NAME = "RADIOACTIVE_COLD";
+    // String DIRTY_COLD_NAME = "DIRTY_COLD";
+    // String SALTY_COLD_NAME = "SALTY_COLD";
+    // String CLEAN_COLD_NAME = "CLEAN_COLD";
+    // String RADIOACTIVE_NAME = "RADIOACTIVE";
+    // String DIRTY_NAME = "DIRTY";
+    // String SALTY_NAME = "SALTY";
+    // String RADIOACTIVE_WARM_NAME = "RADIOACTIVE_WARM";
+    // String DIRTY_WARM_NAME = "DIRTY_WARM";
+    // String SALTY_WARM_NAME = "SALTY_WARM";
+    // String CLEAN_WARM_NAME = "CLEAN_WARM";
+    // String RADIOACTIVE_HOT_NAME = "RADIOACTIVE_HOT";
+    // String HOT_NAME = "HOT";
+    //
+    // int id = 1393;
+    //
+    // RADIOACTIVE_FROSTY = constructFluid(RADIOACTIVE_FROSTY_NAME, 3, EnumSymbol.RADIATION, id++);
+    // FROSTY = constructFluid(FROSTY_NAME, 1, EnumSymbol.NONE, id++);
+    // RADIOACTIVE_COLD = constructFluid(RADIOACTIVE_COLD_NAME, 2, EnumSymbol.RADIATION, id++);
+    // DIRTY_COLD = constructFluid(DIRTY_COLD_NAME, 1, EnumSymbol.NONE, id++);
+    // SALTY_COLD = constructFluid(SALTY_COLD_NAME, 1, EnumSymbol.NONE, id++);
+    // CLEAN_COLD = constructFluid(CLEAN_COLD_NAME, 0, EnumSymbol.NONE, id++);
+    // RADIOACTIVE = constructFluid(RADIOACTIVE_NAME, 2, EnumSymbol.RADIATION, id++);
+    // DIRTY = constructFluid(DIRTY_NAME, 1, EnumSymbol.NONE, id++);
+    // SALTY = constructFluid(SALTY_NAME, 1, EnumSymbol.NONE, id++);
+    // RADIOACTIVE_WARM = constructFluid(RADIOACTIVE_WARM_NAME, 2, EnumSymbol.RADIATION, id++);
+    // DIRTY_WARM = constructFluid(DIRTY_WARM_NAME, 1, EnumSymbol.NONE, id++);
+    // SALTY_WARM = constructFluid(SALTY_WARM_NAME, 1, EnumSymbol.NONE, id++);
+    // CLEAN_WARM = constructFluid(CLEAN_WARM_NAME, 0, EnumSymbol.NONE, id++);
+    // RADIOACTIVE_HOT = constructFluid(RADIOACTIVE_HOT_NAME, 3, EnumSymbol.RADIATION, id++);
+    // HOT = constructFluid(HOT_NAME, 1, EnumSymbol.NONE, id++);
+
+    // double eff_steam_boil = 1.0D;
+    // double eff_steam_heatex = 0.25D;
+    //
+    // RADIOACTIVE_FROSTY.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // FROSTY.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // RADIOACTIVE_COLD.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // DIRTY_COLD.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // SALTY_COLD.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // CLEAN_COLD.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // RADIOACTIVE.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // DIRTY.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // SALTY.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // RADIOACTIVE_WARM.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // DIRTY_WARM.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // SALTY_WARM.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // CLEAN_WARM.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // RADIOACTIVE_HOT.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // HOT.addTraits(
+    // new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+    // .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+    // .addStep(200, 1, STEAM, 100)
+    // .addStep(220, 1, HOTSTEAM, 10)
+    // .addStep(238, 1, SUPERHOTSTEAM, 1)
+    // .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+    // }
+
+    // public static FluidType constructFluid(String name, int poison, EnumSymbol symbol, int id) {
+    // String water = "_WATER";
+    //
+    // return new FluidType(
+    // name + water,
+    // 0x3333FF,
+    // poison,
+    // 0,
+    // 0,
+    // symbol,
+    // name.toLowerCase(Locale.US),
+    // 16777215,
+    // id,
+    // I18nUtil.resolveKey("hbmfluid." + name.toLowerCase(Locale.US), new Object[0]))
+    // .addTraits(LIQUID, UNSIPHONABLE);
+    // }
+
     public static void initItems() {
         waterBottle_polymer = new Item().setMaxStackSize(64)
             .setUnlocalizedName("enviromine.water.polymer")

@@ -197,6 +197,10 @@ public class EnviroMine {
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
 
+        // if (isHbmLoaded) {
+        // ObjectHandlerCompat.initFluids();
+        // }
+
         ObjectHandler.registerRecipes();
 
         // !
