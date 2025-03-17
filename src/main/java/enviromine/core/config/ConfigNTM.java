@@ -11,6 +11,14 @@ public class ConfigNTM {
     public static void init(Configuration config) {
         int i = 0;
 
+        EM_Settings.drainagePipeRadiationDivisor = config.getInt(
+            String.format("%03d" + "_drainagePipeRadiationDivisor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.drainagePipeRadiationDivisor,
+            1,
+            65536,
+            "Divisor value for radiation, released when radioactive liquids are drained through drainage pipe");
+
         EM_Settings.HbmGasMaskBreakMultiplier = config.getInt(
             String.format("%03d" + "_HbmGasMaskFilterBreakMultiplier", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,

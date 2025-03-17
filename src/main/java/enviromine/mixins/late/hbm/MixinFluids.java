@@ -103,23 +103,23 @@ public class MixinFluids {
         // Because [7732-18-5](Dihydrogen oxide)
         int id = 7732;
 
-        RADIOACTIVE_FROSTY_WATER = enviromine$constructFluid(RADIOACTIVE_FROSTY_NAME, 3, EnumSymbol.RADIATION, id++)
+        RADIOACTIVE_FROSTY_WATER = enviromine$constructFluid(RADIOACTIVE_FROSTY_NAME, 4, EnumSymbol.RADIATION, id++)
             .setTemp(2);
         FROSTY_WATER = enviromine$constructFluid(FROSTY_NAME, 1, EnumSymbol.NONE, id++).setTemp(2);
-        RADIOACTIVE_COLD_WATER = enviromine$constructFluid(RADIOACTIVE_COLD_NAME, 2, EnumSymbol.RADIATION, id++)
+        RADIOACTIVE_COLD_WATER = enviromine$constructFluid(RADIOACTIVE_COLD_NAME, 4, EnumSymbol.RADIATION, id++)
             .setTemp(10);
-        DIRTY_COLD_WATER = enviromine$constructFluid(DIRTY_COLD_NAME, 1, EnumSymbol.NONE, id++).setTemp(10);
-        SALTY_COLD_WATER = enviromine$constructFluid(SALTY_COLD_NAME, 1, EnumSymbol.NONE, id++).setTemp(10);
+        DIRTY_COLD_WATER = enviromine$constructFluid(DIRTY_COLD_NAME, 3, EnumSymbol.NONE, id++).setTemp(10);
+        SALTY_COLD_WATER = enviromine$constructFluid(SALTY_COLD_NAME, 3, EnumSymbol.NONE, id++).setTemp(10);
         CLEAN_COLD_WATER = enviromine$constructFluid(CLEAN_COLD_NAME, 0, EnumSymbol.NONE, id++).setTemp(10);
-        RADIOACTIVE_WATER = enviromine$constructFluid(RADIOACTIVE_NAME, 2, EnumSymbol.RADIATION, id++).setTemp(20);
-        DIRTY_WATER = enviromine$constructFluid(DIRTY_NAME, 1, EnumSymbol.NONE, id++).setTemp(20);
-        SALTY_WATER = enviromine$constructFluid(SALTY_NAME, 1, EnumSymbol.NONE, id++).setTemp(20);
-        RADIOACTIVE_WARM_WATER = enviromine$constructFluid(RADIOACTIVE_WARM_NAME, 2, EnumSymbol.RADIATION, id++)
+        RADIOACTIVE_WATER = enviromine$constructFluid(RADIOACTIVE_NAME, 4, EnumSymbol.RADIATION, id++).setTemp(20);
+        DIRTY_WATER = enviromine$constructFluid(DIRTY_NAME, 3, EnumSymbol.NONE, id++).setTemp(20);
+        SALTY_WATER = enviromine$constructFluid(SALTY_NAME, 3, EnumSymbol.NONE, id++).setTemp(20);
+        RADIOACTIVE_WARM_WATER = enviromine$constructFluid(RADIOACTIVE_WARM_NAME, 4, EnumSymbol.RADIATION, id++)
             .setTemp(40);
-        DIRTY_WARM_WATER = enviromine$constructFluid(DIRTY_WARM_NAME, 1, EnumSymbol.NONE, id++).setTemp(40);
-        SALTY_WARM_WATER = enviromine$constructFluid(SALTY_WARM_NAME, 1, EnumSymbol.NONE, id++).setTemp(40);
+        DIRTY_WARM_WATER = enviromine$constructFluid(DIRTY_WARM_NAME, 3, EnumSymbol.NONE, id++).setTemp(40);
+        SALTY_WARM_WATER = enviromine$constructFluid(SALTY_WARM_NAME, 3, EnumSymbol.NONE, id++).setTemp(40);
         CLEAN_WARM_WATER = enviromine$constructFluid(CLEAN_WARM_NAME, 0, EnumSymbol.NONE, id++).setTemp(40);
-        RADIOACTIVE_HOT_WATER = enviromine$constructFluid(RADIOACTIVE_HOT_NAME, 3, EnumSymbol.RADIATION, id++)
+        RADIOACTIVE_HOT_WATER = enviromine$constructFluid(RADIOACTIVE_HOT_NAME, 4, EnumSymbol.RADIATION, id++)
             .setTemp(54);
         HOT_WATER = enviromine$constructFluid(HOT_NAME, 1, EnumSymbol.NONE, id++).setTemp(54);
 

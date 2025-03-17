@@ -113,6 +113,10 @@ public class EM_Settings {
     public static boolean hardcoregases = false;
     public static boolean enablePlayerRandomMobRender = false;
 
+    // NTM
+
+    public static int drainagePipeRadiationDivisor = 10;
+
     // MACHINES
     public static boolean EnableHBMMachinesHeat = true;
     public static float BurnerPressHeatDivisor = 16;
