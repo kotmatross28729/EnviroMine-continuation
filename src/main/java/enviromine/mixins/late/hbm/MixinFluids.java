@@ -1,7 +1,9 @@
 package enviromine.mixins.late.hbm;
 
+import static com.hbm.inventory.fluid.Fluids.GASEOUS;
 import static com.hbm.inventory.fluid.Fluids.HOTSTEAM;
 import static com.hbm.inventory.fluid.Fluids.LIQUID;
+import static com.hbm.inventory.fluid.Fluids.NOCON;
 import static com.hbm.inventory.fluid.Fluids.STEAM;
 import static com.hbm.inventory.fluid.Fluids.SUPERHOTSTEAM;
 import static com.hbm.inventory.fluid.Fluids.ULTRAHOTSTEAM;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.trait.FT_Coolable;
 import com.hbm.inventory.fluid.trait.FT_Heatable;
 import com.hbm.inventory.fluid.trait.FT_Polluting;
 import com.hbm.inventory.fluid.trait.FT_VentRadiation;
@@ -60,6 +63,19 @@ public class MixinFluids {
     @Unique
     private static FluidType HOT_WATER;
 
+    // -----------
+    @Unique
+    private static FluidType RADIOACTIVE_SPENTSTEAM;
+
+    @Unique
+    private static FluidType RADIOACTIVE_STEAM;
+    @Unique
+    private static FluidType RADIOACTIVE_HOTSTEAM;
+    @Unique
+    private static FluidType RADIOACTIVE_SUPERHOTSTEAM;
+    @Unique
+    private static FluidType RADIOACTIVE_ULTRAHOTSTEAM;
+
     @Inject(method = "readCustomFluids", at = @At(value = "HEAD"), remap = false)
     private static void readCustomFluids(File file, CallbackInfo ci) {
         String RADIOACTIVE_FROSTY_NAME = "RADIOACTIVE_FROSTY_WATER";
@@ -77,6 +93,12 @@ public class MixinFluids {
         String CLEAN_WARM_NAME = "CLEAN_WARM_WATER";
         String RADIOACTIVE_HOT_NAME = "RADIOACTIVE_HOT_WATER";
         String HOT_NAME = "HOT_WATER";
+
+        String RADIOACTIVE_SPENTSTEAM_NAME = "RADIOACTIVE_SPENTSTEAM";
+        String RADIOACTIVE_STEAM_NAME = "RADIOACTIVE_STEAM";
+        String RADIOACTIVE_HOTSTEAM_NAME = "RADIOACTIVE_HOTSTEAM";
+        String RADIOACTIVE_SUPERHOTSTEAM_NAME = "RADIOACTIVE_SUPERHOTSTEAM";
+        String RADIOACTIVE_ULTRAHOTSTEAM_NAME = "RADIOACTIVE_ULTRAHOTSTEAM";
 
         // Because [7732-18-5](Dihydrogen oxide)
         int id = 7732;
@@ -101,16 +123,49 @@ public class MixinFluids {
             .setTemp(54);
         HOT_WATER = enviromine$constructFluid(HOT_NAME, 1, EnumSymbol.NONE, id++).setTemp(54);
 
+        RADIOACTIVE_SPENTSTEAM = enviromine$constructGas(
+            RADIOACTIVE_SPENTSTEAM_NAME,
+            0x445772,
+            3,
+            EnumSymbol.NONE,
+            id++,
+            true);
+        RADIOACTIVE_STEAM = enviromine$constructGas(RADIOACTIVE_STEAM_NAME, 0xe5e5e5, 4, EnumSymbol.NONE, id++, false)
+            .setTemp(100);
+        RADIOACTIVE_HOTSTEAM = enviromine$constructGas(
+            RADIOACTIVE_HOTSTEAM_NAME,
+            0xE7D6D6,
+            4,
+            EnumSymbol.NONE,
+            id++,
+            false).setTemp(300);
+        RADIOACTIVE_SUPERHOTSTEAM = enviromine$constructGas(
+            RADIOACTIVE_SUPERHOTSTEAM_NAME,
+            0xE7B7B7,
+            4,
+            EnumSymbol.NONE,
+            id++,
+            false).setTemp(450);
+        RADIOACTIVE_ULTRAHOTSTEAM = enviromine$constructGas(
+            RADIOACTIVE_ULTRAHOTSTEAM_NAME,
+            0xE39393,
+            4,
+            EnumSymbol.NONE,
+            id++,
+            false).setTemp(600);
+
+        /// ----
+
         double eff_steam_boil = 1.0D;
         double eff_steam_heatex = 0.25D;
 
         RADIOACTIVE_FROSTY_WATER.addTraits(
             new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
                 .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
-                .addStep(200, 1, STEAM, 100)
-                .addStep(220, 1, HOTSTEAM, 10)
-                .addStep(238, 1, SUPERHOTSTEAM, 1)
-                .addStep(2500, 10, ULTRAHOTSTEAM, 1),
+                .addStep(200, 1, RADIOACTIVE_STEAM, 100)
+                .addStep(220, 1, RADIOACTIVE_HOTSTEAM, 10)
+                .addStep(238, 1, RADIOACTIVE_SUPERHOTSTEAM, 1)
+                .addStep(2500, 10, RADIOACTIVE_ULTRAHOTSTEAM, 1),
             new FT_VentRadiation(0.02F),
             new FT_Polluting().release(PollutionHandler.PollutionType.POISON, 2.0000001E-5F));
         FROSTY_WATER.addTraits(
@@ -123,10 +178,10 @@ public class MixinFluids {
         RADIOACTIVE_COLD_WATER.addTraits(
             new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
                 .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
-                .addStep(200, 1, STEAM, 100)
-                .addStep(220, 1, HOTSTEAM, 10)
-                .addStep(238, 1, SUPERHOTSTEAM, 1)
-                .addStep(2500, 10, ULTRAHOTSTEAM, 1),
+                .addStep(200, 1, RADIOACTIVE_STEAM, 100)
+                .addStep(220, 1, RADIOACTIVE_HOTSTEAM, 10)
+                .addStep(238, 1, RADIOACTIVE_SUPERHOTSTEAM, 1)
+                .addStep(2500, 10, RADIOACTIVE_ULTRAHOTSTEAM, 1),
             new FT_VentRadiation(0.02F),
             new FT_Polluting().release(PollutionHandler.PollutionType.POISON, 2.0000001E-5F));
         DIRTY_COLD_WATER.addTraits(
@@ -154,10 +209,10 @@ public class MixinFluids {
         RADIOACTIVE_WATER.addTraits(
             new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
                 .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
-                .addStep(200, 1, STEAM, 100)
-                .addStep(220, 1, HOTSTEAM, 10)
-                .addStep(238, 1, SUPERHOTSTEAM, 1)
-                .addStep(2500, 10, ULTRAHOTSTEAM, 1),
+                .addStep(200, 1, RADIOACTIVE_STEAM, 100)
+                .addStep(220, 1, RADIOACTIVE_HOTSTEAM, 10)
+                .addStep(238, 1, RADIOACTIVE_SUPERHOTSTEAM, 1)
+                .addStep(2500, 10, RADIOACTIVE_ULTRAHOTSTEAM, 1),
             new FT_VentRadiation(0.02F),
             new FT_Polluting().release(PollutionHandler.PollutionType.POISON, 2.0000001E-5F));
         DIRTY_WATER.addTraits(
@@ -178,10 +233,10 @@ public class MixinFluids {
         RADIOACTIVE_WARM_WATER.addTraits(
             new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
                 .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
-                .addStep(200, 1, STEAM, 100)
-                .addStep(220, 1, HOTSTEAM, 10)
-                .addStep(238, 1, SUPERHOTSTEAM, 1)
-                .addStep(2500, 10, ULTRAHOTSTEAM, 1),
+                .addStep(200, 1, RADIOACTIVE_STEAM, 100)
+                .addStep(220, 1, RADIOACTIVE_HOTSTEAM, 10)
+                .addStep(238, 1, RADIOACTIVE_SUPERHOTSTEAM, 1)
+                .addStep(2500, 10, RADIOACTIVE_ULTRAHOTSTEAM, 1),
             new FT_VentRadiation(0.02F),
             new FT_Polluting().release(PollutionHandler.PollutionType.POISON, 2.0000001E-5F));
         DIRTY_WARM_WATER.addTraits(
@@ -209,10 +264,10 @@ public class MixinFluids {
         RADIOACTIVE_HOT_WATER.addTraits(
             new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
                 .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
-                .addStep(200, 1, STEAM, 100)
-                .addStep(220, 1, HOTSTEAM, 10)
-                .addStep(238, 1, SUPERHOTSTEAM, 1)
-                .addStep(2500, 10, ULTRAHOTSTEAM, 1),
+                .addStep(200, 1, RADIOACTIVE_STEAM, 100)
+                .addStep(220, 1, RADIOACTIVE_HOTSTEAM, 10)
+                .addStep(238, 1, RADIOACTIVE_SUPERHOTSTEAM, 1)
+                .addStep(2500, 10, RADIOACTIVE_ULTRAHOTSTEAM, 1),
             new FT_VentRadiation(0.02F),
             new FT_Polluting().release(PollutionHandler.PollutionType.POISON, 2.0000001E-5F));
         HOT_WATER.addTraits(
@@ -222,6 +277,47 @@ public class MixinFluids {
                 .addStep(220, 1, HOTSTEAM, 10)
                 .addStep(238, 1, SUPERHOTSTEAM, 1)
                 .addStep(2500, 10, ULTRAHOTSTEAM, 1));
+
+        RADIOACTIVE_STEAM.addTraits(
+            new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+                .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+                .addStep(2, 10, RADIOACTIVE_HOTSTEAM, 1));
+
+        RADIOACTIVE_HOTSTEAM.addTraits(
+            new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+                .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+                .addStep(18, 10, RADIOACTIVE_SUPERHOTSTEAM, 1));
+        RADIOACTIVE_SUPERHOTSTEAM.addTraits(
+            new FT_Heatable().setEff(FT_Heatable.HeatingType.BOILER, eff_steam_boil)
+                .setEff(FT_Heatable.HeatingType.HEATEXCHANGER, eff_steam_heatex)
+                .addStep(120, 10, RADIOACTIVE_ULTRAHOTSTEAM, 1));
+
+        double eff_steam_turbine = 1.0D;
+        double eff_steam_cool = 0.5D;
+
+        // REQ AM -> PROD AM
+        // PROD AM * HEAT = ENERGY
+
+        // Conversion takes place in the turbine, not in the cooling tower, because the cooling towers are hardcoded to
+        // regular steam
+        RADIOACTIVE_SPENTSTEAM.addTraits(
+            new FT_Coolable(RADIOACTIVE_WATER, 1, 1, 1).setEff(FT_Coolable.CoolingType.TURBINE, eff_steam_turbine)
+                .setEff(FT_Coolable.CoolingType.HEATEXCHANGER, eff_steam_cool));
+
+        RADIOACTIVE_STEAM.addTraits(
+            new FT_Coolable(RADIOACTIVE_SPENTSTEAM, 100, 1, 200)
+                .setEff(FT_Coolable.CoolingType.TURBINE, eff_steam_turbine)
+                .setEff(FT_Coolable.CoolingType.HEATEXCHANGER, eff_steam_cool));
+        RADIOACTIVE_HOTSTEAM.addTraits(
+            new FT_Coolable(RADIOACTIVE_STEAM, 1, 10, 2).setEff(FT_Coolable.CoolingType.TURBINE, eff_steam_turbine)
+                .setEff(FT_Coolable.CoolingType.HEATEXCHANGER, eff_steam_cool));
+        RADIOACTIVE_SUPERHOTSTEAM.addTraits(
+            new FT_Coolable(RADIOACTIVE_HOTSTEAM, 1, 10, 18).setEff(FT_Coolable.CoolingType.TURBINE, eff_steam_turbine)
+                .setEff(FT_Coolable.CoolingType.HEATEXCHANGER, eff_steam_cool));
+        RADIOACTIVE_ULTRAHOTSTEAM.addTraits(
+            new FT_Coolable(RADIOACTIVE_SUPERHOTSTEAM, 1, 10, 120)
+                .setEff(FT_Coolable.CoolingType.TURBINE, eff_steam_turbine)
+                .setEff(FT_Coolable.CoolingType.HEATEXCHANGER, eff_steam_cool));
 
         customFluids.add(RADIOACTIVE_FROSTY_WATER);
         customFluids.add(FROSTY_WATER);
@@ -238,6 +334,12 @@ public class MixinFluids {
         customFluids.add(CLEAN_WARM_WATER);
         customFluids.add(RADIOACTIVE_HOT_WATER);
         customFluids.add(HOT_WATER);
+
+        customFluids.add(RADIOACTIVE_SPENTSTEAM);
+        customFluids.add(RADIOACTIVE_STEAM);
+        customFluids.add(RADIOACTIVE_HOTSTEAM);
+        customFluids.add(RADIOACTIVE_SUPERHOTSTEAM);
+        customFluids.add(RADIOACTIVE_ULTRAHOTSTEAM);
     }
 
     @Unique
@@ -255,4 +357,22 @@ public class MixinFluids {
             I18nUtil.resolveKey("hbmfluid." + name.toLowerCase(Locale.US), new Object[0]))
                 .addTraits(LIQUID, UNSIPHONABLE);
     }
+
+    @Unique
+    private static FluidType enviromine$constructGas(String name, int color, int poison, EnumSymbol symbol, int id,
+        boolean spent) {
+        return new FluidType(
+            name,
+            color,
+            poison,
+            0,
+            0,
+            symbol,
+            name.toLowerCase(Locale.US),
+            16777215,
+            id,
+            I18nUtil.resolveKey("hbmfluid." + name.toLowerCase(Locale.US), new Object[0]))
+                .addTraits(GASEOUS, spent ? NOCON : UNSIPHONABLE);
+    }
+
 }

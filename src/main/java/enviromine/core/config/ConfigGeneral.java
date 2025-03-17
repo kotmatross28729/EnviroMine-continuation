@@ -17,6 +17,12 @@ public class ConfigGeneral {
             EM_Settings.oldTorchLogic,
             "Enables old torch logic without mixins, enable this if you don't want to see burned villages");
 
+        EM_Settings.disableWaterTypes = config.getBoolean(
+            String.format("%03d" + "_disableWaterTypes", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.disableWaterTypes,
+            "Disables water types, leave only clean (vanilla) water");
+
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean(
             String.format("%03d" + "_PlayerInsanityRandomMobRender", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,

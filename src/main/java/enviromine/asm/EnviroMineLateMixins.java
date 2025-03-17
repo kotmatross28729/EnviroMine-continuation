@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.spongepowered.asm.mixin.MixinEnvironment;
+
 import com.gtnewhorizon.gtnhmixins.ILateMixinLoader;
 import com.gtnewhorizon.gtnhmixins.LateMixin;
 
@@ -14,6 +16,9 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
     public String getMixinConfig() {
         return "mixins.enviromine.late.json";
     }
+
+    public static final MixinEnvironment.Side side = MixinEnvironment.getCurrentEnvironment()
+        .getSide();
 
     @Override
     public List<String> getMixins(Set<String> loadedMods) {
@@ -35,6 +40,11 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
         }
 
         if (loadedMods.contains("hbm")) {
+
+            if (side == MixinEnvironment.Side.CLIENT) {
+                mixins.add("hbm.client.MixinRenderFluidTank");
+            }
+
             mixins.add("hbm.MixinLiquefactionRecipes");
             mixins.add("hbm.MixinFluids");
         }

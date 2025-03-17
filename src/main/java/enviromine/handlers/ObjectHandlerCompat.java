@@ -5,9 +5,11 @@ import static enviromine.handlers.ObjectHandler.bucket_clean_warm_Water;
 import static enviromine.handlers.ObjectHandler.bucket_dirty_Water;
 import static enviromine.handlers.ObjectHandler.bucket_dirty_cold_Water;
 import static enviromine.handlers.ObjectHandler.bucket_dirty_warm_Water;
+import static enviromine.handlers.ObjectHandler.bucket_frosty_Water;
 import static enviromine.handlers.ObjectHandler.bucket_hot_Water;
 import static enviromine.handlers.ObjectHandler.bucket_radioactive_Water;
 import static enviromine.handlers.ObjectHandler.bucket_radioactive_cold_Water;
+import static enviromine.handlers.ObjectHandler.bucket_radioactive_frosty_Water;
 import static enviromine.handlers.ObjectHandler.bucket_radioactive_hot_Water;
 import static enviromine.handlers.ObjectHandler.bucket_radioactive_warm_Water;
 import static enviromine.handlers.ObjectHandler.bucket_salty_Water;
@@ -335,7 +337,8 @@ public class ObjectHandlerCompat {
             new ItemStack(clean_warm_WaterBottle_polymer), new ItemStack(radioactive_hot_WaterBottle_polymer),
             new ItemStack(hot_WaterBottle_polymer), };
 
-        ItemStack[] buckets = { new ItemStack(bucket_radioactive_cold_Water), new ItemStack(bucket_dirty_cold_Water),
+        ItemStack[] buckets = { new ItemStack(bucket_radioactive_frosty_Water), new ItemStack(bucket_frosty_Water),
+            new ItemStack(bucket_radioactive_cold_Water), new ItemStack(bucket_dirty_cold_Water),
             new ItemStack(bucket_salty_cold_Water), new ItemStack(bucket_clean_cold_Water),
             new ItemStack(bucket_radioactive_Water), new ItemStack(bucket_dirty_Water),
             new ItemStack(bucket_salty_Water), new ItemStack(bucket_radioactive_warm_Water),

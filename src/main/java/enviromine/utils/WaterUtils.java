@@ -307,13 +307,13 @@ public class WaterUtils {
             case RADIOACTIVE -> "RADIOACTIVE_WATER";
             case DIRTY -> "DIRTY_WATER";
             case SALTY -> "SALTY_WATER";
+            case CLEAN -> "CLEAN_WATER";
             case RADIOACTIVE_WARM -> "RADIOACTIVE_WARM_WATER";
             case DIRTY_WARM -> "DIRTY_WARM_WATER";
             case SALTY_WARM -> "SALTY_WARM_WATER";
             case CLEAN_WARM -> "CLEAN_WARM_WATER";
             case RADIOACTIVE_HOT -> "RADIOACTIVE_HOT_WATER";
             case HOT -> "HOT_WATER";
-            default -> "CLEAN_WATER";
         };
     }
 }

@@ -937,6 +937,11 @@ public class EM_EventManager {
     }
 
     public static WaterUtils.WATER_TYPES getWaterType(World world, int x, int y, int z) {
+
+        if (EM_Settings.disableWaterTypes) {
+            return WaterUtils.WATER_TYPES.CLEAN;
+        }
+
         BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
         DimensionProperties dimensionProperties = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
         int seaLvl = dimensionProperties != null ? dimensionProperties.sealevel : 64;

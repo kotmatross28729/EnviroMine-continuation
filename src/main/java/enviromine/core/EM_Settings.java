@@ -51,6 +51,8 @@ public class EM_Settings {
 
     public static boolean oldTorchLogic = false;
 
+    public static boolean disableWaterTypes = false;
+
     // EM_StatusManager
     public static float LavaBlockAmbientTemperature = 200F;
     public static float BurningambientTemperature = 75F;
