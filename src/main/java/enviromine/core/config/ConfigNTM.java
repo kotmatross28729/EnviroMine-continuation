@@ -19,6 +19,46 @@ public class ConfigNTM {
             65536,
             "Divisor value for radiation, released when radioactive liquids are drained through drainage pipe");
 
+        EM_Settings.enableWitherVomit = config.getBoolean(
+            String.format("%03d" + "_enableWitherVomit", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.enableWitherVomit,
+            "Enables vomiting if the player has a wither potion effect");
+        EM_Settings.enablePoisonNauseaVomit = config.getBoolean(
+            String.format("%03d" + "_enablePoisonNauseaVomit", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.enablePoisonNauseaVomit,
+            "Enables vomiting if the player has a poison/nausea potion effect");
+        EM_Settings.vomitTickFullCycle = config.getInt(
+            String.format("%03d" + "_vomitTickFullCycle", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.vomitTickFullCycle,
+            1,
+            65536,
+            "Total duration of the vomiting cycle in ticks. vomitTickFullCycle - vomitDuration = number of ticks when there is no vomiting");
+        EM_Settings.vomitDuration = config.getInt(
+            String.format("%03d" + "_vomitDuration", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.vomitDuration,
+            0,
+            65536,
+            "The duration of vomiting in ticks, should be less than vomitTickFullCycle");
+
+        EM_Settings.vomitWitherAmplifierMultiplier = config.getInt(
+            String.format("%03d" + "_vomitWitherAmplifierMultiplier", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.vomitWitherAmplifierMultiplier,
+            0,
+            65536,
+            "Amplifier (Wither) multiplier for chance, higher value - higher chance");
+        EM_Settings.vomitPoisonNauseaAmplifierMultiplier = config.getInt(
+            String.format("%03d" + "_vomitPoisonNauseaAmplifierMultiplier", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.vomitPoisonNauseaAmplifierMultiplier,
+            0,
+            65536,
+            "Amplifier (Poison/Nausea) multiplier for chance, higher value - higher chance");
+
         EM_Settings.HbmGasMaskBreakMultiplier = config.getInt(
             String.format("%03d" + "_HbmGasMaskFilterBreakMultiplier", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,

@@ -49,6 +49,10 @@
 
 * Enviromine parameters (Ambient Temperature, Ambient Air Quality, Ambient Sanity, Effect Temperature, etc.) are now displayed in the item description [**Suggested by xronin01**]
 
+* [NTM] Added player vomiting when poison/nausea potion effect is active
+  * Blood vomit if wither potion effect is active
+  * Can be disabled in the config
+
 * Now cooling water uses snowball instead of ice (in favor of survival mode) [**Suggested by iamsoNewBee**]
 
   * Golden apple/carrot no longer rot [**Suggested by iamsoNewBee**]

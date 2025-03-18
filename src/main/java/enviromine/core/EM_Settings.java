@@ -115,6 +115,14 @@ public class EM_Settings {
 
     // NTM
 
+    public static boolean enableWitherVomit = true;
+    public static boolean enablePoisonNauseaVomit = true;
+    public static int vomitTickFullCycle = 400;
+    public static int vomitDuration = 20;
+
+    public static int vomitWitherAmplifierMultiplier = 3;
+    public static int vomitPoisonNauseaAmplifierMultiplier = 5;
+
     public static int drainagePipeRadiationDivisor = 10;
 
     // MACHINES

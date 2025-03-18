@@ -3,12 +3,20 @@ package enviromine.handlers.compat;
 import static enviromine.handlers.EM_EventManager.ReplaceInvoItems;
 import static enviromine.handlers.EM_EventManager.getBlockWithinAABB;
 
+import java.util.Random;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -20,9 +28,12 @@ import com.hbm.blocks.gas.BlockGasRadonDense;
 import com.hbm.blocks.gas.BlockGasRadonTomb;
 import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.util.ContaminationUtil;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import enviromine.core.EM_Settings;
 import enviromine.handlers.ObjectHandler;
 
@@ -108,6 +119,82 @@ public class EM_EventManager_NTM {
             ContaminationUtil.HazardType.RADIATION,
             ContaminationUtil.ContaminationType.RAD_BYPASS,
             ammount);
+    }
+
+    public static void handleVomit(EntityLivingBase entityLivingBase) {
+        if (entityLivingBase instanceof EntityPlayer && ((EntityPlayer) entityLivingBase).capabilities.isCreativeMode)
+            return;
+
+        //TODO: effects?
+        
+        int ix = MathHelper.floor_double(entityLivingBase.posX);
+        int iy = MathHelper.floor_double(entityLivingBase.posY);
+        int iz = MathHelper.floor_double(entityLivingBase.posZ);
+        Random rand = new Random(entityLivingBase.getEntityId());
+
+        int offset = rand.nextInt(EM_Settings.vomitTickFullCycle);
+
+        if (entityLivingBase.isPotionActive(Potion.wither) && EM_Settings.enableWitherVomit) {
+            int amplifier = entityLivingBase.getActivePotionEffect(Potion.wither)
+                .getAmplifier();
+
+            // (worldTime + offset) % totalTicks < activeTicks
+            if ((entityLivingBase.worldObj.getTotalWorldTime() + offset) % EM_Settings.vomitTickFullCycle
+                < (EM_Settings.vomitDuration + ((long) amplifier * EM_Settings.vomitWitherAmplifierMultiplier))
+                && canVomit(entityLivingBase)) {
+                NBTTagCompound nbt = new NBTTagCompound();
+                nbt.setString("type", "vomit");
+                nbt.setString("mode", "blood");
+                nbt.setInteger("count", 25);
+                nbt.setInteger("entity", entityLivingBase.getEntityId());
+                PacketDispatcher.wrapper.sendToAllAround(
+                    new AuxParticlePacketNT(nbt, 0, 0, 0),
+                    new NetworkRegistry.TargetPoint(
+                        entityLivingBase.dimension,
+                        entityLivingBase.posX,
+                        entityLivingBase.posY,
+                        entityLivingBase.posZ,
+                        25));
+
+                if ((entityLivingBase.worldObj.getTotalWorldTime() + offset) % EM_Settings.vomitTickFullCycle == 1) {
+                    entityLivingBase.worldObj.playSoundEffect(ix, iy, iz, "hbm:player.vomit", 1.0F, 1.0F);
+                }
+            }
+        } else if ((entityLivingBase.isPotionActive(Potion.poison) || entityLivingBase.isPotionActive(Potion.confusion))
+            && EM_Settings.enablePoisonNauseaVomit) {
+                int amplifier = entityLivingBase
+                    .getActivePotionEffect(
+                        entityLivingBase.isPotionActive(Potion.poison) ? Potion.poison : Potion.confusion)
+                    .getAmplifier();
+
+                if ((entityLivingBase.worldObj.getTotalWorldTime() + offset) % EM_Settings.vomitTickFullCycle
+                    < (EM_Settings.vomitDuration
+                        + ((long) amplifier * EM_Settings.vomitPoisonNauseaAmplifierMultiplier))
+                    && canVomit(entityLivingBase)) {
+                    NBTTagCompound nbt = new NBTTagCompound();
+                    nbt.setString("type", "vomit");
+                    nbt.setString("mode", "normal");
+                    nbt.setInteger("count", 15);
+                    nbt.setInteger("entity", entityLivingBase.getEntityId());
+                    PacketDispatcher.wrapper.sendToAllAround(
+                        new AuxParticlePacketNT(nbt, 0, 0, 0),
+                        new NetworkRegistry.TargetPoint(
+                            entityLivingBase.dimension,
+                            entityLivingBase.posX,
+                            entityLivingBase.posY,
+                            entityLivingBase.posZ,
+                            25));
+
+                    if ((entityLivingBase.worldObj.getTotalWorldTime() + offset) % EM_Settings.vomitTickFullCycle
+                        == 1) {
+                        entityLivingBase.worldObj.playSoundEffect(ix, iy, iz, "hbm:player.vomit", 1.0F, 1.0F);
+                    }
+                }
+            }
+    }
+
+    private static boolean canVomit(Entity e) {
+        return !e.isCreatureType(EnumCreatureType.waterCreature, false);
     }
 
 }

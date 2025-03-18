@@ -1106,6 +1106,10 @@ public class EM_EventManager {
             return;
         }
 
+        if (EnviroMine.isHbmLoaded) {
+            EM_EventManager_NTM.handleVomit(event.entityLiving);
+        }
+
         if (event.entityLiving instanceof EntityPlayer) {
             InventoryPlayer invo = (InventoryPlayer) ((EntityPlayer) event.entityLiving).inventory;
 
