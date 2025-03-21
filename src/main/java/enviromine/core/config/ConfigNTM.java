@@ -43,7 +43,6 @@ public class ConfigNTM {
             0,
             65536,
             "The duration of vomiting in ticks, should be less than vomitTickFullCycle");
-
         EM_Settings.vomitWitherAmplifierMultiplier = config.getInt(
             String.format("%03d" + "_vomitWitherAmplifierMultiplier", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
@@ -58,6 +57,22 @@ public class ConfigNTM {
             0,
             65536,
             "Amplifier (Poison/Nausea) multiplier for chance, higher value - higher chance");
+
+        EM_Settings.vomitHungerDuration = config.getInt(
+            String.format("%03d" + "_vomitHungerDuration", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.vomitHungerDuration,
+            0,
+            65536,
+            "Duration of the hunger effect");
+
+        EM_Settings.vomitHungerAmplifier = config.getInt(
+            String.format("%03d" + "_vomitHungerAmplifier", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES_NTM,
+            EM_Settings.vomitHungerAmplifier,
+            0,
+            65536,
+            "Amplifier of the hunger effect");
 
         EM_Settings.HbmGasMaskBreakMultiplier = config.getInt(
             String.format("%03d" + "_HbmGasMaskFilterBreakMultiplier", i++),

@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -121,12 +122,11 @@ public class EM_EventManager_NTM {
             ammount);
     }
 
+    // TODO: PacketDispatcher.wrapper.sendToAllAround -> PacketThreading.createAllAroundThreadedPacket
     public static void handleVomit(EntityLivingBase entityLivingBase) {
         if (entityLivingBase instanceof EntityPlayer && ((EntityPlayer) entityLivingBase).capabilities.isCreativeMode)
             return;
 
-        //TODO: effects?
-        
         int ix = MathHelper.floor_double(entityLivingBase.posX);
         int iy = MathHelper.floor_double(entityLivingBase.posY);
         int iz = MathHelper.floor_double(entityLivingBase.posZ);
@@ -158,6 +158,11 @@ public class EM_EventManager_NTM {
 
                 if ((entityLivingBase.worldObj.getTotalWorldTime() + offset) % EM_Settings.vomitTickFullCycle == 1) {
                     entityLivingBase.worldObj.playSoundEffect(ix, iy, iz, "hbm:player.vomit", 1.0F, 1.0F);
+                    entityLivingBase.addPotionEffect(
+                        new PotionEffect(
+                            Potion.hunger.id,
+                            EM_Settings.vomitHungerDuration,
+                            EM_Settings.vomitHungerAmplifier));
                 }
             }
         } else if ((entityLivingBase.isPotionActive(Potion.poison) || entityLivingBase.isPotionActive(Potion.confusion))
@@ -188,6 +193,11 @@ public class EM_EventManager_NTM {
                     if ((entityLivingBase.worldObj.getTotalWorldTime() + offset) % EM_Settings.vomitTickFullCycle
                         == 1) {
                         entityLivingBase.worldObj.playSoundEffect(ix, iy, iz, "hbm:player.vomit", 1.0F, 1.0F);
+                        entityLivingBase.addPotionEffect(
+                            new PotionEffect(
+                                Potion.hunger.id,
+                                EM_Settings.vomitHungerDuration,
+                                EM_Settings.vomitHungerAmplifier));
                     }
                 }
             }

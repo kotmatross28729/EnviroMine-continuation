@@ -23,6 +23,16 @@ public class ConfigGeneral {
             EM_Settings.disableWaterTypes,
             "Disables water types, leave only clean (vanilla) water");
 
+        EM_Settings.rotTimeValidation = config.getBoolean(
+            String.format("%03d" + "_rotTimeValidation", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.rotTimeValidation,
+            "Should rotting take into account the exact time, or just the day? "
+                + " [+] If false, all food obtained during the day will have different rot rates."
+                + " [-] However, food cannot be stacked together, even if there is a 1 tick gap in time."
+                + " [+] If true, food obtained during the same day can be stacked together."
+                + " [-] However, food obtained at the beginning of the day and at the end will have the same rot rate.");
+
         EM_Settings.enablePlayerRandomMobRender = config.getBoolean(
             String.format("%03d" + "_PlayerInsanityRandomMobRender", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,

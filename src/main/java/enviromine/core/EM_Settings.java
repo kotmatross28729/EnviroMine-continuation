@@ -50,8 +50,8 @@ public class EM_Settings {
     // Fork changes
 
     public static boolean oldTorchLogic = false;
-
     public static boolean disableWaterTypes = false;
+    public static boolean rotTimeValidation = true;
 
     // EM_StatusManager
     public static float LavaBlockAmbientTemperature = 200F;
@@ -122,6 +122,9 @@ public class EM_Settings {
 
     public static int vomitWitherAmplifierMultiplier = 3;
     public static int vomitPoisonNauseaAmplifierMultiplier = 5;
+
+    public static int vomitHungerDuration = 60;
+    public static int vomitHungerAmplifier = 19;
 
     public static int drainagePipeRadiationDivisor = 10;
 

@@ -59,8 +59,6 @@ public class EnviroItemPolymerWaterBottle extends Item {
             --par1ItemStack.stackSize;
         }
 
-        //TODO: config
-        
         if (!par2World.isRemote) {
             if (waterType.isRadioactive) {
                 ContaminationUtil.contaminate(

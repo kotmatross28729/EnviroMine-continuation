@@ -9,8 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -24,8 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import enviromine.blocks.tiles.TileEntityCauldron;
 import enviromine.blocks.water.BlockEnviroMineWater;
+import enviromine.core.EnviroMine;
 import enviromine.items.ItemModBucket;
 import enviromine.utils.WaterUtils;
+import enviromine.utils.misc.mixins.MixinBlockCauldron_NTM;
 
 @Mixin(value = BlockCauldron.class, priority = 1003)
 public class MixinBlockCauldron implements ITileEntityProvider {
@@ -121,10 +121,9 @@ public class MixinBlockCauldron implements ITileEntityProvider {
             if (l > 0 && entityIn.boundingBox.minY <= (double) f) {
                 if (cauldron.getWaterType().isRadioactive) {
                     if (entityIn instanceof EntityLivingBase entityLivingBase) {
-                        // TODO rad
-                        entityLivingBase.addPotionEffect(new PotionEffect(Potion.poison.id, 100));
-                        // ContaminationUtil.contaminate(entityLivingBase, ContaminationUtil.HazardType.RADIATION,
-                        // ContaminationUtil.ContaminationType.CREATIVE, 5F);
+                        if (EnviroMine.isHbmLoaded) {
+                            MixinBlockCauldron_NTM.applyRadiation(entityLivingBase, 0.125F); // 5 rad/s
+                        }
                     }
                 }
             }
