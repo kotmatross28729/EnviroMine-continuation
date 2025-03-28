@@ -65,6 +65,7 @@
 * (Hbm's NTM) Rotten food can be liquefied into Salient Green (recycling rotten food)
 
 * Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
+  * Not finished
 
 * Added craft for clean water from an empty bottle and snowball
 

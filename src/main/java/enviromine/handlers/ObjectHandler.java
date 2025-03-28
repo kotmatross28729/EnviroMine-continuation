@@ -54,6 +54,7 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.items.EnviroArmor;
 import enviromine.items.EnviroItemWaterBottle;
+import enviromine.items.ItemCamelPack;
 import enviromine.items.ItemDavyLamp;
 import enviromine.items.ItemElevator;
 import enviromine.items.ItemModBucket;
@@ -64,7 +65,8 @@ import enviromine.utils.WaterUtils;
 public class ObjectHandler {
 
     public static HashMap<Block, ArrayList<Integer>> igniteList = new HashMap<Block, ArrayList<Integer>>();
-    public static ArmorMaterial camelPackMaterial;
+
+    public static ArmorMaterial EM_Material;
 
     public static Item radioactive_frosty_WaterBottle;
     public static Item frosty_WaterBottle;
@@ -92,7 +94,7 @@ public class ObjectHandler {
     public static Item rottenFood;
     public static Item spoiledMilk;
 
-    public static ItemArmor camelPack;
+    public static Item camelPack;
     public static ItemArmor gasMask;
     public static ItemArmor hardHat;
 
@@ -558,17 +560,17 @@ public class ObjectHandler {
             .setCreativeTab(EnviroMine.enviroTab)
             .setTextureName("bucket_milk");
 
-        camelPackMaterial = EnumHelper
-            .addArmorMaterial("camelPack", EM_Settings.camelPackMax, new int[] { 2, 2, 0, 0 }, 0);
+        EM_Material = EnumHelper.addArmorMaterial("emMaterial", EM_Settings.camelPackMax, new int[] { 2, 2, 0, 0 }, 0);
 
-        camelPack = (ItemArmor) new EnviroArmor(camelPackMaterial, 4, 1).setTextureName("camel_pack")
-            .setUnlocalizedName("enviromine.camelpack")
-            .setCreativeTab(null);
+        // TODO: CAMEL PACK
+        camelPack = new ItemCamelPack(100F).setTextureName("camel_pack")
+            .setUnlocalizedName("enviromine.gasmask")
+            .setUnlocalizedName("enviromine.camel_pack");
 
-        gasMask = (ItemArmor) new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("gas_mask")
+        gasMask = (ItemArmor) new EnviroArmor(EM_Material, 4, 0).setTextureName("gas_mask")
             .setUnlocalizedName("enviromine.gasmask")
             .setCreativeTab(null);
-        hardHat = (ItemArmor) new EnviroArmor(camelPackMaterial, 4, 0).setTextureName("hard_hat")
+        hardHat = (ItemArmor) new EnviroArmor(EM_Material, 4, 0).setTextureName("hard_hat")
             .setUnlocalizedName("enviromine.hardhat")
             .setCreativeTab(EnviroMine.enviroTab);
     }
@@ -621,6 +623,7 @@ public class ObjectHandler {
         GameRegistry.registerItem(gasMask, "gasMask");
         GameRegistry.registerItem(hardHat, "hardHat");
 
+        // TODO: CAMEL PACK
         // Empty Pack
         ItemStack camelStack1 = new ItemStack(camelPack);
         NBTTagCompound tag = new NBTTagCompound();
@@ -631,6 +634,7 @@ public class ObjectHandler {
         camelStack1.setTagCompound(tag);
         EnviroMine.enviroTab.addRawStack(camelStack1);
 
+        // TODO: CAMEL PACK
         // Full Pack
         ItemStack camelStack2 = new ItemStack(camelPack);
         tag = new NBTTagCompound();
@@ -1111,6 +1115,7 @@ public class ObjectHandler {
             'z',
             new ItemStack(esky));
 
+        // TODO: CAMEL PACK
         ItemStack camelStack = new ItemStack(camelPack);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger(EM_Settings.CAMEL_PACK_FILL_TAG_KEY, 0);

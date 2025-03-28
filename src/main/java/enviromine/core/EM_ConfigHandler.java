@@ -350,13 +350,6 @@ public class EM_ConfigHandler {
         EM_Settings.keepStatus = config
             .get(Configuration.CATEGORY_GENERAL, "Keep statuses on death", EM_Settings.keepStatus)
             .getBoolean(EM_Settings.keepStatus);
-        EM_Settings.renderGear = config
-            .get(
-                Configuration.CATEGORY_GENERAL,
-                "Render Gear",
-                EM_Settings.renderGear,
-                "Render 3d gear worn on player. Must reload game to take effect")
-            .getBoolean(EM_Settings.renderGear);
         EM_Settings.finiteWater = config.get(Configuration.CATEGORY_GENERAL, "Finite Water", EM_Settings.finiteWater)
             .getBoolean(EM_Settings.finiteWater);
         EM_Settings.cauldronHeatingBlocks = config.get(

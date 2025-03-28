@@ -177,13 +177,6 @@ public class ConfigLegacy extends LegacyHandler {
             .getBoolean(false);
         EM_Settings.keepStatus = config.get(Configuration.CATEGORY_GENERAL, "Keep statuses on death", false)
             .getBoolean(false);
-        EM_Settings.renderGear = config
-            .get(
-                Configuration.CATEGORY_GENERAL,
-                "Render Gear",
-                false,
-                "Render 3d gear worn on player. Must reload game to take effect")
-            .getBoolean(false);
         EM_Settings.flammableCoal = config
             .get(
                 Configuration.CATEGORY_GENERAL,

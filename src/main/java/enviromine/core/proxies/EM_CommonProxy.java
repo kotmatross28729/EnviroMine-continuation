@@ -10,8 +10,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import enviromine.handlers.EM_EventManager;
 import enviromine.handlers.EM_ServerScheduledTickHandler;
-import enviromine.handlers.crafting.CamelPackExpandHandler;
-import enviromine.handlers.crafting.CamelPackIntegrationHandler;
 import enviromine.handlers.crafting.CamelPackRefillHandler;
 import enviromine.handlers.crafting.GaskMaskRefillHandler;
 import enviromine.handlers.crafting.LampLightingHandler;
@@ -49,29 +47,6 @@ public class EM_CommonProxy {
         FMLCommonHandler.instance()
             .bus()
             .register(tmp);
-
-        CamelPackIntegrationHandler tmp2 = new CamelPackIntegrationHandler();
-        RecipeSorter.register(
-            "enviromine:armorPack",
-            CamelPackIntegrationHandler.class,
-            RecipeSorter.Category.SHAPELESS,
-            "after:minecraft:shapeless");
-        GameRegistry.addRecipe(tmp2);
-        FMLCommonHandler.instance()
-            .bus()
-            .register(tmp2);
-
-        CamelPackExpandHandler tmp3 = new CamelPackExpandHandler();
-        RecipeSorter.register(
-            "enviromine:expandPack",
-            CamelPackExpandHandler.class,
-            RecipeSorter.Category.SHAPELESS,
-            "after:minecraft:shapeless");
-        GameRegistry.addRecipe(tmp3);
-        FMLCommonHandler.instance()
-            .bus()
-            .register(tmp3);
-
         GaskMaskRefillHandler tmp4 = new GaskMaskRefillHandler();
         RecipeSorter.register(
             "enviromine:maskRefill",

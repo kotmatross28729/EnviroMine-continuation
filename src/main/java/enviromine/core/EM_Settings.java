@@ -344,6 +344,8 @@ public class EM_Settings {
 
     public static final String GAS_MASK_FILL_TAG_KEY = "gasMaskFill";
     public static final String GAS_MASK_MAX_TAG_KEY = "gasMaskMax";
+
+    // TODO: CAMEL PACK
     public static final String CAMEL_PACK_FILL_TAG_KEY = "camelPackFill";
     public static final String CAMEL_PACK_MAX_TAG_KEY = "camelPackMax";
     public static final String IS_CAMEL_PACK_TAG_KEY = "isCamelPack";
@@ -460,7 +462,6 @@ public class EM_Settings {
     public static float thingChance = 0.000001F;
     public static boolean noNausea = false;
     public static boolean keepStatus = false;
-    public static boolean renderGear = false;
     public static String[] cauldronHeatingBlocks = new String[] { // Added on request - AstroTibs
         "minecraft:fire", "minecraft:lava", "minecraft:flowing_lava", "campfirebackport:campfire",
         "campfirebackport:soul_campfire", "CaveBiomes:stone_lavacrust", "demonmobs:hellfire", "etfuturum:magma",

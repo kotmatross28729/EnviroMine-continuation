@@ -39,6 +39,8 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase {
     public float sunMult;
     public float sanity;
     public float air;
+
+    // TODO: CAMEL PACK
     public boolean allowCamelPack;
     public String loadedFrom;
 
