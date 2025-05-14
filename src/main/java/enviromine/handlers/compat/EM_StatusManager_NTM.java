@@ -226,26 +226,6 @@ public class EM_StatusManager_NTM {
                     EM_Settings.blockTempDropoffPower);
             }
         }
-        // !"The nuclear and RTG furnaces will be retired, their recipes have been removed but they remain operational
-        // for now"
-        // else if(tileentity instanceof TileEntityNukeFurnace nukeFurnace) {
-        // if(nukeFurnace.isProcessing()) {
-        // //Operations (max) = 200/0.2 = 114℃ (expected 500) ❌
-        // //Operations (min) = 5/0.2 = not enough to see℃ (expected 12,5) ❔
-        // //Works in space - ✅
-        // blockAndItemTempInfluence += getTempFalloff((nukeFurnace.dualPower / EM_Settings.NukeFurnaceHeatDivisor),
-        // dist, cubeRadius, EM_Settings.blockTempDropoffPower);
-        // }
-        // }
-        // else if(tileentity instanceof TileEntityRtgFurnace rtgFurnace) {
-        // //this shouldn't really be a constant, but I don't give a fuck
-        // if(rtgFurnace.isProcessing()){
-        // //Works in space - ✅
-        // blockAndItemTempInfluence +=
-        // getTempFalloff((EM_Settings.RTGFurnaceHeatConstant*EM_Settings.AmbientTemperatureblockAndItemTempInfluenceDivider),
-        // dist, cubeRadius, EM_Settings.blockTempDropoffPower);
-        // }
-        // }
         else if (tileentity instanceof TileEntityMachineWoodBurner woodBurner) {
             int powerGen = 0;
             try {
