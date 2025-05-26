@@ -5,7 +5,7 @@ import java.awt.Color;
 import enviromine.gases.EnviroGas;
 
 public class GasMethane extends EnviroGas {
-
+    //TODO: BURN ALL THIS
     public GasMethane(String name, int ID) {
         super(name, ID);
         this.setColor(new Color(0, 255, 0, 0));

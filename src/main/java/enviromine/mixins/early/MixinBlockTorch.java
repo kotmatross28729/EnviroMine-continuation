@@ -31,6 +31,8 @@ import enviromine.trackers.properties.BlockProperties;
 @Mixin(value = BlockTorch.class, priority = 1003)
 public abstract class MixinBlockTorch extends Block {
 
+    //TODO: REWORK
+    
     protected MixinBlockTorch(Material materialIn) {
         super(materialIn);
     }

@@ -12,6 +12,7 @@ import enviromine.core.EM_Settings;
 
 public class EnviroDataTracker_NTM {
 
+    //TODO: rework?
     public static float handleGasMaskNTM(ItemStack helmet, boolean isCreative, EntityLivingBase trackedEntity,
         float airQuality) {
         if (helmet != null && !isCreative) {

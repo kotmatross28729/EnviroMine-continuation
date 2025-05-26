@@ -26,6 +26,8 @@ import enviromine.handlers.ObjectHandler;
 
 public class BlockFireTorch extends BlockTorch {
 
+    //TODO: REWORK
+    
     public BlockFireTorch() {
         super();
     }

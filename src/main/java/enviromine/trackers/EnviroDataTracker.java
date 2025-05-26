@@ -185,13 +185,14 @@ public class EnviroDataTracker {
             airQuality += EnviroDataTracker_NTM.handleGasMaskNTM(helmet, isCreative, trackedEntity, airQuality);
         }
 
-        if (helmet != null && !isCreative && EnviroMine.isMCELoaded) {
-            airQuality += EnviroDataTracker_MCE.checkMask(helmet, trackedEntity, airQuality);
+        if (EnviroMine.isMCELoaded) {
+            airQuality += EnviroDataTracker_MCE.checkMask(helmet, isCreative, trackedEntity, airQuality);
         }
 
         if (EnviroMine.isHbmSpaceLoaded) {
             airQuality += EnviroDataTracker_NTM_SPACE.handleAirVent(trackedEntity);
         }
+        
         airQuality = MathHelper.clamp_float(airQuality, 0F, 100F);
 
         // Temperature checks

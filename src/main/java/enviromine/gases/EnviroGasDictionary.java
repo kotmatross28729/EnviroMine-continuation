@@ -15,7 +15,8 @@ import enviromine.gases.types.GasNitrogenDioxide;
 import enviromine.gases.types.GasSulfurDioxide;
 
 public class EnviroGasDictionary {
-
+//TODO: BURN ALL THIS
+    
     public static EnviroGas[] gasList = new EnviroGas[128];
 
     public static EnviroGas gasFire = new GasFire("Gas Fire", 0);

@@ -1,5 +1,6 @@
 package enviromine.handlers.compat;
 
+import com.hbm.handler.threading.PacketThreading;
 import static enviromine.handlers.EM_EventManager.ReplaceInvoItems;
 import static enviromine.handlers.EM_EventManager.getBlockWithinAABB;
 
@@ -29,7 +30,6 @@ import com.hbm.blocks.gas.BlockGasRadonDense;
 import com.hbm.blocks.gas.BlockGasRadonTomb;
 import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.util.ContaminationUtil;
@@ -121,8 +121,7 @@ public class EM_EventManager_NTM {
             ContaminationUtil.ContaminationType.RAD_BYPASS,
             ammount);
     }
-
-    // TODO: PacketDispatcher.wrapper.sendToAllAround -> PacketThreading.createAllAroundThreadedPacket
+    
     public static void handleVomit(EntityLivingBase entityLivingBase) {
         if (entityLivingBase instanceof EntityPlayer && ((EntityPlayer) entityLivingBase).capabilities.isCreativeMode)
             return;
@@ -147,7 +146,7 @@ public class EM_EventManager_NTM {
                 nbt.setString("mode", "blood");
                 nbt.setInteger("count", 25);
                 nbt.setInteger("entity", entityLivingBase.getEntityId());
-                PacketDispatcher.wrapper.sendToAllAround(
+                PacketThreading.createAllAroundThreadedPacket(
                     new AuxParticlePacketNT(nbt, 0, 0, 0),
                     new NetworkRegistry.TargetPoint(
                         entityLivingBase.dimension,
@@ -181,7 +180,7 @@ public class EM_EventManager_NTM {
                     nbt.setString("mode", "normal");
                     nbt.setInteger("count", 15);
                     nbt.setInteger("entity", entityLivingBase.getEntityId());
-                    PacketDispatcher.wrapper.sendToAllAround(
+                    PacketThreading.createAllAroundThreadedPacket(
                         new AuxParticlePacketNT(nbt, 0, 0, 0),
                         new NetworkRegistry.TargetPoint(
                             entityLivingBase.dimension,

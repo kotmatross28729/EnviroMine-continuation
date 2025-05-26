@@ -8,8 +8,8 @@ import mekanism.common.item.ItemScubaTank;
 
 public class EnviroDataTracker_MCE {
 
-    public static float checkMask(ItemStack helmet, EntityLivingBase trackedEntity, float airQuality) {
-        if (helmet.getItem() instanceof ItemGasMask) {
+    public static float checkMask(ItemStack helmet, boolean isCreative, EntityLivingBase trackedEntity, float airQuality) {
+        if (!isCreative && helmet != null && helmet.getItem() instanceof ItemGasMask) {
             if (trackedEntity.getEquipmentInSlot(3) != null && trackedEntity.getEquipmentInSlot(3)
                 .getItem() instanceof ItemScubaTank tank) {
                 if (tank.getFlowing(trackedEntity.getEquipmentInSlot(3))

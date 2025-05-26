@@ -49,7 +49,7 @@ public class ItemCamelPack extends Item {
                     if (tracker != null) {
                         if (tracker.hydration < 100F) {
                             float toHydrate = 100F - tracker.hydration;
-                            if (this.fill > toHydrate) {
+                            if (this.fill >= toHydrate) {
                                 tracker.hydrate(toHydrate);
                                 this.fill -= toHydrate;
                             }
@@ -59,7 +59,5 @@ public class ItemCamelPack extends Item {
             }
         }
     }
-
-    // TODO
 
 }

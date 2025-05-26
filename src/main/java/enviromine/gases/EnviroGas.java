@@ -10,7 +10,7 @@ import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
 
 public class EnviroGas {
-
+    //TODO: BURN ALL THIS
     public int gasID;
     public float suffocation;
     public float volitility;

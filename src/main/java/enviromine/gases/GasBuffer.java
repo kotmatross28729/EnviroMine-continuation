@@ -28,7 +28,7 @@ import enviromine.handlers.ObjectHandler;
  *         other processes to do work in between passes without interruption.
  */
 public class GasBuffer {
-
+    //TODO: BURN ALL THIS
     static ArrayList<int[]> gasBuffer = new ArrayList<int[]>();
     static ArrayList<int[]> fireBuffer = new ArrayList<int[]>();
     static HashMap<String, Integer> chunkUpdates = new HashMap<String, Integer>();
