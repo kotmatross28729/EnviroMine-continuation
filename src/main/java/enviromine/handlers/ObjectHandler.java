@@ -3,7 +3,6 @@ package enviromine.handlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import enviromine.blocks.BlockGlowstoneTorch;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -37,6 +36,7 @@ import enviromine.blocks.BlockEsky;
 import enviromine.blocks.BlockFireTorch;
 import enviromine.blocks.BlockFreezer;
 import enviromine.blocks.BlockGas;
+import enviromine.blocks.BlockGlowstoneTorch;
 import enviromine.blocks.BlockNoPhysics;
 import enviromine.blocks.BlockOffTorch;
 import enviromine.blocks.materials.MaterialElevator;
@@ -297,12 +297,11 @@ public class ObjectHandler {
             .setBlockTextureName("enviromine:torch_off")
             .setLightLevel(0F)
             .setCreativeTab(EnviroMine.enviroTab);
-        glowstoneTorch = new BlockGlowstoneTorch()
-                .setBlockName("enviromine.glowstonetorch")
-                .setBlockTextureName("enviromine:glowstonetorch")
-                .setLightLevel(1.0F)
-                .setCreativeTab(EnviroMine.enviroTab);
-        
+        glowstoneTorch = new BlockGlowstoneTorch().setBlockName("enviromine.glowstonetorch")
+            .setBlockTextureName("enviromine:glowstonetorch")
+            .setLightLevel(1.0F)
+            .setCreativeTab(EnviroMine.enviroTab);
+
         esky = new BlockEsky(Material.iron).setBlockName("enviromine.esky")
             .setCreativeTab(EnviroMine.enviroTab);
         freezer = new BlockFreezer(Material.iron).setBlockName("enviromine.freezer")

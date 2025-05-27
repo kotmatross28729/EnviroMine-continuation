@@ -192,7 +192,7 @@ public class EnviroDataTracker {
         if (EnviroMine.isHbmSpaceLoaded) {
             airQuality += EnviroDataTracker_NTM_SPACE.handleAirVent(trackedEntity);
         }
-        
+
         airQuality = MathHelper.clamp_float(airQuality, 0F, 100F);
 
         // Temperature checks

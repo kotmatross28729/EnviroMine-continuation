@@ -31,7 +31,8 @@ import mekanism.common.item.ItemScubaTank;
 
 @CompatDanger
 public class GasCarbonMonoxide extends EnviroGas {
-    //TODO: BURN ALL THIS
+
+    // TODO: BURN ALL THIS
     boolean isCreative = false;
 
     boolean hasGasMask = false;

@@ -59,7 +59,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
     public boolean wetSlide;
     public String loadedFrom;
 
-    //TORCH
+    // TORCH
     public boolean goOut;
     public boolean goOutRain;
     public int goOutChance;

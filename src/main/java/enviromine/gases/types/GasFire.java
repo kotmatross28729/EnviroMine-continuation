@@ -11,7 +11,8 @@ import enviromine.gases.EnviroGasDictionary;
 import enviromine.utils.ArmorTempUtils;
 
 public class GasFire extends EnviroGas {
-    //TODO: BURN ALL THIS
+
+    // TODO: BURN ALL THIS
     public GasFire(String name, int ID) {
         super(name, ID);
         this.setColor(new Color(255, 128, 0, 64));
