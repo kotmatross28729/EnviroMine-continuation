@@ -1,7 +1,10 @@
 package enviromine.utils;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.fluids.Fluid;
 
+import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.core.EM_Settings;
 
 /**
@@ -315,5 +318,13 @@ public class WaterUtils {
             case RADIOACTIVE_HOT -> "RADIOACTIVE_HOT_WATER";
             case HOT -> "HOT_WATER";
         };
+    }
+
+    // TODO: rad ice
+    public static boolean isWater(Block block, boolean radIncluded) {
+        if (block instanceof BlockEnviroMineWater enviroMineWater) {
+            return radIncluded || !WaterUtils.getTypeFromFluid(enviroMineWater.getFluid()).isRadioactive;
+        }
+        return block == Blocks.water || block == Blocks.flowing_water;
     }
 }
