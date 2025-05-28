@@ -36,8 +36,6 @@ public abstract class MixinTileEntityFreezer extends TileEntity implements ISide
     @Shadow
     public int currentItemCoolTime = 0; // 2500
     @Shadow
-    public int freezerCoolTime = 0; // progress
-    @Shadow
     private ItemStack[] freezerItemStacks = new ItemStack[3];
 
     @Shadow

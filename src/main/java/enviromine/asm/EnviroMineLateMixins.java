@@ -49,6 +49,12 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
             mixins.add("hbm.MixinFluids");
             mixins.add("hbm.MixinRadiolysisRecipes");
             mixins.add("hbm.MixinTileEntityMachineDrain");
+
+            mixins.add("hbm.waterCompat.MixinTileEntityWasteDrum");
+            mixins.add("hbm.waterCompat.MixinExplosionThermo");
+            mixins.add("hbm.waterCompat.MixinLandmine");
+            mixins.add("hbm.waterCompat.MixinTileEntityReactorResearch");
+
         }
 
         return mixins;
