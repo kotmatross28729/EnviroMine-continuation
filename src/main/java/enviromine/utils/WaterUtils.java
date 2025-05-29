@@ -6,6 +6,7 @@ import net.minecraftforge.fluids.Fluid;
 
 import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.core.EM_Settings;
+import enviromine.handlers.ObjectHandler;
 
 /**
  *
@@ -198,6 +199,10 @@ public class WaterUtils {
         return WATER_TYPES.fromTraits(waterType, heatIndex, false, true, false);
     }
 
+    public static WATER_TYPES radiate(WATER_TYPES waterType) {
+        return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, true, false, false);
+    }
+
     public static WaterUtils.WATER_TYPES getTypeFromFluid(Fluid fluid) {
         switch (fluid.getName()) {
             case "radioactive_frosty_water" -> {
@@ -254,6 +259,27 @@ public class WaterUtils {
                 return WaterUtils.WATER_TYPES.CLEAN;
             }
         }
+    }
+
+    public static Block getBlockFromType(WaterUtils.WATER_TYPES type) {
+        return switch (type) {
+            case RADIOACTIVE_FROSTY -> ObjectHandler.block_radioactive_frosty_Water;
+            case FROSTY -> ObjectHandler.block_frosty_Water;
+            case RADIOACTIVE_COLD -> ObjectHandler.block_radioactive_cold_Water;
+            case DIRTY_COLD -> ObjectHandler.block_dirty_cold_Water;
+            case SALTY_COLD -> ObjectHandler.block_salty_cold_Water;
+            case CLEAN_COLD -> ObjectHandler.block_clean_cold_Water;
+            case RADIOACTIVE -> ObjectHandler.block_radioactive_Water;
+            case DIRTY -> ObjectHandler.block_dirty_Water;
+            case SALTY -> ObjectHandler.block_salty_Water;
+            case RADIOACTIVE_WARM -> ObjectHandler.block_radioactive_warm_Water;
+            case DIRTY_WARM -> ObjectHandler.block_dirty_warm_Water;
+            case SALTY_WARM -> ObjectHandler.block_salty_warm_Water;
+            case CLEAN_WARM -> ObjectHandler.block_clean_warm_Water;
+            case RADIOACTIVE_HOT -> ObjectHandler.block_radioactive_hot_Water;
+            case HOT -> ObjectHandler.block_hot_Water;
+            default -> Blocks.water;
+        };
     }
 
     public static WaterUtils.WATER_TYPES getTypeFromString(String type) {

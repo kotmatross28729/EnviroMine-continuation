@@ -16,17 +16,15 @@ import enviromine.blocks.water.BlockEnviroMineWater;
 @Mixin(value = Landmine.class, priority = 999)
 public class MixinLandmine {
 
-    //TODO: not working
-    
     @Inject(
         method = "isWaterAbove",
         at = @At(
-            value = "INVOKE",
-            target = "net/minecraft/world/World.func_147439_a(III)Lnet/minecraft/block/Block;",
+            value = "FIELD",
+            target = "net/minecraft/init/Blocks.field_150355_j : Lnet/minecraft/block/Block;",
             shift = At.Shift.AFTER),
         cancellable = true,
         remap = false)
-    private void isWaterAbove(World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir,
+    public void isWaterAbove(World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir,
         @Local Block blockAbove) {
         if (blockAbove instanceof BlockEnviroMineWater) {
             cir.setReturnValue(true);

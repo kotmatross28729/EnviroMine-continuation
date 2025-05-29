@@ -189,22 +189,26 @@ public class ObjectHandler {
     /// -------
 
     public static void initBlocks() {
-        radioactive_frosty_Water = new EnviroMineWaterFluid("radioactive_frosty_Water").setTemperature(275); // 1,85 °C
+        radioactive_frosty_Water = new EnviroMineWaterFluid("radioactive_frosty_Water").setTemperature(275)
+            .setDensity(1030); // 1,85 °C, 1030 kg/m^3
         frosty_Water = new EnviroMineWaterFluid("frosty_Water").setTemperature(275); // 1,85 °C
-        radioactive_cold_Water = new EnviroMineWaterFluid("radioactive_cold_Water").setTemperature(283); // 9,85 °C
+        radioactive_cold_Water = new EnviroMineWaterFluid("radioactive_cold_Water").setTemperature(283)
+            .setDensity(1040); // 9,85 °C, 1040 kg/m^3
         dirty_cold_Water = new EnviroMineWaterFluid("dirty_cold_Water").setTemperature(283); // 9,85 °C
         salty_cold_Water = new EnviroMineWaterFluid("salty_cold_Water").setTemperature(283)
             .setDensity(1025); // 9,85 °C , 1025 kg/m^3
         clean_cold_Water = new EnviroMineWaterFluid("clean_cold_Water").setTemperature(283); // 9,85 °C
-        radioactive_Water = new EnviroMineWaterFluid("radioactive_Water"); // 26,85 °C
+        radioactive_Water = new EnviroMineWaterFluid("radioactive_Water").setDensity(1050); // 26,85 °C, 1050 kg/m^3
         dirty_Water = new EnviroMineWaterFluid("dirty_Water"); // 26,85 °C
         salty_Water = new EnviroMineWaterFluid("salty_Water").setDensity(1023); // 26,85 °C , 1023 kg/m^3
-        radioactive_warm_Water = new EnviroMineWaterFluid("radioactive_warm_Water").setTemperature(313); // 39,85 °C
+        radioactive_warm_Water = new EnviroMineWaterFluid("radioactive_warm_Water").setTemperature(313)
+            .setDensity(1060); // 39,85 °C, 1060 kg/m^3
         dirty_warm_Water = new EnviroMineWaterFluid("dirty_warm_Water").setTemperature(313); // 39,85 °C
         salty_warm_Water = new EnviroMineWaterFluid("salty_warm_Water").setTemperature(313)
             .setDensity(1020); // 39,85 °C , 1020 kg/m^3
         clean_warm_Water = new EnviroMineWaterFluid("clean_warm_Water").setTemperature(313); // 39,85 °C
-        radioactive_hot_Water = new EnviroMineWaterFluid("radioactive_hot_Water").setTemperature(327); // 53,85 °C
+        radioactive_hot_Water = new EnviroMineWaterFluid("radioactive_hot_Water").setTemperature(327)
+            .setDensity(1070); // 53,85 °C, 1070 kg/m^3
         hot_Water = new EnviroMineWaterFluid("hot_Water").setTemperature(327); // 53,85 °C
 
         FluidRegistry.registerFluid(radioactive_frosty_Water);
