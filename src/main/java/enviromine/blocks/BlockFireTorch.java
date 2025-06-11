@@ -103,51 +103,47 @@ public class BlockFireTorch extends BlockTorch {
             b0 = -50;
         }
 
-        this.tryCatchFire(world, x + 1, y, z, 300 + b0, rand, l, WEST);
-        this.tryCatchFire(world, x - 1, y, z, 300 + b0, rand, l, EAST);
-        this.tryCatchFire(world, x, y - 1, z, 250 + b0, rand, l, UP);
         this.tryCatchFire(world, x, y + 1, z, 250 + b0, rand, l, DOWN);
-        this.tryCatchFire(world, x, y, z - 1, 300 + b0, rand, l, SOUTH);
-        this.tryCatchFire(world, x, y, z + 1, 300 + b0, rand, l, NORTH);
 
-        for (int i1 = x - 1; i1 <= x + 1; ++i1) {
-            for (int j1 = z - 1; j1 <= z + 1; ++j1) {
-                for (int k1 = y - 1; k1 <= y + 4; ++k1) {
-                    if (i1 != x || k1 != y || j1 != z) {
-                        int l1 = 100;
+        // for (int i1 = x - 1; i1 <= x + 1; ++i1) {
+        // for (int j1 = z - 1; j1 <= z + 1; ++j1) {
+        // for (int k1 = y - 1; k1 <= y + 4; ++k1) {
+        // if (i1 != x || k1 != y || j1 != z) {
+        // int l1 = 100;
+        //
+        // if (k1 > y + 1) {
+        // l1 += (k1 - (y + 1)) * 100;
+        // }
+        //
+        // int i2 = this.getChanceOfNeighborsEncouragingFire(world, i1, k1, j1);
+        //
+        // if (i2 > 0) {
+        // int j2 = (i2 + 40 + world.difficultySetting.getDifficultyId() * 7) / (l + 30);
+        //
+        // if (flag1) {
+        // j2 /= 2;
+        // }
+        //
+        // if (j2 > 0 && rand.nextInt(l1) <= j2
+        // && (!world.isRaining() || !world.canLightningStrikeAt(i1, k1, j1))
+        // && !world.canLightningStrikeAt(i1 - 1, k1, z)
+        // && !world.canLightningStrikeAt(i1 + 1, k1, j1)
+        // && !world.canLightningStrikeAt(i1, k1, j1 - 1)
+        // && !world.canLightningStrikeAt(i1, k1, j1 + 1)) {
+        // int k2 = l + rand.nextInt(5) / 4;
+        //
+        // if (k2 > 15) {
+        // k2 = 15;
+        // }
+        //
+        // world.setBlock(i1, k1, j1, Blocks.fire, k2, 3);
+        // }
+        // }
+        // }
+        // }
+        // }
+        // }
 
-                        if (k1 > y + 1) {
-                            l1 += (k1 - (y + 1)) * 100;
-                        }
-
-                        int i2 = this.getChanceOfNeighborsEncouragingFire(world, i1, k1, j1);
-
-                        if (i2 > 0) {
-                            int j2 = (i2 + 40 + world.difficultySetting.getDifficultyId() * 7) / (l + 30);
-
-                            if (flag1) {
-                                j2 /= 2;
-                            }
-
-                            if (j2 > 0 && rand.nextInt(l1) <= j2
-                                && (!world.isRaining() || !world.canLightningStrikeAt(i1, k1, j1))
-                                && !world.canLightningStrikeAt(i1 - 1, k1, z)
-                                && !world.canLightningStrikeAt(i1 + 1, k1, j1)
-                                && !world.canLightningStrikeAt(i1, k1, j1 - 1)
-                                && !world.canLightningStrikeAt(i1, k1, j1 + 1)) {
-                                int k2 = l + rand.nextInt(5) / 4;
-
-                                if (k2 > 15) {
-                                    k2 = 15;
-                                }
-
-                                world.setBlock(i1, k1, j1, Blocks.fire, k2, 3);
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /**

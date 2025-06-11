@@ -80,10 +80,7 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
                 mixins.add("hbm.waterCompat.MixinTileEntityReactorResearch");
             }
 
-            // Someone, fucking kill this, please, thanks
-            if (ConfigMixinsLate.FUCKING_ABOMINATION) {
-                mixins.add("hbm.MixinChunkRadiationHandlerSimple");
-            }
+            // mixins.add("hbm.MixinChunkRadiationHandlerSimple");
 
         }
 

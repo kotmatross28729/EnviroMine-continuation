@@ -1,8 +1,18 @@
-# 1.3.148
+# 1.3.148 - FINAL
 
-## NOW REQUIRES [UNIMIXINS](https://github.com/LegacyModdingMC/UniMixins/releases)
+#### NOW REQUIRES [UNIMIXINS](https://github.com/LegacyModdingMC/UniMixins/releases)
 
-### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG!
+#### DON'T FORGET TO RESET THE CONFIG BEFORE INSTALLING, IF YOU HAVE CHANGED IT, YOU NEED TO TRANSFER THE CHANGES TO THE NEW CONFIG!
+
+---
+
+This is the last update.
+
+Actually, more changes were planned for this mod, but we have what we have
+
+I will still fix serious bugs, but no more content will be added / old content will be reworked
+
+Thanks for reading, and now the changelog:
 
 ---
 
@@ -14,10 +24,8 @@
 * **All logic for the Enviromine torch/coal has been moved to mixins (instead of completely replacing them with their Enviromine variants)**
   * [Torch] Added compatibility with netherlicious torches/lighters
     * There is an option to enable the old, non-mixin torch system (oldTorchLogic) if you don't want to see burnt villages (villagers are stupid)
+    * Also changed the mechanics of ignition: instead of behaving like vanilla fire, torches will only set on fire only block above them
   * [Coal] Fixed fixes VERY old (and rare) bugs, like `NullPointerException` when Enviromine tried to replace vanilla coal with its own
-
-* **Gas rework v1** **[TODO]**
-  * TODO
 
 * **Water types rework v2.0**
   * Now Enviromine water has traits : `heatIndex`, `isRadioactive`, `isDirty`, `isSalty` (**[Wiki page](https://github.com/kotmatross28729/EnviroMine-continuation/wiki/Water-types-v2)**)
@@ -64,14 +72,23 @@
 
 * (Hbm's NTM) Rotten food can be liquefied into Salient Green (recycling rotten food)
 
-* Some HarvestCraft and JAFFA food (HarvestCraft addon) now restore hydration **[TODO]**
-  * Not finished
-
 * Added craft for clean water from an empty bottle and snowball
 
 * Minor code optimizations
 
 
+
+------------------
+
+------------------
+
+------------------
+
+------------------
+
+------------------
+
+------------------
 
 ------------------
 

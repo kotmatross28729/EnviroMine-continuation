@@ -13,6 +13,8 @@ import static com.hbm.inventory.fluid.Fluids.customFluids;
 import java.io.File;
 import java.util.Locale;
 
+import net.minecraft.client.resources.I18n;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +29,6 @@ import com.hbm.inventory.fluid.trait.FT_Heatable;
 import com.hbm.inventory.fluid.trait.FT_Polluting;
 import com.hbm.inventory.fluid.trait.FT_VentRadiation;
 import com.hbm.render.util.EnumSymbol;
-import com.hbm.util.I18nUtil;
 
 @Mixin(value = Fluids.class, priority = 999)
 public class MixinFluids {
@@ -354,8 +355,7 @@ public class MixinFluids {
             name.toLowerCase(Locale.US),
             16777215,
             id,
-            I18nUtil.resolveKey("hbmfluid." + name.toLowerCase(Locale.US), new Object[0]))
-                .addTraits(LIQUID, UNSIPHONABLE);
+            I18n.format("hbmfluid." + name.toLowerCase(Locale.US), new Object[0])).addTraits(LIQUID, UNSIPHONABLE);
     }
 
     @Unique
@@ -371,7 +371,7 @@ public class MixinFluids {
             name.toLowerCase(Locale.US),
             16777215,
             id,
-            I18nUtil.resolveKey("hbmfluid." + name.toLowerCase(Locale.US), new Object[0]))
+            I18n.format("hbmfluid." + name.toLowerCase(Locale.US), new Object[0]))
                 .addTraits(GASEOUS, spent ? NOCON : UNSIPHONABLE);
     }
 

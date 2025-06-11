@@ -1,9 +1,20 @@
 ## EnviroMine continuation
 #### based on [EnviroMine for Galaxy Odyssey](https://gitgud.io/AstroTibs/enviromine-for-galaxy-odyssey) by [AstroTibs](https://gitgud.io/AstroTibs)
 
-## REQUIRES [UNIMIXINS](https://github.com/LegacyModdingMC/UniMixins/releases)
+---
 
-## IMPORTANT:
+# DEPRECATED
+
+Development is currently suspended.
+
+The latest version of the mod is `1.3.148-FINAL`
+Apart from fixing critical bugs, no more changes are planned
+
+---
+
+#### REQUIRES [UNIMIXINS](https://github.com/LegacyModdingMC/UniMixins/releases)
+
+#### IMPORTANT:
 **For most things in this mod to work correctly, do the following: `Enviromine menu - Custom Editor - Profile settings - default_settings.cfg - Config - Generate Defaults - true`**
 
 **Please note, this is a very long process! may take up to 30 minutes of real time if you are using a large modpack**
