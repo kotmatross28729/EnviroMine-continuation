@@ -48,7 +48,7 @@ public class ItemProperties_NTM {
                 .getString();
             config.get(category, IPName[13], 0)
                 .getInt(0);
-        } else if (item == ModItems.canteen_vodka || item == ModItems.canteen_fab) {
+        } else if (item == ModItems.canteen_vodka) {
             config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
                 .getString();
             config.get(category, IPName[1], -1)

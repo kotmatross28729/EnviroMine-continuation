@@ -200,7 +200,9 @@ public class RotProperties implements SerialisableProperty, PropertyBase {
             config.load();
 
             if (EnviroMine.isHbmLoaded) {
-                RotProperties_NTM.registerFoodNTM(config, category, RPName, item);
+                try {
+                    RotProperties_NTM.registerFoodNTM(config, category, RPName, item);
+                } catch (NoSuchFieldError fuckoff) {}
             }
 
             if (item == Items.golden_apple || item == Items.golden_carrot) {

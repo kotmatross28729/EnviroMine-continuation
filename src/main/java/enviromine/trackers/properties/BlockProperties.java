@@ -406,11 +406,15 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
             StabilityType defStability = EnviroUtils.getDefaultStabilityType(block);
 
             if (EnviroMine.isNetherliciousLoaded) {
-                BlockProperties_Netherlicious
-                    .registerNetherliciousTorches(config, category, BPName, block, defStability);
+                try {
+                    BlockProperties_Netherlicious
+                        .registerNetherliciousTorches(config, category, BPName, block, defStability);
+                } catch (NoSuchFieldError fuckoff) {}
             }
             if (EnviroMine.isTCLoaded) {
-                BlockProperties_TC.registerTCLeaves(config, category, BPName, block, defStability);
+                try {
+                    BlockProperties_TC.registerTCLeaves(config, category, BPName, block, defStability);
+                } catch (NoSuchFieldError fuckoff) {}
             }
 
             if (block == Blocks.lava || block == Blocks.flowing_lava

@@ -290,7 +290,9 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase {
             // }
 
             if (EnviroMine.isHbmLoaded) {
-                ArmorProperties_NTM.registerArmorNTM(config, catName, APName, armor);
+                try {
+                    ArmorProperties_NTM.registerArmorNTM(config, catName, APName, armor);
+                } catch (NoSuchFieldError fuckoff) {}
             }
 
             if (armor == Items.diamond_helmet || armor == Items.diamond_chestplate

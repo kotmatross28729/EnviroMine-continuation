@@ -340,7 +340,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
             config.load();
 
             if (EnviroMine.isHbmLoaded) {
-                ItemProperties_NTM.registerItemsNTM(config, category, IPName, item);
+                try {
+                    ItemProperties_NTM.registerItemsNTM(config, category, IPName, item);
+                } catch (NoSuchFieldError fuckoff) {}
             }
 
             if (item == Items.glass_bottle) {

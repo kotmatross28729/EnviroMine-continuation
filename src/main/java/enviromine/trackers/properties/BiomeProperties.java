@@ -220,15 +220,17 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
     public WaterUtils.WATER_TYPES getWaterQuality(World world) {
 
         if (EnviroMine.isSereneSeasonsLoaded) {
-            String seasonWater = BiomeProperties_SS.checkSeasonWater(
-                world,
-                this.SPRING_waterQuality,
-                this.SUMMER_waterQuality,
-                this.AUTUMN_waterQuality,
-                this.WINTER_waterQuality);
-            if (seasonWater != null) {
-                return WaterUtils.getTypeFromString(seasonWater);
-            }
+            try {
+                String seasonWater = BiomeProperties_SS.checkSeasonWater(
+                    world,
+                    this.SPRING_waterQuality,
+                    this.SUMMER_waterQuality,
+                    this.AUTUMN_waterQuality,
+                    this.WINTER_waterQuality);
+                if (seasonWater != null) {
+                    return WaterUtils.getTypeFromString(seasonWater);
+                }
+            } catch (NoSuchFieldError fuckoff) {}
         }
 
         return WaterUtils.getTypeFromString(this.waterQuality);
@@ -887,7 +889,9 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
         GenDefaultsProperty(biomeArray);
         if (EnviroMine.isLOTRLoaded) {
-            BiomeProperties_LOTR.handleLOTRStuff(BOName);
+            try {
+                BiomeProperties_LOTR.handleLOTRStuff(BOName);
+            } catch (NoSuchFieldError fuckoff) {}
         }
     }
 
@@ -1067,43 +1071,47 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
 
         // COMPAT
         if (EnviroMine.isHbmLoaded) {
-            BiomeProperties_NTM.registerNTMBiomes(
-                config,
-                biome,
-                BOName,
-                biomeWater,
-                biomeTemp,
-                DAWN_TEMPERATURE_DECREASE,
-                DAY_TEMPERATURE_DECREASE,
-                DUSK_TEMPERATURE_DECREASE,
-                NIGHT_TEMPERATURE_DECREASE,
-                ambientTemp_TERRAFORMED,
-                SPRING_waterQuality,
-                SUMMER_waterQuality,
-                AUTUMN_waterQuality,
-                WINTER_waterQuality);
+            try {
+                BiomeProperties_NTM.registerNTMBiomes(
+                    config,
+                    biome,
+                    BOName,
+                    biomeWater,
+                    biomeTemp,
+                    DAWN_TEMPERATURE_DECREASE,
+                    DAY_TEMPERATURE_DECREASE,
+                    DUSK_TEMPERATURE_DECREASE,
+                    NIGHT_TEMPERATURE_DECREASE,
+                    ambientTemp_TERRAFORMED,
+                    SPRING_waterQuality,
+                    SUMMER_waterQuality,
+                    AUTUMN_waterQuality,
+                    WINTER_waterQuality);
+            } catch (NoSuchFieldError fuckoff) {}
         }
         if (EnviroMine.isHbmSpaceLoaded) {
-            BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
-                config,
-                biome,
-                BOName,
-                biomeWater,
-                biomeTemp,
-                DAWN_TEMPERATURE_DECREASE,
-                DAY_TEMPERATURE_DECREASE,
-                DUSK_TEMPERATURE_DECREASE,
-                NIGHT_TEMPERATURE_DECREASE,
-                ambientTemp_TERRAFORMED,
-                DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
-                DAY_TEMPERATURE_DECREASE_TERRAFORMED,
-                DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
-                NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
-                tempRate_DAWN,
-                tempRate_DAY,
-                tempRate_DUSK,
-                tempRate_NIGHT,
-                tempRate_HARD);
+            try {
+                BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
+                    config,
+                    biome,
+                    BOName,
+                    biomeWater,
+                    biomeTemp,
+                    DAWN_TEMPERATURE_DECREASE,
+                    DAY_TEMPERATURE_DECREASE,
+                    DUSK_TEMPERATURE_DECREASE,
+                    NIGHT_TEMPERATURE_DECREASE,
+                    ambientTemp_TERRAFORMED,
+                    DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
+                    DAY_TEMPERATURE_DECREASE_TERRAFORMED,
+                    DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
+                    NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
+                    tempRate_DAWN,
+                    tempRate_DAY,
+                    tempRate_DUSK,
+                    tempRate_NIGHT,
+                    tempRate_HARD);
+            } catch (NoSuchFieldError fuckoff) {}
         }
 
         String catName = this.categoryName() + "." + biome.biomeName;
