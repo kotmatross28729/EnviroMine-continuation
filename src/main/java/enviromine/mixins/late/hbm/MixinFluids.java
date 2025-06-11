@@ -1,21 +1,15 @@
 package enviromine.mixins.late.hbm;
 
-import static com.hbm.inventory.fluid.Fluids.GASEOUS;
-import static com.hbm.inventory.fluid.Fluids.HOTSTEAM;
-import static com.hbm.inventory.fluid.Fluids.LIQUID;
-import static com.hbm.inventory.fluid.Fluids.NOCON;
-import static com.hbm.inventory.fluid.Fluids.STEAM;
-import static com.hbm.inventory.fluid.Fluids.SUPERHOTSTEAM;
-import static com.hbm.inventory.fluid.Fluids.ULTRAHOTSTEAM;
-import static com.hbm.inventory.fluid.Fluids.UNSIPHONABLE;
-import static com.hbm.inventory.fluid.Fluids.customFluids;
-
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.resources.I18n;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,13 +19,40 @@ import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.trait.FT_Coolable;
+import com.hbm.inventory.fluid.trait.FT_Gaseous;
 import com.hbm.inventory.fluid.trait.FT_Heatable;
 import com.hbm.inventory.fluid.trait.FT_Polluting;
 import com.hbm.inventory.fluid.trait.FT_VentRadiation;
+import com.hbm.inventory.fluid.trait.FluidTraitSimple;
 import com.hbm.render.util.EnumSymbol;
 
 @Mixin(value = Fluids.class, priority = 999)
 public class MixinFluids {
+
+    @Shadow
+    public static FluidType STEAM;
+    @Shadow
+    public static FluidType HOTSTEAM;
+    @Shadow
+    public static FluidType SUPERHOTSTEAM;
+    @Shadow
+    public static FluidType ULTRAHOTSTEAM;
+
+    @Shadow
+    public static List<FluidType> customFluids = new ArrayList();
+    @Shadow
+    @Final
+    public static FluidTraitSimple.FT_Liquid LIQUID = new FluidTraitSimple.FT_Liquid();
+    @Shadow
+    @Final
+    public static FT_Gaseous GASEOUS = new FT_Gaseous();
+    @Shadow
+    @Final
+    public static FluidTraitSimple.FT_NoContainer NOCON = new FluidTraitSimple.FT_NoContainer();
+
+    @Shadow
+    @Final
+    public static FluidTraitSimple.FT_Unsiphonable UNSIPHONABLE = new FluidTraitSimple.FT_Unsiphonable();
 
     @Unique
     private static FluidType RADIOACTIVE_FROSTY_WATER;

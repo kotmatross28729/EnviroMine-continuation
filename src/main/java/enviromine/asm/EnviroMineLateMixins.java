@@ -1,12 +1,14 @@
 package enviromine.asm;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.launchwrapper.Launch;
 
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import com.gtnewhorizon.gtnhmixins.ILateMixinLoader;
@@ -55,13 +57,30 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
             }
         }
 
+        boolean isHbmSpaceLoaded = false;
+
+        try {
+            if (Launch.classLoader.getClassBytes("com.hbm.dim.SolarSystem") != null) {
+                isHbmSpaceLoaded = true;
+            }
+        } catch (IOException ignored) {}
+
+        LogManager.getLogger()
+            .info("isHbmSpaceLoaded: {}", isHbmSpaceLoaded);
+
         if (loadedMods.contains("hbm")) {
 
             if (ConfigMixinsLate.MixinNTMWaterTypes) {
                 if (side == MixinEnvironment.Side.CLIENT) {
                     mixins.add("hbm.client.MixinRenderFluidTank");
                 }
-                mixins.add("hbm.MixinFluids");
+
+                if (isHbmSpaceLoaded) {
+                    mixins.add("hbm.MixinFluids");
+                } else {
+                    mixins.add("hbm.MixinFluids_OG");
+                }
+
                 mixins.add("hbm.MixinRadiolysisRecipes");
             }
 
