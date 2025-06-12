@@ -80,6 +80,12 @@ hbmfluid.clean_warm_water=Warm Water
 hbmfluid.radioactive_hot_water=Radioactive Hot Water
 hbmfluid.hot_water=Hot Water
 
+hbmfluid.radioactive_spentsteam=Radioactive Low-Pressure Steam
+hbmfluid.radioactive_steam=Radioactive Steam
+hbmfluid.radioactive_hotsteam=Radioactive Dense Steam
+hbmfluid.radioactive_superhotsteam=Radioactive Super Dense Steam
+hbmfluid.radioactive_ultrahotsteam=Radioactive Ultra Dense Steam
+
 # Enviromine items
 item.enviromine.camelpack.name=Camel Pack
 item.enviromine.gasmask.name=Respirator

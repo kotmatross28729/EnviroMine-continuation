@@ -80,6 +80,12 @@ hbmfluid.clean_warm_water=Тёплая вода
 hbmfluid.radioactive_hot_water=Радиоактивная горячая вода
 hbmfluid.hot_water=Горячая вода
 
+hbmfluid.radioactive_spentsteam=Радиоактивный пар низкого давления
+hbmfluid.radioactive_steam=Радиоактивный пар
+hbmfluid.radioactive_hotsteam=Радиоактивный горячий пар
+hbmfluid.radioactive_superhotsteam=Радиоактивный перегретый пар
+hbmfluid.radioactive_ultrahotsteam=Радиоактивный раскалённый пар
+
 # Предметы EnviroMine
 item.enviromine.camelpack.name=Бурдюк
 item.enviromine.gasmask.name=Противогаз
