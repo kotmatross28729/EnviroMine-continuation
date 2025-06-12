@@ -1757,104 +1757,132 @@ public class EM_EventManager {
                     : itemProps.effHydration;
 
                 // AMBIENT
-                if (itemProps.enableTemp && itemProps.ambTemp > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.RED + "["
-                            + I18n.format("enviromine.tooltip.ambTemp")
-                            + " "
-                            + itemProps.ambTemp
-                            + "]");
-                } else if (itemProps.ambTemp < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.AQUA + "["
-                            + I18n.format("enviromine.tooltip.ambTemp")
-                            + " "
-                            + itemProps.ambTemp
-                            + "]");
+                if (EM_Settings.enableBodyTemp) {
+                    if (itemProps.enableTemp && itemProps.ambTemp > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.RED + "["
+                                + I18n.format("enviromine.tooltip.ambTemp")
+                                + " "
+                                + itemProps.ambTemp
+                                + "]");
+                    } else if (itemProps.ambTemp < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.AQUA + "["
+                                + I18n.format("enviromine.tooltip.ambTemp")
+                                + " "
+                                + itemProps.ambTemp
+                                + "]");
+                    }
                 }
-                if (itemProps.ambAir > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.GREEN + "["
-                            + I18n.format("enviromine.tooltip.ambAir")
-                            + " "
-                            + itemProps.ambAir
-                            + "]");
-                } else if (itemProps.ambAir < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_GRAY + "["
-                            + I18n.format("enviromine.tooltip.ambAir")
-                            + " "
-                            + itemProps.ambAir
-                            + "]");
+
+                if (EM_Settings.enableAirQ) {
+                    if (itemProps.ambAir > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.GREEN + "["
+                                + I18n.format("enviromine.tooltip.ambAir")
+                                + " "
+                                + itemProps.ambAir
+                                + "]");
+                    } else if (itemProps.ambAir < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_GRAY + "["
+                                + I18n.format("enviromine.tooltip.ambAir")
+                                + " "
+                                + itemProps.ambAir
+                                + "]");
+                    }
                 }
-                if (itemProps.ambSanity > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_AQUA + "["
-                            + I18n.format("enviromine.tooltip.ambSanity")
-                            + " "
-                            + itemProps.ambSanity
-                            + "]");
-                } else if (itemProps.ambSanity < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_PURPLE + "["
-                            + I18n.format("enviromine.tooltip.ambSanity")
-                            + " "
-                            + itemProps.ambSanity
-                            + "]");
+
+                if (EM_Settings.enableSanity) {
+                    if (itemProps.ambSanity > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_AQUA + "["
+                                + I18n.format("enviromine.tooltip.ambSanity")
+                                + " "
+                                + itemProps.ambSanity
+                                + "]");
+                    } else if (itemProps.ambSanity < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_PURPLE + "["
+                                + I18n.format("enviromine.tooltip.ambSanity")
+                                + " "
+                                + itemProps.ambSanity
+                                + "]");
+                    }
                 }
-                // EFFECTIVE
-                if (itemProps.effTemp > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.RED + "[" + I18n.format("enviromine.tooltip.effTemp") + " " + effTemp + "]");
-                } else if (itemProps.effTemp < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.AQUA + "["
-                            + I18n.format("enviromine.tooltip.effTemp")
-                            + " "
-                            + effTemp
-                            + "]");
+                if (EM_Settings.enableBodyTemp) {
+                    // EFFECTIVE
+                    if (itemProps.effTemp > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.RED + "["
+                                + I18n.format("enviromine.tooltip.effTemp")
+                                + " "
+                                + effTemp
+                                + "]");
+                    } else if (itemProps.effTemp < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.AQUA + "["
+                                + I18n.format("enviromine.tooltip.effTemp")
+                                + " "
+                                + effTemp
+                                + "]");
+                    }
                 }
-                if (itemProps.effAir > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.GREEN + "[" + I18n.format("enviromine.tooltip.effAir") + " " + effAir + "]");
-                } else if (itemProps.effAir < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_GRAY + "["
-                            + I18n.format("enviromine.tooltip.effAir")
-                            + " "
-                            + effAir
-                            + "]");
+
+                if (EM_Settings.enableAirQ) {
+                    if (itemProps.effAir > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.GREEN + "["
+                                + I18n.format("enviromine.tooltip.effAir")
+                                + " "
+                                + effAir
+                                + "]");
+                    } else if (itemProps.effAir < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_GRAY + "["
+                                + I18n.format("enviromine.tooltip.effAir")
+                                + " "
+                                + effAir
+                                + "]");
+                    }
                 }
-                if (itemProps.effSanity > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_AQUA + "["
-                            + I18n.format("enviromine.tooltip.effSanity")
-                            + " "
-                            + effSanity
-                            + "]");
-                } else if (itemProps.effSanity < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_PURPLE + "["
-                            + I18n.format("enviromine.tooltip.effSanity")
-                            + " "
-                            + effSanity
-                            + "]");
+
+                if (EM_Settings.enableSanity) {
+                    if (itemProps.effSanity > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_AQUA + "["
+                                + I18n.format("enviromine.tooltip.effSanity")
+                                + " "
+                                + effSanity
+                                + "]");
+                    } else if (itemProps.effSanity < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_PURPLE + "["
+                                + I18n.format("enviromine.tooltip.effSanity")
+                                + " "
+                                + effSanity
+                                + "]");
+                    }
                 }
-                if (itemProps.effHydration > 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.DARK_BLUE + "["
-                            + I18n.format("enviromine.tooltip.effHydration")
-                            + " "
-                            + effHydration
-                            + "]");
-                } else if (itemProps.effHydration < 0F) {
-                    event.toolTip.add(
-                        EnumChatFormatting.WHITE + "["
-                            + I18n.format("enviromine.tooltip.effHydration")
-                            + " "
-                            + effHydration
-                            + "]");
+
+                if (EM_Settings.enableHydrate) {
+                    if (itemProps.effHydration > 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.DARK_BLUE + "["
+                                + I18n.format("enviromine.tooltip.effHydration")
+                                + " "
+                                + effHydration
+                                + "]");
+                    } else if (itemProps.effHydration < 0F) {
+                        event.toolTip.add(
+                            EnumChatFormatting.WHITE + "["
+                                + I18n.format("enviromine.tooltip.effHydration")
+                                + " "
+                                + effHydration
+                                + "]");
+                    }
                 }
+
             }
 
             if (event.itemStack.getItem() instanceof EnviroItemWaterBottle enviroItemWaterBottle) {
