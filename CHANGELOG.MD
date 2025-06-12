@@ -16,6 +16,19 @@ Thanks for reading, and now the changelog:
 
 ---
 
+Patch from 12.06.2025:
+
+* Fixed crash when generating new configs with Hbm's NTM (both)
+
+* Fixed crash with Hbm's NTM main (not space) version
+
+* Fixed missing localizations for radioactive steams (NTM compat)
+
+* Fixed tooltips with Enviromine parameters being displayed even if the given parameter (Ambient Temperature, Ambient Air Quality, etc.) is disabled
+
+---
+
+
 -  **[NTM Space compat]**
    * Rebalanced temperature values for planets to be more in line with ~~reality~~ common sense
      * **You can see the values [here](https://github.com/kotmatross28729/EnviroMine-continuation/blob/main/DEBUG_SHEET/TEMPS.MD)**
