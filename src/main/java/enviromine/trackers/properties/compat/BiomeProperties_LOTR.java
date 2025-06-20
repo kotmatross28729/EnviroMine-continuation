@@ -1,5 +1,12 @@
 package enviromine.trackers.properties.compat;
 
+import static enviromine.utils.WaterUtils.coolDown;
+import static enviromine.utils.WaterUtils.forcePollute;
+import static enviromine.utils.WaterUtils.forceSaltDown;
+import static enviromine.utils.WaterUtils.getStringFromType;
+import static enviromine.utils.WaterUtils.getTypeFromString;
+import static enviromine.utils.WaterUtils.heatUp;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,35 +81,31 @@ public class BiomeProperties_LOTR {
         double temp = typeList.contains(BiomeDictionary.Type.NETHER) || typeList.contains(BiomeDictionary.Type.DRY)
             ? 0.005D
             : 0D;
-        boolean isDesertBiome = typeList.contains(BiomeDictionary.Type.DESERT)
-            || typeList.contains(BiomeDictionary.Type.DRY);
-        double DesertBiomeTemperatureMultiplier = typeList.contains(BiomeDictionary.Type.DESERT)
-            || typeList.contains(BiomeDictionary.Type.DRY) ? 3D : 1D;
+        double TemperatureMultiplier = 1D;
 
         double TemperatureRainDecrease = typeList.contains(BiomeDictionary.Type.WATER) ? 8D
             : typeList.contains(BiomeDictionary.Type.JUNGLE) ? 2D : 6D;
         double TemperatureThunderDecrease = typeList.contains(BiomeDictionary.Type.WATER) ? 10D
             : typeList.contains(BiomeDictionary.Type.JUNGLE) ? 4D : 8D;
+
         boolean TemperatureRainBool = true;
         boolean TemperatureThunderBool = true;
 
-        double TemperatureShadeDecrease = /*
-                                           * typeList.contains(Type.WATER) ? 12D : typeList.contains(Type.JUNGLE)? 10D :
-                                           */ 2.5D;
+        double TemperatureShadeDecrease = 2.5D;
 
         String biomeWater = EnviroUtils.getBiomeWater(biome);
 
-        double biomeTemp;
-        double DAWN_TEMPERATURE;
-        double DAY_TEMPERATURE;
-        double DUSK_TEMPERATURE;
-        double NIGHT_TEMPERATURE;
+        double biomeTemp = EnviroUtils.getBiomeTemp(biome);
+        double DAWN_TEMPERATURE_DECREASE = 4D;
+        double DAY_TEMPERATURE_DECREASE = 0D;
+        double DUSK_TEMPERATURE_DECREASE = 4D;
+        double NIGHT_TEMPERATURE_DECREASE = 8D;
 
-        double ambientTemp_TERRAFORMED;
-        double DAWN_TEMPERATURE_TERRAFORMED;
-        double DAY_TEMPERATURE_TERRAFORMED;
-        double DUSK_TEMPERATURE_TERRAFORMED;
-        double NIGHT_TEMPERATURE_TERRAFORMED;
+        double ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
+        double DAWN_TEMPERATURE_DECREASE_TERRAFORMED = 4F;
+        double DAY_TEMPERATURE_DECREASE_TERRAFORMED = 0F;
+        double DUSK_TEMPERATURE_DECREASE_TERRAFORMED = 4F;
+        double NIGHT_TEMPERATURE_DECREASE_TERRAFORMED = 8F;
 
         double tempRate_DAWN = temp;
         double tempRate_DAY = temp;
@@ -116,6 +119,33 @@ public class BiomeProperties_LOTR {
 
         float dropSpeedRain = 0.01F;
         float dropSpeedThunder = 0.01F;
+
+        String SPRING_waterQuality;
+        String SUMMER_waterQuality;
+        String AUTUMN_waterQuality;
+        String WINTER_waterQuality;
+
+        if (getTypeFromString(EnviroUtils.getBiomeWater(biome)).isSalty) { // Because oceans don't become fresh in
+            // summer/winter
+            SPRING_waterQuality = EnviroUtils.getBiomeWater(biome);
+            SUMMER_waterQuality = getStringFromType(
+                forceSaltDown(heatUp(getTypeFromString(EnviroUtils.getBiomeWater(biome)))));
+            AUTUMN_waterQuality = EnviroUtils.getBiomeWater(biome);
+            WINTER_waterQuality = getStringFromType(
+                forceSaltDown(coolDown(getTypeFromString(EnviroUtils.getBiomeWater(biome)), 2)));
+        } else if (getTypeFromString(EnviroUtils.getBiomeWater(biome)).isDirty) { // Same with swamps
+            SPRING_waterQuality = EnviroUtils.getBiomeWater(biome);
+            SUMMER_waterQuality = getStringFromType(
+                forcePollute(heatUp(getTypeFromString(EnviroUtils.getBiomeWater(biome)))));
+            AUTUMN_waterQuality = EnviroUtils.getBiomeWater(biome);
+            WINTER_waterQuality = getStringFromType(
+                forcePollute(coolDown(getTypeFromString(EnviroUtils.getBiomeWater(biome)), 2)));
+        } else {
+            SPRING_waterQuality = EnviroUtils.getBiomeWater(biome);
+            SUMMER_waterQuality = getStringFromType(heatUp(getTypeFromString(EnviroUtils.getBiomeWater(biome))));
+            AUTUMN_waterQuality = EnviroUtils.getBiomeWater(biome);
+            WINTER_waterQuality = getStringFromType(coolDown(getTypeFromString(EnviroUtils.getBiomeWater(biome)), 2));
+        }
 
         double EARLY_SPRING_TEMPERATURE_DECREASE = (typeList.contains(BiomeDictionary.Type.HOT)
             && typeList.contains(BiomeDictionary.Type.SANDY)) ? -3.0 : // DESERT (-8 (DEFAULT+8))
@@ -167,7 +197,9 @@ public class BiomeProperties_LOTR {
                             6.0; // DEFAULT (0)
 
         double MID_AUTUMN_TEMPERATURE_DECREASE = (typeList.contains(BiomeDictionary.Type.HOT)
-            && typeList.contains(BiomeDictionary.Type.SANDY)) ? 0.0 : // DESERT (-8 (DEFAULT+8))
+            && typeList.contains(BiomeDictionary.Type.SANDY)) ? 0.0 : // DESERT
+        // (-8
+        // (DEFAULT+8))
                 typeList.contains(BiomeDictionary.Type.JUNGLE) ? 3.0 : // JUNGLE (-5 (DEFAULT+5))
                     typeList.contains(BiomeDictionary.Type.HOT) ? 6.0 : // ELSE HOT (SAVANNA) (-2 (DEFAULT+2))
                         typeList.contains(BiomeDictionary.Type.CONIFEROUS) ? 10.0 : // TAIGA (+2 (DEFAULT-2))
@@ -188,31 +220,67 @@ public class BiomeProperties_LOTR {
                             12.0; // DEFAULT (0)
 
         double MID_WINTER_TEMPERATURE_DECREASE = (typeList.contains(BiomeDictionary.Type.HOT)
-            && typeList.contains(BiomeDictionary.Type.SANDY)) ? 8.0 : // DESERT (-8 (DEFAULT+8))
+            && typeList.contains(BiomeDictionary.Type.SANDY)) ? 8.0 : // DESERT
+        // (-8
+        // (DEFAULT+8))
                 typeList.contains(BiomeDictionary.Type.JUNGLE) ? 11.0 : // JUNGLE (-5 (DEFAULT+5))
                     typeList.contains(BiomeDictionary.Type.HOT) ? 14.0 : // ELSE HOT (SAVANNA) (-2 (DEFAULT+2)))
                         typeList.contains(BiomeDictionary.Type.CONIFEROUS) ? 18.0 : // TAIGA (+2 (DEFAULT-2))
                             16.0; // DEFAULT (0)
 
         double LATE_WINTER_TEMPERATURE_DECREASE = (typeList.contains(BiomeDictionary.Type.HOT)
-            && typeList.contains(BiomeDictionary.Type.SANDY)) ? 2.0 : // DESERT (-8 (DEFAULT+8))
+            && typeList.contains(BiomeDictionary.Type.SANDY)) ? 2.0 : // DESERT
+        // (-8
+        // (DEFAULT+8))
                 typeList.contains(BiomeDictionary.Type.JUNGLE) ? 5.0 : // JUNGLE (-5 (DEFAULT+5))
                     typeList.contains(BiomeDictionary.Type.HOT) ? 8.0 : // ELSE HOT (SAVANNA) (-2 (DEFAULT+2))
                         typeList.contains(BiomeDictionary.Type.CONIFEROUS) ? 12.0 : // TAIGA (+2 (DEFAULT-2))
                             10.0; // DEFAULT (0)
 
-        DAWN_TEMPERATURE = 4D;
-        DAY_TEMPERATURE = 0D;
-        DUSK_TEMPERATURE = 4D;
-        NIGHT_TEMPERATURE = 8D;
-
-        biomeTemp = EnviroUtils.getBiomeTemp(biome);
-
-        DAWN_TEMPERATURE_TERRAFORMED = 4D;
-        DAY_TEMPERATURE_TERRAFORMED = 0D;
-        DUSK_TEMPERATURE_TERRAFORMED = 4D;
-        NIGHT_TEMPERATURE_TERRAFORMED = 8D;
-        ambientTemp_TERRAFORMED = EnviroUtils.getBiomeTemp(biome);
+        // COMPAT
+        if (EnviroMine.isHbmLoaded) {
+            try {
+                BiomeProperties_NTM.registerNTMBiomes(
+                    config,
+                    biome,
+                    BOName,
+                    biomeWater,
+                    biomeTemp,
+                    DAWN_TEMPERATURE_DECREASE,
+                    DAY_TEMPERATURE_DECREASE,
+                    DUSK_TEMPERATURE_DECREASE,
+                    NIGHT_TEMPERATURE_DECREASE,
+                    ambientTemp_TERRAFORMED,
+                    SPRING_waterQuality,
+                    SUMMER_waterQuality,
+                    AUTUMN_waterQuality,
+                    WINTER_waterQuality);
+            } catch (NoSuchFieldError fuckoff) {}
+        }
+        if (EnviroMine.isHbmSpaceLoaded) {
+            try {
+                BiomeProperties_NTM_SPACE.registerNTMSpaceBiomes(
+                    config,
+                    biome,
+                    BOName,
+                    biomeWater,
+                    biomeTemp,
+                    DAWN_TEMPERATURE_DECREASE,
+                    DAY_TEMPERATURE_DECREASE,
+                    DUSK_TEMPERATURE_DECREASE,
+                    NIGHT_TEMPERATURE_DECREASE,
+                    ambientTemp_TERRAFORMED,
+                    DAWN_TEMPERATURE_DECREASE_TERRAFORMED,
+                    DAY_TEMPERATURE_DECREASE_TERRAFORMED,
+                    DUSK_TEMPERATURE_DECREASE_TERRAFORMED,
+                    NIGHT_TEMPERATURE_DECREASE_TERRAFORMED,
+                    tempRate_DAWN,
+                    tempRate_DAY,
+                    tempRate_DUSK,
+                    tempRate_NIGHT,
+                    tempRate_HARD);
+            } catch (NoSuchFieldError fuckoff) {}
+        }
 
         String catName = "biomes" + "." + biome.biomeName;
 
@@ -225,7 +293,22 @@ public class BiomeProperties_LOTR {
                 catName,
                 BOName[2],
                 biomeWater,
-                "Water Quality: dirty, salty, cold, dirty cold, frosty, warm, dirty warm, hot, clean")
+                "Water Quality: " + "RADIOACTIVE_FROSTY, "
+                    + "FROSTY, "
+                    + "RADIOACTIVE_COLD, "
+                    + "DIRTY_COLD, "
+                    + "SALTY_COLD, "
+                    + "CLEAN_COLD, "
+                    + "RADIOACTIVE, "
+                    + "DIRTY, "
+                    + "SALTY, "
+                    + "CLEAN, "
+                    + "RADIOACTIVE_WARM, "
+                    + "DIRTY_WARM, "
+                    + "SALTY_WARM, "
+                    + "CLEAN_WARM, "
+                    + "RADIOACTIVE_HOT, "
+                    + "HOT ")
             .getString();
         config.get(catName, BOName[3], biomeTemp, "Biome temperature in celsius (Player body temp is offset by + 12C)")
             .getDouble(25.00);
@@ -237,88 +320,95 @@ public class BiomeProperties_LOTR {
             .getDouble(water);
         config.get(catName, BOName[7], air)
             .getDouble(air);
-        config.get(catName, BOName[8], isDesertBiome)
-            .getBoolean(isDesertBiome);
-        config.get(catName, BOName[9], DesertBiomeTemperatureMultiplier)
-            .getDouble(DesertBiomeTemperatureMultiplier);
+        config.get(catName, BOName[8], TemperatureMultiplier)
+            .getDouble(TemperatureMultiplier);
 
-        config.get(catName, BOName[10], DAWN_TEMPERATURE)
-            .getDouble(DAWN_TEMPERATURE);
-        config.get(catName, BOName[11], DAY_TEMPERATURE)
-            .getDouble(DAY_TEMPERATURE);
-        config.get(catName, BOName[12], DUSK_TEMPERATURE)
-            .getDouble(DUSK_TEMPERATURE);
-        config.get(catName, BOName[13], NIGHT_TEMPERATURE)
-            .getDouble(NIGHT_TEMPERATURE);
+        config.get(catName, BOName[9], DAWN_TEMPERATURE_DECREASE)
+            .getDouble(DAWN_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[10], DAY_TEMPERATURE_DECREASE)
+            .getDouble(DAY_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[11], DUSK_TEMPERATURE_DECREASE)
+            .getDouble(DUSK_TEMPERATURE_DECREASE);
+        config.get(catName, BOName[12], NIGHT_TEMPERATURE_DECREASE)
+            .getDouble(NIGHT_TEMPERATURE_DECREASE);
 
-        config.get(catName, BOName[14], TemperatureRainDecrease)
+        config.get(catName, BOName[13], TemperatureRainDecrease)
             .getDouble(TemperatureRainDecrease);
-        config.get(catName, BOName[15], TemperatureThunderDecrease)
+        config.get(catName, BOName[14], TemperatureThunderDecrease)
             .getDouble(TemperatureThunderDecrease);
-        config.get(catName, BOName[16], TemperatureRainBool)
+        config.get(catName, BOName[15], TemperatureRainBool)
             .getBoolean(TemperatureRainBool);
-        config.get(catName, BOName[17], TemperatureThunderBool)
+        config.get(catName, BOName[16], TemperatureThunderBool)
             .getBoolean(TemperatureThunderBool);
-        config.get(catName, BOName[18], TemperatureShadeDecrease)
+        config.get(catName, BOName[17], TemperatureShadeDecrease)
             .getDouble(TemperatureShadeDecrease);
 
-        config.get(catName, BOName[19], ambientTemp_TERRAFORMED)
+        config.get(catName, BOName[18], ambientTemp_TERRAFORMED)
             .getDouble(ambientTemp_TERRAFORMED);
-        config.get(catName, BOName[20], DAWN_TEMPERATURE_TERRAFORMED)
-            .getDouble(DAWN_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[21], DAY_TEMPERATURE_TERRAFORMED)
-            .getDouble(DAY_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[22], DUSK_TEMPERATURE_TERRAFORMED)
-            .getDouble(DUSK_TEMPERATURE_TERRAFORMED);
-        config.get(catName, BOName[23], NIGHT_TEMPERATURE_TERRAFORMED)
-            .getDouble(NIGHT_TEMPERATURE_TERRAFORMED);
+        config.get(catName, BOName[19], DAWN_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(DAWN_TEMPERATURE_DECREASE_TERRAFORMED);
+        config.get(catName, BOName[20], DAY_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(DAY_TEMPERATURE_DECREASE_TERRAFORMED);
+        config.get(catName, BOName[21], DUSK_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(DUSK_TEMPERATURE_DECREASE_TERRAFORMED);
+        config.get(catName, BOName[22], NIGHT_TEMPERATURE_DECREASE_TERRAFORMED)
+            .getDouble(NIGHT_TEMPERATURE_DECREASE_TERRAFORMED);
 
-        config.get(catName, BOName[24], EARLY_SPRING_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[23], EARLY_SPRING_TEMPERATURE_DECREASE)
             .getDouble(EARLY_SPRING_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[25], EARLY_SUMMER_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[24], EARLY_SUMMER_TEMPERATURE_DECREASE)
             .getDouble(EARLY_SUMMER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[26], EARLY_WINTER_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[25], EARLY_WINTER_TEMPERATURE_DECREASE)
             .getDouble(EARLY_WINTER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[27], EARLY_AUTUMN_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[26], EARLY_AUTUMN_TEMPERATURE_DECREASE)
             .getDouble(EARLY_AUTUMN_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[28], MID_SPRING_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[27], MID_SPRING_TEMPERATURE_DECREASE)
             .getDouble(MID_SPRING_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[29], MID_SUMMER_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[28], MID_SUMMER_TEMPERATURE_DECREASE)
             .getDouble(MID_SUMMER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[30], MID_WINTER_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[29], MID_WINTER_TEMPERATURE_DECREASE)
             .getDouble(MID_WINTER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[31], MID_AUTUMN_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[30], MID_AUTUMN_TEMPERATURE_DECREASE)
             .getDouble(MID_AUTUMN_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[32], LATE_SPRING_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[31], LATE_SPRING_TEMPERATURE_DECREASE)
             .getDouble(LATE_SPRING_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[33], LATE_SUMMER_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[32], LATE_SUMMER_TEMPERATURE_DECREASE)
             .getDouble(LATE_SUMMER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[34], LATE_WINTER_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[33], LATE_WINTER_TEMPERATURE_DECREASE)
             .getDouble(LATE_WINTER_TEMPERATURE_DECREASE);
-        config.get(catName, BOName[35], LATE_AUTUMN_TEMPERATURE_DECREASE)
+        config.get(catName, BOName[34], LATE_AUTUMN_TEMPERATURE_DECREASE)
             .getDouble(LATE_AUTUMN_TEMPERATURE_DECREASE);
 
-        config.get(catName, BOName[36], tempRate_DAWN)
+        config.get(catName, BOName[35], tempRate_DAWN)
             .getDouble(tempRate_DAWN);
-        config.get(catName, BOName[37], tempRate_DAY)
+        config.get(catName, BOName[36], tempRate_DAY)
             .getDouble(tempRate_DAY);
-        config.get(catName, BOName[38], tempRate_DUSK)
+        config.get(catName, BOName[37], tempRate_DUSK)
             .getDouble(tempRate_DUSK);
-        config.get(catName, BOName[39], tempRate_NIGHT)
+        config.get(catName, BOName[38], tempRate_NIGHT)
             .getDouble(tempRate_NIGHT);
 
-        config.get(catName, BOName[40], tempRate_HARD)
+        config.get(catName, BOName[39], tempRate_HARD)
             .getBoolean(tempRate_HARD);
 
-        config.get(catName, BOName[41], TemperatureWaterDecrease)
+        config.get(catName, BOName[40], TemperatureWaterDecrease)
             .getDouble(TemperatureWaterDecrease);
-        config.get(catName, BOName[42], dropSpeedWater)
+        config.get(catName, BOName[41], dropSpeedWater)
             .getDouble(dropSpeedWater);
 
-        config.get(catName, BOName[43], dropSpeedRain)
+        config.get(catName, BOName[42], dropSpeedRain)
             .getDouble(dropSpeedRain);
-        config.get(catName, BOName[44], dropSpeedThunder)
+        config.get(catName, BOName[43], dropSpeedThunder)
             .getDouble(dropSpeedThunder);
+
+        config.get(catName, BOName[44], SPRING_waterQuality, "Water Quality at spring")
+            .getString();
+        config.get(catName, BOName[45], SUMMER_waterQuality, "Water Quality at summer")
+            .getString();
+        config.get(catName, BOName[46], AUTUMN_waterQuality, "Water Quality at autumn")
+            .getString();
+        config.get(catName, BOName[47], WINTER_waterQuality, "Water Quality at winter")
+            .getString();
     }
 
 }
