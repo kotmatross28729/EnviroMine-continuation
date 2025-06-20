@@ -433,7 +433,7 @@ public class EM_Settings {
     public static boolean catchFireAtHighTemps = true;
 
     public static int caveDimID = -3;
-    public static int caveBiomeID = 23;
+    public static int caveBiomeID = 50;
     public static boolean disableCaves = false;
     public static int limitElevatorY = 10;
     public static boolean caveOreEvent = true;
