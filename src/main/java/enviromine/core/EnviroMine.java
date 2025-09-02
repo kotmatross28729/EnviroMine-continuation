@@ -14,6 +14,8 @@ import net.minecraftforge.common.DimensionManager;
 
 import org.apache.logging.log4j.Logger;
 
+import com.hbm.util.CompatExternal;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -32,12 +34,15 @@ import enviromine.EnviroPotion;
 import enviromine.core.commands.CommandPhysics;
 import enviromine.core.commands.EnviroCommand;
 import enviromine.core.commands.QuakeCommand;
+import enviromine.core.config.mixins.ConfigMixinsLate;
 import enviromine.core.proxies.EM_CommonProxy;
 import enviromine.handlers.EnviroAchievements;
 import enviromine.handlers.EnviroShaftCreationHandler;
 import enviromine.handlers.Legacy.LegacyHandler;
 import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.ObjectHandlerCompat;
+import enviromine.handlers.compat.EM_Water_Compat_NTM;
+import enviromine.handlers.compat.EM_Water_Compat_NTM_SPACE;
 import enviromine.handlers.compat.ObjectHandler_MCF;
 import enviromine.handlers.compat.ObjectHandler_MCF_NTM;
 import enviromine.handlers.compat.ObjectHandler_Netherlicious;
@@ -160,6 +165,10 @@ public class EnviroMine {
         if (isHbmLoaded) {
             ObjectHandlerCompat.initItems();
             ObjectHandlerCompat.registerItems();
+            if (ConfigMixinsLate.MixinNTMWaterTypes) {
+                if (isHbmSpaceLoaded) CompatExternal.registerFluidRegisterListener(new EM_Water_Compat_NTM_SPACE());
+                else CompatExternal.registerFluidRegisterListener(new EM_Water_Compat_NTM());
+            }
         }
         if (isNetherliciousLoaded) {
             ObjectHandler_Netherlicious.initBlocks();

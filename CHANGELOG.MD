@@ -1,3 +1,9 @@
+# 1.3.148 - FINAL - HOTFIX
+
+* Fixed crash with new versions of Hbm's NTM
+  - Use a proper API (`IFluidRegisterListener`) instead of a terrible mixin
+* Fixed crash with LOTR
+
 # 1.3.148 - FINAL
 
 #### NOW REQUIRES [UNIMIXINS](https://github.com/LegacyModdingMC/UniMixins/releases)
