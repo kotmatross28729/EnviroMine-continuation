@@ -14,8 +14,6 @@ import net.minecraftforge.common.DimensionManager;
 
 import org.apache.logging.log4j.Logger;
 
-import com.hbm.util.CompatExternal;
-
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -166,8 +164,8 @@ public class EnviroMine {
             ObjectHandlerCompat.initItems();
             ObjectHandlerCompat.registerItems();
             if (ConfigMixinsLate.MixinNTMWaterTypes) {
-                if (isHbmSpaceLoaded) CompatExternal.registerFluidRegisterListener(new EM_Water_Compat_NTM_SPACE());
-                else CompatExternal.registerFluidRegisterListener(new EM_Water_Compat_NTM());
+                if (isHbmSpaceLoaded) new EM_Water_Compat_NTM_SPACE().register();
+                else new EM_Water_Compat_NTM().register();
             }
         }
         if (isNetherliciousLoaded) {

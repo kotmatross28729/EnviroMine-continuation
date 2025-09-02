@@ -21,11 +21,16 @@ import com.hbm.inventory.fluid.trait.FT_Polluting;
 import com.hbm.inventory.fluid.trait.FT_VentRadiation;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.util.EnumSymbol;
+import com.hbm.util.CompatExternal;
 import com.hbm.util.CompatFluidRegistry;
 
 import api.hbm.fluidmk2.IFluidRegisterListener;
 
 public class EM_Water_Compat_NTM_SPACE implements IFluidRegisterListener {
+
+    public void register() {
+        CompatExternal.registerFluidRegisterListener(this);
+    }
 
     public static FluidType RADIOACTIVE_FROSTY_WATER;
     public static FluidType FROSTY_WATER;
