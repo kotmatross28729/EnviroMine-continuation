@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,11 +27,17 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
     public static IIcon stillWater;
     public static IIcon flowingWater;
 
+    // Configuration options
+    private static final boolean CONVERT_TO_VANILLA = true; // Enable conversion to vanilla water
+    private static final int CONVERSION_CHANCE = 5; // 1 in 5 chance to check for conversion each tick
+    private static final boolean CHAIN_REACTION = true; // Enable chain reaction conversion
+    private static final int MAX_CONVERSIONS_PER_TICK = 10; // Maximum number of conversions per tick
+
     public BlockEnviroMineWater(Fluid fluid, Material material) {
         super(fluid, material);
     }
 
-    // No, I DON'T want blue water everywhere, thanks
+    // Adjust water color based on surrounding biomes to avoid uniform blue water
     @SideOnly(Side.CLIENT)
     public int colorMultiplier(IBlockAccess worldIn, int x, int y, int z) {
         int l = 0;
@@ -88,13 +95,35 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
     }
 
     public void updateTick(World world, int x, int y, int z, Random rand) {
+        // Implementation of probabilistic check for vanilla water contact (Strategy 2)
+        if (CONVERT_TO_VANILLA && rand.nextInt(CONVERSION_CHANCE) == 0) {
+            boolean hasVanillaWater = checkForVanillaWater(world, x, y, z);
+
+            if (hasVanillaWater) {
+                // Convert current block to vanilla water
+                int currentMeta = world.getBlockMetadata(x, y, z);
+                world.setBlock(x, y, z, Blocks.flowing_water, currentMeta, 3);
+
+                // Chain reaction conversion (Strategy 4)
+                if (CHAIN_REACTION) {
+                    convertAdjacentCustomWater(world, x, y, z, rand);
+                }
+
+                // After conversion, this block is no longer custom water, so skip further processing
+                // However, vanilla water needs to continue updating, so call its updateTick
+                Blocks.flowing_water.updateTick(world, x, y, z, rand);
+                return;
+            }
+        }
+
+        // Original HBM space evaporation check
         if (EnviroMine.isHbmSpaceLoaded) {
             if (BlockEnviroMineWater_NTM_SPACE.checkEvaporation(world, x, y, z, tickRate)) {
                 return; // Will not try to spill further if removed
             }
         }
 
-        // INFINITE WATER
+        // Original infinite water mechanism
         if (!this.isSourceBlock(world, x, y, z)) {
             int adjacentSourceBlocks = (this.isSourceBlock(world, x - 1, y, z) ? 1 : 0)
                 + (this.isSourceBlock(world, x + 1, y, z) ? 1 : 0)
@@ -111,4 +140,83 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
         super.updateTick(world, x, y, z, rand);
     }
 
+    // Helper method: Check surrounding blocks for vanilla water
+    private boolean checkForVanillaWater(World world, int x, int y, int z) {
+        // Check all six adjacent directions
+        int[][] directions = {
+            {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1},
+            {0, 1, 0}, {0, -1, 0}
+        };
+
+        for (int[] dir : directions) {
+            int checkX = x + dir[0];
+            int checkY = y + dir[1];
+            int checkZ = z + dir[2];
+
+            Block neighborBlock = world.getBlock(checkX, checkY, checkZ);
+            if (neighborBlock == Blocks.flowing_water || neighborBlock == Blocks.water) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Helper method: Convert adjacent custom water blocks
+    private void convertAdjacentCustomWater(World world, int x, int y, int z, Random rand) {
+        int[][] directions = {
+            {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1},
+            {0, 1, 0}, {0, -1, 0}
+        };
+
+        int conversions = 0;
+
+        for (int[] dir : directions) {
+            if (conversions >= MAX_CONVERSIONS_PER_TICK) {
+                break; // Reached maximum conversions per tick
+            }
+
+            int checkX = x + dir[0];
+            int checkY = y + dir[1];
+            int checkZ = z + dir[2];
+
+            Block neighborBlock = world.getBlock(checkX, checkY, checkZ);
+
+            // If neighbor is custom water, convert it with a probability
+            if (neighborBlock instanceof BlockEnviroMineWater) {
+                // Convert with probability to avoid simultaneous conversion of all water
+                if (rand.nextInt(3) == 0) { // 1 in 3 chance to convert adjacent block
+                    int neighborMeta = world.getBlockMetadata(checkX, checkY, checkZ);
+                    world.setBlock(checkX, checkY, checkZ, Blocks.flowing_water, neighborMeta, 3);
+                    conversions++;
+
+                    // Optional: Schedule update for newly converted block to continue chain reaction
+                    // Note: This may cause performance issues, use with caution
+                    // world.scheduleBlockUpdate(checkX, checkY, checkZ, Blocks.flowing_water, 1);
+                }
+            }
+        }
+    }
+
+    // Optional: Override onNeighborBlockChange for faster response to neighbor changes
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block neighborBlock) {
+        super.onNeighborBlockChange(world, x, y, z, neighborBlock);
+
+        // If neighbor is vanilla water, immediately check for conversion (without waiting for updateTick)
+        if (CONVERT_TO_VANILLA && (neighborBlock == Blocks.flowing_water || neighborBlock == Blocks.water)) {
+            // Check if current block is still custom water
+            if (world.getBlock(x, y, z) instanceof BlockEnviroMineWater) {
+                int currentMeta = world.getBlockMetadata(x, y, z);
+                world.setBlock(x, y, z, Blocks.flowing_water, currentMeta, 3);
+
+                // Trigger chain reaction
+                if (CHAIN_REACTION) {
+                    // Use world's random instance
+                    Random rand = world.rand;
+                    convertAdjacentCustomWater(world, x, y, z, rand);
+                }
+            }
+        }
+    }
 }
