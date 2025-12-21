@@ -20,18 +20,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.blocks.water.compat.BlockEnviroMineWater_NTM_SPACE;
 import enviromine.core.EnviroMine;
+import enviromine.core.EM_Settings;
 import enviromine.utils.WaterUtils;
 
 public class BlockEnviroMineWater extends BlockFluidClassic {
 
     public static IIcon stillWater;
     public static IIcon flowingWater;
-
-    // Configuration options
-    private static final boolean CONVERT_TO_VANILLA = true; // Enable conversion to vanilla water
-    private static final int CONVERSION_CHANCE = 5; // 1 in 5 chance to check for conversion each tick
-    private static final boolean CHAIN_REACTION = true; // Enable chain reaction conversion
-    private static final int MAX_CONVERSIONS_PER_TICK = 10; // Maximum number of conversions per tick
 
     public BlockEnviroMineWater(Fluid fluid, Material material) {
         super(fluid, material);
@@ -43,7 +38,6 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
         int l = 0;
         int i1 = 0;
         int j1 = 0;
-
         for (int k1 = -1; k1 <= 1; ++k1) {
             for (int l1 = -1; l1 <= 1; ++l1) {
                 int i2 = worldIn.getBiomeGenForCoords(x + l1, z + k1)
@@ -96,7 +90,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 
     public void updateTick(World world, int x, int y, int z, Random rand) {
         // Implementation of probabilistic check for vanilla water contact (Strategy 2)
-        if (CONVERT_TO_VANILLA && rand.nextInt(CONVERSION_CHANCE) == 0) {
+        if (EM_Settings.convertToVanilla && rand.nextInt(EM_Settings.conversionChance) == 0) {
             boolean hasVanillaWater = checkForVanillaWater(world, x, y, z);
 
             if (hasVanillaWater) {
@@ -105,7 +99,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
                 world.setBlock(x, y, z, Blocks.flowing_water, currentMeta, 3);
 
                 // Chain reaction conversion (Strategy 4)
-                if (CHAIN_REACTION) {
+                if (EM_Settings.chainReaction) {
                     convertAdjacentCustomWater(world, x, y, z, rand);
                 }
 
@@ -172,7 +166,8 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
         int conversions = 0;
 
         for (int[] dir : directions) {
-            if (conversions >= MAX_CONVERSIONS_PER_TICK) {
+
+            if (conversions >= EM_Settings.maxConversionsPerTick) {
                 break; // Reached maximum conversions per tick
             }
 
@@ -204,14 +199,14 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
         super.onNeighborBlockChange(world, x, y, z, neighborBlock);
 
         // If neighbor is vanilla water, immediately check for conversion (without waiting for updateTick)
-        if (CONVERT_TO_VANILLA && (neighborBlock == Blocks.flowing_water || neighborBlock == Blocks.water)) {
+        if (EM_Settings.convertToVanilla && (neighborBlock == Blocks.flowing_water || neighborBlock == Blocks.water)) {
             // Check if current block is still custom water
             if (world.getBlock(x, y, z) instanceof BlockEnviroMineWater) {
                 int currentMeta = world.getBlockMetadata(x, y, z);
                 world.setBlock(x, y, z, Blocks.flowing_water, currentMeta, 3);
 
                 // Trigger chain reaction
-                if (CHAIN_REACTION) {
+                if (EM_Settings.chainReaction) {
                     // Use world's random instance
                     Random rand = world.rand;
                     convertAdjacentCustomWater(world, x, y, z, rand);
