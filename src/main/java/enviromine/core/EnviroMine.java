@@ -32,12 +32,15 @@ import enviromine.EnviroPotion;
 import enviromine.core.commands.CommandPhysics;
 import enviromine.core.commands.EnviroCommand;
 import enviromine.core.commands.QuakeCommand;
+import enviromine.core.config.mixins.ConfigMixinsLate;
 import enviromine.core.proxies.EM_CommonProxy;
 import enviromine.handlers.EnviroAchievements;
 import enviromine.handlers.EnviroShaftCreationHandler;
 import enviromine.handlers.Legacy.LegacyHandler;
 import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.ObjectHandlerCompat;
+import enviromine.handlers.compat.EM_Water_Compat_NTM;
+import enviromine.handlers.compat.EM_Water_Compat_NTM_SPACE;
 import enviromine.handlers.compat.ObjectHandler_MCF;
 import enviromine.handlers.compat.ObjectHandler_MCF_NTM;
 import enviromine.handlers.compat.ObjectHandler_Netherlicious;
@@ -160,6 +163,10 @@ public class EnviroMine {
         if (isHbmLoaded) {
             ObjectHandlerCompat.initItems();
             ObjectHandlerCompat.registerItems();
+            if (ConfigMixinsLate.MixinNTMWaterTypes) {
+                if (isHbmSpaceLoaded) new EM_Water_Compat_NTM_SPACE().register();
+                else new EM_Water_Compat_NTM().register();
+            }
         }
         if (isNetherliciousLoaded) {
             ObjectHandler_Netherlicious.initBlocks();

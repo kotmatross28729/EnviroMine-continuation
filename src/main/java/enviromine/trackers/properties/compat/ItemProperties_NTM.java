@@ -91,9 +91,7 @@ public class ItemProperties_NTM {
             || item == ModItems.bottle_sparkle
             || item == ModItems.bottle_rad
             || item == ModItems.bottle2_korl
-            || item == ModItems.bottle2_fritz
-            || item == ModItems.bottle2_korl_special
-            || item == ModItems.bottle2_fritz_special) {
+            || item == ModItems.bottle2_fritz) {
                 config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
                     .getString();
                 config.get(category, IPName[1], -1)

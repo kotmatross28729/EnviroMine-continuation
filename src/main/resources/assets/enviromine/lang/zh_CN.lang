@@ -21,6 +21,22 @@ item.enviromine.clean_warm_WaterBottle.name=温水瓶
 item.enviromine.radioactive_hot_WaterBottle.name=放射性热水瓶
 item.enviromine.hot_WaterBottle.name=热水瓶
 
+item.bucket_radioactive_frosty_Water.name=放射性冰水桶
+item.bucket_frosty_Water.name=冰水桶
+item.bucket_radioactive_cold_Water.name=放射性凉水桶
+item.bucket_dirty_cold_Water.name=脏凉水桶
+item.bucket_salty_cold_Water.name=咸凉水桶
+item.bucket_clean_cold_Water.name=凉水桶
+item.bucket_radioactive_Water.name=放射性水桶
+item.bucket_dirty_Water.name=脏水桶
+item.bucket_salty_Water.name=咸水桶
+item.bucket_radioactive_warm_Water.name=放射性温水桶
+item.bucket_dirty_warm_Water.name=脏温水桶
+item.bucket_salty_warm_Water.name=咸温水桶
+item.bucket_clean_warm_Water.name=温水桶
+item.bucket_radioactive_hot_Water.name=放射性热水桶
+item.bucket_hot_Water.name=热水桶
+
 # Polymer Bottle Types (Hbm's NTM compat)
 item.enviromine.water.polymer.name=塑料瓶
 
@@ -45,6 +61,27 @@ item.enviromine.clean_warm_WaterBottle.polymer.name=塑料瓶装温水
 item.enviromine.radioactive_hot_WaterBottle.polymer.name=放射性塑料瓶装热水
 item.enviromine.hot_WaterBottle.polymer.name=塑料瓶装热水
 
+hbmfluid.radioactive_frosty_water=放射性冰水
+hbmfluid.frosty_water=冰水
+hbmfluid.radioactive_cold_water=放射性凉水
+hbmfluid.dirty_cold_water=脏凉水
+hbmfluid.salty_cold_water=咸凉水
+hbmfluid.clean_cold_water=凉水
+hbmfluid.radioactive_water=放射性水
+hbmfluid.dirty_water=脏水
+hbmfluid.salty_water=咸水
+hbmfluid.radioactive_warm_water=放射性温水
+hbmfluid.dirty_warm_water=脏温水
+hbmfluid.salty_warm_water=咸温水
+hbmfluid.clean_warm_water=温水
+hbmfluid.radioactive_hot_water=放射性热水
+hbmfluid.hot_water=热水
+
+hbmfluid.radioactive_spentsteam=放射性低压蒸汽
+hbmfluid.radioactive_steam=放射性蒸汽
+hbmfluid.radioactive_hotsteam=放射性稠密蒸汽
+hbmfluid.radioactive_superhotsteam=放射性超稠密蒸汽
+hbmfluid.radioactive_ultrahotsteam=放射性极稠密蒸汽
 
 item.enviromine.camelpack.name=储水包
 item.enviromine.gasmask.name=口罩
@@ -58,6 +95,22 @@ potion.enviromine.dehydration=脱水
 potion.enviromine.insanity=精神错乱
 potion.enviromine.heatstroke=中暑
 potion.enviromine.hypothermia=失温
+
+tile.block_radioactive_frosty_Water.name=放射性冰水
+tile.block_frosty_Water.name=冰水
+tile.block_radioactive_cold_Water.name=放射性凉水
+tile.block_dirty_cold_Water.name=脏凉水
+tile.block_salty_cold_Water.name=咸凉水
+tile.block_clean_cold_Water.name=凉水
+tile.block_radioactive_Water.name=放射性水
+tile.block_dirty_Water.name=脏水
+tile.block_salty_Water.name=咸水
+tile.block_radioactive_warm_Water.name=放射性温水
+tile.block_dirty_warm_Water.name=脏温水
+tile.block_salty_warm_Water.name=咸温水
+tile.block_clean_warm_Water.name=温水
+tile.block_radioactive_hot_Water.name=放射性热水
+tile.block_hot_Water.name=热水
 
 tile.enviromine.elevator_top.name=升降机顶
 tile.enviromine.elevator_bottom.name=升降机底

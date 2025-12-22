@@ -171,6 +171,12 @@ public class EM_Settings {
     // UNHARDCODE PROJECT
 
     // WATER
+
+    public static boolean convertToVanilla = true;
+    public static int conversionChance = 5;
+    public static boolean chainReaction = true;
+    public static int maxConversionsPerTick = 10;
+
     public static float RADIOACTIVE_FROSTY_TemperatureInfluence = -0.1F;
     public static float FROSTY_TemperatureInfluence = -0.1F;
     public static float RADIOACTIVE_COLD_TemperatureInfluence = -0.05F;
@@ -433,7 +439,7 @@ public class EM_Settings {
     public static boolean catchFireAtHighTemps = true;
 
     public static int caveDimID = -3;
-    public static int caveBiomeID = 23;
+    public static int caveBiomeID = 50;
     public static boolean disableCaves = false;
     public static int limitElevatorY = 10;
     public static boolean caveOreEvent = true;

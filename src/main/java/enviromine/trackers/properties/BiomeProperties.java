@@ -1261,7 +1261,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase {
         BOName[5] = "06.Sanity Rate";
         BOName[6] = "07.Dehydrate Rate";
         BOName[7] = "08.Air Quality Rate";
-        BOName[8] = "9.Temperature Multiplier";
+        BOName[8] = "09.Temperature Multiplier";
         BOName[9] = "10.Dawn Biome Temperature Decrease";
         BOName[10] = "11.Day Biome Temperature Decrease";
         BOName[11] = "12.Dusk Biome Temperature Decrease";

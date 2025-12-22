@@ -74,13 +74,6 @@ public class EnviroMineLateMixins implements ILateMixinLoader {
                 if (side == MixinEnvironment.Side.CLIENT) {
                     mixins.add("hbm.client.MixinRenderFluidTank");
                 }
-
-                if (isHbmSpaceLoaded) {
-                    mixins.add("hbm.MixinFluids");
-                } else {
-                    mixins.add("hbm.MixinFluids_OG");
-                }
-
                 mixins.add("hbm.MixinRadiolysisRecipes");
             }
 

@@ -23,6 +23,32 @@ public class ConfigGeneral {
             EM_Settings.disableWaterTypes,
             "Disables water types, leave only clean (vanilla) water");
 
+        EM_Settings.convertToVanilla = config.getBoolean(
+            String.format("%03d" + "_convertToVanilla", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.convertToVanilla,
+            "Whether to automatically convert custom water to vanilla water when it comes into contact with vanilla water");
+
+        EM_Settings.conversionChance = config.getInt(
+            String.format("%03d" + "_conversionChance", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.conversionChance,
+            1, 100,
+            "Conversion check probability denominator (1/N). For example, 5 means check every 5 updates. Higher values result in slower conversion");
+
+        EM_Settings.chainReaction = config.getBoolean(
+            String.format("%03d" + "_chainReaction", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.chainReaction,
+            "Whether to enable chain reaction (when a water block converts, it will attempt to convert adjacent custom water blocks)");
+
+        EM_Settings.maxConversionsPerTick = config.getInt(
+            String.format("%03d" + "_maxConversionsPerTick", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.maxConversionsPerTick,
+            1, 100,
+            "Maximum number of custom water block conversions per tick (prevents performance issues)");
+
         EM_Settings.rotTimeValidation = config.getBoolean(
             String.format("%03d" + "_rotTimeValidation", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,
