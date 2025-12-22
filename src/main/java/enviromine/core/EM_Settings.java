@@ -48,10 +48,24 @@ public class EM_Settings {
     public static int loggerVerbosity;
 
     // Fork changes
-
     public static boolean oldTorchLogic = false;
     public static boolean disableWaterTypes = false;
     public static boolean rotTimeValidation = true;
+
+    // Tooltip Colors
+    public static String tooltipArmorSealedColor = "GOLD";
+    public static String tooltipArmorResistanceColor = "YELLOW";
+    public static String tooltipTempPositiveColor = "RED";
+    public static String tooltipTempNegativeColor = "AQUA";
+    public static String tooltipAirPositiveColor = "GREEN";
+    public static String tooltipAirNegativeColor = "DARK_GRAY";
+    public static String tooltipSanityPositiveColor = "DARK_AQUA";
+    public static String tooltipSanityNegativeColor = "DARK_PURPLE";
+    public static String tooltipHydrationPositiveColor = "DARK_BLUE";
+    public static String tooltipHydrationNegativeColor = "WHITE";
+    public static String tooltipRadioactiveColor = "GREEN";
+    public static String tooltipDirtyColor = "DARK_GREEN";
+    public static String tooltipSaltyColor = "WHITE";
 
     // EM_StatusManager
     public static float LavaBlockAmbientTemperature = 200F;
