@@ -665,6 +665,85 @@ public class ConfigGeneral {
             -65536,
             65536,
             "Distance from the player at which the davy lamp reacts to gases");
+
+        // Tooltip Colors
+        EM_Settings.tooltipArmorSealedColor = config.getString(
+            String.format("%03d" + "_tooltipArmorSealedColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipArmorSealedColor,
+            " Valid values: BLACK, DARK_BLUE, DARK_GREEN, DARK_AQUA, DARK_RED, DARK_PURPLE, GOLD, GRAY, DARK_GRAY, BLUE, GREEN, AQUA, RED, LIGHT_PURPLE, YELLOW, WHITE.\n" + "Color for armor sealed tooltip.");
+
+        EM_Settings.tooltipArmorResistanceColor = config.getString(
+            String.format("%03d" + "_tooltipArmorResistanceColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipArmorResistanceColor,
+            "Color for armor resistance tooltip");
+
+        EM_Settings.tooltipTempPositiveColor = config.getString(
+            String.format("%03d" + "_tooltipTempPositiveColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipTempPositiveColor,
+            "Color for positive temperature effects");
+
+        EM_Settings.tooltipTempNegativeColor = config.getString(
+            String.format("%03d" + "_tooltipTempNegativeColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipTempNegativeColor,
+            "Color for negative temperature effects");
+
+        EM_Settings.tooltipAirPositiveColor = config.getString(
+            String.format("%03d" + "_tooltipAirPositiveColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipAirPositiveColor,
+            "Color for positive air quality effects");
+
+        EM_Settings.tooltipAirNegativeColor = config.getString(
+            String.format("%03d" + "_tooltipAirNegativeColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipAirNegativeColor,
+            "Color for negative air quality effects");
+
+        EM_Settings.tooltipSanityPositiveColor = config.getString(
+            String.format("%03d" + "_tooltipSanityPositiveColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipSanityPositiveColor,
+            "Color for positive sanity effects");
+
+        EM_Settings.tooltipSanityNegativeColor = config.getString(
+            String.format("%03d" + "_tooltipSanityNegativeColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipSanityNegativeColor,
+            "Color for negative sanity effects");
+
+        EM_Settings.tooltipHydrationPositiveColor = config.getString(
+            String.format("%03d" + "_tooltipHydrationPositiveColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipHydrationPositiveColor,
+            "Color for positive hydration effects");
+
+        EM_Settings.tooltipHydrationNegativeColor = config.getString(
+            String.format("%03d" + "_tooltipHydrationNegativeColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipHydrationNegativeColor,
+            "Color for negative hydration effects");
+
+        EM_Settings.tooltipRadioactiveColor = config.getString(
+            String.format("%03d" + "_tooltipRadioactiveColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipRadioactiveColor,
+            "Color for radioactive water tooltip");
+
+        EM_Settings.tooltipDirtyColor = config.getString(
+            String.format("%03d" + "_tooltipDirtyColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipDirtyColor,
+            "Color for dirty water tooltip");
+
+        EM_Settings.tooltipSaltyColor = config.getString(
+            String.format("%03d" + "_tooltipSaltyColor", i++),
+            CATEGORY_KOTMATROSS_FORK_CHANGES,
+            EM_Settings.tooltipSaltyColor,
+            "Color for salty water tooltip");
     }
 
 }
