@@ -185,7 +185,6 @@ public class EM_Settings {
     // UNHARDCODE PROJECT
 
     // WATER
-
     public static boolean convertToVanilla = true;
     public static int conversionChance = 5;
     public static boolean chainReaction = true;
