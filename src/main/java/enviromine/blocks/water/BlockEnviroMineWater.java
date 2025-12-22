@@ -19,8 +19,8 @@ import com.hbm.util.ContaminationUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import enviromine.blocks.water.compat.BlockEnviroMineWater_NTM_SPACE;
-import enviromine.core.EnviroMine;
 import enviromine.core.EM_Settings;
+import enviromine.core.EnviroMine;
 import enviromine.utils.WaterUtils;
 
 public class BlockEnviroMineWater extends BlockFluidClassic {
@@ -137,10 +137,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
     // Helper method: Check surrounding blocks for vanilla water
     private boolean checkForVanillaWater(World world, int x, int y, int z) {
         // Check all six adjacent directions
-        int[][] directions = {
-            {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1},
-            {0, 1, 0}, {0, -1, 0}
-        };
+        int[][] directions = { { 1, 0, 0 }, { -1, 0, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 0, 1, 0 }, { 0, -1, 0 } };
 
         for (int[] dir : directions) {
             int checkX = x + dir[0];
@@ -158,10 +155,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
 
     // Helper method: Convert adjacent custom water blocks
     private void convertAdjacentCustomWater(World world, int x, int y, int z, Random rand) {
-        int[][] directions = {
-            {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1},
-            {0, 1, 0}, {0, -1, 0}
-        };
+        int[][] directions = { { 1, 0, 0 }, { -1, 0, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 0, 1, 0 }, { 0, -1, 0 } };
 
         int conversions = 0;
 

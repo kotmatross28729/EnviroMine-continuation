@@ -6,7 +6,7 @@
     Big thanks to the AstroTibs for developing EnviroMine for Galaxy Odyssey
 
 # EnviroMine continuation
-    Big thanks to the iamsoNewBee for Chinese localization, nice suggestions and new plastic bottles textures
+    Big thanks to the iamsoNewBee for Chinese localization, nice suggestions, new plastic bottles textures and other contributions
     Big thanks to the xronin01 for nice suggestions
     
 # Honorable mentions [EnviroMine continuation]

@@ -57,7 +57,8 @@ import enviromine.world.features.mineshaft.EM_VillageMineshaft;
     modid = EM_Settings.MOD_ID,
     name = EM_Settings.MOD_NAME,
     version = EM_Settings.VERSION,
-    guiFactory = EM_Settings.GUI_FACTORY)
+    guiFactory = EM_Settings.GUI_FACTORY,
+    dependencies = "after:hbm;")
 public class EnviroMine {
 
     public static Logger logger;

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import enviromine.trackers.properties.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.BlockJukebox.TileEntityJukebox;
@@ -109,6 +108,7 @@ import enviromine.items.EnviroItemWaterBottle;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.trackers.EnviroDataTracker;
 import enviromine.trackers.Hallucination;
+import enviromine.trackers.properties.*;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.WaterUtils;
@@ -171,7 +171,7 @@ public class EM_EventManager {
             // Ensure that only one set of trackers are made per Minecraft instance.
             boolean allowTracker = !(event.world.isRemote && EnviroMine.proxy.isClient()
                 && Minecraft.getMinecraft()
-                .isIntegratedServerRunning());
+                    .isIntegratedServerRunning());
 
             if (EnviroDataTracker.isLegalType((EntityLivingBase) event.entity)
                 && (event.entity instanceof EntityPlayer || EM_Settings.trackNonPlayer)
@@ -207,25 +207,25 @@ public class EM_EventManager {
             && !event.world.isRemote
             && event.world.getTotalWorldTime() > EM_PhysManager.worldStartTime + EM_Settings.worldDelay
             && chunkPhys) {
-            if (oldSand.func_145805_f() != Blocks.air) {
-                NBTTagCompound oldTags = new NBTTagCompound();
-                oldSand.writeToNBT(oldTags);
+                if (oldSand.func_145805_f() != Blocks.air) {
+                    NBTTagCompound oldTags = new NBTTagCompound();
+                    oldSand.writeToNBT(oldTags);
 
-                EntityPhysicsBlock newSand = new EntityPhysicsBlock(
-                    oldSand.worldObj,
-                    oldSand.prevPosX,
-                    oldSand.prevPosY,
-                    oldSand.prevPosZ,
-                    oldSand.func_145805_f(),
-                    oldSand.field_145814_a,
-                    true);
-                newSand.readFromNBT(oldTags);
-                event.world.spawnEntityInWorld(newSand);
-                event.setCanceled(true);
-                event.entity.setDead();
-                return;
+                    EntityPhysicsBlock newSand = new EntityPhysicsBlock(
+                        oldSand.worldObj,
+                        oldSand.prevPosX,
+                        oldSand.prevPosY,
+                        oldSand.prevPosZ,
+                        oldSand.func_145805_f(),
+                        oldSand.field_145814_a,
+                        true);
+                    newSand.readFromNBT(oldTags);
+                    event.world.spawnEntityInWorld(newSand);
+                    event.setCanceled(true);
+                    event.entity.setDead();
+                    return;
+                }
             }
-        }
     }
 
     @SubscribeEvent
@@ -322,7 +322,7 @@ public class EM_EventManager {
             || event.source == EnviroDamageSource.landslide
             || event.source == EnviroDamageSource.avalanche) && event.entityLiving.getEquipmentInSlot(4) != null
             && event.entityLiving.getEquipmentInSlot(4)
-            .getItem() == ObjectHandler.hardHat) {
+                .getItem() == ObjectHandler.hardHat) {
             ItemStack hardHat = event.entityLiving.getEquipmentInSlot(4);
             int helmet_durability = (hardHat.getMaxDamage() + 1) - hardHat.getItemDamage();
             int block_damage_amount = MathHelper.ceiling_float_int(event.ammount);
@@ -541,31 +541,31 @@ public class EM_EventManager {
             // CAULDRON
             else if ((item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
                 && !event.entityPlayer.worldObj.isRemote) {
-                if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
-                    && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
-                    fillBottle(
-                        event.entityPlayer.worldObj,
-                        event.entityPlayer,
-                        event.x,
-                        event.y,
-                        event.z,
-                        item,
-                        event,
-                        item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
+                    if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
+                        && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
+                        fillBottle(
+                            event.entityPlayer.worldObj,
+                            event.entityPlayer,
+                            event.x,
+                            event.y,
+                            event.z,
+                            item,
+                            event,
+                            item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
+                    }
+                } else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
+                    if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
+                        && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 3) {
+                        fillBucket(
+                            event.entityPlayer.worldObj,
+                            event.entityPlayer,
+                            event.x,
+                            event.y,
+                            event.z,
+                            item,
+                            event);
+                    }
                 }
-            } else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
-                if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
-                    && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 3) {
-                    fillBucket(
-                        event.entityPlayer.worldObj,
-                        event.entityPlayer,
-                        event.x,
-                        event.y,
-                        event.z,
-                        item,
-                        event);
-                }
-            }
 
             else if (item.getItem() == Items.record_11) {
                 RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
@@ -614,7 +614,7 @@ public class EM_EventManager {
     }
 
     public static void fillBucket(World world, EntityPlayer player, int x, int y, int z, ItemStack item,
-                                  PlayerInteractEvent event) {
+        PlayerInteractEvent event) {
         MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player);
 
         if (movingobjectposition != null) {
@@ -694,7 +694,7 @@ public class EM_EventManager {
     }
 
     public static void fillBottle(World world, EntityPlayer player, int x, int y, int z, ItemStack item,
-                                  PlayerInteractEvent event, boolean isPolymer) {
+        PlayerInteractEvent event, boolean isPolymer) {
         MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(world, player);
 
         if (movingobjectposition != null) {
@@ -811,7 +811,7 @@ public class EM_EventManager {
                 if (entityPlayer.worldObj.getBlock(i, j, k)
                     .getMaterial() != Material.water
                     && entityPlayer.worldObj.getBlock(x, y, z)
-                    .getMaterial() == Material.water) {
+                        .getMaterial() == Material.water) {
                     i = x;
                     j = y;
                     k = z;
@@ -859,7 +859,7 @@ public class EM_EventManager {
                         if (type.isDirty) {
                             if (!(EM_Settings.witcheryWerewolfImmunities
                                 && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer)
-                                || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer)))) {
+                                    || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer)))) {
                                 if (entityPlayer.getRNG()
                                     .nextInt(2) == 0) {
                                     entityPlayer
@@ -876,12 +876,12 @@ public class EM_EventManager {
                         if (type.isSalty) {
                             if (!(EM_Settings.witcheryWerewolfImmunities
                                 && (EnviroUtils.isPlayerCurrentlyWitcheryWerewolf(entityPlayer)
-                                || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer)))) {
+                                    || EnviroUtils.isPlayerCurrentlyWitcheryWolf(entityPlayer)))) {
                                 entityPlayer.getRNG()
                                     .nextInt(1);
                                 if (entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null
                                     && entityPlayer.getRNG()
-                                    .nextInt(5) == 0) {
+                                        .nextInt(5) == 0) {
                                     int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration)
                                         .getAmplifier();
                                     entityPlayer.addPotionEffect(
@@ -997,7 +997,7 @@ public class EM_EventManager {
 
         if (EM_Settings.itemProperties.containsKey(Item.itemRegistry.getNameForObject(item.getItem()))
             || EM_Settings.itemProperties
-            .containsKey(Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage())) {
+                .containsKey(Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage())) {
             ItemProperties itemProps;
             if (EM_Settings.itemProperties
                 .containsKey(Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage())) {
@@ -1158,7 +1158,7 @@ public class EM_EventManager {
 
             if (event.entityLiving.worldObj.provider.dimensionId == EM_Settings.caveDimID
                 && event.entityLiving.getEntityData()
-                .hasKey("EM_CAVE_DIST")) {
+                    .hasKey("EM_CAVE_DIST")) {
                 int[] prePos = event.entityLiving.getEntityData()
                     .getIntArray("EM_CAVE_DIST");
                 int distance = MathHelper.floor_double(event.entityLiving.getDistance(prePos[0], prePos[1], prePos[2]));
@@ -1173,10 +1173,10 @@ public class EM_EventManager {
             if (!event.entityLiving.isPotionActive(EnviroPotion.hypothermia)
                 && !event.entityLiving.isPotionActive(EnviroPotion.frostbite)
                 && event.entityLiving.worldObj
-                .getBiomeGenForCoords(
-                    MathHelper.floor_double(event.entityLiving.posX),
-                    MathHelper.floor_double(event.entityLiving.posZ))
-                .getEnableSnow()) {
+                    .getBiomeGenForCoords(
+                        MathHelper.floor_double(event.entityLiving.posX),
+                        MathHelper.floor_double(event.entityLiving.posZ))
+                    .getEnableSnow()) {
                 if (event.entityLiving.getEntityData()
                     .hasKey("EM_WINTER")) {
                     if (event.entityLiving.worldObj.getTotalWorldTime() - event.entityLiving.getEntityData()
@@ -1191,31 +1191,31 @@ public class EM_EventManager {
                 }
             } else if (event.entityLiving.getEntityData()
                 .hasKey("EM_WINTER")) {
-                event.entityLiving.getEntityData()
-                    .removeTag("EM_WINTER");
-            }
+                    event.entityLiving.getEntityData()
+                        .removeTag("EM_WINTER");
+                }
 
             if (event.entityLiving.isPotionActive(EnviroPotion.heatstroke)
                 && event.entityLiving.getActivePotionEffect(EnviroPotion.heatstroke)
-                .getAmplifier() >= 2) {
+                    .getAmplifier() >= 2) {
                 event.entityLiving.getEntityData()
                     .setBoolean("EM_BOILED", true);
             } else if (event.entityLiving.getEntityData()
                 .getBoolean("EM_BOILED") && !event.entityLiving.isPotionActive(EnviroPotion.heatstroke)) {
-                ((EntityPlayer) event.entityLiving).addStat(EnviroAchievements.hardBoiled, 1);
-                event.entityLiving.getEntityData()
-                    .removeTag("EM_BOILED");
-            } else if (event.entityLiving.getEntityData()
-                .hasKey("EM_BOILED")) {
-                event.entityLiving.getEntityData()
-                    .removeTag("EM_BOILED");
-            }
+                    ((EntityPlayer) event.entityLiving).addStat(EnviroAchievements.hardBoiled, 1);
+                    event.entityLiving.getEntityData()
+                        .removeTag("EM_BOILED");
+                } else if (event.entityLiving.getEntityData()
+                    .hasKey("EM_BOILED")) {
+                        event.entityLiving.getEntityData()
+                            .removeTag("EM_BOILED");
+                    }
 
             if (event.entityLiving.worldObj.provider.dimensionId == EM_Settings.caveDimID
                 && event.entityLiving.worldObj.getBlockLightValue(
-                MathHelper.floor_double(event.entityLiving.posX),
-                MathHelper.floor_double(event.entityLiving.posY),
-                MathHelper.floor_double(event.entityLiving.posZ)) < 1) {
+                    MathHelper.floor_double(event.entityLiving.posX),
+                    MathHelper.floor_double(event.entityLiving.posY),
+                    MathHelper.floor_double(event.entityLiving.posZ)) < 1) {
                 int x = MathHelper.floor_double(event.entityLiving.posX);
                 int y = MathHelper.floor_double(event.entityLiving.posY);
                 int z = MathHelper.floor_double(event.entityLiving.posZ);
@@ -1231,9 +1231,9 @@ public class EM_EventManager {
                 }
             } else if (event.entityLiving.getEntityData()
                 .hasKey("EM_PITCH")) {
-                event.entityLiving.getEntityData()
-                    .removeTag("EM_PITCH");
-            }
+                    event.entityLiving.getEntityData()
+                        .removeTag("EM_PITCH");
+                }
 
             if (EM_Settings.enableAirQ && EM_Settings.enableBodyTemp
                 && EM_Settings.enableHydrate
@@ -1288,8 +1288,8 @@ public class EM_EventManager {
         if (tracker == null || tracker.isDisabled) {
             if ((!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN())
                 && (EM_Settings.enableAirQ || EM_Settings.enableBodyTemp
-                || EM_Settings.enableHydrate
-                || EM_Settings.enableSanity)) {
+                    || EM_Settings.enableHydrate
+                    || EM_Settings.enableSanity)) {
                 if (event.entityLiving instanceof EntityPlayer
                     || (EM_Settings.trackNonPlayer && EnviroDataTracker.isLegalType(event.entityLiving))) {
                     if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.LOW.getLevel())
@@ -1313,7 +1313,7 @@ public class EM_EventManager {
 
         if (tracker.hydration < 10F && (!EM_Settings.dimensionProperties.containsKey(event.entityLiving.dimension)
             || (EM_Settings.dimensionProperties.containsKey(event.entityLiving.dimension)
-            && EM_Settings.dimensionProperties.get(event.entityLiving.dimension).trackHydration))) {
+                && EM_Settings.dimensionProperties.get(event.entityLiving.dimension).trackHydration))) {
             event.entityLiving.addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 0));
             event.entityLiving.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 0));
 
@@ -1578,7 +1578,7 @@ public class EM_EventManager {
     }
 
     protected static MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World,
-                                                                            EntityPlayer par2EntityPlayer) {
+        EntityPlayer par2EntityPlayer) {
         float f = 1.0F;
         float f1 = par2EntityPlayer.prevRotationPitch
             + (par2EntityPlayer.rotationPitch - par2EntityPlayer.prevRotationPitch) * f;
@@ -1587,7 +1587,7 @@ public class EM_EventManager {
         double d0 = par2EntityPlayer.prevPosX + (par2EntityPlayer.posX - par2EntityPlayer.prevPosX) * (double) f;
         double d1 = par2EntityPlayer.prevPosY + (par2EntityPlayer.posY - par2EntityPlayer.prevPosY) * (double) f
             + (double) (par1World.isRemote ? par2EntityPlayer.getEyeHeight() - par2EntityPlayer.getDefaultEyeHeight()
-            : par2EntityPlayer.getEyeHeight()); // isRemote check to revert changes to ray trace position due to
+                : par2EntityPlayer.getEyeHeight()); // isRemote check to revert changes to ray trace position due to
         // adding the eye height clientside and player yOffset differences
         double d2 = par2EntityPlayer.prevPosZ + (par2EntityPlayer.posZ - par2EntityPlayer.prevPosZ) * (double) f;
         Vec3 vec3 = Vec3.createVectorHelper(d0, d1, d2);
@@ -1648,7 +1648,7 @@ public class EM_EventManager {
         if (EM_Settings.enablePlayerRandomMobRender) {
             if (Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity)
                 && Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity)
-                .getAmplifier() >= 2) {
+                    .getAmplifier() >= 2) {
                 event.setCanceled(true);
 
                 EntityLivingBase entity = playerMob.get(event.entityPlayer.getCommandSenderName());
@@ -1735,7 +1735,9 @@ public class EM_EventManager {
         }
 
         try {
-            return EnumChatFormatting.valueOf(colorName.toUpperCase().trim());
+            return EnumChatFormatting.valueOf(
+                colorName.toUpperCase()
+                    .trim());
         } catch (IllegalArgumentException e) {
             return defaultColor;
         }
@@ -1747,24 +1749,47 @@ public class EM_EventManager {
         if (event.itemStack != null) {
 
             // All colors
-            EnumChatFormatting armorSealedColor = parseColor(EM_Settings.tooltipArmorSealedColor, EnumChatFormatting.GOLD);
-            EnumChatFormatting armorResistanceColor = parseColor(EM_Settings.tooltipArmorResistanceColor, EnumChatFormatting.YELLOW);
-            EnumChatFormatting tempPositiveColor = parseColor(EM_Settings.tooltipTempPositiveColor, EnumChatFormatting.RED);
-            EnumChatFormatting tempNegativeColor = parseColor(EM_Settings.tooltipTempNegativeColor, EnumChatFormatting.AQUA);
-            EnumChatFormatting airPositiveColor = parseColor(EM_Settings.tooltipAirPositiveColor, EnumChatFormatting.GREEN);
-            EnumChatFormatting airNegativeColor = parseColor(EM_Settings.tooltipAirNegativeColor, EnumChatFormatting.DARK_GRAY);
-            EnumChatFormatting sanityPositiveColor = parseColor(EM_Settings.tooltipSanityPositiveColor, EnumChatFormatting.DARK_AQUA);
-            EnumChatFormatting sanityNegativeColor = parseColor(EM_Settings.tooltipSanityNegativeColor, EnumChatFormatting.DARK_PURPLE);
-            EnumChatFormatting hydrationPositiveColor = parseColor(EM_Settings.tooltipHydrationPositiveColor, EnumChatFormatting.DARK_BLUE);
-            EnumChatFormatting hydrationNegativeColor = parseColor(EM_Settings.tooltipHydrationNegativeColor, EnumChatFormatting.WHITE);
-            EnumChatFormatting radioactiveColor = parseColor(EM_Settings.tooltipRadioactiveColor, EnumChatFormatting.GREEN);
+            EnumChatFormatting armorSealedColor = parseColor(
+                EM_Settings.tooltipArmorSealedColor,
+                EnumChatFormatting.GOLD);
+            EnumChatFormatting armorResistanceColor = parseColor(
+                EM_Settings.tooltipArmorResistanceColor,
+                EnumChatFormatting.YELLOW);
+            EnumChatFormatting tempPositiveColor = parseColor(
+                EM_Settings.tooltipTempPositiveColor,
+                EnumChatFormatting.RED);
+            EnumChatFormatting tempNegativeColor = parseColor(
+                EM_Settings.tooltipTempNegativeColor,
+                EnumChatFormatting.AQUA);
+            EnumChatFormatting airPositiveColor = parseColor(
+                EM_Settings.tooltipAirPositiveColor,
+                EnumChatFormatting.GREEN);
+            EnumChatFormatting airNegativeColor = parseColor(
+                EM_Settings.tooltipAirNegativeColor,
+                EnumChatFormatting.DARK_GRAY);
+            EnumChatFormatting sanityPositiveColor = parseColor(
+                EM_Settings.tooltipSanityPositiveColor,
+                EnumChatFormatting.DARK_AQUA);
+            EnumChatFormatting sanityNegativeColor = parseColor(
+                EM_Settings.tooltipSanityNegativeColor,
+                EnumChatFormatting.DARK_PURPLE);
+            EnumChatFormatting hydrationPositiveColor = parseColor(
+                EM_Settings.tooltipHydrationPositiveColor,
+                EnumChatFormatting.DARK_BLUE);
+            EnumChatFormatting hydrationNegativeColor = parseColor(
+                EM_Settings.tooltipHydrationNegativeColor,
+                EnumChatFormatting.WHITE);
+            EnumChatFormatting radioactiveColor = parseColor(
+                EM_Settings.tooltipRadioactiveColor,
+                EnumChatFormatting.GREEN);
             EnumChatFormatting dirtyColor = parseColor(EM_Settings.tooltipDirtyColor, EnumChatFormatting.DARK_GREEN);
             EnumChatFormatting saltyColor = parseColor(EM_Settings.tooltipSaltyColor, EnumChatFormatting.WHITE);
 
             if (ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, false)) {
                 event.toolTip.add(armorSealedColor + "[" + I18n.format("enviromine.tooltip.armor.sealed") + "]");
             } else if (ArmorTempUtils.checkArmorPropertyItemStack(event.itemStack, true)) {
-                event.toolTip.add(armorResistanceColor + "[" + I18n.format("enviromine.tooltip.armor.resistance") + "]");
+                event.toolTip
+                    .add(armorResistanceColor + "[" + I18n.format("enviromine.tooltip.armor.resistance") + "]");
             }
 
             if (ItemProperties.base.hasProperty(event.itemStack)) {
@@ -1836,36 +1861,20 @@ public class EM_EventManager {
                     // EFFECTIVE
                     if (itemProps.effTemp > 0F) {
                         event.toolTip.add(
-                            tempPositiveColor + "["
-                                + I18n.format("enviromine.tooltip.effTemp")
-                                + " "
-                                + effTemp
-                                + "]");
+                            tempPositiveColor + "[" + I18n.format("enviromine.tooltip.effTemp") + " " + effTemp + "]");
                     } else if (itemProps.effTemp < 0F) {
                         event.toolTip.add(
-                            tempNegativeColor + "["
-                                + I18n.format("enviromine.tooltip.effTemp")
-                                + " "
-                                + effTemp
-                                + "]");
+                            tempNegativeColor + "[" + I18n.format("enviromine.tooltip.effTemp") + " " + effTemp + "]");
                     }
                 }
 
                 if (EM_Settings.enableAirQ) {
                     if (itemProps.effAir > 0F) {
                         event.toolTip.add(
-                            airPositiveColor + "["
-                                + I18n.format("enviromine.tooltip.effAir")
-                                + " "
-                                + effAir
-                                + "]");
+                            airPositiveColor + "[" + I18n.format("enviromine.tooltip.effAir") + " " + effAir + "]");
                     } else if (itemProps.effAir < 0F) {
                         event.toolTip.add(
-                            airNegativeColor + "["
-                                + I18n.format("enviromine.tooltip.effAir")
-                                + " "
-                                + effAir
-                                + "]");
+                            airNegativeColor + "[" + I18n.format("enviromine.tooltip.effAir") + " " + effAir + "]");
                     }
                 }
 
@@ -1985,16 +1994,16 @@ public class EM_EventManager {
         }
     }
 
-        @SubscribeEvent
-        public void onConfigChanged (ConfigChangedEvent.OnConfigChangedEvent event){
-            if (event.modID.equals(EM_Settings.MOD_ID)) {
-                for (Configuration config : EM_ConfigMenu.tempConfigs) {
-                    config.save();
-                }
-
-                EM_ConfigHandler.ReloadConfig();
+    @SubscribeEvent
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.modID.equals(EM_Settings.MOD_ID)) {
+            for (Configuration config : EM_ConfigMenu.tempConfigs) {
+                config.save();
             }
+
+            EM_ConfigHandler.ReloadConfig();
         }
+    }
 
     @SubscribeEvent
     public void onCrafted(ItemCraftedEvent event) // Prevents exploit of making foods with almost rotten food to prolong
@@ -2012,12 +2021,12 @@ public class EM_EventManager {
             rotTime = (long) (rotProps.days * 24000L);
         } else if (EM_Settings.rotProperties.containsKey(
             "" + Item.itemRegistry.getNameForObject(event.crafting.getItem()) + "," + event.crafting.getItemDamage())) {
-            rotProps = EM_Settings.rotProperties.get(
-                "" + Item.itemRegistry.getNameForObject(event.crafting.getItem())
-                    + ","
-                    + event.crafting.getItemDamage());
-            rotTime = (long) (rotProps.days * 24000L);
-        }
+                rotProps = EM_Settings.rotProperties.get(
+                    "" + Item.itemRegistry.getNameForObject(event.crafting.getItem())
+                        + ","
+                        + event.crafting.getItemDamage());
+                rotTime = (long) (rotProps.days * 24000L);
+            }
 
         if (rotProps == null) {
             return; // Crafted item is not a rotting food
@@ -2035,7 +2044,7 @@ public class EM_EventManager {
             if (stack.getTagCompound()
                 .hasKey("EM_ROT_DATE")
                 && (lowestDate < 0 || stack.getTagCompound()
-                .getLong("EM_ROT_DATE") < lowestDate)) {
+                    .getLong("EM_ROT_DATE") < lowestDate)) {
                 lowestDate = stack.getTagCompound()
                     .getLong("EM_ROT_DATE");
             }

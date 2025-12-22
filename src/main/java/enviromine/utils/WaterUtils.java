@@ -91,6 +91,7 @@ public class WaterUtils {
         }
     }
 
+    // 22.12.25: same here
     public static WATER_TYPES heatUp(WATER_TYPES waterType) {
         boolean isDirty = waterType.isDirty;
         boolean isSalty = waterType.isSalty;
@@ -134,6 +135,7 @@ public class WaterUtils {
         return WATER_TYPES.fromTraits(waterType, heatIndex, waterType.isRadioactive, isDirty, isSalty);
     }
 
+    // 22.12.25: coolDown(waterType, 1), lol this is another method rewrite for no reason
     public static WATER_TYPES coolDown(WATER_TYPES waterType) {
         boolean isDirty = waterType.isDirty;
         boolean isSalty = waterType.isSalty;
@@ -203,6 +205,7 @@ public class WaterUtils {
         return WATER_TYPES.fromTraits(waterType, waterType.heatIndex, true, false, false);
     }
 
+    // 22.12.25: LMAO, this is literally a rewrite of an existing method
     public static WaterUtils.WATER_TYPES getTypeFromFluid(Fluid fluid) {
         switch (fluid.getName()) {
             case "radioactive_frosty_water" -> {
@@ -303,6 +306,7 @@ public class WaterUtils {
         };
     }
 
+    // 22.12.25: Holy shit, we have two almost identical methods, but this one just doesn't have `_WATER`, LMAO
     public static String getStringFromType(WaterUtils.WATER_TYPES type) {
         return switch (type) {
             case RADIOACTIVE_FROSTY -> "RADIOACTIVE_FROSTY";
@@ -325,6 +329,7 @@ public class WaterUtils {
     }
 
     // Used to find the relevant NTM fluid: `Fluids.fromName(WaterUtils.getStringFromTypeNTMFluid(type))`
+    // 22.12.25: It's absolutely stupid to do all this stuff using String when it can be done directly, but I don't care
     public static String getStringFromTypeNTMFluid(WaterUtils.WATER_TYPES type) {
         return switch (type) {
             case RADIOACTIVE_FROSTY -> "RADIOACTIVE_FROSTY_WATER";
@@ -336,7 +341,7 @@ public class WaterUtils {
             case RADIOACTIVE -> "RADIOACTIVE_WATER";
             case DIRTY -> "DIRTY_WATER";
             case SALTY -> "SALTY_WATER";
-            case CLEAN -> "CLEAN_WATER";
+            case CLEAN -> "WATER";
             case RADIOACTIVE_WARM -> "RADIOACTIVE_WARM_WATER";
             case DIRTY_WARM -> "DIRTY_WARM_WATER";
             case SALTY_WARM -> "SALTY_WARM_WATER";

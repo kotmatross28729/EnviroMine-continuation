@@ -33,7 +33,8 @@ public class ConfigGeneral {
             String.format("%03d" + "_conversionChance", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,
             EM_Settings.conversionChance,
-            1, 100,
+            1,
+            100,
             "Conversion check probability denominator (1/N). For example, 5 means check every 5 updates. Higher values result in slower conversion");
 
         EM_Settings.chainReaction = config.getBoolean(
@@ -46,7 +47,8 @@ public class ConfigGeneral {
             String.format("%03d" + "_maxConversionsPerTick", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,
             EM_Settings.maxConversionsPerTick,
-            1, 100,
+            1,
+            100,
             "Maximum number of custom water block conversions per tick (prevents performance issues)");
 
         EM_Settings.rotTimeValidation = config.getBoolean(
@@ -671,7 +673,8 @@ public class ConfigGeneral {
             String.format("%03d" + "_tooltipArmorSealedColor", i++),
             CATEGORY_KOTMATROSS_FORK_CHANGES,
             EM_Settings.tooltipArmorSealedColor,
-            " Valid values: BLACK, DARK_BLUE, DARK_GREEN, DARK_AQUA, DARK_RED, DARK_PURPLE, GOLD, GRAY, DARK_GRAY, BLUE, GREEN, AQUA, RED, LIGHT_PURPLE, YELLOW, WHITE.\n" + "Color for armor sealed tooltip.");
+            " Valid values: BLACK, DARK_BLUE, DARK_GREEN, DARK_AQUA, DARK_RED, DARK_PURPLE, GOLD, GRAY, DARK_GRAY, BLUE, GREEN, AQUA, RED, LIGHT_PURPLE, YELLOW, WHITE.\n"
+                + "Color for armor sealed tooltip.");
 
         EM_Settings.tooltipArmorResistanceColor = config.getString(
             String.format("%03d" + "_tooltipArmorResistanceColor", i++),
