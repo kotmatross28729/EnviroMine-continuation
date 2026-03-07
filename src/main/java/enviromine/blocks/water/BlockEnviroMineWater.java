@@ -118,6 +118,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
         }
 
         // Original infinite water mechanism
+        if (!EM_Settings.finiteEMWater) {
         if (!this.isSourceBlock(world, x, y, z)) {
             int adjacentSourceBlocks = (this.isSourceBlock(world, x - 1, y, z) ? 1 : 0)
                 + (this.isSourceBlock(world, x + 1, y, z) ? 1 : 0)
@@ -129,6 +130,7 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
                 .isSolid() || this.isSourceBlock(world, x, y + densityDir, z))) {
                 world.setBlockMetadataWithNotify(x, y, z, 0, 3);
             }
+        }
         }
 
         super.updateTick(world, x, y, z, rand);
