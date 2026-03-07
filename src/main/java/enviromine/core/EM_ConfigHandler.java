@@ -1063,5 +1063,4 @@ public class EM_ConfigHandler {
         config.moveProperty(oldCat, propName, remove);
         config.removeCategory(config.getCategory(remove));
     }
-
 } // End of Page
