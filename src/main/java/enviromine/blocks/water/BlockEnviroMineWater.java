@@ -118,16 +118,18 @@ public class BlockEnviroMineWater extends BlockFluidClassic {
         }
 
         // Original infinite water mechanism
-        if (!this.isSourceBlock(world, x, y, z)) {
-            int adjacentSourceBlocks = (this.isSourceBlock(world, x - 1, y, z) ? 1 : 0)
-                + (this.isSourceBlock(world, x + 1, y, z) ? 1 : 0)
-                + (this.isSourceBlock(world, x, y, z - 1) ? 1 : 0)
-                + (this.isSourceBlock(world, x, y, z + 1) ? 1 : 0);
-            int densityDir = getDensity(world, x, y, z) > 0 ? -1 : 1;
-            if (adjacentSourceBlocks >= 2 && (world.getBlock(x, y + densityDir, z)
-                .getMaterial()
-                .isSolid() || this.isSourceBlock(world, x, y + densityDir, z))) {
-                world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+        if (!EM_Settings.finiteEMWater) {
+            if (!this.isSourceBlock(world, x, y, z)) {
+                int adjacentSourceBlocks = (this.isSourceBlock(world, x - 1, y, z) ? 1 : 0)
+                    + (this.isSourceBlock(world, x + 1, y, z) ? 1 : 0)
+                    + (this.isSourceBlock(world, x, y, z - 1) ? 1 : 0)
+                    + (this.isSourceBlock(world, x, y, z + 1) ? 1 : 0);
+                int densityDir = getDensity(world, x, y, z) > 0 ? -1 : 1;
+                if (adjacentSourceBlocks >= 2 && (world.getBlock(x, y + densityDir, z)
+                    .getMaterial()
+                    .isSolid() || this.isSourceBlock(world, x, y + densityDir, z))) {
+                    world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+                }
             }
         }
 

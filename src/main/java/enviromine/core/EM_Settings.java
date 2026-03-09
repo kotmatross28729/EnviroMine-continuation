@@ -24,6 +24,8 @@ import enviromine.trackers.properties.StabilityType;
 
 public class EM_Settings {
 
+    public static boolean finiteEMWater = false;
+
     public static final UUID FROST1_UUID = UUID.fromString("B0C5F86A-78F3-417C-8B5A-527B90A1E919");
     public static final UUID FROST2_UUID = UUID.fromString("5C4111A7-A66C-40FB-9FAD-1C6ADAEE7E27");
     public static final UUID FROST3_UUID = UUID.fromString("721E793E-2203-4F6F-883F-6F44D7DDCCE1");
