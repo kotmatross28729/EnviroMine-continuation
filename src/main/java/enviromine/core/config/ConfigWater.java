@@ -400,6 +400,43 @@ public class ConfigWater {
             CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
             EM_Settings.finiteEMWater,
             "If true, EnviroMine's custom water will not regenerate sources (infinite water disabled).");
-    }
 
+        EM_Settings.enableHighTempCooling = config.getBoolean(
+            "Enable High Temp Cooling",
+            CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
+            EM_Settings.enableHighTempCooling,
+            "If true, when player's body temperature exceeds the threshold and they are in water, their temperature will be reduced.");
+
+        EM_Settings.highTempThreshold = config.getFloat(
+            "High Temp Threshold",
+            CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
+            EM_Settings.highTempThreshold,
+            0.0f,
+            100.0f,
+            "Body temperature above this value (in Celsius) will trigger cooling when in water.");
+
+        EM_Settings.coolTempNormal = config.getFloat(
+            "Cool Temp Normal Water",
+            CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
+            EM_Settings.coolTempNormal,
+            0.0f,
+            100.0f,
+            "Body temperature set to this value when cooling in normal water (vanilla water, or ambient radioactive/dirty/salty water).");
+
+        EM_Settings.coolTempCold = config.getFloat(
+            "Cool Temp Cold Water",
+            CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
+            EM_Settings.coolTempCold,
+            0.0f,
+            100.0f,
+            "Body temperature set to this value when cooling in cold water (radioactive_cold, dirty_cold, salty_cold).");
+
+        EM_Settings.coolTempFrosty = config.getFloat(
+            "Cool Temp Frosty Water",
+            CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
+            EM_Settings.coolTempFrosty,
+            0.0f,
+            100.0f,
+            "Body temperature set to this value when cooling in frosty water (radioactive_frosty, frosty).");
+    }
 }

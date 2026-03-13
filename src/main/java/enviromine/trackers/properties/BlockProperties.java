@@ -64,6 +64,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
     public boolean goOutRain;
     public int goOutChance;
     public String goOutName;
+    public boolean ignite; // Whether this torch can ignite surrounding blocks
 
     public BlockProperties(NBTTagCompound tags) {
         this.ReadFromNBT(tags);
@@ -80,7 +81,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
     public BlockProperties(String name, int meta, boolean hasPhys, int minFall, int maxFall, int supportDist,
         String dropName, int dropMeta, int dropNum, boolean enableTemp, float temp, float air, float sanity,
         boolean holdOther, boolean slides, boolean canHang, boolean wetSlide, String stability, String fileName,
-        boolean goOut, boolean goOutRain, int goOutChance, String goOutName) {
+        boolean goOut, boolean goOutRain, int goOutChance, String goOutName, boolean ignite) {
         this.name = name;
         this.meta = meta;
         this.hasPhys = hasPhys;
@@ -104,6 +105,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
         this.goOutRain = goOutRain;
         this.goOutChance = goOutChance;
         this.goOutName = goOutName;
+        this.ignite = ignite;
 
     }
 
@@ -111,7 +113,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
      * <b>hasProperty(Block block, int meta)</b><bR>
      * <br>
      * Checks if contains custom properties for Block and metaData.
-     * 
+     *
      * @param block
      * @param meta  - Block MetaData<br>
      * @return true if has custom properties
@@ -126,7 +128,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
      * <b>getProperty(Block block, int meta)</b><bR>
      * <br>
      * Gets Property form Block and metaData.
-     * 
+     *
      * @param block
      * @param meta  - Block MetaData<br>
      * @return BlockProperties for block
@@ -162,6 +164,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
         tags.setBoolean("goOutRain", this.goOutRain);
         tags.setInteger("goOutChance", this.goOutChance);
         tags.setString("goOutName", this.goOutName);
+        tags.setBoolean("ignite", this.ignite);
 
         return tags;
     }
@@ -185,6 +188,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
         this.goOutRain = tags.getBoolean("goOutRain");
         this.goOutChance = tags.getInteger("goOutChance");
         this.goOutName = tags.getString("goOutName");
+        this.ignite = tags.getBoolean("ignite");
     }
 
     @Override
@@ -237,6 +241,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
         String goOutName = config
             .get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
             .getString();
+        boolean ignite = config.get(category, BPName[16], false)
+            .getBoolean(false);
 
         // Get Stability Options
         int minFall = 99;
@@ -289,7 +295,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
             goOut,
             goOutRain,
             goOutChance,
-            goOutName);
+            goOutName,
+            ignite);
 
         if (metaData < 0) {
             // If item already exist and current file hasn't completely been loaded do this
@@ -313,7 +320,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                     Level.ERROR,
                     "CONFIG DUPLICATE: Block - " + name.toUpperCase()
                         + " - Meta:"
-                        + meta
+                        + metaData
                         + "  was already added from "
                         + EM_Settings.blockProperties.get(name).loadedFrom.toUpperCase()
                         + " and will be overriden by "
@@ -350,14 +357,16 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
             .getBoolean(false);
         config.get(category, BPName[11], wetSlide)
             .getBoolean(false);
-        config.get(category, BPName[12], false)
+        config.get(category, BPName[12], goOut)
             .getBoolean(false);
-        config.get(category, BPName[13], false)
+        config.get(category, BPName[13], goOutRain)
             .getBoolean(false);
-        config.get(category, BPName[14], 10000)
+        config.get(category, BPName[14], goOutChance)
             .getInt(10000);
-        config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+        config.get(category, BPName[15], goOutName)
             .getString();
+        config.get(category, BPName[16], ignite)
+            .getBoolean(false);
     }
 
     @Override
@@ -452,6 +461,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                     .getInt(10000);
                 config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                     .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
             } else if (block == Blocks.fire || block == ObjectHandler.burningCoal
                 || (EM_Settings.genConfigs && block.getMaterial() == Material.fire)) {
                     config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
@@ -486,6 +497,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                         .getInt(10000);
                     config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                         .getString();
+                    config.get(category, BPName[16], false)
+                        .getBoolean(false);
                 } else if (block == Blocks.torch) {
                     config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
                         .getString();
@@ -519,6 +532,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                         .getInt(10000);
                     config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                         .getString();
+                    config.get(category, BPName[16], true) // torch ignites by default? adjust as needed
+                        .getBoolean(true);
                 } else if (block == Blocks.lit_furnace) {
                     config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
                         .getString();
@@ -552,6 +567,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                         .getInt(10000);
                     config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                         .getString();
+                    config.get(category, BPName[16], true) // lit furnace can ignite
+                        .getBoolean(true);
                 } else if (block == Blocks.netherrack || block == Blocks.nether_brick
                     || block == Blocks.nether_brick_fence
                     || block == Blocks.nether_brick_stairs) {
@@ -587,6 +604,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                             .getInt(10000);
                         config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                             .getString();
+                        config.get(category, BPName[16], false)
+                            .getBoolean(false);
                     } else if ((block == Blocks.flower_pot || block == Blocks.grass
                         || block instanceof BlockLeavesBase
                         || block instanceof BlockFlower
@@ -633,6 +652,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                             config
                                 .get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                 .getString();
+                            config.get(category, BPName[16], false)
+                                .getBoolean(false);
                         } else if ((block.getMaterial() == Material.snow || block.getMaterial() == Material.ice
                             || block.getMaterial() == Material.packedIce)
                             && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
@@ -672,6 +693,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                                         BPName[15],
                                         Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                     .getString();
+                                config.get(category, BPName[16], false)
+                                    .getBoolean(false);
                             } else if ((block == Blocks.skull || block == Blocks.soul_sand)
                                 && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
                                     config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
@@ -710,6 +733,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                                             BPName[15],
                                             Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                         .getString();
+                                    config.get(category, BPName[16], false)
+                                        .getBoolean(false);
                                 } else if (block.getMaterial() == Material.web
                                     && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
                                         config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
@@ -748,6 +773,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                                                 BPName[15],
                                                 Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                             .getString();
+                                        config.get(category, BPName[16], false)
+                                            .getBoolean(false);
                                     } else if (block.getMaterial() == Material.dragonEgg
                                         && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
                                             config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
@@ -786,6 +813,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                                                     BPName[15],
                                                     Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                                 .getString();
+                                            config.get(category, BPName[16], false)
+                                                .getBoolean(false);
                                         } else if (block instanceof BlockFalling
                                             && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
                                                 config
@@ -828,6 +857,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                                                         BPName[15],
                                                         Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                                     .getString();
+                                                config.get(category, BPName[16], false)
+                                                    .getBoolean(false);
                                             } else if (block == Blocks.dirt) {
                                                 config
                                                     .get(
@@ -869,6 +900,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                                                         BPName[15],
                                                         Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
                                                     .getString();
+                                                config.get(category, BPName[16], false)
+                                                    .getBoolean(false);
                                             } else if (EM_Settings.genConfigs) {
                                                 this.generateEmpty(config, block);
                                             }
@@ -942,6 +975,8 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
             .getInt(10000);
         config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
             .getString();
+        config.get(category, BPName[16], false)
+            .getBoolean(false);
     }
 
     @Override
@@ -971,6 +1006,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
         BPName[13] = "14.[Torch] Does it go out in the rain?";
         BPName[14] = "15.[Torch] Go out chance";
         BPName[15] = "16.[Torch] Go out Name (block)";
+        BPName[16] = "17.[Torch] Can ignite?";
     }
 
 }

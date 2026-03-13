@@ -2,6 +2,8 @@ package enviromine.handlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -13,6 +15,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -29,16 +32,7 @@ import org.apache.logging.log4j.Level;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import enviromine.EntityPhysicsBlock;
-import enviromine.blocks.BlockBurningCoal;
-import enviromine.blocks.BlockDavyLamp;
-import enviromine.blocks.BlockElevator;
-import enviromine.blocks.BlockEsky;
-import enviromine.blocks.BlockFireTorch;
-import enviromine.blocks.BlockFreezer;
-import enviromine.blocks.BlockGas;
-import enviromine.blocks.BlockGlowstoneTorch;
-import enviromine.blocks.BlockNoPhysics;
-import enviromine.blocks.BlockOffTorch;
+import enviromine.blocks.*;
 import enviromine.blocks.materials.MaterialElevator;
 import enviromine.blocks.materials.MaterialGas;
 import enviromine.blocks.tiles.TileEntityBurningCoal;
@@ -186,9 +180,17 @@ public class ObjectHandler {
     public static Item bucket_radioactive_hot_Water;
     public static Item bucket_hot_Water;
 
+    public static Block fakeTorch; // Fake vanilla torch that retains original behavior
+
     /// -------
 
     public static void initBlocks() {
+
+        fakeTorch = new BlockFakeTorch().setBlockName("fake_torch")
+            .setBlockTextureName("enviromine:torch_on") // Uses vanilla torch texture
+            .setLightLevel(0.9375F) // Same light as vanilla torch
+            .setCreativeTab(EnviroMine.enviroTab); // Placed in EnviroMine creative tab
+
         radioactive_frosty_Water = new EnviroMineWaterFluid("radioactive_frosty_Water").setTemperature(275)
             .setDensity(1030); // 1,85 °C, 1030 kg/m^3
         frosty_Water = new EnviroMineWaterFluid("frosty_Water").setTemperature(275); // 1,85 °C
@@ -316,6 +318,8 @@ public class ObjectHandler {
     }
 
     public static void registerBlocks() {
+
+        GameRegistry.registerBlock(fakeTorch, "fake_torch");
 
         GameRegistry.registerBlock(block_radioactive_frosty_Water, "block_radioactive_frosty_Water");
         GameRegistry.registerBlock(block_frosty_Water, "block_frosty_Water");
@@ -1157,10 +1161,43 @@ public class ObjectHandler {
             new ItemStack(Items.leather),
             'y',
             new ItemStack(Items.potionitem, 1, 0));
+
+        List<IRecipe> recipes = CraftingManager.getInstance()
+            .getRecipeList();
+        Iterator<IRecipe> iterator = recipes.iterator();
+        while (iterator.hasNext()) {
+            IRecipe recipe = iterator.next();
+            ItemStack output = recipe.getRecipeOutput();
+            if (output != null && output.getItem() == Item.getItemFromBlock(Blocks.torch)) {
+                iterator.remove();
+            }
+        }
+
+        CraftingManager.getInstance()
+            .getRecipeList()
+            .add(new ShapelessOreRecipe(new ItemStack(fakeTorch, 4), "coal", "stickWood"));
+
+        CraftingManager.getInstance()
+            .getRecipeList()
+            .add(new ShapelessOreRecipe(new ItemStack(fakeTorch, 4), "gemLignite", "stickWood"));
+
+        CraftingManager.getInstance()
+            .getRecipeList()
+            .add(new ShapelessOreRecipe(new ItemStack(fakeTorch, 4), "itemCoal", "stickWood"));
+
+        GameRegistry.addShapedRecipe(
+            new ItemStack(Blocks.torch, 1),
+            " X ",
+            " Y ",
+            'X',
+            new ItemStack(Blocks.iron_bars),
+            'Y',
+            new ItemStack(fakeTorch));
+
     }
 
     public static String[] DefaultIgnitionSources() {
-        String[] list = new String[] { "minecraft:flowing_lava", "minecraft:lava", "minecraft:torch",
+        String[] list = new String[] { "minecraft:flowing_lava", "minecraft:lava", "enviromine:fake_torch",
             "minecraft:lit_furnace", "minecraft:fire", "minecraft:lit_pumpkin", "minecraft:lava_bucket",
             "enviromine:firegas", "enviromine:burningcoal", "enviromine:firetorch", "campfirebackport:campfire",
             "campfirebackport:soul_campfire", "CarpentersBlocks:blockCarpentersTorch", "CaveBiomes:stone_lavacrust",

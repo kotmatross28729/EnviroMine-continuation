@@ -24,7 +24,7 @@ import enviromine.trackers.properties.StabilityType;
 
 public class EM_Settings {
 
-    public static boolean finiteEMWater = false;
+    public static boolean finiteEMWater = true;
 
     public static final UUID FROST1_UUID = UUID.fromString("B0C5F86A-78F3-417C-8B5A-527B90A1E919");
     public static final UUID FROST2_UUID = UUID.fromString("5C4111A7-A66C-40FB-9FAD-1C6ADAEE7E27");
@@ -54,7 +54,14 @@ public class EM_Settings {
     public static boolean disableWaterTypes = false;
     public static boolean rotTimeValidation = true;
 
+    public static boolean enableHighTempCooling = true;
+    public static float highTempThreshold = 50.0f;
+    public static float coolTempNormal = 39.0f;
+    public static float coolTempCold = 38.0f;
+    public static float coolTempFrosty = 37.0f;
+
     // Tooltip Colors
+
     public static String tooltipArmorSealedColor = "GOLD";
     public static String tooltipArmorResistanceColor = "YELLOW";
     public static String tooltipTempPositiveColor = "RED";
@@ -479,7 +486,7 @@ public class EM_Settings {
     public static boolean quakePhysics = true;
     public static int quakeRarity = 100;
 
-    public static boolean finiteWater = false;
+    public static boolean finiteWater = true;
     public static float thingChance = 0.000001F;
     public static boolean noNausea = false;
     public static boolean keepStatus = false;

@@ -323,3 +323,6 @@ editor.enviromine.GuiAdd.item=Add as Item
 editor.enviromine.GuiAdd.block=Add as Block
 editor.enviromine.GuiAdd.both=Add Both
 msg.enviromine.RecordEasterEgg=An eerie shiver travels down your spine
+
+tile.torch.name=Safety Torch
+tile.fake_torch.name=Torch

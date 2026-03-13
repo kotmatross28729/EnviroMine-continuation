@@ -303,3 +303,6 @@ editor.enviromine.GuiAdd.item=作为物品添加
 editor.enviromine.GuiAdd.block=作为方块添加
 editor.enviromine.GuiAdd.both=作为两者添加
 msg.enviromine.RecordEasterEgg=一股诡异的寒意顺着你的脊椎蔓延……
+
+tile.torch.name=安全火把
+tile.fake_torch.name=火把

@@ -87,9 +87,19 @@ public abstract class MixinBlockTorch extends Block {
             target = "Lnet/minecraft/block/Block;updateTick(Lnet/minecraft/world/World;IIILjava/util/Random;)V",
             shift = At.Shift.AFTER))
     protected void updateTick2(World world, int x, int y, int z, Random rand, CallbackInfo ci) {
-        // Don't go any further unless this torch is allowed to burn stuff
+        // Global switch and not an off torch
         if ((!EM_Settings.oldTorchLogic) && EM_Settings.torchesBurn
             && (this != ObjectHandler.offTorch && this != ObjectHandler_Netherlicious.offTorchBone)) {
+
+            Block block = world.getBlock(x, y, z);
+            int meta = world.getBlockMetadata(x, y, z);
+            BlockProperties blockProps = BlockProperties.base.getProperty(block, meta);
+
+            // Only ignite if this block has properties and the ignite flag is true
+            if (blockProps == null || !blockProps.ignite) {
+                return;
+            }
+
             world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world) + rand.nextInt(10));
 
             int l = world.getBlockMetadata(x, y, z);
@@ -101,46 +111,6 @@ public abstract class MixinBlockTorch extends Block {
             }
 
             this.enviroMine$tryCatchFire(world, x, y + 1, z, 250 + b0, rand, l, DOWN);
-
-            // for (int i1 = x - 1; i1 <= x + 1; ++i1) {
-            // for (int j1 = z - 1; j1 <= z + 1; ++j1) {
-            // for (int k1 = y - 1; k1 <= y + 4; ++k1) {
-            // if (i1 != x || k1 != y || j1 != z) {
-            // int l1 = 100;
-            //
-            // if (k1 > y + 1) {
-            // l1 += (k1 - (y + 1)) * 100;
-            // }
-            //
-            // int i2 = this.enviroMine$getChanceOfNeighborsEncouragingFire(world, i1, k1, j1);
-            //
-            // if (i2 > 0) {
-            // int j2 = (i2 + 40 + world.difficultySetting.getDifficultyId() * 7) / (l + 30);
-            //
-            // if (flag1) {
-            // j2 /= 2;
-            // }
-            //
-            // if (j2 > 0 && rand.nextInt(l1) <= j2
-            // && (!world.isRaining() || !world.canLightningStrikeAt(i1, k1, j1))
-            // && !world.canLightningStrikeAt(i1 - 1, k1, z)
-            // && !world.canLightningStrikeAt(i1 + 1, k1, j1)
-            // && !world.canLightningStrikeAt(i1, k1, j1 - 1)
-            // && !world.canLightningStrikeAt(i1, k1, j1 + 1)) {
-            // int k2 = l + rand.nextInt(5) / 4;
-            //
-            // if (k2 > 15) {
-            // k2 = 15;
-            // }
-            //
-            // world.setBlock(i1, k1, j1, Blocks.fire, k2, 3);
-            // }
-            // }
-            // }
-            // }
-            // }
-            // }
-
         }
     }
 

@@ -79,6 +79,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
+import net.minecraftforge.fluids.Fluid;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
@@ -465,95 +466,87 @@ public class EM_EventManager {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
-
         ItemStack item = event.entityPlayer.getCurrentEquippedItem();
 
+        // Handle food spoilage when interacting with inventories (right-click block)
         if (event.action == Action.RIGHT_CLICK_BLOCK && EM_Settings.foodSpoiling) {
             TileEntity tile = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
-
-            if (tile != null & tile instanceof IInventory) {
-                RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory) tile); // For every tileentity with
-                // inventory
+            if (tile != null && tile instanceof IInventory) {
+                RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory) tile);
             }
         }
 
-        // RMB BLOCK WITH ITEM
-        if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item != null) {
+        // Right-click block
+        if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK) {
+            if (item != null) {
+                // ItemBlock placement with physics update
+                if (item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote) {
+                    int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
 
-            if (item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote) {
-                int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
-
-                if (EM_Settings.oldTorchLogic) {
-                    if (item.getItem() == Item.getItemFromBlock(Blocks.torch)
-                        && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) // Redirect torch placement to our own
-                    {
-                        Vec3 lookVec = event.entityPlayer.getLookVec();
-
-                        Block block = event.world.getBlock(event.x, event.y, event.z);
-                        if (block.onBlockActivated(
-                            event.world,
-                            event.x,
-                            event.y,
-                            event.y,
-                            event.entityPlayer,
-                            event.face,
-                            0F,
-                            0F,
-                            0F)) {
-                            event.useItem = Result.DENY;
-                            event.useBlock = Result.ALLOW;
-                        } else {
-                            // event.useItem = Result.DENY;
-                            ItemBlock torchItem = (ItemBlock) Item.getItemFromBlock(ObjectHandler.fireTorch);
-                            torchItem.onItemUse(
-                                item,
-                                event.entityPlayer,
+                    if (EM_Settings.oldTorchLogic) {
+                        if (item.getItem() == Item.getItemFromBlock(Blocks.torch)
+                            && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) {
+                            Vec3 lookVec = event.entityPlayer.getLookVec();
+                            Block block = event.world.getBlock(event.x, event.y, event.z);
+                            if (block.onBlockActivated(
                                 event.world,
                                 event.x,
                                 event.y,
-                                event.z,
+                                event.y,
+                                event.entityPlayer,
                                 event.face,
-                                (float) lookVec.xCoord,
-                                (float) lookVec.yCoord,
-                                (float) lookVec.zCoord);
-                            if (event.entityPlayer.capabilities.isCreativeMode) item.stackSize++; // dirty hack, in
-                            // creative, when
-                            // replacing torch,
-                            // torch was wasted,
-                            // here we immediately
-                            // replenish the torch
-                            // after it was placed
-                            event.setCanceled(true);
+                                0F,
+                                0F,
+                                0F)) {
+                                event.useItem = Result.DENY;
+                                event.useBlock = Result.ALLOW;
+                            } else {
+                                ItemBlock torchItem = (ItemBlock) Item.getItemFromBlock(ObjectHandler.fireTorch);
+                                torchItem.onItemUse(
+                                    item,
+                                    event.entityPlayer,
+                                    event.world,
+                                    event.x,
+                                    event.y,
+                                    event.z,
+                                    event.face,
+                                    (float) lookVec.xCoord,
+                                    (float) lookVec.yCoord,
+                                    (float) lookVec.zCoord);
+                                if (event.entityPlayer.capabilities.isCreativeMode) item.stackSize++;
+                                event.setCanceled(true);
+                            }
+                            return;
                         }
-                        return;
                     }
+
+                    EM_PhysManager.schedulePhysUpdate(
+                        event.entityPlayer.worldObj,
+                        adjCoords[0],
+                        adjCoords[1],
+                        adjCoords[2],
+                        true,
+                        "Normal");
                 }
-
-                EM_PhysManager.schedulePhysUpdate(
-                    event.entityPlayer.worldObj,
-                    adjCoords[0],
-                    adjCoords[1],
-                    adjCoords[2],
-                    true,
-                    "Normal");
-            }
-
-            // CAULDRON
-            else if ((item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
-                && !event.entityPlayer.worldObj.isRemote) {
-                    if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
-                        && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
-                        fillBottle(
-                            event.entityPlayer.worldObj,
-                            event.entityPlayer,
-                            event.x,
-                            event.y,
-                            event.z,
-                            item,
-                            event,
-                            item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
+                // Cauldron bottle filling
+                else if ((item.getItem() == Items.glass_bottle
+                    || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
+                    && !event.entityPlayer.worldObj.isRemote) {
+                        if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
+                            && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
+                            fillBottle(
+                                event.entityPlayer.worldObj,
+                                event.entityPlayer,
+                                event.x,
+                                event.y,
+                                event.z,
+                                item,
+                                event,
+                                item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
+                        }
                     }
-                } else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
+                // Cauldron bucket filling
+                else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
                     if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
                         && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 3) {
                         fillBucket(
@@ -566,28 +559,25 @@ public class EM_EventManager {
                             event);
                     }
                 }
-
-            else if (item.getItem() == Items.record_11) {
-                RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
+                // Record 11 easter egg
+                else if (item.getItem() == Items.record_11) {
+                    RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
+                }
+            } else {
+                // Empty hand: drink water
+                if (!event.entityPlayer.worldObj.isRemote) {
+                    drinkWater(event.entityPlayer, event);
+                }
             }
         }
-
-        // RMB BLOCK WITH HAND
-        else if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item == null) {
-            if (!event.entityPlayer.worldObj.isRemote) {
-                drinkWater(event.entityPlayer, event);
-            }
-        }
-        // LMB BLOCK WITH HAND
+        // Left-click block
         else if (event.getResult() != Result.DENY && event.action == Action.LEFT_CLICK_BLOCK) {
             EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, event.x, event.y, event.z, true, "Normal");
         }
-
-        // RMB AIR WITH ITEM
+        // Right-click air with item
         else if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item != null) {
             if ((item.getItem() instanceof ItemGlassBottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
                 && !event.entityPlayer.worldObj.isRemote) {
-                // WATER
                 if (!(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
                     && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0)) {
                     fillBottle(
@@ -604,7 +594,7 @@ public class EM_EventManager {
                 fillBucket(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
             }
         }
-        // RMB AIR WITH HAND
+        // Right-click air with empty hand
         else if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item == null) {
             NBTTagCompound pData = new NBTTagCompound();
             pData.setInteger("id", 1);
@@ -1106,6 +1096,17 @@ public class EM_EventManager {
         }
 
         if (event.entityLiving instanceof EntityPlayer) {
+
+            if (EM_Settings.enableHighTempCooling) {
+                EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.entityLiving);
+                if (tracker != null && tracker.bodyTemp > EM_Settings.highTempThreshold) {
+                    EntityPlayer player = (EntityPlayer) event.entityLiving;
+                    if (player.isInsideOfMaterial(Material.water)) {
+                        applyWaterCooling(player, tracker);
+                    }
+                }
+            }
+
             InventoryPlayer invo = (InventoryPlayer) ((EntityPlayer) event.entityLiving).inventory;
 
             // GASMASK SOUND
@@ -2096,5 +2097,70 @@ public class EM_EventManager {
         }
 
         return false;
+    }
+
+    private static void applyWaterCooling(EntityPlayer player, EnviroDataTracker tracker) {
+        World world = player.worldObj;
+        AxisAlignedBB box = player.boundingBox; // player's current collision box
+        int minX = MathHelper.floor_double(box.minX);
+        int maxX = MathHelper.floor_double(box.maxX);
+        int minY = MathHelper.floor_double(box.minY);
+        int maxY = MathHelper.floor_double(box.maxY);
+        int minZ = MathHelper.floor_double(box.minZ);
+        int maxZ = MathHelper.floor_double(box.maxZ);
+
+        float bestTargetTemp = -1; // keep -1 if no water found
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    Block block = world.getBlock(x, y, z);
+                    // ignore air and non-water blocks
+                    if (block == null || block.getMaterial() != Material.water) {
+                        continue;
+                    }
+
+                    float targetTemp = -1;
+
+                    // vanilla water (including flowing water)
+                    if (block == Blocks.water || block == Blocks.flowing_water) {
+                        targetTemp = EM_Settings.coolTempNormal;
+                    }
+                    // custom water
+                    else if (block instanceof BlockEnviroMineWater) {
+                        Fluid fluid = ((BlockEnviroMineWater) block).getFluid();
+                        WaterUtils.WATER_TYPES type = WaterUtils.getTypeFromFluid(fluid);
+                        String typeName = type.name();
+                        if (typeName.contains("FROSTY")) {
+                            targetTemp = EM_Settings.coolTempFrosty;
+                        } else if (typeName.contains("COLD")) {
+                            targetTemp = EM_Settings.coolTempCold;
+                        } else {
+                            targetTemp = EM_Settings.coolTempNormal;
+                        }
+                    }
+
+                    if (targetTemp >= 0) {
+                        // choose the coldest water (lowest target temperature)
+                        if (bestTargetTemp < 0 || targetTemp < bestTargetTemp) {
+                            bestTargetTemp = targetTemp;
+                        }
+                    }
+                }
+            }
+        }
+
+        // if usable water was found, set body temperature
+        if (bestTargetTemp >= 0) {
+            tracker.bodyTemp = bestTargetTemp;
+            if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) {
+                EnviroMine.logger.log(
+                    Level.INFO,
+                    "Player " + player.getCommandSenderName()
+                        + " cooled to "
+                        + bestTargetTemp
+                        + " by water (body contact).");
+            }
+        }
     }
 }
