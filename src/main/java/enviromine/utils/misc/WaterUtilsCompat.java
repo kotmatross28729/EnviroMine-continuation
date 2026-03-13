@@ -1,0 +1,12 @@
+package enviromine.utils.misc;
+
+public class WaterUtilsCompat {
+
+    public static boolean isEnviromineType(String type) {
+        return switch (type) {
+            case "RADIOACTIVE_FROSTY_WATER", "FROSTY_WATER", "RADIOACTIVE_COLD_WATER", "DIRTY_COLD_WATER", "SALTY_COLD_WATER", "CLEAN_COLD_WATER", "RADIOACTIVE_WATER", "DIRTY_WATER", "SALTY_WATER", "CLEAN_WATER", "RADIOACTIVE_WARM_WATER", "DIRTY_WARM_WATER", "SALTY_WARM_WATER", "CLEAN_WARM_WATER", "RADIOACTIVE_HOT_WATER", "HOT_WATER", "RADIOACTIVE_SPENTSTEAM", "RADIOACTIVE_STEAM", "RADIOACTIVE_HOTSTEAM", "RADIOACTIVE_SUPERHOTSTEAM", "RADIOACTIVE_ULTRAHOTSTEAM" -> true;
+            default -> false;
+        };
+    }
+
+}
