@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import enviromine.blocks.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -32,7 +34,6 @@ import org.apache.logging.log4j.Level;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import enviromine.EntityPhysicsBlock;
-import enviromine.blocks.*;
 import enviromine.blocks.materials.MaterialElevator;
 import enviromine.blocks.materials.MaterialGas;
 import enviromine.blocks.tiles.TileEntityBurningCoal;
@@ -186,10 +187,11 @@ public class ObjectHandler {
 
     public static void initBlocks() {
 
-        fakeTorch = new BlockFakeTorch().setBlockName("fake_torch")
-            .setBlockTextureName("enviromine:torch_on") // Uses vanilla torch texture
-            .setLightLevel(0.9375F) // Same light as vanilla torch
-            .setCreativeTab(EnviroMine.enviroTab); // Placed in EnviroMine creative tab
+        fakeTorch = new BlockFakeTorch()
+            .setBlockName("fake_torch")
+            .setBlockTextureName("enviromine:torch_on")          // Uses vanilla torch texture
+            .setLightLevel(0.9375F)                              // Same light as vanilla torch
+            .setCreativeTab(EnviroMine.enviroTab);               // Placed in EnviroMine creative tab
 
         radioactive_frosty_Water = new EnviroMineWaterFluid("radioactive_frosty_Water").setTemperature(275)
             .setDensity(1030); // 1,85 °C, 1030 kg/m^3
@@ -1162,8 +1164,7 @@ public class ObjectHandler {
             'y',
             new ItemStack(Items.potionitem, 1, 0));
 
-        List<IRecipe> recipes = CraftingManager.getInstance()
-            .getRecipeList();
+        List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
         Iterator<IRecipe> iterator = recipes.iterator();
         while (iterator.hasNext()) {
             IRecipe recipe = iterator.next();
@@ -1173,26 +1174,29 @@ public class ObjectHandler {
             }
         }
 
-        CraftingManager.getInstance()
-            .getRecipeList()
-            .add(new ShapelessOreRecipe(new ItemStack(fakeTorch, 4), "coal", "stickWood"));
+        CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(
+            new ItemStack(fakeTorch, 4),
+            "coal",
+            "stickWood"
+        ));
 
-        CraftingManager.getInstance()
-            .getRecipeList()
-            .add(new ShapelessOreRecipe(new ItemStack(fakeTorch, 4), "gemLignite", "stickWood"));
+        CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(
+            new ItemStack(fakeTorch, 4),
+            "gemLignite",
+            "stickWood"
+        ));
 
-        CraftingManager.getInstance()
-            .getRecipeList()
-            .add(new ShapelessOreRecipe(new ItemStack(fakeTorch, 4), "itemCoal", "stickWood"));
+        CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(
+            new ItemStack(fakeTorch, 4),
+            "itemCoal",
+            "stickWood"
+        ));
 
-        GameRegistry.addShapedRecipe(
-            new ItemStack(Blocks.torch, 1),
+        GameRegistry.addShapedRecipe(new ItemStack(Blocks.torch, 1),
             " X ",
             " Y ",
-            'X',
-            new ItemStack(Blocks.iron_bars),
-            'Y',
-            new ItemStack(fakeTorch));
+            'X', new ItemStack(Blocks.iron_bars),
+            'Y', new ItemStack(fakeTorch));
 
     }
 

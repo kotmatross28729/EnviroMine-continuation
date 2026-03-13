@@ -79,9 +79,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
     }
 
     public BlockProperties(String name, int meta, boolean hasPhys, int minFall, int maxFall, int supportDist,
-        String dropName, int dropMeta, int dropNum, boolean enableTemp, float temp, float air, float sanity,
-        boolean holdOther, boolean slides, boolean canHang, boolean wetSlide, String stability, String fileName,
-        boolean goOut, boolean goOutRain, int goOutChance, String goOutName, boolean ignite) {
+                           String dropName, int dropMeta, int dropNum, boolean enableTemp, float temp, float air, float sanity,
+                           boolean holdOther, boolean slides, boolean canHang, boolean wetSlide, String stability, String fileName,
+                           boolean goOut, boolean goOutRain, int goOutChance, String goOutName, boolean ignite) {
         this.name = name;
         this.meta = meta;
         this.hasPhys = hasPhys;
@@ -465,446 +465,446 @@ public class BlockProperties implements SerialisableProperty, PropertyBase {
                     .getBoolean(false);
             } else if (block == Blocks.fire || block == ObjectHandler.burningCoal
                 || (EM_Settings.genConfigs && block.getMaterial() == Material.fire)) {
-                    config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                        .getString();
-                    config.get(category, BPName[1], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[2], "")
-                        .getString();
-                    config.get(category, BPName[3], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[4], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[5], true)
-                        .getBoolean(true);
-                    config.get(category, BPName[6], 75.0D)
-                        .getDouble(75.0D);
-                    config.get(category, BPName[7], -0.25D)
-                        .getDouble(-0.25D);
-                    config.get(category, BPName[8], 0.0D)
-                        .getDouble(0.0D);
-                    config.get(category, BPName[9], defStability.name)
-                        .getString();
-                    config.get(category, BPName[10], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[11], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[12], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[13], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[14], 10000)
-                        .getInt(10000);
-                    config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                        .getString();
-                    config.get(category, BPName[16], false)
-                        .getBoolean(false);
-                } else if (block == Blocks.torch) {
-                    config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                        .getString();
-                    config.get(category, BPName[1], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[2], "")
-                        .getString();
-                    config.get(category, BPName[3], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[4], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[5], true)
-                        .getBoolean(true);
-                    config.get(category, BPName[6], 75.0D)
-                        .getDouble(75.0D);
-                    config.get(category, BPName[7], -0.25D)
-                        .getDouble(-0.25D);
-                    config.get(category, BPName[8], 0.0D)
-                        .getDouble(0.0D);
-                    config.get(category, BPName[9], defStability.name)
-                        .getString();
-                    config.get(category, BPName[10], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[11], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[12], true)
-                        .getBoolean(true);
-                    config.get(category, BPName[13], true)
-                        .getBoolean(true);
-                    config.get(category, BPName[14], 10000)
-                        .getInt(10000);
-                    config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                        .getString();
-                    config.get(category, BPName[16], true) // torch ignites by default? adjust as needed
-                        .getBoolean(true);
-                } else if (block == Blocks.lit_furnace) {
-                    config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                        .getString();
-                    config.get(category, BPName[1], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[2], "")
-                        .getString();
-                    config.get(category, BPName[3], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[4], -1)
-                        .getInt(-1);
-                    config.get(category, BPName[5], true)
-                        .getBoolean(true);
-                    config.get(category, BPName[6], 75.0D)
-                        .getDouble(75.0D);
-                    config.get(category, BPName[7], -0.25D)
-                        .getDouble(-0.25D);
-                    config.get(category, BPName[8], 0.0D)
-                        .getDouble(0.0D);
-                    config.get(category, BPName[9], defStability.name)
-                        .getString();
-                    config.get(category, BPName[10], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[11], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[12], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[13], false)
-                        .getBoolean(false);
-                    config.get(category, BPName[14], 10000)
-                        .getInt(10000);
-                    config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                        .getString();
-                    config.get(category, BPName[16], true) // lit furnace can ignite
-                        .getBoolean(true);
-                } else if (block == Blocks.netherrack || block == Blocks.nether_brick
-                    || block == Blocks.nether_brick_fence
-                    || block == Blocks.nether_brick_stairs) {
-                        config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                            .getString();
-                        config.get(category, BPName[1], -1)
-                            .getInt(-1);
-                        config.get(category, BPName[2], "")
-                            .getString();
-                        config.get(category, BPName[3], -1)
-                            .getInt(-1);
-                        config.get(category, BPName[4], -1)
-                            .getInt(-1);
-                        config.get(category, BPName[5], true)
-                            .getBoolean(true);
-                        config.get(category, BPName[6], 50.0D)
-                            .getDouble(50.0D);
-                        config.get(category, BPName[7], 0.0D)
-                            .getDouble(0.0D);
-                        config.get(category, BPName[8], 0.0D)
-                            .getDouble(0.0D);
-                        config.get(category, BPName[9], defStability.name)
-                            .getString();
-                        config.get(category, BPName[10], false)
-                            .getBoolean(false);
-                        config.get(category, BPName[11], false)
-                            .getBoolean(false);
-                        config.get(category, BPName[12], false)
-                            .getBoolean(false);
-                        config.get(category, BPName[13], false)
-                            .getBoolean(false);
-                        config.get(category, BPName[14], 10000)
-                            .getInt(10000);
-                        config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                            .getString();
-                        config.get(category, BPName[16], false)
-                            .getBoolean(false);
-                    } else if ((block == Blocks.flower_pot || block == Blocks.grass
-                        || block instanceof BlockLeavesBase
-                        || block instanceof BlockFlower
-                        || block instanceof BlockBush
-                        || block.getMaterial() == Material.grass
-                        || block.getMaterial() == Material.leaves
-                        || block.getMaterial() == Material.vine
-                        || block.getMaterial() == Material.plants)
-                        && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                            config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                                .getString();
-                            config.get(category, BPName[1], -1)
-                                .getInt(-1);
-                            config
-                                .get(
-                                    category,
-                                    BPName[2],
-                                    block == Blocks.grass ? Block.blockRegistry.getNameForObject(Blocks.dirt) : "")
-                                .getString();
-                            config.get(category, BPName[3], -1)
-                                .getInt(-1);
-                            config.get(category, BPName[4], -1)
-                                .getInt(-1);
-                            config.get(category, BPName[5], false)
-                                .getBoolean(false);
-                            config.get(category, BPName[6], 0.0D)
-                                .getDouble(0.0D);
-                            config.get(category, BPName[7], 1.0D)
-                                .getDouble(1.0D);
-                            config.get(category, BPName[8], 0.1D)
-                                .getDouble(0.1D);
-                            config.get(category, BPName[9], defStability.name)
-                                .getString();
-                            config.get(category, BPName[10], false)
-                                .getBoolean(false);
-                            config.get(category, BPName[11], false)
-                                .getBoolean(false);
-                            config.get(category, BPName[12], false)
-                                .getBoolean(false);
-                            config.get(category, BPName[13], false)
-                                .getBoolean(false);
-                            config.get(category, BPName[14], 10000)
-                                .getInt(10000);
-                            config
-                                .get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                .getString();
-                            config.get(category, BPName[16], false)
-                                .getBoolean(false);
-                        } else if ((block.getMaterial() == Material.snow || block.getMaterial() == Material.ice
-                            || block.getMaterial() == Material.packedIce)
-                            && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                                    .getString();
-                                config.get(category, BPName[1], -1)
-                                    .getInt(-1);
-                                config.get(category, BPName[2], "")
-                                    .getString();
-                                config.get(category, BPName[3], -1)
-                                    .getInt(-1);
-                                config.get(category, BPName[4], -1)
-                                    .getInt(-1);
-                                config.get(category, BPName[5], true)
-                                    .getBoolean(true);
-                                config.get(category, BPName[6], -0.02D)
-                                    .getDouble(-0.02D);
-                                config.get(category, BPName[7], 0.0D)
-                                    .getDouble(0.0D);
-                                config.get(category, BPName[8], 0.0D)
-                                    .getDouble(0.0D);
-                                config.get(category, BPName[9], defStability.name)
-                                    .getString();
-                                config.get(category, BPName[10], false)
-                                    .getBoolean(false);
-                                config.get(category, BPName[11], (block == Blocks.snow || block == Blocks.snow_layer))
-                                    .getBoolean((block == Blocks.snow || block == Blocks.snow_layer));
-                                config.get(category, BPName[12], false)
-                                    .getBoolean(false);
-                                config.get(category, BPName[13], false)
-                                    .getBoolean(false);
-                                config.get(category, BPName[14], 10000)
-                                    .getInt(10000);
-                                config
-                                    .get(
-                                        category,
-                                        BPName[15],
-                                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                    .getString();
-                                config.get(category, BPName[16], false)
-                                    .getBoolean(false);
-                            } else if ((block == Blocks.skull || block == Blocks.soul_sand)
-                                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                                    config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                                        .getString();
-                                    config.get(category, BPName[1], -1)
-                                        .getInt(-1);
-                                    config.get(category, BPName[2], "")
-                                        .getString();
-                                    config.get(category, BPName[3], -1)
-                                        .getInt(-1);
-                                    config.get(category, BPName[4], -1)
-                                        .getInt(-1);
-                                    config.get(category, BPName[5], false)
-                                        .getBoolean(false);
-                                    config.get(category, BPName[6], 0.0D)
-                                        .getDouble(0.0D);
-                                    config.get(category, BPName[7], 0.0D)
-                                        .getDouble(0.0D);
-                                    config.get(category, BPName[8], -0.1D)
-                                        .getDouble(-0.1D);
-                                    config.get(category, BPName[9], defStability.name)
-                                        .getString();
-                                    config.get(category, BPName[10], false)
-                                        .getBoolean(false);
-                                    config.get(category, BPName[11], false)
-                                        .getBoolean(false);
-                                    config.get(category, BPName[12], false)
-                                        .getBoolean(false);
-                                    config.get(category, BPName[13], false)
-                                        .getBoolean(false);
-                                    config.get(category, BPName[14], 10000)
-                                        .getInt(10000);
-                                    config
-                                        .get(
-                                            category,
-                                            BPName[15],
-                                            Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                        .getString();
-                                    config.get(category, BPName[16], false)
-                                        .getBoolean(false);
-                                } else if (block.getMaterial() == Material.web
-                                    && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                                        config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                                            .getString();
-                                        config.get(category, BPName[1], -1)
-                                            .getInt(-1);
-                                        config.get(category, BPName[2], "")
-                                            .getString();
-                                        config.get(category, BPName[3], -1)
-                                            .getInt(-1);
-                                        config.get(category, BPName[4], -1)
-                                            .getInt(-1);
-                                        config.get(category, BPName[5], false)
-                                            .getBoolean(false);
-                                        config.get(category, BPName[6], 0.0D)
-                                            .getDouble(0.0D);
-                                        config.get(category, BPName[7], 0.0D)
-                                            .getDouble(0.0D);
-                                        config.get(category, BPName[8], -0.01D)
-                                            .getDouble(-0.01D);
-                                        config.get(category, BPName[9], defStability.name)
-                                            .getString();
-                                        config.get(category, BPName[10], false)
-                                            .getBoolean(false);
-                                        config.get(category, BPName[11], false)
-                                            .getBoolean(false);
-                                        config.get(category, BPName[12], false)
-                                            .getBoolean(false);
-                                        config.get(category, BPName[13], false)
-                                            .getBoolean(false);
-                                        config.get(category, BPName[14], 10000)
-                                            .getInt(10000);
-                                        config
-                                            .get(
-                                                category,
-                                                BPName[15],
-                                                Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                            .getString();
-                                        config.get(category, BPName[16], false)
-                                            .getBoolean(false);
-                                    } else if (block.getMaterial() == Material.dragonEgg
-                                        && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                                            config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
-                                                .getString();
-                                            config.get(category, BPName[1], -1)
-                                                .getInt(-1);
-                                            config.get(category, BPName[2], "")
-                                                .getString();
-                                            config.get(category, BPName[3], -1)
-                                                .getInt(-1);
-                                            config.get(category, BPName[4], -1)
-                                                .getInt(-1);
-                                            config.get(category, BPName[5], false)
-                                                .getBoolean(false);
-                                            config.get(category, BPName[6], 0.0D)
-                                                .getDouble(0.0D);
-                                            config.get(category, BPName[7], 0.0D)
-                                                .getDouble(0.0D);
-                                            config.get(category, BPName[8], 1.0D)
-                                                .getDouble(1.0D);
-                                            config.get(category, BPName[9], defStability.name)
-                                                .getString();
-                                            config.get(category, BPName[10], false)
-                                                .getBoolean(false);
-                                            config.get(category, BPName[11], false)
-                                                .getBoolean(false);
-                                            config.get(category, BPName[12], false)
-                                                .getBoolean(false);
-                                            config.get(category, BPName[13], false)
-                                                .getBoolean(false);
-                                            config.get(category, BPName[14], 10000)
-                                                .getInt(10000);
-                                            config
-                                                .get(
-                                                    category,
-                                                    BPName[15],
-                                                    Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                                .getString();
-                                            config.get(category, BPName[16], false)
-                                                .getBoolean(false);
-                                        } else if (block instanceof BlockFalling
-                                            && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                                                config
-                                                    .get(
-                                                        category,
-                                                        BPName[0],
-                                                        Block.blockRegistry.getNameForObject(block))
-                                                    .getString();
-                                                config.get(category, BPName[1], -1)
-                                                    .getInt(-1);
-                                                config.get(category, BPName[2], "")
-                                                    .getString();
-                                                config.get(category, BPName[3], -1)
-                                                    .getInt(-1);
-                                                config.get(category, BPName[4], -1)
-                                                    .getInt(-1);
-                                                config.get(category, BPName[5], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[6], 0.0D)
-                                                    .getDouble(0.0D);
-                                                config.get(category, BPName[7], 0.0D)
-                                                    .getDouble(0.0D);
-                                                config.get(category, BPName[8], 0.0D)
-                                                    .getDouble(0.0D);
-                                                config.get(category, BPName[9], defStability.name)
-                                                    .getString();
-                                                config.get(category, BPName[10], true)
-                                                    .getBoolean(true);
-                                                config.get(category, BPName[11], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[12], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[13], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[14], 10000)
-                                                    .getInt(10000);
-                                                config
-                                                    .get(
-                                                        category,
-                                                        BPName[15],
-                                                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                                    .getString();
-                                                config.get(category, BPName[16], false)
-                                                    .getBoolean(false);
-                                            } else if (block == Blocks.dirt) {
-                                                config
-                                                    .get(
-                                                        category,
-                                                        BPName[0],
-                                                        Block.blockRegistry.getNameForObject(block))
-                                                    .getString();
-                                                config.get(category, BPName[1], -1)
-                                                    .getInt(-1);
-                                                config.get(category, BPName[2], "")
-                                                    .getString();
-                                                config.get(category, BPName[3], -1)
-                                                    .getInt(-1);
-                                                config.get(category, BPName[4], -1)
-                                                    .getInt(-1);
-                                                config.get(category, BPName[5], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[6], 0.0D)
-                                                    .getDouble(0.0D);
-                                                config.get(category, BPName[7], 0.0D)
-                                                    .getDouble(0.0D);
-                                                config.get(category, BPName[8], 0.0D)
-                                                    .getDouble(0.0D);
-                                                config.get(category, BPName[9], defStability.name)
-                                                    .getString();
-                                                config.get(category, BPName[10], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[11], true)
-                                                    .getBoolean(true);
-                                                config.get(category, BPName[12], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[13], false)
-                                                    .getBoolean(false);
-                                                config.get(category, BPName[14], 10000)
-                                                    .getInt(10000);
-                                                config
-                                                    .get(
-                                                        category,
-                                                        BPName[15],
-                                                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
-                                                    .getString();
-                                                config.get(category, BPName[16], false)
-                                                    .getBoolean(false);
-                                            } else if (EM_Settings.genConfigs) {
-                                                this.generateEmpty(config, block);
-                                            }
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], true)
+                    .getBoolean(true);
+                config.get(category, BPName[6], 75.0D)
+                    .getDouble(75.0D);
+                config.get(category, BPName[7], -0.25D)
+                    .getDouble(-0.25D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if (block == Blocks.torch) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], true)
+                    .getBoolean(true);
+                config.get(category, BPName[6], 75.0D)
+                    .getDouble(75.0D);
+                config.get(category, BPName[7], -0.25D)
+                    .getDouble(-0.25D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], true)
+                    .getBoolean(true);
+                config.get(category, BPName[13], true)
+                    .getBoolean(true);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], true) // torch ignites by default? adjust as needed
+                    .getBoolean(true);
+            } else if (block == Blocks.lit_furnace) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], true)
+                    .getBoolean(true);
+                config.get(category, BPName[6], 75.0D)
+                    .getDouble(75.0D);
+                config.get(category, BPName[7], -0.25D)
+                    .getDouble(-0.25D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], true) // lit furnace can ignite
+                    .getBoolean(true);
+            } else if (block == Blocks.netherrack || block == Blocks.nether_brick
+                || block == Blocks.nether_brick_fence
+                || block == Blocks.nether_brick_stairs) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], true)
+                    .getBoolean(true);
+                config.get(category, BPName[6], 50.0D)
+                    .getDouble(50.0D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config.get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if ((block == Blocks.flower_pot || block == Blocks.grass
+                || block instanceof BlockLeavesBase
+                || block instanceof BlockFlower
+                || block instanceof BlockBush
+                || block.getMaterial() == Material.grass
+                || block.getMaterial() == Material.leaves
+                || block.getMaterial() == Material.vine
+                || block.getMaterial() == Material.plants)
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config
+                    .get(
+                        category,
+                        BPName[2],
+                        block == Blocks.grass ? Block.blockRegistry.getNameForObject(Blocks.dirt) : "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], false)
+                    .getBoolean(false);
+                config.get(category, BPName[6], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[7], 1.0D)
+                    .getDouble(1.0D);
+                config.get(category, BPName[8], 0.1D)
+                    .getDouble(0.1D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(category, BPName[15], Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if ((block.getMaterial() == Material.snow || block.getMaterial() == Material.ice
+                || block.getMaterial() == Material.packedIce)
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], true)
+                    .getBoolean(true);
+                config.get(category, BPName[6], -0.02D)
+                    .getDouble(-0.02D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], (block == Blocks.snow || block == Blocks.snow_layer))
+                    .getBoolean((block == Blocks.snow || block == Blocks.snow_layer));
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(
+                        category,
+                        BPName[15],
+                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if ((block == Blocks.skull || block == Blocks.soul_sand)
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], false)
+                    .getBoolean(false);
+                config.get(category, BPName[6], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], -0.1D)
+                    .getDouble(-0.1D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(
+                        category,
+                        BPName[15],
+                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if (block.getMaterial() == Material.web
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], false)
+                    .getBoolean(false);
+                config.get(category, BPName[6], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], -0.01D)
+                    .getDouble(-0.01D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(
+                        category,
+                        BPName[15],
+                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if (block.getMaterial() == Material.dragonEgg
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], false)
+                    .getBoolean(false);
+                config.get(category, BPName[6], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], 1.0D)
+                    .getDouble(1.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(
+                        category,
+                        BPName[15],
+                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if (block instanceof BlockFalling
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config
+                    .get(
+                        category,
+                        BPName[0],
+                        Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], false)
+                    .getBoolean(false);
+                config.get(category, BPName[6], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], true)
+                    .getBoolean(true);
+                config.get(category, BPName[11], false)
+                    .getBoolean(false);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(
+                        category,
+                        BPName[15],
+                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if (block == Blocks.dirt) {
+                config
+                    .get(
+                        category,
+                        BPName[0],
+                        Block.blockRegistry.getNameForObject(block))
+                    .getString();
+                config.get(category, BPName[1], -1)
+                    .getInt(-1);
+                config.get(category, BPName[2], "")
+                    .getString();
+                config.get(category, BPName[3], -1)
+                    .getInt(-1);
+                config.get(category, BPName[4], -1)
+                    .getInt(-1);
+                config.get(category, BPName[5], false)
+                    .getBoolean(false);
+                config.get(category, BPName[6], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[7], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[8], 0.0D)
+                    .getDouble(0.0D);
+                config.get(category, BPName[9], defStability.name)
+                    .getString();
+                config.get(category, BPName[10], false)
+                    .getBoolean(false);
+                config.get(category, BPName[11], true)
+                    .getBoolean(true);
+                config.get(category, BPName[12], false)
+                    .getBoolean(false);
+                config.get(category, BPName[13], false)
+                    .getBoolean(false);
+                config.get(category, BPName[14], 10000)
+                    .getInt(10000);
+                config
+                    .get(
+                        category,
+                        BPName[15],
+                        Block.blockRegistry.getNameForObject(ObjectHandler.offTorch))
+                    .getString();
+                config.get(category, BPName[16], false)
+                    .getBoolean(false);
+            } else if (EM_Settings.genConfigs) {
+                this.generateEmpty(config, block);
+            }
 
             config.save();
         }

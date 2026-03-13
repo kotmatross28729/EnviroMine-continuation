@@ -440,3 +440,5 @@ public class ConfigWater {
             "Body temperature set to this value when cooling in frosty water (radioactive_frosty, frosty).");
     }
 }
+
+

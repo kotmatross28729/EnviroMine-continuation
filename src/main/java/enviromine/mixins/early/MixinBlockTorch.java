@@ -62,7 +62,7 @@ public abstract class MixinBlockTorch extends Block {
                             if (blockProps.goOut) {
                                 if (world.rand.nextInt(blockProps.goOutChance) == 0
                                     || (blockProps.goOutRain && world.isRaining()
-                                        && world.canBlockSeeTheSky(x, y, z))) {
+                                    && world.canBlockSeeTheSky(x, y, z))) {
                                     world.playSoundEffect(
                                         (double) x + 0.5D,
                                         (double) y + 0.5D,
@@ -116,7 +116,7 @@ public abstract class MixinBlockTorch extends Block {
 
     @Unique
     private void enviroMine$tryCatchFire(World p_149841_1_, int p_149841_2_, int p_149841_3_, int p_149841_4_,
-        int p_149841_5_, Random p_149841_6_, int p_149841_7_, ForgeDirection face) {
+                                         int p_149841_5_, Random p_149841_6_, int p_149841_7_, ForgeDirection face) {
         int j1 = p_149841_1_.getBlock(p_149841_2_, p_149841_3_, p_149841_4_)
             .getFlammability(p_149841_1_, p_149841_2_, p_149841_3_, p_149841_4_, face);
 
@@ -147,7 +147,7 @@ public abstract class MixinBlockTorch extends Block {
      */
     @Unique
     private int enviroMine$getChanceOfNeighborsEncouragingFire(World p_149845_1_, int p_149845_2_, int p_149845_3_,
-        int p_149845_4_) {
+                                                               int p_149845_4_) {
         byte b0 = 0;
 
         if (!p_149845_1_.isAirBlock(p_149845_2_, p_149845_3_, p_149845_4_)) {
@@ -182,7 +182,7 @@ public abstract class MixinBlockTorch extends Block {
      */
     @Unique
     public int enviroMine$getChanceToEncourageFire(IBlockAccess world, int x, int y, int z, int oldChance,
-        ForgeDirection face) {
+                                                   ForgeDirection face) {
         int newChance = world.getBlock(x, y, z)
             .getFireSpreadSpeed(world, x, y, z, face);
         return (Math.max(newChance, oldChance));
