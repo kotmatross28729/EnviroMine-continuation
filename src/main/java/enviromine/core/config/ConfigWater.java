@@ -400,8 +400,6 @@ public class ConfigWater {
             CATEGORY_KOTMATROSS_FORK_CHANGES_WATER,
             EM_Settings.finiteEMWater,
             "If true, EnviroMine's custom water will not regenerate sources (infinite water disabled).");
-        }
-
     }
 
-
+}
