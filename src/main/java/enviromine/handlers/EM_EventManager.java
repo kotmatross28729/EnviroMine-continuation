@@ -655,10 +655,10 @@ public class EM_EventManager {
                     }
                 }
 
-                // ===== Growthcraft 水袋处理 =====
+                // ===== Growthcraft handle the waterbag =====
                 if (EnviroMine.isGrowthcraftLoaded && item != null && isWaterBagItem(item)) {
                     handleWaterBagFill(event.entityPlayer, event.x, event.y, event.z, event.face, item, event);
-                    if (event.isCanceled()) return; // 如果已取消，跳过后续处理
+                    if (event.isCanceled()) return; // If canceled, skip.
                 }
 
                 // Record 11 easter egg
@@ -696,7 +696,7 @@ public class EM_EventManager {
                 fillBucket(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
             }
 
-            // ===== Growthcraft 水袋空气右键处理 =====
+            // ===== Growthcraft waterbag RMB air =====
             if (EnviroMine.isGrowthcraftLoaded && isWaterBagItem(item)) {
                 MovingObjectPosition mop = getMovingObjectPositionFromPlayer(event.entityPlayer.worldObj, event.entityPlayer);
                 if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
