@@ -125,11 +125,12 @@ public class Gui_EventManager {
             return;
         }
 
-        mc.thePlayer.yOffset = 1.62F;
         if (ClientQuake.GetQuakeShake(mc.theWorld, mc.thePlayer) > 0) {
             if (mc.thePlayer == null || mc.thePlayer.isPlayerSleeping()
                 || !mc.thePlayer.onGround
-                || (mc.currentScreen != null && mc.currentScreen.doesGuiPauseGame())) {} else {
+                || (mc.currentScreen != null && mc.currentScreen.doesGuiPauseGame())) {
+                mc.thePlayer.yOffset = mc.thePlayer.height == 0.6F ? 0.28F : 1.62F;
+            } else {
                 float shakeMult = ClientQuake.GetQuakeShake(mc.theWorld, mc.thePlayer);
 
                 double shakeSpeed = 2D * shakeMult;
@@ -137,6 +138,7 @@ public class Gui_EventManager {
 
                 double shake = (int) (mc.theWorld.getTotalWorldTime() % 24000L) * shakeSpeed;
 
+                mc.thePlayer.yOffset = mc.thePlayer.height == 0.6F ? 0.28F : 1.62F;
                 mc.thePlayer.yOffset -= (Math.sin(shake) * (offsetY / 2F)) + (offsetY / 2F);
                 mc.thePlayer.cameraPitch = (float) (Math.sin(shake) * offsetY / 4F);
                 mc.thePlayer.cameraYaw = (float) (Math.sin(shake) * offsetY / 4F);
