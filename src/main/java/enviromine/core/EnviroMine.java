@@ -91,6 +91,8 @@ public class EnviroMine {
 
     public static boolean isEndlessIDsLoaded;
 
+    public static boolean isGrowthcraftLoaded;
+
     // public static EM_WorldData theWorldEM;
 
     @EventHandler
