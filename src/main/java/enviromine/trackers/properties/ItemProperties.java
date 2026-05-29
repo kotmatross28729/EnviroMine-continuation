@@ -70,8 +70,8 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
     }
 
     public ItemProperties(String name, int meta, boolean enableTemp, float ambTemp, float ambAir, float ambSanity,
-        float effTemp, float effAir, float effSanity, float effHydration, float effTempCap, int camelFill,
-        String fillReturnItem, int fillReturnMeta, String fileName) {
+                          float effTemp, float effAir, float effSanity, float effHydration, float effTempCap, int camelFill,
+                          String fillReturnItem, int fillReturnMeta, String fileName) {
         this.name = name;
         this.meta = meta;
         this.enableTemp = enableTemp;
@@ -105,7 +105,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
      * <b>hasProperty(ItemStack stack)</b><bR>
      * <br>
      * Checks if ItemProperty contains custom properties from ItemStack.
-     * 
+     *
      * @param stack
      * @return true if has custom properties
      */
@@ -119,7 +119,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
      * <b>getProperty(ItemStack stack)</b><bR>
      * <br>
      * Gets ItemProperty from ItemStack.
-     * 
+     *
      * @param stack
      * @return ItemProperties
      */
@@ -581,130 +581,130 @@ public class ItemProperties implements SerialisableProperty, PropertyBase {
             } else if (block == Blocks.netherrack || block == Blocks.nether_brick
                 || block == Blocks.nether_brick_fence
                 || block == Blocks.nether_brick_stairs) {
-                    config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
-                        .getString();
-                    config.get(category, IPName[1], -1)
-                        .getInt(-1);
-                    config.get(category, IPName[2], true)
-                        .getBoolean(true);
-                    config.get(category, IPName[3], 50D)
-                        .getDouble(50D);
-                    config.get(category, IPName[4], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[5], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[6], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[7], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[8], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[9], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[10], 36.6D)
-                        .getDouble(36.6D);
-                    config.get(category, IPName[12], "")
-                        .getString();
-                    config.get(category, IPName[13], 0)
-                        .getInt(0);
-                } else if (block == Blocks.soul_sand || item == Items.skull || block == Blocks.skull) {
-                    config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
-                        .getString();
-                    config.get(category, IPName[1], -1)
-                        .getInt(-1);
-                    config.get(category, IPName[2], false)
-                        .getBoolean(false);
-                    config.get(category, IPName[3], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[4], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[5], -1D)
-                        .getDouble(-1D);
-                    config.get(category, IPName[6], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[7], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[8], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[9], 0D)
-                        .getDouble(0D);
-                    config.get(category, IPName[10], 36.6D)
-                        .getDouble(36.6D);
-                    config.get(category, IPName[11], 0)
-                        .getInt(0);
-                    config.get(category, IPName[12], "")
-                        .getString();
-                    config.get(category, IPName[13], 0)
-                        .getInt(0);
-                } else if ((block == Blocks.flower_pot || block == Blocks.grass
-                    || block instanceof BlockLeavesBase
-                    || block instanceof BlockFlower
-                    || block instanceof BlockBush
-                    || block.getMaterial() == Material.grass
-                    || block.getMaterial() == Material.leaves
-                    || block.getMaterial() == Material.plants
-                    || block.getMaterial() == Material.vine)
-                    && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
-                        config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
-                            .getString();
-                        config.get(category, IPName[1], -1)
-                            .getInt(-1);
-                        config.get(category, IPName[2], false)
-                            .getBoolean(false);
-                        config.get(category, IPName[3], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[4], 0.025D)
-                            .getDouble(0.025D);
-                        config.get(category, IPName[5], 0.1D)
-                            .getDouble(0.1D);
-                        config.get(category, IPName[6], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[7], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[8], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[9], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[10], 36.6D)
-                            .getDouble(36.6D);
-                        config.get(category, IPName[11], 0)
-                            .getInt(0);
-                        config.get(category, IPName[12], "")
-                            .getString();
-                        config.get(category, IPName[13], 0)
-                            .getInt(0);
-                    } else if (item == Items.lava_bucket) {
-                        config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
-                            .getString();
-                        config.get(category, IPName[1], -1)
-                            .getInt(-1);
-                        config.get(category, IPName[2], true)
-                            .getBoolean(true);
-                        config.get(category, IPName[3], 100D)
-                            .getDouble(100D);
-                        config.get(category, IPName[4], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[5], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[6], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[7], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[8], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[9], 0D)
-                            .getDouble(0D);
-                        config.get(category, IPName[10], 36.6D)
-                            .getDouble(36.6D);
-                        config.get(category, IPName[11], 0)
-                            .getInt(0);
-                        config.get(category, IPName[12], "")
-                            .getString();
-                        config.get(category, IPName[13], 0)
-                            .getInt(0);
-                    } else if (EM_Settings.genConfigs) {
-                        this.generateEmpty(config, item);
-                    }
+                config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, IPName[1], -1)
+                    .getInt(-1);
+                config.get(category, IPName[2], true)
+                    .getBoolean(true);
+                config.get(category, IPName[3], 50D)
+                    .getDouble(50D);
+                config.get(category, IPName[4], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[5], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[6], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[7], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[8], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[9], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
+                config.get(category, IPName[12], "")
+                    .getString();
+                config.get(category, IPName[13], 0)
+                    .getInt(0);
+            } else if (block == Blocks.soul_sand || item == Items.skull || block == Blocks.skull) {
+                config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, IPName[1], -1)
+                    .getInt(-1);
+                config.get(category, IPName[2], false)
+                    .getBoolean(false);
+                config.get(category, IPName[3], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[4], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[5], -1D)
+                    .getDouble(-1D);
+                config.get(category, IPName[6], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[7], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[8], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[9], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
+                config.get(category, IPName[11], 0)
+                    .getInt(0);
+                config.get(category, IPName[12], "")
+                    .getString();
+                config.get(category, IPName[13], 0)
+                    .getInt(0);
+            } else if ((block == Blocks.flower_pot || block == Blocks.grass
+                || block instanceof BlockLeavesBase
+                || block instanceof BlockFlower
+                || block instanceof BlockBush
+                || block.getMaterial() == Material.grass
+                || block.getMaterial() == Material.leaves
+                || block.getMaterial() == Material.plants
+                || block.getMaterial() == Material.vine)
+                && (regName[0].equals("minecraft") || EM_Settings.genConfigs)) {
+                config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, IPName[1], -1)
+                    .getInt(-1);
+                config.get(category, IPName[2], false)
+                    .getBoolean(false);
+                config.get(category, IPName[3], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[4], 0.025D)
+                    .getDouble(0.025D);
+                config.get(category, IPName[5], 0.1D)
+                    .getDouble(0.1D);
+                config.get(category, IPName[6], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[7], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[8], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[9], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
+                config.get(category, IPName[11], 0)
+                    .getInt(0);
+                config.get(category, IPName[12], "")
+                    .getString();
+                config.get(category, IPName[13], 0)
+                    .getInt(0);
+            } else if (item == Items.lava_bucket) {
+                config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item))
+                    .getString();
+                config.get(category, IPName[1], -1)
+                    .getInt(-1);
+                config.get(category, IPName[2], true)
+                    .getBoolean(true);
+                config.get(category, IPName[3], 100D)
+                    .getDouble(100D);
+                config.get(category, IPName[4], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[5], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[6], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[7], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[8], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[9], 0D)
+                    .getDouble(0D);
+                config.get(category, IPName[10], 36.6D)
+                    .getDouble(36.6D);
+                config.get(category, IPName[11], 0)
+                    .getInt(0);
+                config.get(category, IPName[12], "")
+                    .getString();
+                config.get(category, IPName[13], 0)
+                    .getInt(0);
+            } else if (EM_Settings.genConfigs) {
+                this.generateEmpty(config, item);
+            }
 
             config.save();
         }

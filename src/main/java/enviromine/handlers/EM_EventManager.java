@@ -1,6 +1,7 @@
 package enviromine.handlers;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -79,8 +80,13 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
-
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
+
+import enviromine.items.compat.EnviroItemWaterBottle_NTM;
+
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
@@ -122,6 +128,95 @@ public class EM_EventManager {
 
     private static final String BLOOD_BLOCK_BOP = "BiomesOPlenty:hell_blood";
     private static final String WATER_ROOT_STREAMS = "streams:river/tile.water";
+
+    // ========== Growthcraft WaterBag ==========
+    private boolean isWaterBagItem(ItemStack stack) {
+        if (stack == null || stack.getItem() == null) return false;
+        return "growthcraft.cellar.common.item.ItemWaterBag".equals(stack.getItem().getClass().getName());
+    }
+
+    private int getWaterBagDosage(ItemStack stack) {
+        try {
+            Field f = stack.getItem().getClass().getDeclaredField("dosage");
+            f.setAccessible(true);
+            return f.getInt(stack.getItem());
+        } catch (Exception e) {
+            return 250; // Growthcraft default water value, but it is useless. Covered?
+        }
+    }
+
+    private void handleWaterBagFill(EntityPlayer player, int x, int y, int z, int side, ItemStack stack, PlayerInteractEvent event) {
+        World world = player.worldObj;
+        if (world.isRemote) return;
+
+        int i = x, j = y, k = z;
+        Block block = world.getBlock(i, j, k);
+        if (block.getMaterial() != Material.water && block != Blocks.cauldron) {
+            int[] adj = EnviroUtils.getAdjacentBlockCoordsFromSide(i, j, k, side);
+            int ni = adj[0], nj = adj[1], nk = adj[2];
+            Block adjBlock = world.getBlock(ni, nj, nk);
+            if (adjBlock.getMaterial() == Material.water || adjBlock == Blocks.cauldron) {
+                i = ni; j = nj; k = nk;
+                block = adjBlock;
+            } else {
+                return; // Not available water
+            }
+        }
+
+        if (!world.canMineBlock(player, i, j, k) || !player.canPlayerEdit(i, j, k, side, stack)) return;
+
+        boolean isValidCauldron = (block == Blocks.cauldron && world.getBlockMetadata(i, j, k) > 0);
+        boolean isWaterBlock = (block == Blocks.water || block == Blocks.flowing_water) &&
+            !(world.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater);
+
+        if (!isWaterBlock && !isValidCauldron) return;
+
+        // Get waterType
+        WaterUtils.WATER_TYPES waterType = getWaterType(world, i, j, k);
+        if (waterType == null) return;
+
+        // I didn't test this
+        if (isValidCauldron && isCauldronHeatingBlock(world.getBlock(i, j-1, k), world.getBlockMetadata(i, j-1, k))) {
+            waterType = WaterUtils.heatUp(waterType);
+        }
+
+        // Get fluid
+        Fluid fluid = null;
+        if (waterType == WaterUtils.WATER_TYPES.CLEAN) {
+            fluid = FluidRegistry.WATER;
+        } else {
+            Block blockType = WaterUtils.getBlockFromType(waterType);
+            if (blockType instanceof BlockEnviroMineWater) {
+                fluid = ((BlockEnviroMineWater) blockType).getFluid();
+            }
+        }
+        if (fluid == null) return;
+
+        int dosage = getWaterBagDosage(stack);
+        FluidStack fluidStack = new FluidStack(fluid, dosage);
+
+        // Fill the bag
+        if (stack.getItem() instanceof IFluidContainerItem) {
+            IFluidContainerItem container = (IFluidContainerItem) stack.getItem();
+            int filled = container.fill(stack, fluidStack, false);
+            if (filled <= 0) return; // 无法填充（已满或不兼容）
+
+            // Consume water
+            if (isValidCauldron) {
+                world.setBlockMetadataWithNotify(i, j, k, world.getBlockMetadata(i, j, k) - 1, 2);
+            } else if (isWaterBlock && EM_Settings.finiteWater) {
+                world.setBlock(i, j, k, Blocks.flowing_water, world.getBlockMetadata(i, j, k) + 1, 2);
+            }
+
+            container.fill(stack, fluidStack, true);
+            world.playSoundAtEntity(player, "random.drink", 1.0F, 1.0F);
+
+            // Cancel GC's logic, and I hate their code
+            event.setCanceled(true);
+            event.useItem = Result.DENY;
+            event.useBlock = Result.DENY;
+        }
+    }
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -298,8 +393,8 @@ public class EM_EventManager {
 
     public static void doDeath(EntityLivingBase entityLiving) {
         if (entityLiving instanceof EntityPlayer) {
-            String[] keysToRemove = {"EM_MINE_TIME", "EM_WINTER", "EM_CAVE_DIST", "EM_SAFETY", "EM_MIND_MAT",
-                "EM_THAT", "EM_BOILED", "EM_PITCH"};
+            String[] keysToRemove = { "EM_MINE_TIME", "EM_WINTER", "EM_CAVE_DIST", "EM_SAFETY", "EM_MIND_MAT",
+                "EM_THAT", "EM_BOILED", "EM_PITCH" };
             for (String key : keysToRemove) {
                 if (entityLiving.getEntityData()
                     .hasKey(key)) {
@@ -529,7 +624,8 @@ public class EM_EventManager {
                         "Normal");
                 }
                 // Cauldron bottle filling
-                else if ((item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
+                else if ((item.getItem() == Items.glass_bottle
+                    || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
                     && !event.entityPlayer.worldObj.isRemote) {
                     if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
                         && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
@@ -558,6 +654,13 @@ public class EM_EventManager {
                             event);
                     }
                 }
+
+                // ===== Growthcraft 水袋处理 =====
+                if (EnviroMine.isGrowthcraftLoaded && item != null && isWaterBagItem(item)) {
+                    handleWaterBagFill(event.entityPlayer, event.x, event.y, event.z, event.face, item, event);
+                    if (event.isCanceled()) return; // 如果已取消，跳过后续处理
+                }
+
                 // Record 11 easter egg
                 else if (item.getItem() == Items.record_11) {
                     RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
@@ -592,6 +695,16 @@ public class EM_EventManager {
             } else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
                 fillBucket(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
             }
+
+            // ===== Growthcraft 水袋空气右键处理 =====
+            if (EnviroMine.isGrowthcraftLoaded && isWaterBagItem(item)) {
+                MovingObjectPosition mop = getMovingObjectPositionFromPlayer(event.entityPlayer.worldObj, event.entityPlayer);
+                if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                    handleWaterBagFill(event.entityPlayer, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit, item, event);
+                    if (event.isCanceled()) return;
+                }
+            }
+
         }
         // Right-click air with empty hand
         else if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item == null) {
@@ -1054,6 +1167,66 @@ public class EM_EventManager {
             tracker.trackedEntity.removePotionEffect(EnviroPotion.frostbite.id);
             tracker.frostbiteLevel = 0;
         }
+        // Apply drinking effects for waterbag
+        if (EnviroMine.isGrowthcraftLoaded && isWaterBagItem(item)) {
+            applyWaterBagDrinkEffects(event.entityPlayer, item, tracker);
+            if (item.getItem() instanceof IFluidContainerItem) {
+                IFluidContainerItem container = (IFluidContainerItem) item.getItem();
+                FluidStack fs = container.getFluid(item);
+                if (fs != null && fs.amount <= 1) {
+                    container.drain(item, Integer.MAX_VALUE, true); // 清空所有流体
+                }
+            }
+        }
+
+    }
+
+    private void applyWaterBagDrinkEffects(EntityPlayer player, ItemStack stack, EnviroDataTracker tracker) {
+        if (!(stack.getItem() instanceof IFluidContainerItem)) return;
+        IFluidContainerItem container = (IFluidContainerItem) stack.getItem();
+        FluidStack fluidStack = container.getFluid(stack);
+        if (fluidStack == null || fluidStack.amount <= 0) return;
+
+        Fluid fluid = fluidStack.getFluid();
+        WaterUtils.WATER_TYPES type;
+        if (fluid == FluidRegistry.WATER) {
+            type = WaterUtils.WATER_TYPES.CLEAN;
+        } else {
+            type = WaterUtils.getTypeFromFluid(fluid);
+            if (type == null) type = WaterUtils.WATER_TYPES.CLEAN;
+        }
+
+        if (type.isRadioactive && EnviroMine.isHbmLoaded) {
+            EnviroItemWaterBottle_NTM.applyRadiation(player, 5.0F);
+        }
+
+        if (type.isDirty) {
+            if (player.getRNG().nextInt(4) == 0) {
+                player.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
+            }
+            if (player.getRNG().nextInt(4) == 0) {
+                player.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+            }
+        }
+
+        if (type.isSalty) {
+            if (player.getActivePotionEffect(EnviroPotion.dehydration) != null && player.getRNG().nextInt(5) == 0) {
+                int amp = player.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
+                player.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
+            } else {
+                player.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600));
+            }
+        }
+
+        if (type.temperatureInfluence != 0.0F) {
+            tracker.bodyTemp += type.temperatureInfluence;
+        }
+
+        if (type.hydration > 0.0F) {
+            tracker.hydrate(type.hydration);
+        } else if (type.hydration < 0.0F) {
+            tracker.dehydrate(Math.abs(type.hydration));
+        }
     }
 
     @SubscribeEvent
@@ -1223,7 +1396,7 @@ public class EM_EventManager {
                 if (!event.entityLiving.getEntityData()
                     .hasKey("EM_PITCH")) {
                     event.entityLiving.getEntityData()
-                        .setIntArray("EM_PITCH", new int[]{x, y, z});
+                        .setIntArray("EM_PITCH", new int[] { x, y, z });
                 }
 
                 if (event.entityLiving.getDistance(x, y, z) >= 250) {
@@ -1546,8 +1719,7 @@ public class EM_EventManager {
                         .saveBuilders(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroMineshafts"));
                     Earthquake.saveQuakes(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroEarthquakes"));
                 }
-                Earthquake.Reset();
-                ;
+                Earthquake.Reset();;
                 MineshaftBuilder.clearBuilders();
                 GasBuffer.reset();
 
@@ -1667,8 +1839,8 @@ public class EM_EventManager {
                             .nextInt(spawnList.size());
                         try {
                             entity = (EntityLiving) spawnList.get(spawnIndex).entityClass
-                                .getConstructor(new Class[]{World.class})
-                                .newInstance(new Object[]{event.entityPlayer.worldObj});
+                                .getConstructor(new Class[] { World.class })
+                                .newInstance(new Object[] { event.entityPlayer.worldObj });
                         } catch (Exception e) {
                             entity = new EntityZombie(event.entityPlayer.worldObj);
                         }
@@ -2154,7 +2326,12 @@ public class EM_EventManager {
         if (bestTargetTemp >= 0) {
             tracker.bodyTemp = bestTargetTemp;
             if (EM_Settings.loggerVerbosity >= EnumLogVerbosity.ALL.getLevel()) {
-                EnviroMine.logger.log(Level.INFO, "Player " + player.getCommandSenderName() + " cooled to " + bestTargetTemp + " by water (body contact).");
+                EnviroMine.logger.log(
+                    Level.INFO,
+                    "Player " + player.getCommandSenderName()
+                        + " cooled to "
+                        + bestTargetTemp
+                        + " by water (body contact).");
             }
         }
     }

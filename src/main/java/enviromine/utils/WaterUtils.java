@@ -67,7 +67,7 @@ public class WaterUtils {
         public final float temperatureInfluenceCap;
 
         WATER_TYPES(int heatIndex, boolean isRadioactive, boolean isDirty, boolean isSalty, float hydration,
-            float temperatureInfluence, float temperatureInfluenceCap) {
+                    float temperatureInfluence, float temperatureInfluenceCap) {
             this.heatIndex = heatIndex;
             this.isRadioactive = isRadioactive;
             this.isDirty = isDirty;
@@ -79,7 +79,7 @@ public class WaterUtils {
 
         // Method to find water type from traits
         public static WATER_TYPES fromTraits(WATER_TYPES waterTypeInitial, int heatIndex, boolean isRadioactive,
-            boolean isDirty, boolean isSalty) {
+                                             boolean isDirty, boolean isSalty) {
             for (WATER_TYPES type : WATER_TYPES.values()) {
                 if (type.heatIndex == heatIndex && type.isRadioactive == isRadioactive
                     && type.isDirty == isDirty

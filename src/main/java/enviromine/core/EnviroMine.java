@@ -182,6 +182,8 @@ public class EnviroMine {
             }
         }
 
+        isGrowthcraftLoaded = Loader.isModLoaded("Growthcraft|Cellar");
+
         // Load Configuration files And Custom files
         EM_ConfigHandler.initConfig();
 
