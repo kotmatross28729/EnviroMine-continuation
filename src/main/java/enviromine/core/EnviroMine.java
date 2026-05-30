@@ -91,6 +91,8 @@ public class EnviroMine {
 
     public static boolean isEndlessIDsLoaded;
 
+    public static boolean isGrowthcraftLoaded;
+
     // public static EM_WorldData theWorldEM;
 
     @EventHandler
@@ -179,6 +181,8 @@ public class EnviroMine {
                 ObjectHandler_MCF_NTM.register();
             }
         }
+
+        isGrowthcraftLoaded = Loader.isModLoaded("Growthcraft");
 
         // Load Configuration files And Custom files
         EM_ConfigHandler.initConfig();
