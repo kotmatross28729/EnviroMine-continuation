@@ -42,19 +42,20 @@ public class BiomeGenCaves extends BiomeGenBase {
             if (clazz == null || !(EntityLiving.class.isAssignableFrom(clazz))) {
                 continue;
             }
+            Class<? extends EntityLiving> claz = (Class<? extends EntityLiving>) clazz;
 
             if (EnumCreatureType.monster.getCreatureClass()
                 .isAssignableFrom(clazz)) {
-                this.spawnableMonsterList.add(new SpawnListEntry(clazz, props.weight, props.minGroup, props.maxGroup));
+                this.spawnableMonsterList.add(new SpawnListEntry(claz, props.weight, props.minGroup, props.maxGroup));
             } else if (EnumCreatureType.waterCreature.getCreatureClass()
                 .isAssignableFrom(clazz)) {
                     this.spawnableWaterCreatureList
-                        .add(new SpawnListEntry(clazz, props.weight, props.minGroup, props.maxGroup));
+                        .add(new SpawnListEntry(claz, props.weight, props.minGroup, props.maxGroup));
                 } else {
                     this.spawnableCaveCreatureList
-                        .add(new SpawnListEntry(clazz, props.weight, props.minGroup, props.maxGroup));
+                        .add(new SpawnListEntry(claz, props.weight, props.minGroup, props.maxGroup));
                     this.spawnableCreatureList
-                        .add(new SpawnListEntry(clazz, props.weight, props.minGroup, props.maxGroup));
+                        .add(new SpawnListEntry(claz, props.weight, props.minGroup, props.maxGroup));
                 }
 
             this.totalSpawnWeight += props.weight;

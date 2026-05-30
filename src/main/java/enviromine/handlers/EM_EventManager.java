@@ -103,13 +103,19 @@ import enviromine.core.EM_ConfigHandler.EnumLogVerbosity;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.gases.GasBuffer;
+import enviromine.handlers.compat.EM_EventManager_Growthcraft;
 import enviromine.handlers.compat.EM_EventManager_NTM;
 import enviromine.items.EnviroItemPolymerWaterBottle;
 import enviromine.items.EnviroItemWaterBottle;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.trackers.EnviroDataTracker;
 import enviromine.trackers.Hallucination;
-import enviromine.trackers.properties.*;
+import enviromine.trackers.properties.BiomeProperties;
+import enviromine.trackers.properties.CaveSpawnProperties;
+import enviromine.trackers.properties.DimensionProperties;
+import enviromine.trackers.properties.EntityProperties;
+import enviromine.trackers.properties.ItemProperties;
+import enviromine.trackers.properties.RotProperties;
 import enviromine.utils.ArmorTempUtils;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.WaterUtils;
@@ -422,131 +428,120 @@ public class EM_EventManager {
         }
     }
 
-    public void RecordEasterEgg(EntityPlayer player, int x, int y, int z) {
-        if (player.worldObj.isRemote) {
+    public void recordEasterEgg(EntityPlayer player) {
+        MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(player.worldObj, player);
+        if (movingobjectposition == null
+            || movingobjectposition.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
             return;
         }
 
-        MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(player.worldObj, player);
+        int i = movingobjectposition.blockX;
+        int j = movingobjectposition.blockY;
+        int k = movingobjectposition.blockZ;
 
-        if (movingobjectposition == null) {
-            return;
-        } else {
-            if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                int i = movingobjectposition.blockX;
-                int j = movingobjectposition.blockY;
-                int k = movingobjectposition.blockZ;
+        TileEntityJukebox recordplayer = (TileEntityJukebox) player.worldObj.getTileEntity(i, j, k);
+        if (recordplayer != null && recordplayer.func_145856_a() == null) {
+            EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
+            if (tracker != null) {
+                if (tracker.sanity >= 75F) tracker.sanity -= 50F;
+                player.addChatMessage(
+                    new ChatComponentText(StatCollector.translateToLocal("msg.enviromine.RecordEasterEgg")));
+                player.addStat(EnviroAchievements.ohGodWhy, 1);
+            }
+        }
+    }
 
-                if (player.worldObj.getBlock(i, j, k) == Blocks.jukebox) {
-                    TileEntityJukebox recordplayer = (TileEntityJukebox) player.worldObj.getTileEntity(i, j, k);
-
-                    if (recordplayer != null) {
-
-                        if (recordplayer.func_145856_a() == null) {
-
-                            EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
-
-                            if (tracker != null) {
-
-                                if (tracker.sanity >= 75F) {
-                                    tracker.sanity -= 50F;
-                                }
-
-                                player.addChatMessage(
-                                    new ChatComponentText(
-                                        StatCollector.translateToLocal("msg.enviromine.RecordEasterEgg")));
-                                player.addStat(EnviroAchievements.ohGodWhy, 1);
-                            }
-                        }
-                    }
-                }
+    public void handleOldTorch(PlayerInteractEvent event, ItemStack item) {
+        if (item.getItem() == Item.getItemFromBlock(Blocks.torch)
+            && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) {
+            Vec3 lookVec = event.entityPlayer.getLookVec();
+            Block block = event.world.getBlock(event.x, event.y, event.z);
+            if (block
+                .onBlockActivated(event.world, event.x, event.y, event.y, event.entityPlayer, event.face, 0F, 0F, 0F)) {
+                event.useItem = Result.DENY;
+                event.useBlock = Result.ALLOW;
+            } else {
+                ItemBlock torchItem = (ItemBlock) Item.getItemFromBlock(ObjectHandler.fireTorch);
+                torchItem.onItemUse(
+                    item,
+                    event.entityPlayer,
+                    event.world,
+                    event.x,
+                    event.y,
+                    event.z,
+                    event.face,
+                    (float) lookVec.xCoord,
+                    (float) lookVec.yCoord,
+                    (float) lookVec.zCoord);
+                if (event.entityPlayer.capabilities.isCreativeMode) item.stackSize++;
+                event.setCanceled(true);
             }
         }
     }
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getResult() == Result.DENY) return;
+
         ItemStack item = event.entityPlayer.getCurrentEquippedItem();
 
-        // Handle food spoilage when interacting with inventories (right-click block)
-        if (event.action == Action.RIGHT_CLICK_BLOCK && EM_Settings.foodSpoiling) {
-            TileEntity tile = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
-            if (tile != null && tile instanceof IInventory) {
-                RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory) tile);
+        if (!event.entityPlayer.worldObj.isRemote) {
+            if (event.action == Action.RIGHT_CLICK_BLOCK) {
+                onRightClickBlockInteract(event, item);
+            } else if (event.action == Action.LEFT_CLICK_BLOCK) {
+                EM_PhysManager
+                    .schedulePhysUpdate(event.entityPlayer.worldObj, event.x, event.y, event.z, true, "Normal");
             }
+            /*
+             * else if (event.action == Action.RIGHT_CLICK_AIR) {
+             * onRightClickAirInteract(event, item);
+             * }
+             */
         }
 
-        // Right-click block
-        if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK) {
-            if (item != null) {
-                // ItemBlock placement with physics update
-                if (item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote) {
-                    int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
+        if (event.action == Action.RIGHT_CLICK_AIR && item == null) {
+            NBTTagCompound pData = new NBTTagCompound();
+            pData.setInteger("id", 1);
+            pData.setString("player", event.entityPlayer.getCommandSenderName());
+            EnviroMine.instance.network.sendToServer(new PacketEnviroMine(pData));
+        }
 
-                    if (EM_Settings.oldTorchLogic) {
-                        if (item.getItem() == Item.getItemFromBlock(Blocks.torch)
-                            && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) {
-                            Vec3 lookVec = event.entityPlayer.getLookVec();
-                            Block block = event.world.getBlock(event.x, event.y, event.z);
-                            if (block.onBlockActivated(
-                                event.world,
-                                event.x,
-                                event.y,
-                                event.y,
-                                event.entityPlayer,
-                                event.face,
-                                0F,
-                                0F,
-                                0F)) {
-                                event.useItem = Result.DENY;
-                                event.useBlock = Result.ALLOW;
-                            } else {
-                                ItemBlock torchItem = (ItemBlock) Item.getItemFromBlock(ObjectHandler.fireTorch);
-                                torchItem.onItemUse(
-                                    item,
-                                    event.entityPlayer,
-                                    event.world,
-                                    event.x,
-                                    event.y,
-                                    event.z,
-                                    event.face,
-                                    (float) lookVec.xCoord,
-                                    (float) lookVec.yCoord,
-                                    (float) lookVec.zCoord);
-                                if (event.entityPlayer.capabilities.isCreativeMode) item.stackSize++;
-                                event.setCanceled(true);
-                            }
-                            return;
-                        }
-                    }
+    }
 
-                    EM_PhysManager.schedulePhysUpdate(
-                        event.entityPlayer.worldObj,
-                        adjCoords[0],
-                        adjCoords[1],
-                        adjCoords[2],
-                        true,
-                        "Normal");
-                }
-                // Cauldron bottle filling
-                else if ((item.getItem() == Items.glass_bottle
-                    || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
-                    && !event.entityPlayer.worldObj.isRemote) {
-                        if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
-                            && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
-                            fillBottle(
-                                event.entityPlayer.worldObj,
-                                event.entityPlayer,
-                                event.x,
-                                event.y,
-                                event.z,
-                                item,
-                                event,
-                                item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
-                        }
+    public void onRightClickBlockInteract(PlayerInteractEvent event, ItemStack item) {
+        if (EM_Settings.foodSpoiling) {
+            TileEntity tile = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
+            if (tile instanceof IInventory inventory) {
+                RotHandler.rotInvo(event.entityPlayer.worldObj, inventory);
+            }
+        }
+        if (item != null) {
+            if (item.getItem() instanceof ItemBlock) {
+                if (EM_Settings.oldTorchLogic) handleOldTorch(event, item);
+
+                int[] adjCoords = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
+                EM_PhysManager.schedulePhysUpdate(
+                    event.entityPlayer.worldObj,
+                    adjCoords[0],
+                    adjCoords[1],
+                    adjCoords[2],
+                    true,
+                    "Normal");
+            } else
+                if (item.getItem() == Items.glass_bottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer) {
+                    if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
+                        && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0) {
+                        fillBottle(
+                            event.entityPlayer.worldObj,
+                            event.entityPlayer,
+                            event.x,
+                            event.y,
+                            event.z,
+                            item,
+                            event,
+                            item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
                     }
-                // Cauldron bucket filling
-                else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
+                } else if (item.getItem() == Items.bucket) {
                     if (event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
                         && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 3) {
                         fillBucket(
@@ -558,26 +553,21 @@ public class EM_EventManager {
                             item,
                             event);
                     }
+                } else if (EnviroMine.isGrowthcraftLoaded && EM_EventManager_Growthcraft.isWaterBagItem(item)) {
+                    EM_EventManager_Growthcraft
+                        .handleWaterBagFill(event.entityPlayer, event.x, event.y, event.z, event.face, item, event);
+                } else if (item.getItem() == Items.record_11) {
+                    recordEasterEgg(event.entityPlayer);
                 }
-                // Record 11 easter egg
-                else if (item.getItem() == Items.record_11) {
-                    RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
-                }
-            } else {
-                // Empty hand: drink water
-                if (!event.entityPlayer.worldObj.isRemote) {
-                    drinkWater(event.entityPlayer, event);
-                }
-            }
+        } else {
+            drinkWater(event.entityPlayer, event);
         }
-        // Left-click block
-        else if (event.getResult() != Result.DENY && event.action == Action.LEFT_CLICK_BLOCK) {
-            EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, event.x, event.y, event.z, true, "Normal");
-        }
-        // Right-click air with item
-        else if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item != null) {
-            if ((item.getItem() instanceof ItemGlassBottle || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)
-                && !event.entityPlayer.worldObj.isRemote) {
+    }
+
+    public void onRightClickAirInteract(PlayerInteractEvent event, ItemStack item) {
+        if (item != null) {
+            if ((item.getItem() instanceof ItemGlassBottle
+                || item.getItem() == ObjectHandlerCompat.waterBottle_polymer)) {
                 if (!(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron
                     && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0)) {
                     fillBottle(
@@ -590,16 +580,23 @@ public class EM_EventManager {
                         event,
                         item.getItem() == ObjectHandlerCompat.waterBottle_polymer);
                 }
-            } else if (item.getItem() == Items.bucket && !event.entityPlayer.worldObj.isRemote) {
+            } else if (item.getItem() == Items.bucket) {
                 fillBucket(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
+            } else if (EnviroMine.isGrowthcraftLoaded && EM_EventManager_Growthcraft.isWaterBagItem(item)) {
+                MovingObjectPosition mop = getMovingObjectPositionFromPlayer(
+                    event.entityPlayer.worldObj,
+                    event.entityPlayer);
+                if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                    EM_EventManager_Growthcraft.handleWaterBagFill(
+                        event.entityPlayer,
+                        mop.blockX,
+                        mop.blockY,
+                        mop.blockZ,
+                        mop.sideHit,
+                        item,
+                        event);
+                }
             }
-        }
-        // Right-click air with empty hand
-        else if (event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_AIR && item == null) {
-            NBTTagCompound pData = new NBTTagCompound();
-            pData.setInteger("id", 1);
-            pData.setString("player", event.entityPlayer.getCommandSenderName());
-            EnviroMine.instance.network.sendToServer(new PacketEnviroMine(pData));
         }
     }
 
@@ -1055,6 +1052,11 @@ public class EM_EventManager {
             tracker.trackedEntity.removePotionEffect(EnviroPotion.frostbite.id);
             tracker.frostbiteLevel = 0;
         }
+
+        if (EnviroMine.isGrowthcraftLoaded && EM_EventManager_Growthcraft.isWaterBagItem(item)) {
+            EM_EventManager_Growthcraft.onUseItem(event.entityPlayer, item, tracker);
+        }
+
     }
 
     @SubscribeEvent
@@ -2163,4 +2165,5 @@ public class EM_EventManager {
             }
         }
     }
+
 }
