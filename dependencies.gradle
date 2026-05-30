@@ -43,8 +43,9 @@ dependencies {
     compileOnly name: 'MrCrayfishFurnitureModv3.4.7(1.7.10)'
     compileOnly name: '+unimixins-all-1.7.10-0.1.19-dev'
     compileOnly name: 'netherlicious-3.2.8'
-    compileOnly name: 'growthcraft-1.7.10-2.7.3-complete'
-
+    compileOnly(rfg.deobf(project.files("libs/growthcraft-1.7.10-2.7.3-complete.jar")))
+    compileOnly(project.files("libs/AppleCore-3.3.11-dev.jar"))
+    
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     compileOnly fileTree(dir: 'libs', include: '*.zip')
 }

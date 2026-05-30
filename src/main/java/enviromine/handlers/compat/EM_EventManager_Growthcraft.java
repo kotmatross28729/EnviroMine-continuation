@@ -14,7 +14,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
 import enviromine.EnviroPotion;
 import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.core.EM_Settings;
@@ -33,17 +32,15 @@ public class EM_EventManager_Growthcraft {
         return stack.getItem() instanceof ItemWaterBag;
     }
 
-    public static int getWaterBagDosage() {
-        return GrowthCraftCellar.getConfig().waterBagDosage;
-    }
-
     public static void handleWaterBagFill(EntityPlayer player, int x, int y, int z, int side, ItemStack stack,
         PlayerInteractEvent event) {
+        if (!(stack.getItem() instanceof ItemWaterBag bag)) return;
+
         World world = player.worldObj;
-        if (world.isRemote) return;
 
         int i = x, j = y, k = z;
         Block block = world.getBlock(i, j, k);
+
         if (block.getMaterial() != Material.water && block != Blocks.cauldron) {
             int[] adj = EnviroUtils.getAdjacentBlockCoordsFromSide(i, j, k, side);
             int ni = adj[0], nj = adj[1], nk = adj[2];
@@ -89,26 +86,22 @@ public class EM_EventManager_Growthcraft {
         }
         if (fluid == null) return;
 
-        int dosage = getWaterBagDosage();
+        int dosage = GrowthCraftCellar.getConfig().waterBagDosage;
         FluidStack fluidStack = new FluidStack(fluid, dosage);
 
-        if (stack.getItem() instanceof IFluidContainerItem container) {
-            int filled = container.fill(stack, fluidStack, false);
-            if (filled <= 0) return;
+        int filled = bag.fill(stack, fluidStack, false);
+        if (filled <= 0) return;
+        bag.fill(stack, fluidStack, true);
 
-            if (isValidCauldron) {
-                world.setBlockMetadataWithNotify(i, j, k, world.getBlockMetadata(i, j, k) - 1, 2);
-            } else if (isWaterBlock && EM_Settings.finiteWater) {
-                world.setBlock(i, j, k, Blocks.flowing_water, world.getBlockMetadata(i, j, k) + 1, 2);
-            }
-
-            container.fill(stack, fluidStack, true);
-            world.playSoundAtEntity(player, "random.drink", 1.0F, 1.0F);
-
-            event.setCanceled(true);
-            event.useItem = Result.DENY;
-            event.useBlock = Result.DENY;
+        if (isValidCauldron) {
+            world.setBlockMetadataWithNotify(i, j, k, world.getBlockMetadata(i, j, k) - 1, 2);
+        } else if (EM_Settings.finiteWater) {
+            world.setBlock(i, j, k, Blocks.flowing_water, world.getBlockMetadata(i, j, k) + 1, 2);
         }
+        world.playSoundAtEntity(player, "random.drink", 1.0F, 1.0F);
+
+        player.inventoryContainer.detectAndSendChanges();
+        event.setCanceled(true);
     }
 
     public static void onUseItem(EntityPlayer player, ItemStack stack, EnviroDataTracker tracker) {
