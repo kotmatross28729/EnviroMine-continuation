@@ -257,7 +257,6 @@ public class WaterUtils {
             case "hot_water" -> {
                 return WaterUtils.WATER_TYPES.HOT;
             }
-
             default -> {
                 return WaterUtils.WATER_TYPES.CLEAN;
             }

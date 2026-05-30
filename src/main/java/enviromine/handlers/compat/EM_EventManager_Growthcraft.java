@@ -5,7 +5,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fluids.Fluid;
@@ -14,9 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
-
-import growthcraft.cellar.GrowthCraftCellar;
-import growthcraft.cellar.common.item.ItemWaterBag;
+import enviromine.EnviroPotion;
 import enviromine.blocks.water.BlockEnviroMineWater;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -25,29 +24,24 @@ import enviromine.items.compat.EnviroItemWaterBottle_NTM;
 import enviromine.trackers.EnviroDataTracker;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.WaterUtils;
-import enviromine.EnviroPotion;
-
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import growthcraft.cellar.GrowthCraftCellar;
+import growthcraft.cellar.common.item.ItemWaterBag;
 
 public class EM_EventManager_Growthcraft {
 
-    // Directly use Growthcraft's ItemWaterBag type
     public static boolean isWaterBagItem(ItemStack stack) {
-        return stack != null && stack.getItem() instanceof ItemWaterBag;
+        return stack.getItem() instanceof ItemWaterBag;
     }
 
-    // Get dosage from Growthcraft config (no reflection)
     public static int getWaterBagDosage() {
         return GrowthCraftCellar.getConfig().waterBagDosage;
     }
 
-    // Handle water bag filling
-    public static void handleWaterBagFill(EntityPlayer player, int x, int y, int z, int side, ItemStack stack, PlayerInteractEvent event) {
+    public static void handleWaterBagFill(EntityPlayer player, int x, int y, int z, int side, ItemStack stack,
+        PlayerInteractEvent event) {
         World world = player.worldObj;
         if (world.isRemote) return;
 
-        // Determine actual water source coordinates (same logic as water bottle)
         int i = x, j = y, k = z;
         Block block = world.getBlock(i, j, k);
         if (block.getMaterial() != Material.water && block != Blocks.cauldron) {
@@ -55,7 +49,9 @@ public class EM_EventManager_Growthcraft {
             int ni = adj[0], nj = adj[1], nk = adj[2];
             Block adjBlock = world.getBlock(ni, nj, nk);
             if (adjBlock.getMaterial() == Material.water || adjBlock == Blocks.cauldron) {
-                i = ni; j = nj; k = nk;
+                i = ni;
+                j = nj;
+                k = nk;
                 block = adjBlock;
             } else {
                 return;
@@ -65,21 +61,23 @@ public class EM_EventManager_Growthcraft {
         if (!world.canMineBlock(player, i, j, k) || !player.canPlayerEdit(i, j, k, side, stack)) return;
 
         boolean isValidCauldron = (block == Blocks.cauldron && world.getBlockMetadata(i, j, k) > 0);
-        boolean isWaterBlock = (block == Blocks.water || block == Blocks.flowing_water) &&
-            !(world.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater);
+        boolean isWaterBlock;
+        if (block == Blocks.water || block == Blocks.flowing_water || block instanceof BlockEnviroMineWater) {
+            isWaterBlock = !(world.getBlockMetadata(i, j, k) > .2f) || !EM_Settings.finiteWater;
+        } else {
+            isWaterBlock = false;
+        }
 
         if (!isWaterBlock && !isValidCauldron) return;
 
-        // Get EnviroMine water type
         WaterUtils.WATER_TYPES waterType = EM_EventManager.getWaterType(world, i, j, k);
         if (waterType == null) return;
 
-        // Cauldron heating
-        if (isValidCauldron && EM_EventManager.isCauldronHeatingBlock(world.getBlock(i, j-1, k), world.getBlockMetadata(i, j-1, k))) {
+        if (isValidCauldron && EM_EventManager
+            .isCauldronHeatingBlock(world.getBlock(i, j - 1, k), world.getBlockMetadata(i, j - 1, k))) {
             waterType = WaterUtils.heatUp(waterType);
         }
 
-        // Get Fluid
         Fluid fluid = null;
         if (waterType == WaterUtils.WATER_TYPES.CLEAN) {
             fluid = FluidRegistry.WATER;
@@ -94,12 +92,10 @@ public class EM_EventManager_Growthcraft {
         int dosage = getWaterBagDosage();
         FluidStack fluidStack = new FluidStack(fluid, dosage);
 
-        if (stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem container = (IFluidContainerItem) stack.getItem();
+        if (stack.getItem() instanceof IFluidContainerItem container) {
             int filled = container.fill(stack, fluidStack, false);
             if (filled <= 0) return;
 
-            // Consume water source
             if (isValidCauldron) {
                 world.setBlockMetadataWithNotify(i, j, k, world.getBlockMetadata(i, j, k) - 1, 2);
             } else if (isWaterBlock && EM_Settings.finiteWater) {
@@ -115,12 +111,13 @@ public class EM_EventManager_Growthcraft {
         }
     }
 
-    // Handle water bag drinking effects
-    public static void applyWaterBagDrinkEffects(EntityPlayer player, ItemStack stack, EnviroDataTracker tracker) {
-        if (!(stack.getItem() instanceof IFluidContainerItem)) return;
-        IFluidContainerItem container = (IFluidContainerItem) stack.getItem();
+    public static void onUseItem(EntityPlayer player, ItemStack stack, EnviroDataTracker tracker) {
+        if (!(stack.getItem() instanceof IFluidContainerItem container)) return;
         FluidStack fluidStack = container.getFluid(stack);
         if (fluidStack == null || fluidStack.amount <= 0) return;
+        if (fluidStack.amount == 1) {
+            container.drain(stack, Integer.MAX_VALUE, true);
+        }
 
         Fluid fluid = fluidStack.getFluid();
         WaterUtils.WATER_TYPES type;
@@ -136,17 +133,21 @@ public class EM_EventManager_Growthcraft {
         }
 
         if (type.isDirty) {
-            if (player.getRNG().nextInt(4) == 0) {
+            if (player.getRNG()
+                .nextInt(4) == 0) {
                 player.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
             }
-            if (player.getRNG().nextInt(4) == 0) {
+            if (player.getRNG()
+                .nextInt(4) == 0) {
                 player.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
             }
         }
 
         if (type.isSalty) {
-            if (player.getActivePotionEffect(EnviroPotion.dehydration) != null && player.getRNG().nextInt(5) == 0) {
-                int amp = player.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
+            if (player.getActivePotionEffect(EnviroPotion.dehydration) != null && player.getRNG()
+                .nextInt(5) == 0) {
+                int amp = player.getActivePotionEffect(EnviroPotion.dehydration)
+                    .getAmplifier();
                 player.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
             } else {
                 player.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600));
@@ -163,4 +164,5 @@ public class EM_EventManager_Growthcraft {
             tracker.dehydrate(Math.abs(type.hydration));
         }
     }
+
 }

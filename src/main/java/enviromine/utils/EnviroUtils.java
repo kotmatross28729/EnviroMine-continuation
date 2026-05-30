@@ -2,7 +2,7 @@ package enviromine.utils;
 
 import static enviromine.core.EnviroMine.isTCLoaded;
 
-import java.awt.*;
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
