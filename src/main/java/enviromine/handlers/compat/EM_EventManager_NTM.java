@@ -27,7 +27,6 @@ import com.hbm.blocks.gas.BlockGasFlammable;
 import com.hbm.blocks.gas.BlockGasMonoxide;
 import com.hbm.blocks.gas.BlockGasRadonDense;
 import com.hbm.blocks.gas.BlockGasRadonTomb;
-import com.hbm.blocks.gas.BlockVacuum;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
@@ -102,8 +101,7 @@ public class EM_EventManager_NTM {
                 2);
         } else if (getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasMonoxide.class)
             || getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonDense.class)
-            || getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonTomb.class)
-            || getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockVacuum.class)) {
+            || getBlockWithinAABB(boundingBox, event.entityLiving.worldObj, BlockGasRadonTomb.class)) {
                 // Fire -> No fire
                 ReplaceInvoItems(
                     invo,
